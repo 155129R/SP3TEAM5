@@ -87,29 +87,13 @@ bool Application::GetMouseUpdate()
     return false;
 }
 
-void Application::UpdateMusic()
-{
-	if (SFX->BGM == NULL)
-	{
-		//SFX->BGM = SFX->SoundEngine->play2D("Sound//Underwater.mp3", false, true);
-	}
-	//if (SFX->BGM->getIsPaused() == true)
-	//{
-	//	SFX->BGM->setIsPaused(false);
-	//}
-	//else if (SFX->BGM->isFinished() == true)
-	//{
-	//	SFX->BGM = NULL;
-	//}
-}
-
 Application::Application()
 {
 }
 
 Application::~Application()
 {
-	delete SFX;
+
 }
 
 void Application::Init()
@@ -191,7 +175,6 @@ void Application::Run()
 		if (m_dAccumlatedTime_ThreadOne > 0.016) //60 times every second
 		{
 			GetMouseUpdate();
-			UpdateMusic();
 			scene->Update(m_dElapsedTime);
 			m_dAccumlatedTime_ThreadOne = 0.0;
 		}
