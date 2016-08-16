@@ -3,13 +3,15 @@
 
 #include "Scene.h"
 #include "Mtx44.h"
-#include "Camera3.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
 #include <vector>
 #include "Particle.h"
 #include "DepthFBO.h"
+#include "MeshBuilder.h"
+
+#include "Player.h"
 
 class SceneBase : public Scene
 {
@@ -110,7 +112,15 @@ public:
 		WATER,
 		WATER_SURFACE,
 
-		CACTUS,
+		//PLAYER
+		GEO_STAMINA,
+
+		GEO_CACTUS,
+
+		//SPRITE / ENEMY
+		GEO_GHOST1,
+		GEO_GHOST2,
+		GEO_GHOST3,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -141,6 +151,9 @@ public:
 	void RenderMeshOutlined(Mesh* mesh, bool enableLight);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 
+	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
+	float getHeightofTerrain(float terrainscale, float ** heights);
+
 protected:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -161,9 +174,6 @@ protected:
 	int m_particlesCount;						//Number of particles
 	unsigned MAX_PARTICLE;						//Max no of particles
 
-	//Outline stuff
-	unsigned m_outlineID;
-
 	//Terrain
 	std::vector<unsigned char>m_heightMap;
 
@@ -179,6 +189,21 @@ protected:
 
 	float FogAmount;
 	float fps;
+
+
+	//Player
+	Player* player;
+
+	//Sprite Pointers
+	SpriteAnimation* G1;
+	SpriteAnimation* G2;
+	SpriteAnimation* G3;
+
+	float **level1_Heights;
+	float characterHeight;
+
+	float terrainHeight;
+
 };
 
 #endif

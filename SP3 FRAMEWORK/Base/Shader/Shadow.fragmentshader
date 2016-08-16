@@ -180,7 +180,7 @@ void main(){
 			}
 			
 			// Cel-Shading values
-			float levels = 6;
+			float levels = 8;
 			
 			// Distance to the light
 			float distance = length( lightDirection_cameraspace );

@@ -2,7 +2,6 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
@@ -19,10 +18,17 @@ SceneShadow::~SceneShadow()
 }
 
 static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
-
 void SceneShadow::Init()
 {
 	SceneBase::Init();
+
+
+	player = new Player();
+
+	player->Init();
+
+
+	terrainHeight = TERRAINSIZE.y;
 
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -58,7 +64,29 @@ void SceneShadow::Update(double dt)
 	UpdateParticle(dt);
 	UpdateBullet(dt);
 
-	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+
+	UpdatePlayer(dt);
+
+	//Update sprites
+	if (G1)
+	{
+		G1->Update(dt);
+		G1->m_anim->animActive = true;
+	}
+	if (G2)
+	{
+		G2->Update(dt);
+		G2->m_anim->animActive = true;
+	}
+	if (G3)
+	{
+		G3->Update(dt);
+		G3->m_anim->animActive = true;
+	}
+
+	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level1_Heights);
+
 	camera.Update(dt);
 
 	//shoot
@@ -198,6 +226,65 @@ void SceneShadow::UpdateParticle(double dt)
 	}
 }
 
+void SceneShadow::UpdatePlayer(double dt)
+{
+	player->GetCamera(camera);
+	player->Update(dt);
+
+	if (Application::IsKeyPressed(VK_NUMPAD0))
+	{
+		player->InflictFear(5);
+	}
+
+	if (player->GetStamina() <= 0.0f)
+	{
+		camera.Tired = true;
+	}
+	else
+	{
+		camera.Tired = false;
+	}
+
+	UpdateFearEffect(dt);
+}
+
+void SceneShadow::UpdateFearEffect(double dt)
+{
+	switch (player->GetFear())
+	{
+		case 1:
+			break;
+
+		case 2:
+			FogAmount = 1000.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+
+		case 3:
+			FogAmount = 700.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+
+		case 4:
+			FogAmount = 500.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+
+		case 5:
+			FogAmount = 100.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+	}
+}
+
 ParticleObject* SceneShadow::GetParticles(void)
 {
 	for (auto it : particleList)
@@ -261,7 +348,7 @@ void SceneShadow::RenderTerrain()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
-	RenderMesh(meshList[TERRAIN], true);
+	RenderMesh(meshList[TERRAIN], false);
 	modelStack.PopMatrix();
 }
 
@@ -270,16 +357,37 @@ void SceneShadow::RenderEnvironment(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(10, 30, 10);
-	RenderMeshOutlined(meshList[CACTUS], Light);
+
+	RenderMeshOutlined(meshList[GEO_CACTUS], Light);
+
 	modelStack.PopMatrix();
 }
 
 void SceneShadow::RenderHUD()
 {
+	std::cout << player->GetStamina() << std::endl;
+	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
 }
 
 void SceneShadow::RenderSprite()
 {
+	modelStack.PushMatrix();
+	modelStack.Translate(150, 0, 0);
+	modelStack.Scale(25, 25, 25);
+	RenderMesh(meshList[GEO_GHOST1], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 0, 0);
+	modelStack.Scale(25, 25, 25);
+	RenderMesh(meshList[GEO_GHOST2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 0, 0);
+	modelStack.Scale(25, 25, 25);
+	RenderMesh(meshList[GEO_GHOST3], false);
+	modelStack.PopMatrix();
 }
 
 void SceneShadow::RenderParticle(ParticleObject* particle)
@@ -338,7 +446,7 @@ void SceneShadow::RenderWorld()
 	RenderSkyplane(); 
 	RenderTerrain();
 	RenderEnvironment(true);
-	//RenderSprite();
+	RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
@@ -453,6 +561,8 @@ void SceneShadow::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
+
+	RenderHUD();
 
 	//On screen text
 	std::ostringstream ss;

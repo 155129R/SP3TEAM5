@@ -2,6 +2,7 @@
 #define SCENESHADOW_H
 
 #include "SceneBase.h"
+#include "MeshBuilder.h"
 
 class SceneShadow : public SceneBase
 {
@@ -32,6 +33,9 @@ public:
 	void RenderPassMain();
 	void RenderWorld();
 
+	void UpdatePlayer(double dt);
+	void UpdateFearEffect(double dt);
+
 private:
 	float rotateAngle;
 
@@ -46,6 +50,8 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
+
+	Color Black;
 };
 
 #endif
