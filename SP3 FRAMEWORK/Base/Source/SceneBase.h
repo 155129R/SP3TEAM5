@@ -180,6 +180,8 @@ protected:
 
 	float **level1_Heights;
 	float characterHeight;
+
+	float terrainHeight;
 };
 
 #endif

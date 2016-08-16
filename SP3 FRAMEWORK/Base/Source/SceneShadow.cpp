@@ -17,12 +17,11 @@ SceneShadow::~SceneShadow()
 {
 }
 
-static const Vector3 TERRAINSIZE(4000.0f, 400.0f, 4000.0f);
-
+static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 void SceneShadow::Init()
 {
 	SceneBase::Init();
-
+	terrainHeight = TERRAINSIZE.y;
 	//Random my random randomly using srand
 	srand(time(NULL));
 

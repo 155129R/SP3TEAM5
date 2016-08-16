@@ -160,7 +160,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	camera.Init(Vector3(0, -2, 10), Vector3(0, 0, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -209,6 +209,7 @@ void SceneBase::Init()
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
 	characterHeight = 7.f;
+	//camera.position.y += characterHeight;
 }
 
 void SceneBase::Update(double dt)
@@ -534,7 +535,7 @@ float SceneBase::getHeightofTerrain(float terrainscale, float ** heights)
 	{
 		answer = getBaryCentricInterpolation(Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ + 1], 1), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
 	}
-	answer *= 350.f;
+	answer *= terrainHeight;
 	answer += characterHeight;
 
 	return answer;
