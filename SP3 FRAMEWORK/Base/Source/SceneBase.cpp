@@ -187,7 +187,7 @@ void SceneBase::Init()
 	meshList[SKYPLANE]->textureArray[0] = LoadTGA("Image//Sky.tga");
 
 	//Terrain 
-	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap);
+	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
@@ -529,6 +529,44 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneBase::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
+{
+	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+	float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.z - p3.z)) / det;
+	float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.z - p3.z)) / det;
+	float l3 = 1.0f - l1 - l2;
+	return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+}
+
+float SceneBase::getHeightofTerrain(float terrainscale, float ** heights)
+{
+	float terrainX = camera.position.x + (terrainscale / 2.f);
+	float terrainZ = camera.position.z + (terrainscale / 2.f);
+	float gridSquSiz = terrainscale / 255.f;
+	int gridX = floor(terrainX / gridSquSiz);
+	int gridZ = floor(terrainZ / gridSquSiz);
+	if (gridX >= 255.f || gridZ >= 255.f || gridX < 0.f || gridZ < 0.f)
+	{
+		return 0.f;
+	}
+	float xCoord = (fmod(terrainX, gridSquSiz)) / gridSquSiz;
+	float zCoord = (fmod(terrainZ, gridSquSiz)) / gridSquSiz;
+	float answer;
+
+	if (xCoord <= (1.f - zCoord))
+	{
+		answer = getBaryCentricInterpolation(Vector3(0, heights[gridX][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
+	}
+	else
+	{
+		answer = getBaryCentricInterpolation(Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ + 1], 1), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
+	}
+	answer *= terrainHeight;
+	answer += characterHeight;
+
+	return answer;
 }
 
 void SceneBase::Exit()

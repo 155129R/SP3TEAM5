@@ -17,14 +17,17 @@ SceneShadow::~SceneShadow()
 }
 
 static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
-
 void SceneShadow::Init()
 {
 	SceneBase::Init();
 
+
 	player = new Player();
 
 	player->Init();
+
+
+	terrainHeight = TERRAINSIZE.y;
 
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -59,6 +62,7 @@ void SceneShadow::Update(double dt)
 
 	UpdateParticle(dt);
 
+
 	UpdatePlayer(dt);
 
 	//Update sprites
@@ -78,7 +82,9 @@ void SceneShadow::Update(double dt)
 		G3->m_anim->animActive = true;
 	}
 
-	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level1_Heights);
+
 	camera.Update(dt);
 
 	if (Flashlight)
@@ -320,7 +326,7 @@ void SceneShadow::RenderTerrain()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
-	RenderMesh(meshList[TERRAIN], true);
+	RenderMesh(meshList[TERRAIN], false);
 	modelStack.PopMatrix();
 }
 
@@ -329,7 +335,9 @@ void SceneShadow::RenderEnvironment(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(10, 30, 10);
+
 	RenderMeshOutlined(meshList[GEO_CACTUS], Light);
+
 	modelStack.PopMatrix();
 }
 

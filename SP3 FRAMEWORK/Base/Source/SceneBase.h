@@ -146,6 +146,9 @@ public:
 	void RenderMeshOutlined(Mesh* mesh, bool enableLight);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 
+	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
+	float getHeightofTerrain(float terrainscale, float ** heights);
+
 protected:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -182,6 +185,7 @@ protected:
 	float FogAmount;
 	float fps;
 
+
 	//Player
 	Player* player;
 
@@ -189,6 +193,12 @@ protected:
 	SpriteAnimation* G1;
 	SpriteAnimation* G2;
 	SpriteAnimation* G3;
+
+	float **level1_Heights;
+	float characterHeight;
+
+	float terrainHeight;
+
 };
 
 #endif
