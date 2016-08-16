@@ -198,6 +198,27 @@ void SceneBase::Init()
 	meshList[CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
+	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
+	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
+
+	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
+	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
+
+	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10,10,TexCoord(10,10));
+	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+
+	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
+
+	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
+	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
+
+	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
+
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
 	meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);

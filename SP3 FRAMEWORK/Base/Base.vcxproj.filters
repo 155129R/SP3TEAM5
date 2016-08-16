@@ -75,9 +75,6 @@
     <ClCompile Include="Source\LoadOBJ.cpp">
       <Filter>Source Files\Load</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneShadow.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneBase.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -95,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="Source\MeshBuilder.cpp">
       <Filter>Source Files\Mesh and Material</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneShadow.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLevel02.cpp">
+      <Filter>Source Files\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,10 +155,13 @@
     <ClInclude Include="Source\Scene.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneBase.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SceneShadow.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneBase.h">
+    <ClInclude Include="Source\SceneLevel02.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>

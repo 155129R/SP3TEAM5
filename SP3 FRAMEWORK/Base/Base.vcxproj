@@ -23,6 +23,7 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
+    <ClCompile Include="Source\SceneLevel02.cpp" />
     <ClCompile Include="Source\SceneShadow.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Sound.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
+    <ClInclude Include="Source\SceneLevel02.h" />
     <ClInclude Include="Source\SceneShadow.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Sound.h" />

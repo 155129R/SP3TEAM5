@@ -156,6 +156,16 @@ void SceneShadow::UpdateParticle(double dt)
 		particle->vel.Set(0, -10, 0);
 		particle->scale.Set(10, 10, 10);
 		particle->rotateSpeed = Math::RandFloatMinMax(20.0f, 40.0f);
+
+		ParticleObject* particleSmoke = GetParticles();
+		particleSmoke->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
+		//particleSmoke->scale.Set(5, 5, 5);
+		float range = 2;
+		particleSmoke->vel.Set(Math::RandFloatMinMax(-range, range),
+			Math::RandFloatMinMax(-range, range),
+			Math::RandFloatMinMax(-range, range));
+		particleSmoke->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
+		particleSmoke->pos.Set(0, 20 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
 	}
 	for (auto it : particleList)
 	{
@@ -166,11 +176,26 @@ void SceneShadow::UpdateParticle(double dt)
 			{
 				particle->vel += m_gravity *(float)dt * 10.0f;
 				particle->pos += particle->vel *(float)dt * 10.0f;
+
+				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
+				{
+					particle->active = false;
+					m_particlesCount--;
+				}
 			}
-			if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
+
+			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
 			{
-				particle->active = false;
-				m_particlesCount--;
+				particle->vel += m_gravity * (float)dt;
+				particle->pos += particle->vel * (float)dt * 10.f;
+
+				//if particle reaches the terrain, it should not be inacitve
+				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
+				{
+					//particle->vel.y = particle->pos.y;
+					particle->active = false;
+					m_particlesCount--;
+				}
 			}
 		}
 	}
@@ -245,10 +270,16 @@ void SceneShadow::RenderTerrain()
 
 void SceneShadow::RenderEnvironment(bool Light)
 {
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(10, 30, 10);
 	RenderMeshOutlined(meshList[CACTUS], Light);
+	modelStack.PopMatrix();*/
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[FOUNTAIN], Light);
 	modelStack.PopMatrix();
 }
 
@@ -264,9 +295,17 @@ void SceneShadow::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
+	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		//insert billboard code
+		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
+		RenderMesh(meshList[FOUNTAIN_WATER1], false);
+		modelStack.PopMatrix();
+		break;
 
-		default :
-			break;
+	default :
+		break;
 	}
 }
 
@@ -315,7 +354,7 @@ void SceneShadow::RenderWorld()
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane(); 
 	RenderTerrain();
-	RenderEnvironment(true);
+	RenderEnvironment(false);
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
@@ -417,6 +456,15 @@ void SceneShadow::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
+
+	for (std::vector<ParticleObject*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
+	{
+		ParticleObject*particle = (ParticleObject*)*it;
+		if (particle->active)
+		{
+			RenderParticle(particle);
+		}
+	}
 
 	//On screen text
 	std::ostringstream ss;
