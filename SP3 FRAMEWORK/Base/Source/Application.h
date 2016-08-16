@@ -5,7 +5,11 @@
 #include "timer.h"
 #include "Sound.h"
 #include "SceneShadow.h"
+
 #include "SceneLevel02.h"
+
+#include "SceneLevel01.h"
+
 
 class Application
 {
@@ -46,7 +50,12 @@ private:
 	double m_dAccumlatedTime_ThreadFour;
 
 	// The handler for the scene
+
 	SceneLevel02 *scene;
+
+	//SceneShadow *scene;
+	//SceneLevel01 *scene;
+
 };
 
 #endif

@@ -659,7 +659,7 @@ Then generate the VBO/IBO and store them in Mesh object
 \return Pointer to mesh storing VBO/IBO of quad
 */
 /******************************************************************************/
-Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> &heightmap)
+Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::string &file_path, std::vector<unsigned char> &heightmap, float **& heights)
 {
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
@@ -676,7 +676,14 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 	Vertex v;
 
 	unsigned terrainSize = (unsigned)sqrt((double)heightmap.size());
-	
+	heights = new float*[terrainSize];
+	for (unsigned i = 0; i < terrainSize; ++i)
+	{
+		for (unsigned j = 0; j < terrainSize; ++j)
+		{
+			heights[i] = new float[terrainSize];
+		}
+	}
 	for (unsigned z = 0; z < terrainSize; ++z)
 	{
 		for (unsigned x = 0; x < terrainSize; ++x)
@@ -687,8 +694,8 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 			v.color.Set(scaledHeight, scaledHeight, scaledHeight);
 			v.texCoord.Set((float)x / terrainSize * 32, 1.f - (float)z / terrainSize * 32); // value 64, repeat texture 64 x across the plane
 			v.normal.Set(0, 1, 0);
-
 			vertex_buffer_data.push_back(v);
+			heights[x][z] = scaledHeight;
 		}
 	}
 

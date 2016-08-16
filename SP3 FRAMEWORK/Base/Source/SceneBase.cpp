@@ -160,7 +160,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -179,24 +179,40 @@ void SceneBase::Init()
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 4);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
+	//meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
+	//meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	//Skyplane
 	meshList[SKYPLANE] = MeshBuilder::GenerateSkyplane("WEEE", Color(1, 1, 1), 256, 1000.0f, 4000.0f, 1.0f, 1.0f);
 	meshList[SKYPLANE]->textureArray[0] = LoadTGA("Image//Sky.tga");
 
 	//Terrain 
-	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap);
+	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+
+	//level 1 terrain
+	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+
+	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
+	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
+
+	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
+	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
+
+	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
+	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+
+	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
+	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
 
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
 	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
 	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
 
-	meshList[CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
-	meshList[CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
+	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
+	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
 	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
 	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
@@ -223,11 +239,44 @@ void SceneBase::Init()
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
 	meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);
 
+	//Player
+	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
+
 	//Sprite
+	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
+	meshList[GEO_GHOST1]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
+	meshList[GEO_GHOST2] = MeshBuilder::GenerateSpriteAnimation("Horsey", 4, 3);
+	meshList[GEO_GHOST2]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
+	meshList[GEO_GHOST3] = MeshBuilder::GenerateSpriteAnimation("Horsey", 3, 6);
+	meshList[GEO_GHOST3]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
+
+	G1 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1]);
+	G2 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2]);
+	G3 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3]);
+
+	if (G1)
+	{
+		G1->m_anim = new Animation();
+		G1->m_anim->Set(0, 11, 0, 2.0f, true);
+	}
+
+	if (G2)
+	{
+		G2->m_anim = new Animation();
+		G2->m_anim->Set(0, 11, 0, 2.0f, true);
+	}
+	
+	if (G3)
+	{
+		G3->m_anim = new Animation();
+		G3->m_anim->Set(0, 17, 0, 2.0f, true);
+	}
+
+	characterHeight = 7.f;
 }
 
 void SceneBase::Update(double dt)
@@ -519,6 +568,44 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneBase::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
+{
+	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+	float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.z - p3.z)) / det;
+	float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.z - p3.z)) / det;
+	float l3 = 1.0f - l1 - l2;
+	return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+}
+
+float SceneBase::getHeightofTerrain(float terrainscale, float ** heights)
+{
+	float terrainX = camera.position.x + (terrainscale / 2.f);
+	float terrainZ = camera.position.z + (terrainscale / 2.f);
+	float gridSquSiz = terrainscale / 255.f;
+	int gridX = floor(terrainX / gridSquSiz);
+	int gridZ = floor(terrainZ / gridSquSiz);
+	if (gridX >= 255.f || gridZ >= 255.f || gridX < 0.f || gridZ < 0.f)
+	{
+		return 0.f;
+	}
+	float xCoord = (fmod(terrainX, gridSquSiz)) / gridSquSiz;
+	float zCoord = (fmod(terrainZ, gridSquSiz)) / gridSquSiz;
+	float answer;
+
+	if (xCoord <= (1.f - zCoord))
+	{
+		answer = getBaryCentricInterpolation(Vector3(0, heights[gridX][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
+	}
+	else
+	{
+		answer = getBaryCentricInterpolation(Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ + 1], 1), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
+	}
+	answer *= terrainHeight;
+	answer += characterHeight;
+
+	return answer;
 }
 
 void SceneBase::Exit()

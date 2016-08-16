@@ -1,7 +1,8 @@
-#include "SceneShadow.h"
+#include "SceneLevel01.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
+#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
@@ -9,26 +10,19 @@
 #include "LoadHmap.h"
 #include "Bullet.h"
 
-SceneShadow::SceneShadow()
+SceneLevel01::SceneLevel01()
 {
 }
 
-SceneShadow::~SceneShadow()
+SceneLevel01::~SceneLevel01()
 {
 }
 
 static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
-void SceneShadow::Init()
+
+void SceneLevel01::Init()
 {
 	SceneBase::Init();
-
-
-	player = new Player();
-
-	player->Init();
-
-
-	terrainHeight = TERRAINSIZE.y;
 
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -38,7 +32,7 @@ void SceneShadow::Init()
 	perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	//perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	projectionStack.LoadMatrix(perspective);
-	
+
 	rotateAngle = 0;
 
 	m_particlesCount = 0;
@@ -57,36 +51,14 @@ void SceneShadow::Init()
 	Switch = false;
 }
 
-void SceneShadow::Update(double dt)
+void SceneLevel01::Update(double dt)
 {
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
 	UpdateBullet(dt);
 
-
-	UpdatePlayer(dt);
-
-	//Update sprites
-	if (G1)
-	{
-		G1->Update(dt);
-		G1->m_anim->animActive = true;
-	}
-	if (G2)
-	{
-		G2->Update(dt);
-		G2->m_anim->animActive = true;
-	}
-	if (G3)
-	{
-		G3->Update(dt);
-		G3->m_anim->animActive = true;
-	}
-
-	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level1_Heights);
-
+	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Update(dt);
 
 	//shoot
@@ -175,14 +147,14 @@ void SceneShadow::Update(double dt)
 			}
 		}
 	}
-		
+
 	rotateAngle += (float)(1 * dt);
 
 
 	fps = (float)(1.f / dt);
 }
 
-void SceneShadow::UpdateBullet(double dt)
+void SceneLevel01::UpdateBullet(double dt)
 {
 	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
 		if ((*it)->deleteBullet == true){
@@ -196,7 +168,7 @@ void SceneShadow::UpdateBullet(double dt)
 	}
 }
 
-void SceneShadow::UpdateParticle(double dt)
+void SceneLevel01::UpdateParticle(double dt)
 {
 	if (m_particlesCount < MAX_PARTICLE)
 	{
@@ -206,16 +178,6 @@ void SceneShadow::UpdateParticle(double dt)
 		particle->vel.Set(0, -10, 0);
 		particle->scale.Set(10, 10, 10);
 		particle->rotateSpeed = Math::RandFloatMinMax(20.0f, 40.0f);
-
-		ParticleObject* particleSmoke = GetParticles();
-		particleSmoke->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
-		//particleSmoke->scale.Set(5, 5, 5);
-		float range = 2;
-		particleSmoke->vel.Set(Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range));
-		particleSmoke->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
-		particleSmoke->pos.Set(0, 20 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
 	}
 	for (auto it : particleList)
 	{
@@ -226,91 +188,17 @@ void SceneShadow::UpdateParticle(double dt)
 			{
 				particle->vel += m_gravity *(float)dt * 10.0f;
 				particle->pos += particle->vel *(float)dt * 10.0f;
-
-				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
-				{
-					particle->active = false;
-					m_particlesCount--;
-				}
 			}
-
-			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
+			if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
 			{
-				particle->vel += m_gravity * (float)dt;
-				particle->pos += particle->vel * (float)dt * 10.f;
-
-				//if particle reaches the terrain, it should not be inacitve
-				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
-				{
-					//particle->vel.y = particle->pos.y;
-					particle->active = false;
-					m_particlesCount--;
-				}
+				particle->active = false;
+				m_particlesCount--;
 			}
 		}
 	}
 }
 
-void SceneShadow::UpdatePlayer(double dt)
-{
-	player->GetCamera(camera);
-	player->Update(dt);
-
-	if (Application::IsKeyPressed(VK_NUMPAD0))
-	{
-		player->InflictFear(5);
-	}
-
-	if (player->GetStamina() <= 0.0f)
-	{
-		camera.Tired = true;
-	}
-	else
-	{
-		camera.Tired = false;
-	}
-
-	UpdateFearEffect(dt);
-}
-
-void SceneShadow::UpdateFearEffect(double dt)
-{
-	switch (player->GetFear())
-	{
-		case 1:
-			break;
-
-		case 2:
-			FogAmount = 1000.0f;
-			glUniform1f(m_parameters[U_FOG_END], FogAmount);
-			Black.Set(0.0f, 0.0f, 0.0f);
-			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-			break;
-
-		case 3:
-			FogAmount = 700.0f;
-			glUniform1f(m_parameters[U_FOG_END], FogAmount);
-			Black.Set(0.0f, 0.0f, 0.0f);
-			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-			break;
-
-		case 4:
-			FogAmount = 500.0f;
-			glUniform1f(m_parameters[U_FOG_END], FogAmount);
-			Black.Set(0.0f, 0.0f, 0.0f);
-			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-			break;
-
-		case 5:
-			FogAmount = 100.0f;
-			glUniform1f(m_parameters[U_FOG_END], FogAmount);
-			Black.Set(0.0f, 0.0f, 0.0f);
-			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-			break;
-	}
-}
-
-ParticleObject* SceneShadow::GetParticles(void)
+ParticleObject* SceneLevel01::GetParticles(void)
 {
 	for (auto it : particleList)
 	{
@@ -335,7 +223,7 @@ ParticleObject* SceneShadow::GetParticles(void)
 	return particle;
 }
 
-void SceneShadow::RenderGround()
+void SceneLevel01::RenderGround()
 {
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
@@ -343,13 +231,13 @@ void SceneShadow::RenderGround()
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Scale(100.0f, 100.0f, 100.0f);
 
-	for (int x=0; x<10; x++)
+	for (int x = 0; x<10; x++)
 	{
-		for (int z=0; z<10; z++)
+		for (int z = 0; z<10; z++)
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(x-5.0f, z-5.0f, 0.0f);
-			if ( ((x*9+z) % 2) == 0)
+			modelStack.Translate(x - 5.0f, z - 5.0f, 0.0f);
+			if (((x * 9 + z) % 2) == 0)
 				RenderMesh(meshList[GEO_GRASS_DARKGREEN], false);
 			else
 				RenderMesh(meshList[GEO_GRASS_LIGHTGREEN], false);
@@ -359,85 +247,227 @@ void SceneShadow::RenderGround()
 	modelStack.PopMatrix();
 }
 
-void SceneShadow::RenderSkyplane()
+void SceneLevel01::RenderSkyplane()
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.position.x , 1800, camera.position.z);
+	modelStack.Translate(camera.position.x, 1800, camera.position.z);
 	modelStack.Rotate(rotateAngle, 0, 1, 0);
 	RenderMesh(meshList[SKYPLANE], false);
 	modelStack.PopMatrix();
 }
 
-void SceneShadow::RenderTerrain()
+void SceneLevel01::RenderTerrain()
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -50, 0);
+	modelStack.Translate(1450, -50, 0);
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
-	RenderMesh(meshList[TERRAIN], false);
+	RenderMesh(meshList[LEVEL01_TERRAIN], true);
 	modelStack.PopMatrix();
 }
 
-void SceneShadow::RenderEnvironment(bool Light)
+void SceneLevel01::RenderCorridor(bool Light)
 {
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(10, 30, 10);
+	RenderMeshOutlined(meshList[CACTUS], Light);
+	modelStack.PopMatrix();*/
+
+	
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	//modelStack.Scale(1, 1, 1);
+	//RenderMesh(meshList[STAIRS], Light);
+	//modelStack.PopMatrix();
+
+	//left 
+	modelStack.PushMatrix();
+	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Scale(800, 150, 800);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Scale(1, 1, 1);
-	RenderMeshOutlined(meshList[GEO_CACTUS], Light);
-
-
+	modelStack.Translate(250, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	modelStack.Scale(300, 150, 300);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(550, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(800, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Scale(500, 150, 500);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1050, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1200, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	modelStack.Scale(300, 150, 300);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1350, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	modelStack.Scale(600, 150, 600);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	//right
+	modelStack.PushMatrix();
+	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
+	modelStack.Scale(800, 150, 800);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(250, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	modelStack.Scale(300, 150, 300);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(550, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(800, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
+	modelStack.Scale(500, 150, 500);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1050, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1200, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	modelStack.Scale(300, 150, 300);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	/*modelStack.PushMatrix();
+	modelStack.Translate(1350, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
+	modelStack.Scale(100, 150, 200);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();*/
 }
 
-void SceneShadow::RenderHUD()
+void SceneLevel01::RenderRoom(bool Light)
 {
-	std::cout << player->GetStamina() << std::endl;
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
+	//Room 1
+	modelStack.PushMatrix();
+	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	modelStack.Scale(600, 150, 600);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(101, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(600, 150, 600);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(701, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(600, 150, 600);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -800);
+	modelStack.Scale(600, 150, 600);
+	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.PopMatrix();
 }
 
-void SceneShadow::RenderSprite()
+void SceneLevel01::RenderHUD()
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(150, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST1], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(100, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST2], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(50, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST3], false);
-	modelStack.PopMatrix();
 }
 
-void SceneShadow::RenderParticle(ParticleObject* particle)
+void SceneLevel01::RenderSprite()
+{
+}
+
+void SceneLevel01::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
-	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		//insert billboard code
-		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
-		RenderMesh(meshList[FOUNTAIN_WATER1], false);
-		modelStack.PopMatrix();
-		break;
 
-	default :
+	default:
 		break;
 	}
 }
 
-void SceneShadow::RenderLight()
+void SceneLevel01::RenderLight()
 {
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -477,19 +507,18 @@ void SceneShadow::RenderLight()
 	}
 }
 
-void SceneShadow::RenderWorld()
+void SceneLevel01::RenderWorld()
 {
-	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
-	RenderSkyplane(); 
+	//glUniform1f(m_parameters[U_FOG_ENABLE], 1);
+	RenderSkyplane();
 	RenderTerrain();
-
-	RenderEnvironment(false);
+	RenderCorridor(true);
+	RenderRoom(true);
 	//RenderSprite();
-
-	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
+	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
-void SceneShadow::RenderPassGPass()
+void SceneLevel01::RenderPassGPass()
 {
 	m_renderPass = RENDER_PASS_PRE;
 
@@ -512,7 +541,7 @@ void SceneShadow::RenderPassGPass()
 	RenderWorld();
 }
 
-void SceneShadow::RenderPassMain()
+void SceneLevel01::RenderPassMain()
 {
 	m_renderPass = RENDER_PASS_MAIN;
 
@@ -601,8 +630,6 @@ void SceneShadow::RenderPassMain()
 
 	RenderWorld();
 
-
-
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -611,7 +638,7 @@ void SceneShadow::RenderPassMain()
 
 }
 
-void SceneShadow::Render()
+void SceneLevel01::Render()
 {
 	//PRE RENDER PASS
 	RenderPassGPass();
@@ -620,7 +647,7 @@ void SceneShadow::Render()
 	RenderPassMain();
 }
 
-void SceneShadow::Exit()
+void SceneLevel01::Exit()
 {
 	SceneBase::Exit();
 }

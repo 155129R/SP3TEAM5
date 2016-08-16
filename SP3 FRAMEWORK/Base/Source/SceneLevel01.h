@@ -1,14 +1,13 @@
-#ifndef SCENESHADOW_H
-#define SCENESHADOW_H
+#ifndef SCENELEVEL01_H
+#define SCENELEVEL01_H
 
 #include "SceneBase.h"
-#include "MeshBuilder.h"
 
-class SceneShadow : public SceneBase
+class SceneLevel01 : public SceneBase
 {
 public:
-	SceneShadow();
-	~SceneShadow();
+	SceneLevel01();
+	~SceneLevel01();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -18,7 +17,8 @@ public:
 	void RenderGround();
 	void RenderSkyplane();
 	void RenderTerrain();
-	void RenderEnvironment(bool Light);
+	void RenderCorridor(bool Light);
+	void RenderRoom(bool Light);
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
@@ -32,9 +32,6 @@ public:
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
-
-	void UpdatePlayer(double dt);
-	void UpdateFearEffect(double dt);
 
 private:
 	float rotateAngle;
@@ -50,8 +47,6 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
-
-	Color Black;
 };
 
 #endif
