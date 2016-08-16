@@ -160,7 +160,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -238,6 +238,8 @@ void SceneBase::Init()
 		G3->m_anim = new Animation();
 		G3->m_anim->Set(0, 17, 0, 2.0f, true);
 	}
+
+	characterHeight = 7.f;
 }
 
 void SceneBase::Update(double dt)
