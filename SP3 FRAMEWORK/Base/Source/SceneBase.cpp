@@ -179,8 +179,8 @@ void SceneBase::Init()
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1), 4);
 	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
+	//meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
+	//meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	//Skyplane
 	meshList[SKYPLANE] = MeshBuilder::GenerateSkyplane("WEEE", Color(1, 1, 1), 256, 1000.0f, 4000.0f, 1.0f, 1.0f);
@@ -195,18 +195,49 @@ void SceneBase::Init()
 	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
 	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
 
-	meshList[CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
-	meshList[CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
+	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
+	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
 	meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);
 
+	//Player
+	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
+
 	//Sprite
+	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
+	meshList[GEO_GHOST1]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
+	meshList[GEO_GHOST2] = MeshBuilder::GenerateSpriteAnimation("Horsey", 4, 3);
+	meshList[GEO_GHOST2]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
+	meshList[GEO_GHOST3] = MeshBuilder::GenerateSpriteAnimation("Horsey", 3, 6);
+	meshList[GEO_GHOST3]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
+
+	G1 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1]);
+	G2 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2]);
+	G3 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3]);
+
+	if (G1)
+	{
+		G1->m_anim = new Animation();
+		G1->m_anim->Set(0, 11, 0, 2.0f, true);
+	}
+
+	if (G2)
+	{
+		G2->m_anim = new Animation();
+		G2->m_anim->Set(0, 11, 0, 2.0f, true);
+	}
+	
+	if (G3)
+	{
+		G3->m_anim = new Animation();
+		G3->m_anim->Set(0, 17, 0, 2.0f, true);
+	}
 }
 
 void SceneBase::Update(double dt)
