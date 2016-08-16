@@ -190,6 +190,22 @@ void SceneBase::Init()
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 
+	//level 1 terrain
+	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap);
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+
+	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
+	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
+
+	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
+	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
+
+	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
+	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+
+	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
+	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
+
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
 	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
