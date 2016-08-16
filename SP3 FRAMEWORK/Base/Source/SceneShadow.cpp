@@ -390,6 +390,7 @@ void SceneShadow::RenderEnvironment(bool Light)
 
 
 	modelStack.PopMatrix();
+	*/
 }
 
 void SceneShadow::RenderHUD()
