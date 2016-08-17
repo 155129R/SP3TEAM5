@@ -10,6 +10,9 @@
 
 #include "SceneLevel01.h"
 
+#include "SceneLevel01.h"
+
+#include "SceneLevel04.h"
 
 class Application
 {
@@ -51,7 +54,9 @@ private:
 
 	// The handler for the scene
 
-	SceneLevel02 *scene;
+	SceneLevel04 *scene;
+
+	//SceneLevel02 *scene;
 
 	//SceneShadow *scene;
 	//SceneLevel01 *scene;

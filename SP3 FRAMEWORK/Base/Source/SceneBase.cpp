@@ -191,7 +191,7 @@ void SceneBase::Init()
 	//Terrain 
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
-	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
 	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
 	//level 1 terrain
@@ -614,16 +614,133 @@ float SceneBase::getHeightofTerrain(float terrainscale, float ** heights)
 
 	return answer;
 }
+//		*----*----*			*----*----**----*----*
+//		|  A |  B |			|  A |  B ||  C |  D |
+//		*----*----*			*----*----**----*----*
+//		|  C |  D |			|  E |  F ||  G |  H |
+//		*----*----*			*----*----**----*----*
+//							|  I |  J ||  K |  L |
+//			2*2				*----*----**----*----*
+//							|  M |  N ||  O |  P |
+//							*----*----**----*----*
+//									 4*4
 
 void SceneBase::InitPartitioning()
 {
+	//2*2
+	//Partition A;												
+	//A.MINPOS.Set(-Terrainsize.x, 0, -Terrainsize.z);
+	//A.MAXPOS.Set(0, 0, 0);
+	//partitioning['A'] = A;
+
+	//Partition B;
+	//B.MINPOS.Set(0, 0, -Terrainsize.z);
+	//B.MAXPOS.Set(Terrainsize.x, 0, 0);
+	//partitioning['B'] = B;
+
+	//Partition C;
+	//C.MINPOS.Set(-Terrainsize.x, 0, 0);
+	//C.MAXPOS.Set(0, 0, Terrainsize.z);
+	//partitioning['C'] = C;
+
+	//Partition D;
+	//D.MINPOS.Set(0, 0, 0);
+	//D.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z);
+	//partitioning['D'] = D;
+
+	//4*4
 	Partition A;
-	A.MINPOS.Set();
+	A.MINPOS.Set(-Terrainsize.x, 0, -Terrainsize.z);
+	A.MAXPOS.Set(-Terrainsize.x * 0.5f, 0, -Terrainsize.z * 0.5f);
+	partitioning['A'] = A;
+
+	Partition B;
+	B.MINPOS.Set(-Terrainsize.x * 0.5f, 0, -Terrainsize.z);
+	B.MAXPOS.Set(0, 0, -Terrainsize.z * 0.5f);
+	partitioning['B'] = B;
+
+	Partition C;
+	C.MINPOS.Set(0, 0, -Terrainsize.z);
+	C.MAXPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z * 0.5f);
+	partitioning['C'] = C;
+
+	Partition D;
+	D.MINPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z);
+	D.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z);
+	partitioning['D'] = D;
+	/////////////////////////////////////////////////////////////////////////
+	Partition E;
+	E.MINPOS.Set(-Terrainsize.x, 0, -Terrainsize.z * 0.5f);
+	E.MAXPOS.Set(-Terrainsize.x * 0.5f, 0, 0);
+	partitioning['E'] = E;
+
+	Partition F;
+	F.MINPOS.Set(-Terrainsize.x * 0.5f, 0, -Terrainsize.z * 0.5f);
+	F.MAXPOS.SetZero();
+	partitioning['F'] = F;
+
+	Partition G;
+	G.MINPOS.Set(0, 0, -Terrainsize.z);
+	G.MAXPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z * 0.5f);
+	partitioning['G'] = G;
+
+	Partition H;
+	H.MINPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z);
+	H.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z);
+	partitioning['H'] = H;
+	/////////////////////////////////////////////////////////////////////////
+	Partition I;
+	I.MINPOS.Set(-Terrainsize.x, 0, 0);
+	I.MAXPOS.Set(-Terrainsize.x * 0.5f, 0, Terrainsize.z * 0.5f);
+	partitioning['I'] = I;
+
+	Partition J;
+	J.MINPOS.Set(-Terrainsize.x * 0.5f, 0, 0);
+	J.MAXPOS.Set(0, 0, Terrainsize.z * 0.5f);
+	partitioning['J'] = J;
+
+	Partition K;
+	K.MINPOS.SetZero();
+	K.MAXPOS.Set(Terrainsize.x * 0.5f, 0, Terrainsize.z * 0.5f);
+	partitioning['K'] = K;
+
+	Partition L;
+	L.MINPOS.Set(Terrainsize.x * 0.5f, 0, 0);
+	L.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z * 0.5f);
+	partitioning['L'] = L;
+	///////////////////////////////////////////////////////////////////////
+	Partition M;
+	M.MINPOS.Set(-Terrainsize.x, 0, Terrainsize.z * 0.5f);
+	M.MAXPOS.Set(-Terrainsize.x * 0.5f, 0, Terrainsize.z);
+	partitioning['M'] = M;
+
+	Partition N;
+	N.MINPOS.Set(-Terrainsize.x * 0.5f, 0, Terrainsize.z * 0.5f);
+	N.MAXPOS.Set(0, 0, Terrainsize.z);
+	partitioning['N'] = N;
+
+	Partition O;
+	O.MINPOS.Set(0, 0, Terrainsize.z * 0.5f);
+	O.MAXPOS.Set(Terrainsize.x * 0.5f, 0, Terrainsize.z);
+	partitioning['O'] = O;
+
+	Partition P;
+	P.MINPOS.Set(Terrainsize.x * 0.5f, 0, Terrainsize.z * 0.5f);
+	P.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z);
+	partitioning['P'] = P;
+	///////////////////////////////////////////////////////////////////////
+
 }
 
-void SceneBase::updatePartition(Vector3 pos)
+char SceneBase::getPartition(Vector3 pos)
 {
-
+	for (auto partition : partitioning)
+	{
+		if ((pos.x >= partition.second.MINPOS.x && pos.z >= partition.second.MINPOS.z) && (pos.x <= partition.second.MAXPOS.x && pos.z <= partition.second.MAXPOS.z))
+		{
+			return partition.first;
+		}
+	}
 }
 
 void SceneBase::Exit()

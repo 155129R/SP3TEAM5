@@ -125,8 +125,6 @@ public:
 		STAIRS,
 		DOOR,
 		ELEVATORDOOR,
-		WATER,
-		WATER_SURFACE,
 
 		//PLAYER
 		GEO_STAMINA,
@@ -181,7 +179,7 @@ public:
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
 	void InitPartitioning();
-	void updatePartition(Vector3 pos);
+	char getPartition(Vector3 pos);
 
 protected:
 	unsigned m_vertexArrayID;
