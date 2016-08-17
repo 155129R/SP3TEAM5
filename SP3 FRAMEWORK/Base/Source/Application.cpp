@@ -39,6 +39,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 void resize_callback(GLFWwindow* window, int w, int h)
 {
 	glViewport(0, 0, w, h);
+	m_width = w;
+	m_height = h;
 }
 
 int Application::GetWindowWidth()
@@ -116,7 +118,7 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2231_Framework", NULL, NULL);
+	m_window = glfwCreateWindow(m_window_width, m_window_height, "SP3", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -158,7 +160,11 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	scene = new SceneShadow();
+
+	scene = new SceneLevel02();
+
+	//scene = new SceneLevel01();
+
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

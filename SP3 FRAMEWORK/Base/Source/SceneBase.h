@@ -3,7 +3,6 @@
 
 #include "Scene.h"
 #include "Mtx44.h"
-#include "Camera3.h"
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
@@ -17,6 +16,11 @@ struct Partition
 	Vector3 MINPOS;
 	Vector3 MAXPOS;
 };
+
+#include "MeshBuilder.h"
+
+#include "Player.h"
+
 
 class SceneBase : public Scene
 {
@@ -116,6 +120,34 @@ public:
 		CACTUS,
 		TOMBSTONE,
 
+		LEVEL01_TERRAIN,
+		LEVEL01_WALLS,
+		STAIRS,
+		DOOR,
+		ELEVATORDOOR,
+		WATER,
+		WATER_SURFACE,
+
+		//PLAYER
+		GEO_STAMINA,
+
+		GEO_CACTUS,
+
+		//SPRITE / ENEMY
+		GEO_GHOST1,
+		GEO_GHOST2,
+		GEO_GHOST3,
+
+		//level 2
+		FOUNTAIN,
+		FOUNTAIN_WATER1,
+		FLOOR,
+		HOUSE1,
+		HOUSE2,
+		POT,
+		COCONUT_TREE,
+
+
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
 
@@ -171,9 +203,6 @@ protected:
 	int m_particlesCount;						//Number of particles
 	unsigned MAX_PARTICLE;						//Max no of particles
 
-	//Outline stuff
-	unsigned m_outlineID;
-
 	//Terrain
 	std::vector<unsigned char>m_heightMap;
 	std::vector<unsigned char>m_heightMap_4;
@@ -191,14 +220,25 @@ protected:
 	float FogAmount;
 	float fps;
 
+
+	//Player
+	Player* player;
+
+	//Sprite Pointers
+	SpriteAnimation* G1;
+	SpriteAnimation* G2;
+	SpriteAnimation* G3;
+
 	float **level1_Heights;
 	float **level4_Heights;
 	float characterHeight;
 
 	float terrainHeight;
 
+
 	std::map<char, Partition> partitioning;
 	Vector3 Terrainsize;
+
 };
 
 #endif

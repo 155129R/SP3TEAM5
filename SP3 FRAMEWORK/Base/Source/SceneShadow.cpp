@@ -2,12 +2,12 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
 #include <sstream>
 #include "LoadHmap.h"
+#include "Bullet.h"
 
 SceneShadow::SceneShadow()
 {
@@ -21,7 +21,15 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 void SceneShadow::Init()
 {
 	SceneBase::Init();
+
+
+	player = new Player();
+
+	player->Init();
+
+
 	terrainHeight = TERRAINSIZE.y;
+
 	//Random my random randomly using srand
 	srand(time(NULL));
 
@@ -54,10 +62,38 @@ void SceneShadow::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
+	UpdateBullet(dt);
+
+
+	UpdatePlayer(dt);
+
+	//Update sprites
+	if (G1)
+	{
+		G1->Update(dt);
+		G1->m_anim->animActive = true;
+	}
+	if (G2)
+	{
+		G2->Update(dt);
+		G2->m_anim->animActive = true;
+	}
+	if (G3)
+	{
+		G3->Update(dt);
+		G3->m_anim->animActive = true;
+	}
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level1_Heights);
+
 	camera.Update(dt);
+
+	//shoot
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(1, 0, 1), 150, 100, 10));
+	}
 
 	if (Flashlight)
 	{
@@ -146,6 +182,20 @@ void SceneShadow::Update(double dt)
 	fps = (float)(1.f / dt);
 }
 
+void SceneShadow::UpdateBullet(double dt)
+{
+	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
+		if ((*it)->deleteBullet == true){
+			delete *it;
+			it = Bullet::bulletList.erase(it);
+		}
+		else{
+			(*it)->Update(dt);
+			it++;
+		}
+	}
+}
+
 void SceneShadow::UpdateParticle(double dt)
 {
 	if (m_particlesCount < MAX_PARTICLE)
@@ -156,6 +206,16 @@ void SceneShadow::UpdateParticle(double dt)
 		particle->vel.Set(0, -10, 0);
 		particle->scale.Set(10, 10, 10);
 		particle->rotateSpeed = Math::RandFloatMinMax(20.0f, 40.0f);
+
+		ParticleObject* particleSmoke = GetParticles();
+		particleSmoke->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
+		//particleSmoke->scale.Set(5, 5, 5);
+		float range = 2;
+		particleSmoke->vel.Set(Math::RandFloatMinMax(-range, range),
+			Math::RandFloatMinMax(-range, range),
+			Math::RandFloatMinMax(-range, range));
+		particleSmoke->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
+		particleSmoke->pos.Set(0, 20 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
 	}
 	for (auto it : particleList)
 	{
@@ -166,13 +226,87 @@ void SceneShadow::UpdateParticle(double dt)
 			{
 				particle->vel += m_gravity *(float)dt * 10.0f;
 				particle->pos += particle->vel *(float)dt * 10.0f;
+
+				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
+				{
+					particle->active = false;
+					m_particlesCount--;
+				}
 			}
-			if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
+
+			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
 			{
-				particle->active = false;
-				m_particlesCount--;
+				particle->vel += m_gravity * (float)dt;
+				particle->pos += particle->vel * (float)dt * 10.f;
+
+				//if particle reaches the terrain, it should not be inacitve
+				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
+				{
+					//particle->vel.y = particle->pos.y;
+					particle->active = false;
+					m_particlesCount--;
+				}
 			}
 		}
+	}
+}
+
+void SceneShadow::UpdatePlayer(double dt)
+{
+	player->GetCamera(camera);
+	player->Update(dt);
+
+	if (Application::IsKeyPressed(VK_NUMPAD0))
+	{
+		player->InflictFear(5);
+	}
+
+	if (player->GetStamina() <= 0.0f)
+	{
+		camera.Tired = true;
+	}
+	else
+	{
+		camera.Tired = false;
+	}
+
+	UpdateFearEffect(dt);
+}
+
+void SceneShadow::UpdateFearEffect(double dt)
+{
+	switch (player->GetFear())
+	{
+		case 1:
+			break;
+
+		case 2:
+			FogAmount = 1000.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+
+		case 3:
+			FogAmount = 700.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+
+		case 4:
+			FogAmount = 500.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
+
+		case 5:
+			FogAmount = 100.0f;
+			glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			Black.Set(0.0f, 0.0f, 0.0f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+			break;
 	}
 }
 
@@ -245,28 +379,62 @@ void SceneShadow::RenderTerrain()
 
 void SceneShadow::RenderEnvironment(bool Light)
 {
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(10, 30, 10);
-	//RenderMeshOutlined(meshList[CACTUS], Light);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[GEO_CACTUS], Light);
+
+
 	modelStack.PopMatrix();
+	*/
 }
 
 void SceneShadow::RenderHUD()
 {
+	std::cout << player->GetStamina() << std::endl;
+	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
 }
 
 void SceneShadow::RenderSprite()
 {
+	modelStack.PushMatrix();
+	modelStack.Translate(150, 0, 0);
+	modelStack.Scale(25, 25, 25);
+	RenderMesh(meshList[GEO_GHOST1], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 0, 0);
+	modelStack.Scale(25, 25, 25);
+	RenderMesh(meshList[GEO_GHOST2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(50, 0, 0);
+	modelStack.Scale(25, 25, 25);
+	RenderMesh(meshList[GEO_GHOST3], false);
+	modelStack.PopMatrix();
 }
 
 void SceneShadow::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
+	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		//insert billboard code
+		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
+		RenderMesh(meshList[FOUNTAIN_WATER1], false);
+		modelStack.PopMatrix();
+		break;
 
-		default :
-			break;
+	default :
+		break;
 	}
 }
 
@@ -315,8 +483,10 @@ void SceneShadow::RenderWorld()
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane(); 
 	RenderTerrain();
-	RenderEnvironment(true);
+
+	RenderEnvironment(false);
 	//RenderSprite();
+
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
@@ -403,6 +573,20 @@ void SceneShadow::RenderPassMain()
 	//Render objects
 	RenderLight();
 
+	//bullet
+	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+		modelStack.PushMatrix();
+		modelStack.Translate(
+			(*it)->position.x,
+			(*it)->position.y,
+			(*it)->position.z
+			);
+		modelStack.Scale(1, 1, 1);
+		RenderMesh(meshList[GEO_LIGHTBALL], false);
+		modelStack.PopMatrix();
+	}
+
+
 	//Depth quad
 	//viewStack.PushMatrix();
 	//viewStack.LoadIdentity();
@@ -417,6 +601,8 @@ void SceneShadow::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
+
+
 
 	//On screen text
 	std::ostringstream ss;
