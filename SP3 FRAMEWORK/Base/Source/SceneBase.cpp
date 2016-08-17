@@ -192,7 +192,7 @@ void SceneBase::Init()
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
-	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+	//meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -232,6 +232,12 @@ void SceneBase::Init()
 
 	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
 	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
+	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
+
+	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//bench.obj");
+	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//bench.tga");
 
 	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
 	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
