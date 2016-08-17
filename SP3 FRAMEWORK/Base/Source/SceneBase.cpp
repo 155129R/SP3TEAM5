@@ -18,6 +18,8 @@ SceneBase::~SceneBase()
 
 void SceneBase::Init()
 {
+	Math::InitRNG();
+
 	// Black background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// Enable depth test
@@ -160,7 +162,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	camera.Init(Vector3(0, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 100, 10), Vector3(0, 100, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -189,6 +191,24 @@ void SceneBase::Init()
 	//Terrain 
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+
+	//level 1 terrain
+	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+
+	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
+	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
+
+	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
+	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
+
+	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
+	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+
+	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
+	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
 
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
@@ -197,6 +217,30 @@ void SceneBase::Init()
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
+
+	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
+	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
+
+	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
+	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
+
+	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10,10,TexCoord(10,10));
+	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+
+	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
+
+	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
+	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
+
+	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
+
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Tombstone.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -576,9 +620,20 @@ float SceneBase::getHeightofTerrain(float terrainscale, float ** heights)
 		answer = getBaryCentricInterpolation(Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ + 1], 1), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
 	}
 	answer *= terrainHeight;
-	answer += characterHeight;
+	answer += characterHeight * 2;
 
 	return answer;
+}
+
+void SceneBase::InitPartitioning()
+{
+	Partition A;
+	A.MINPOS.Set();
+}
+
+void SceneBase::updatePartition(Vector3 pos)
+{
+
 }
 
 void SceneBase::Exit()
