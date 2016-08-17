@@ -189,16 +189,17 @@ void SceneBase::Init()
 	meshList[SKYPLANE]->textureArray[0] = LoadTGA("Image//Sky.tga");
 
 	//Terrain 
-	//meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
-	//meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
-	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap, level1_Heights);
+	/*meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
+	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");*/
+
+	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	//meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
-//	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+	//	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
 	//level 1 terrain
-	//meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	//meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 
 	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
 	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
