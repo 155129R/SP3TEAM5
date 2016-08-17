@@ -12,7 +12,7 @@ void Player::Init()
 {
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
-	stamina = 100.0f;
+	stamina = 500.0f;
 	recharge = 5.0f;
 }
 

@@ -6,7 +6,6 @@
 
 class SceneLevel02 : public SceneBase
 {
-
 public:
 	SceneLevel02();
 	~SceneLevel02();
