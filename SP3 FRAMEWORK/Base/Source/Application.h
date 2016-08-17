@@ -53,8 +53,10 @@ private:
 
 	//SceneLevel02 *scene;
 
-	SceneShadow *scene;
-	//SceneLevel01 *scene;
+
+	//SceneShadow *scene;
+	SceneLevel01 *scene;
+
 
 };
 
