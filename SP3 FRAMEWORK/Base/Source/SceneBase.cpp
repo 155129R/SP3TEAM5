@@ -189,14 +189,16 @@ void SceneBase::Init()
 	meshList[SKYPLANE]->textureArray[0] = LoadTGA("Image//Sky.tga");
 
 	//Terrain 
-	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
+	//meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
+	//meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	//meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
 //	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
 	//level 1 terrain
-	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	//meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
+	//meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 
 	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
 	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
@@ -218,11 +220,6 @@ void SceneBase::Init()
 
 	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
 	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
-
-	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
-	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
-	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
@@ -257,6 +254,24 @@ void SceneBase::Init()
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
+
+	//Forest
+	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree.tga");
+	meshList[GEO_TREE_2] = MeshBuilder::GenerateQuad("Fat Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_2]->textureArray[0] = LoadTGA("Image//Forest//Fat_Tree.tga");
+	meshList[GEO_TREE_3] = MeshBuilder::GenerateQuad("Dead Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
+	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
+	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
+	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
+	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
+	meshList[GEO_BRIDGE] = MeshBuilder::GenerateOBJ("Bridge", "OBJ//Forest//Bridge.obj");
+	meshList[GEO_BRIDGE]->textureArray[0] = LoadTGA("Image//Forest//Bridge.tga");
+	meshList[GEO_LOGS] = MeshBuilder::GenerateOBJ("Logs", "OBJ//Forest//Logs.obj");
+	meshList[GEO_LOGS]->textureArray[0] = LoadTGA("Image//Forest//Logs.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);

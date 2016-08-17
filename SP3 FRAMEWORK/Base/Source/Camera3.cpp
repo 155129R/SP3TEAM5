@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "Mtx44.h"
 
-static const float CAMERA_SPEED = 100.f;
+static const float CAMERA_SPEED = 500.f;
 static const float MOUSE_SPEED = 200.f;
 
 Camera3::Camera3()
