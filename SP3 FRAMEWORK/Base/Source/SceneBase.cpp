@@ -205,6 +205,16 @@ void SceneBase::Init()
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
 
+	//Forest
+	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree.tga");
+	meshList[GEO_TREE_2] = MeshBuilder::GenerateQuad("Fat Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_2]->textureArray[0] = LoadTGA("Image//Forest//Fat_Tree.tga");
+	meshList[GEO_TREE_3] = MeshBuilder::GenerateQuad("Dead Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
+	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
+
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
 	meshList[GEO_GHOST1]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");

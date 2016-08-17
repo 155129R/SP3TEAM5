@@ -50,6 +50,11 @@ private:
 	bool Switch;
 
 	Color Black;
+
+	//Forest
+	Vector3 Tree[120];
+	int Tree_Type[120];
+	Vector3 Bush[200];
 };
 
 #endif
