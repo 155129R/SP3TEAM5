@@ -64,7 +64,7 @@ void SceneLevel01::Update(double dt)
 	//shoot
 	if (Application::IsKeyPressed(VK_SPACE))
 	{
-		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(1, 0, 1), 150, 100, 10));
+		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(camera.view.x, camera.view.y, camera.view.z), 150, 100, 10));
 	}
 
 	if (Flashlight)
@@ -265,7 +265,7 @@ void SceneLevel01::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel01::RenderCorridor(bool Light)
+void SceneLevel01::RenderLevel(bool Light)
 {
 	/*modelStack.PushMatrix();
 	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
@@ -284,169 +284,84 @@ void SceneLevel01::RenderCorridor(bool Light)
 	//left 
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Scale(800, 150, 800);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.Scale(20, 20, 20);
+	RenderMeshOutlined(meshList[LEVEL01], Light);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(250, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(400, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
-	modelStack.Scale(300, 150, 300);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
-	modelStack.Scale(4, 4, 4);
-	RenderMeshOutlined(meshList[DOOR], Light);
-	modelStack.PopMatrix();
+	
 
 
-	modelStack.PushMatrix();
-	modelStack.Translate(550, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(800, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Scale(500, 150, 500);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1050, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1200, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
-	modelStack.Scale(300, 150, 300);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
-	modelStack.Scale(4, 4, 4);
-	RenderMeshOutlined(meshList[DOOR], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1350, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
-	modelStack.Scale(600, 150, 600);
-	modelStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	//right
-	modelStack.PushMatrix();
-	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
-	modelStack.Scale(800, 150, 800);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(250, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(400, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
-	modelStack.Scale(300, 150, 300);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
-	modelStack.Scale(4, 4, 4);
-	RenderMeshOutlined(meshList[DOOR], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(550, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(800, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
-	modelStack.Scale(500, 150, 500);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1050, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1200, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
-	modelStack.Scale(300, 150, 300);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
-	modelStack.Scale(4, 4, 4);
-	RenderMeshOutlined(meshList[DOOR], Light);
-	modelStack.PopMatrix();
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(1350, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 300);
-	modelStack.Scale(100, 150, 200);
-	modelStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
-	modelStack.PopMatrix();*/
 }
 
-void SceneLevel01::RenderRoom(bool Light)
+void SceneLevel01::RenderRoomObjects(bool Light)
 {
-	//Room 1
+
+	//[Left] first room (front doors)
 	modelStack.PushMatrix();
-	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
-	modelStack.Scale(600, 150, 600);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(101, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	modelStack.Scale(600, 150, 600);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	//[Left] second room (front doors)
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(701, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	modelStack.Scale(600, 150, 600);
-	modelStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.Translate(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	//[Right] first room (front doors)
+	modelStack.PushMatrix();
+	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -800);
-	modelStack.Scale(600, 150, 600);
-	RenderMesh(meshList[LEVEL01_WALLS], Light);
+	modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
 	modelStack.PopMatrix();
+
+	//[Right] second room (front doors)
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
+	modelStack.Scale(4, 4, 4);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	//first room
+	modelStack.PushMatrix();
+	modelStack.Translate(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
+	modelStack.Scale(4, 3.5, 4);
+	modelStack.Rotate(-75, 0, 1, 0);
+	RenderMesh(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(401, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(20, 20, 20);
+	RenderMesh(meshList[TABLE], Light);
+	modelStack.PopMatrix();
+
 }
 
 void SceneLevel01::RenderHUD()
@@ -512,8 +427,8 @@ void SceneLevel01::RenderWorld()
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
-	RenderCorridor(true);
-	RenderRoom(true);
+	RenderLevel(false);
+	RenderRoomObjects(false);
 	//RenderSprite();
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }

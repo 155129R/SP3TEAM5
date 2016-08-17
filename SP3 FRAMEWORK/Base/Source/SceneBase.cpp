@@ -191,8 +191,8 @@ void SceneBase::Init()
 	//Terrain 
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
-	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
-	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+	//meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
+//	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -204,8 +204,17 @@ void SceneBase::Init()
 	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
 	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
 
+	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Level01.obj");
+	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//uvmap.tga");
+
 	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
 	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+
+	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
+	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+
+	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
+	//meshList[TABLE]->textureArray[0] = LoadTGA("Image//bed.tga");
 
 	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
 	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");

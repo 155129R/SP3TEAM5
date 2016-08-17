@@ -17,8 +17,8 @@ public:
 	void RenderGround();
 	void RenderSkyplane();
 	void RenderTerrain();
-	void RenderCorridor(bool Light);
-	void RenderRoom(bool Light);
+	void RenderLevel(bool Light);
+	void RenderRoomObjects(bool Light);
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
