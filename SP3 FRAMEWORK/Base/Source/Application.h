@@ -54,12 +54,16 @@ private:
 
 	// The handler for the scene
 
-	SceneLevel04 *scene;
+
+	//SceneLevel04 *scene;
 
 	//SceneLevel02 *scene;
 
+
+
 	//SceneShadow *scene;
-	//SceneLevel01 *scene;
+	SceneLevel01 *scene;
+
 
 };
 

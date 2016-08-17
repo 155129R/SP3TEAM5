@@ -22,7 +22,7 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 void SceneLevel02::Init()
 {
 	SceneBase::Init();
-
+	sound.Init();
 	//Random my random randomly using srand
 	srand(time(NULL));
 
@@ -48,12 +48,25 @@ void SceneLevel02::Init()
 
 	FogEffect = false;
 	Switch = false;
+	soundTimer = 0;
 }
 
 void SceneLevel02::Update(double dt)
 {
 	SceneBase::Update(dt);
-
+	sound.Init();
+	soundTimer += dt;
+	if (soundTimer > 0.1)
+	{
+		sound.playSoundEffect3D("Sound/fountain2.wav",
+			irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
+			irrklang::vec3df(camera.target.x, camera.target.y, camera.target.z),
+			irrklang::vec3df(0, 0, 0),
+			false);
+		soundTimer = 0;
+	}
+	
+	
 	UpdateParticle(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
@@ -280,6 +293,44 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.Translate(0, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(2, 2, 2);
 	RenderMeshOutlined(meshList[FOUNTAIN], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	modelStack.Scale(20, 20, 40);
+	RenderMeshOutlined(meshList[HEDGE], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(5, 5, 5);
+	RenderMeshOutlined(meshList[BENCHES], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	modelStack.Scale(20, 20, 40);
+	RenderMeshOutlined(meshList[HEDGE], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	modelStack.Scale(20, 20, 40);
+	RenderMeshOutlined(meshList[HEDGE], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Scale(5, 5, 5);
+	RenderMeshOutlined(meshList[BENCHES], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	modelStack.Scale(20, 20, 40);
+	RenderMeshOutlined(meshList[HEDGE], Light);
 	modelStack.PopMatrix();
 
 	for (int i = 0; i < 5; i++)

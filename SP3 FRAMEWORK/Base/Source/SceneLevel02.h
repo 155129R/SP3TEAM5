@@ -2,10 +2,10 @@
 #define SCENELEVEL02_H
 
 #include "SceneBase.h"
+#include "Sound.h"
 
 class SceneLevel02 : public SceneBase
 {
-
 public:
 	SceneLevel02();
 	~SceneLevel02();
@@ -45,6 +45,10 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
+
+	Sound sound;
+
+	float soundTimer;
 };
 
 #endif

@@ -113,23 +113,35 @@ public:
 
 		SKYPLANE,
 		TERRAIN,
+		TERRAIN_LEVEL01,
+		TERRAIN_LEVEL02,
+		TERRAIN_LEVEL03,
 		TERRAIN_LEVEL04,
-		WATER,
-		WATER_SURFACE,
 
 		CACTUS,
 		TOMBSTONE,
 
 		LEVEL01_TERRAIN,
 		LEVEL01_WALLS,
+		LEVEL01,
 		STAIRS,
 		DOOR,
+		BED,
+		WINDOW,
+		TABLE,
 		ELEVATORDOOR,
 
 		//PLAYER
 		GEO_STAMINA,
 
+		//FOREST
 		GEO_CACTUS,
+		GEO_TREE_1,
+		GEO_TREE_2,
+		GEO_TREE_3,
+		GEO_BUSH,
+		GEO_BRIDGE,
+		GEO_LOGS,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1,
@@ -144,7 +156,8 @@ public:
 		HOUSE2,
 		POT,
 		COCONUT_TREE,
-
+		HEDGE,
+		BENCHES,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -203,6 +216,8 @@ protected:
 
 	//Terrain
 	std::vector<unsigned char>m_heightMap;
+	std::vector<unsigned char>m_heightMap_2;
+	std::vector<unsigned char>m_heightMap_3;
 	std::vector<unsigned char>m_heightMap_4;
 
 	//Shadow Stuff
@@ -228,6 +243,8 @@ protected:
 	SpriteAnimation* G3;
 
 	float **level1_Heights;
+	float **level2_Heights;
+	float **level3_Heights;
 	float **level4_Heights;
 	float characterHeight;
 
