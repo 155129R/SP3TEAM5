@@ -16,9 +16,9 @@ public:
 	virtual void Exit();
 
 	void RenderGround();
-	void RenderSkyplane();
+	void RenderSkyplane(bool inverted = false);
 	void RenderTerrain();
-	void RenderEnvironment(bool Light);
+	void RenderEnvironment(bool Light, bool inverted = false);
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
@@ -54,9 +54,9 @@ private:
 	Color Black;
 
 	//Forest
-	Vector3 Tree[120];
-	int Tree_Type[120];
-	Vector3 Bush[200];
+	Vector3 Tree[400];
+	int Tree_Type[400];
+	Vector3 Bush[400];
 };
 
 #endif

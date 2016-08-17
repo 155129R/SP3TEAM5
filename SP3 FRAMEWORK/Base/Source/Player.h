@@ -45,7 +45,6 @@ private:
 	//Stamina
 	float stamina;
 	float recharge;
-	bool recharging;
 
 	//Weapon* equipped;
 	//Inventory
