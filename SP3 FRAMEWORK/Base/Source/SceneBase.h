@@ -10,6 +10,13 @@
 #include <vector>
 #include "Particle.h"
 #include "DepthFBO.h"
+#include <map>
+
+struct Partition
+{
+	Vector3 MINPOS;
+	Vector3 MAXPOS;
+};
 
 class SceneBase : public Scene
 {
@@ -102,10 +109,12 @@ public:
 
 		SKYPLANE,
 		TERRAIN,
+		TERRAIN_LEVEL04,
 		WATER,
 		WATER_SURFACE,
 
 		CACTUS,
+		TOMBSTONE,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -139,6 +148,9 @@ public:
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
+	void InitPartitioning();
+	void updatePartition(Vector3 pos);
+
 protected:
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
@@ -164,6 +176,7 @@ protected:
 
 	//Terrain
 	std::vector<unsigned char>m_heightMap;
+	std::vector<unsigned char>m_heightMap_4;
 
 	//Shadow Stuff
 	unsigned m_gPassShaderID;
@@ -179,9 +192,13 @@ protected:
 	float fps;
 
 	float **level1_Heights;
+	float **level4_Heights;
 	float characterHeight;
 
 	float terrainHeight;
+
+	std::map<char, Partition> partitioning;
+	Vector3 Terrainsize;
 };
 
 #endif

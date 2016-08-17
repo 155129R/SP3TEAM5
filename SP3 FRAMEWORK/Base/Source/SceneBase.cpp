@@ -18,6 +18,8 @@ SceneBase::~SceneBase()
 
 void SceneBase::Init()
 {
+	Math::InitRNG();
+
 	// Black background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// Enable depth test
@@ -160,7 +162,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	camera.Init(Vector3(0, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 100, 10), Vector3(0, 100, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -189,6 +191,8 @@ void SceneBase::Init()
 	//Terrain 
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
@@ -197,6 +201,9 @@ void SceneBase::Init()
 
 	meshList[CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
+
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Tombstone.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -209,7 +216,6 @@ void SceneBase::Init()
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
 	characterHeight = 7.f;
-	//camera.position.y += characterHeight;
 }
 
 void SceneBase::Update(double dt)
@@ -536,9 +542,20 @@ float SceneBase::getHeightofTerrain(float terrainscale, float ** heights)
 		answer = getBaryCentricInterpolation(Vector3(1, heights[gridX + 1][gridZ], 0), Vector3(1, heights[gridX + 1][gridZ + 1], 1), Vector3(0, heights[gridX][gridZ + 1], 1), Vector3(xCoord, 0, zCoord));
 	}
 	answer *= terrainHeight;
-	answer += characterHeight;
+	answer += characterHeight * 2;
 
 	return answer;
+}
+
+void SceneBase::InitPartitioning()
+{
+	Partition A;
+	A.MINPOS.Set();
+}
+
+void SceneBase::updatePartition(Vector3 pos)
+{
+
 }
 
 void SceneBase::Exit()
