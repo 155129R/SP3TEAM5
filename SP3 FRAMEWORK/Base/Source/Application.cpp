@@ -160,11 +160,10 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	scene = new SceneLevel01();
-
-	//scene = new SceneLevel04();
-
 	//scene = new SceneLevel01();
+	//scene = new SceneLevel02();
+    scene = new SceneLevel04();
+
 
 	//scene = new SceneShadow();
 

@@ -259,8 +259,8 @@ void SceneBase::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
-	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Tombstone.obj");
-	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Tombstone.tga");
+	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1));
+	meshList[NIGHT_VISION]->textureArray[0] = LoadTGA("Image//nightVision.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -286,6 +286,12 @@ void SceneBase::Init()
 	meshList[GEO_BRIDGE]->textureArray[0] = LoadTGA("Image//Forest//Bridge.tga");
 	meshList[GEO_LOGS] = MeshBuilder::GenerateOBJ("Logs", "OBJ//Forest//Logs.obj");
 	meshList[GEO_LOGS]->textureArray[0] = LoadTGA("Image//Forest//Logs.tga");
+
+	//Level 4 - Graveyard
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fene", "OBJ//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
@@ -370,6 +376,7 @@ void SceneBase::Update(double dt)
 	{
 		bLightEnabled = false;
 	}
+
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)

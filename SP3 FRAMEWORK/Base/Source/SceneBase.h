@@ -119,9 +119,9 @@ public:
 		TERRAIN_LEVEL04,
 		WATER,
 		WATER_SURFACE,
+		NIGHT_VISION,
 
 		CACTUS,
-		TOMBSTONE,
 
 		LEVEL01_TERRAIN,
 		LEVEL01_WALLS,
@@ -161,6 +161,10 @@ public:
 		HEDGE,
 		BENCHES,
 
+		//level4
+		TOMBSTONE,
+		FENCE,
+
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
 
@@ -189,6 +193,7 @@ public:
 	void RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate);
 	void RenderMeshOutlined(Mesh* mesh, bool enableLight);
 	void RenderMesh(Mesh *mesh, bool enableLight);
+	void RenderNightVision();
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
@@ -255,7 +260,7 @@ protected:
 
 	std::map<char, Partition> partitioning;
 	Vector3 Terrainsize;
-
+	bool nightVision;
 };
 
 #endif

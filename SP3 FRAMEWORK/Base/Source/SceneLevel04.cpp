@@ -22,9 +22,8 @@ void SceneLevel04::Init()
 {
 	SceneBase::Init();
 	terrainHeight = TERRAINSIZE.y;
-	Terrainsize = TERRAINSIZE;
+	Terrainsize = TERRAINSIZE * 0.5f;
 	//Random my random randomly using srand
-	srand(time(NULL));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -51,10 +50,28 @@ void SceneLevel04::Init()
 	camera.position.Set(0, 200, 10);
 	camera.target.Set(0, 200, 1);
 	
-	for (int i = 0; i < 500; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		Vector3 temp;
-		temp.Set(Math::RandFloatMinMax(-4000, 4000), 0, Math::RandFloatMinMax(-4000, 4000));
+		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+		gravePos.push_back(temp);
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+		gravePos.push_back(temp);
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+		gravePos.push_back(temp);
+	}
+	for (int i = 0; i < 50; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
 		gravePos.push_back(temp);
 	}
 
@@ -64,6 +81,14 @@ void SceneLevel04::Init()
 	InitPartitioning();
 
 	spatialPartitioning = true;
+	nightVision = false;
+
+	lights[0].power = 0.5f;
+	lights[0].color = (0.f, 0.2f, 0.4f);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	Color fogColor(0.1f, 0.1f, 0.1f);
+	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 }
 
 void SceneLevel04::Update(double dt)
@@ -82,7 +107,10 @@ void SceneLevel04::Update(double dt)
 		lights[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 		lights[1].spotDirection.Set(-view.x, -view.y, -view.z);
 	}
-
+	if (Application::IsKeyPressed('6'))
+	{
+		nightVision = true;
+	}
 	//TOGGLE AXIS
 	if (Application::IsKeyPressed('X') && Axis_Wait >= 0.5f)
 	{
@@ -159,11 +187,11 @@ void SceneLevel04::Update(double dt)
 
 	rotateAngle += (float)(1 * dt);
 
-	if (Application::IsKeyPressed('H'))
+	if (Application::IsKeyPressed(VK_NUMPAD1))
 	{
 		spatialPartitioning = true;
 	}
-	if (Application::IsKeyPressed('J'))
+	if (Application::IsKeyPressed(VK_NUMPAD2))
 	{
 		spatialPartitioning = false;
 	}
@@ -268,22 +296,91 @@ void SceneLevel04::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel04::RenderEnvironment(bool Light)
+void SceneLevel04::RenderFence(bool Light)
+{
+	{
+		Vector3 fencePos;
+		fencePos.Set(Terrainsize.x - 400, 0, -Terrainsize.z + 600);
+		modelStack.PushMatrix();
+		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMeshOutlined(meshList[FENCE], true);
+		modelStack.PopMatrix();
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(Terrainsize.x - 400, 0, Terrainsize.z - 600);
+		modelStack.PushMatrix();
+		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMeshOutlined(meshList[FENCE], true);
+		modelStack.PopMatrix();
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(Terrainsize.x - 400, 0, 0);
+		modelStack.PushMatrix();
+		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMeshOutlined(meshList[FENCE], true);
+		modelStack.PopMatrix();
+	}
+	////
+	{
+		Vector3 fencePos;
+		fencePos.Set(-Terrainsize.x + 400, 0, -Terrainsize.z + 600);
+		modelStack.PushMatrix();
+		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMeshOutlined(meshList[FENCE], true);
+		modelStack.PopMatrix();
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(-Terrainsize.x + 400, 0, Terrainsize.z - 600);
+		modelStack.PushMatrix();
+		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMeshOutlined(meshList[FENCE], true);
+		modelStack.PopMatrix();
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(-Terrainsize.x + 400, 0, 0);
+		modelStack.PushMatrix();
+		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+		modelStack.Rotate(90, 0, 1, 0);
+		RenderMeshOutlined(meshList[FENCE], true);
+		modelStack.PopMatrix();
+	}
+}
+
+void SceneLevel04::RenderTombstone(bool Light)
 {
 	if (spatialPartitioning)
 	{
+		playerPartition = getPartition(camera.position);
 		for (auto pos : gravePos)
 		{
-			char playerPartition = getPartition(camera.position);
-			char posPartition = getPartition(pos);
-			if ((playerPartition == posPartition) || (playerPartition - 1 == posPartition) || (playerPartition + 1 == posPartition))
+			posPartition = getPartition(pos);
+
+			if
+				(
+				(playerPartition == posPartition) || (playerPartition + 1 == posPartition) || (playerPartition + 3 == posPartition) || (playerPartition + 4 == posPartition) || (playerPartition + 5 == posPartition)
+				|| (playerPartition - 1 == posPartition) || (playerPartition - 3 == posPartition) || (playerPartition - 4 == posPartition) || (playerPartition - 5 == posPartition)
+				)
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(pos.x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z), pos.z);
+				modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
 				modelStack.Scale(10, 10, 10);
 				RenderMeshOutlined(meshList[TOMBSTONE], true);
 				modelStack.PopMatrix();
 			}
+
 		}
 	}
 	else
@@ -292,19 +389,30 @@ void SceneLevel04::RenderEnvironment(bool Light)
 		{
 			//char playerPartition = getPartition(camera.position);
 			//char posPartition = getPartition(pos);
-			
-				modelStack.PushMatrix();
-				modelStack.Translate(pos.x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z), pos.z);
-				modelStack.Scale(10, 10, 10);
-				RenderMeshOutlined(meshList[TOMBSTONE], true);
-				modelStack.PopMatrix();
-			
+
+			modelStack.PushMatrix();
+			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
+			modelStack.Scale(10, 10, 10);
+			RenderMeshOutlined(meshList[TOMBSTONE], true);
+			modelStack.PopMatrix();
+
 		}
 	}
 }
 
+void SceneLevel04::RenderEnvironment(bool Light)
+{
+	RenderTombstone(Light);
+	RenderFence(Light);
+}
+
+
 void SceneLevel04::RenderHUD()
 {
+	if (nightVision == true)
+	{
+		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+	}
 }
 
 void SceneLevel04::RenderSprite()
@@ -367,6 +475,7 @@ void SceneLevel04::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(true);
+
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
@@ -453,7 +562,7 @@ void SceneLevel04::RenderPassMain()
 
 	//Render objects
 	RenderLight();
-
+	RenderHUD();
 	//Depth quad
 	//viewStack.PushMatrix();
 	//viewStack.LoadIdentity();
@@ -470,16 +579,24 @@ void SceneLevel04::RenderPassMain()
 	RenderWorld();
 
 	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
-	//std::ostringstream ss;
-	//ss.precision(5);
-	//ss << "Partition: " << getPartition(camera.position);
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	}
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "Partition: " << getPartition(camera.position);
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+	}
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "Position: " << camera.position;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+	}
 
 }
 

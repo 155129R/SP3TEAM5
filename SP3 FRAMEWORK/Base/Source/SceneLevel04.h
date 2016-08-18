@@ -21,7 +21,8 @@ public:
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
-
+	void RenderTombstone(bool Light);
+	void RenderFence(bool Light);
 	void UpdateParticle(double dt);
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
@@ -48,6 +49,9 @@ private:
 	std::vector<Vector3> gravePos;
 
 	bool spatialPartitioning;
+
+	char playerPartition;
+	char posPartition;
 };
 
 #endif
