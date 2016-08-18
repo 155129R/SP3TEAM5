@@ -159,7 +159,7 @@ void Application::Init()
 
 void Application::Run()
 {
-	scene = new SceneShadow();
+	scene = new SceneLevel03();
 	//Main Loop
 	//scene = new SceneLevel01();
 

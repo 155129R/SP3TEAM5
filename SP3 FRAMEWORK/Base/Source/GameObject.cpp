@@ -13,3 +13,11 @@ GameObject::GameObject()
 GameObject::~GameObject()
 {
 }
+
+void GameObject::Init()
+{
+}
+
+void GameObject::Update(double dt)
+{
+}

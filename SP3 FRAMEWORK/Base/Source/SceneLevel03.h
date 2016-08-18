@@ -33,9 +33,6 @@ public:
 	void RenderWorld();
 	void RenderReflection();
 
-	void UpdatePlayer(double dt);
-	void UpdateFearEffect(double dt);
-
 private:
 	float rotateAngle;
 
@@ -50,8 +47,6 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
-
-	Color Black;
 
 	//Forest
 	Vector3 Tree[400];

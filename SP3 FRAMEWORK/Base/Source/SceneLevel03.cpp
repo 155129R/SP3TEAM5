@@ -72,9 +72,17 @@ void SceneLevel03::Update(double dt)
 
 	UpdateParticle(dt);
 	UpdateBullet(dt);
-
-
 	UpdatePlayer(dt);
+
+	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->pos.y =  TERRAINSIZE.y *  ReadHeightMap(m_heightMap_3, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
+			ghost->Update(dt, player->pos);
+		}
+	}
 
 	//Update sprites
 	if (G1)
@@ -94,7 +102,7 @@ void SceneLevel03::Update(double dt)
 	}
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level1_Heights);
+	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
 	camera.Update(dt);
 
@@ -260,65 +268,6 @@ void SceneLevel03::UpdateParticle(double dt)
 	}
 }
 
-void SceneLevel03::UpdatePlayer(double dt)
-{
-	player->GetCamera(camera);
-	player->Update(dt);
-
-	if (Application::IsKeyPressed(VK_NUMPAD0))
-	{
-		player->InflictFear(5);
-	}
-
-	if (player->GetStamina() <= 0.0f)
-	{
-		camera.Tired = true;
-	}
-	else
-	{
-		camera.Tired = false;
-	}
-
-	UpdateFearEffect(dt);
-}
-
-void SceneLevel03::UpdateFearEffect(double dt)
-{
-	switch (player->GetFear())
-	{
-	case 1:
-		break;
-
-	case 2:
-		FogAmount = 1000.0f;
-		glUniform1f(m_parameters[U_FOG_END], FogAmount);
-		Black.Set(0.0f, 0.0f, 0.0f);
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-		break;
-
-	case 3:
-		FogAmount = 700.0f;
-		glUniform1f(m_parameters[U_FOG_END], FogAmount);
-		Black.Set(0.0f, 0.0f, 0.0f);
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-		break;
-
-	case 4:
-		FogAmount = 500.0f;
-		glUniform1f(m_parameters[U_FOG_END], FogAmount);
-		Black.Set(0.0f, 0.0f, 0.0f);
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-		break;
-
-	case 5:
-		FogAmount = 100.0f;
-		glUniform1f(m_parameters[U_FOG_END], FogAmount);
-		Black.Set(0.0f, 0.0f, 0.0f);
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
-		break;
-	}
-}
-
 ParticleObject* SceneLevel03::GetParticles(void)
 {
 	for (auto it : particleList)
@@ -402,7 +351,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 			case 1:
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+				modelStack.Translate(Tree[i].x, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
 				modelStack.Rotate(Degree - 90, 0, 1, 0);
 				modelStack.Scale(250, 400, 250);
 				RenderMeshOutlined(meshList[GEO_TREE_1], false);
@@ -412,7 +361,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 			case 2:
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+				modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
 				modelStack.Rotate(Degree - 90, 0, 1, 0);
 				modelStack.Scale(400, 400, 400);
 				RenderMeshOutlined(meshList[GEO_TREE_2], false);
@@ -422,7 +371,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 			case 3:
 			{
 				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+				modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
 				modelStack.Rotate(Degree - 90, 0, 1, 0);
 				modelStack.Scale(150, 400, 150);
 				RenderMeshOutlined(meshList[GEO_TREE_3], false);
@@ -436,7 +385,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 		{
 			float Degree = Math::RadianToDegree(atan2(-(Bush[i].z - player->pos.z), Bush[i].x - player->pos.x));
 			modelStack.PushMatrix();
-			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
+			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
 			modelStack.Rotate(Degree - 90, 0, 1, 0);
 			modelStack.Scale(100, 100, 100);
 			RenderMeshOutlined(meshList[GEO_BUSH], false);
@@ -507,14 +456,6 @@ void SceneLevel03::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
-	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		//insert billboard code
-		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
-		RenderMesh(meshList[FOUNTAIN_WATER1], false);
-		modelStack.PopMatrix();
-		break;
 
 	default:
 		break;
@@ -563,12 +504,9 @@ void SceneLevel03::RenderLight()
 
 void SceneLevel03::RenderWorld()
 {
-	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(false);
-	//RenderSprite();
-	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
 void SceneLevel03::RenderReflection()
@@ -722,9 +660,13 @@ void SceneLevel03::RenderPassMain()
 	// Render the crosshair
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
+	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderWorld();
 
 	RenderReflection();
+
+	RenderEnemies(true);
+	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
 	RenderHUD();
 

@@ -1,29 +1,44 @@
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
-#include "Vector3.h"
+#include "GameObject.h"
+#include "AABB.h"
 
-enum GameObject
+struct Enemy : public GameObject
 {
-	P_WATER,
-	P_TOTAL,
-};
+	enum ENEMY_TYPE
+	{
+		GHOST_1,
+		GHOST_2,
+		GHOST_3,
 
-class ParticleObject
-{
-public:
-	ParticleObject(PARTICLEOBJECT_TYPE = P_WATER);
-	~ParticleObject();
+		MAX_ENEMY_TYPE,
+	};
+	enum ENEMY_STATE
+	{
+		IDLE,
+		ATTACK,
+		RUN,
+		WEAKEN,
+		MAX_ENEMY_STATE
+	};
 
-	//Type of particle
-	PARTICLEOBJECT_TYPE type;	//Type of particle
-	Vector3 pos;				//Position of particle
-	Vector3 vel;				//Velocity of particle
-	Vector3 scale;				//Scale of particle
-	float rotation;				//Rotation of particle
-	float rotateSpeed;			//Rotation speed of particle
+	ENEMY_TYPE Type;
+	ENEMY_STATE State;
 
-	bool active;				//Activate particle upon use
+	Enemy(ENEMY_TYPE type = GHOST_1, ENEMY_STATE state = IDLE);
+	~Enemy();
+
+	AABB Hitbox;
+
+	const int MAX_HP;
+	int HP;
+	const int Attack;
+
+	void Update(double dt, Vector3 PlayerPos);
+	bool Chase(Vector3 PlayerPos);
+	int DealDamage();
+	void TakeDamage(int Damage);
 };
 
 #endif
