@@ -31,6 +31,7 @@
     <ClCompile Include="Source\SceneLevel01.cpp" />
     <ClCompile Include="Source\SceneLevel03.cpp" />
     <ClCompile Include="Source\SceneLevel04.cpp" />
+    <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneShadow.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Sound.cpp" />
@@ -63,6 +64,7 @@
     <ClInclude Include="Source\SceneLevel01.h" />
     <ClInclude Include="Source\SceneLevel03.h" />
     <ClInclude Include="Source\SceneLevel04.h" />
+    <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneShadow.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Sound.h" />
