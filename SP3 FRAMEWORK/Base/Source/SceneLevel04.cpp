@@ -23,6 +23,7 @@ void SceneLevel04::Init()
 	SceneBase::Init();
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
+	InitPartitioning();
 	//Random my random randomly using srand
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
@@ -50,25 +51,25 @@ void SceneLevel04::Init()
 	camera.position.Set(0, 200, 10);
 	camera.target.Set(0, 200, 1);
 	
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
 		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
 		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
 		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
@@ -78,8 +79,6 @@ void SceneLevel04::Init()
 	lights[0].power = 0.8f;
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 
-	InitPartitioning();
-
 	spatialPartitioning = true;
 	nightVision = false;
 
@@ -87,7 +86,7 @@ void SceneLevel04::Init()
 	lights[0].color = (0.f, 0.2f, 0.4f);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-	Color fogColor(0.1f, 0.1f, 0.1f);
+	Color fogColor(0.2f, 0.2f, 0.2f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 }
 
@@ -186,15 +185,6 @@ void SceneLevel04::Update(double dt)
 	}
 
 	rotateAngle += (float)(1 * dt);
-
-	if (Application::IsKeyPressed(VK_NUMPAD1))
-	{
-		spatialPartitioning = true;
-	}
-	if (Application::IsKeyPressed(VK_NUMPAD2))
-	{
-		spatialPartitioning = false;
-	}
 
 	fps = (float)(1.f / dt);
 }
@@ -301,61 +291,85 @@ void SceneLevel04::RenderFence(bool Light)
 	{
 		Vector3 fencePos;
 		fencePos.Set(Terrainsize.x - 400, 0, -Terrainsize.z + 600);
-		modelStack.PushMatrix();
-		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		RenderMeshOutlined(meshList[FENCE], true);
-		modelStack.PopMatrix();
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	{
 		Vector3 fencePos;
 		fencePos.Set(Terrainsize.x - 400, 0, Terrainsize.z - 600);
-		modelStack.PushMatrix();
-		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		RenderMeshOutlined(meshList[FENCE], true);
-		modelStack.PopMatrix();
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	{
 		Vector3 fencePos;
 		fencePos.Set(Terrainsize.x - 400, 0, 0);
-		modelStack.PushMatrix();
-		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		RenderMeshOutlined(meshList[FENCE], true);
-		modelStack.PopMatrix();
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 	////
 	{
 		Vector3 fencePos;
 		fencePos.Set(-Terrainsize.x + 400, 0, -Terrainsize.z + 600);
-		modelStack.PushMatrix();
-		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		RenderMeshOutlined(meshList[FENCE], true);
-		modelStack.PopMatrix();
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	{
 		Vector3 fencePos;
 		fencePos.Set(-Terrainsize.x + 400, 0, Terrainsize.z - 600);
-		modelStack.PushMatrix();
-		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		RenderMeshOutlined(meshList[FENCE], true);
-		modelStack.PopMatrix();
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 
 	{
 		Vector3 fencePos;
 		fencePos.Set(-Terrainsize.x + 400, 0, 0);
-		modelStack.PushMatrix();
-		modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-		modelStack.Rotate(90, 0, 1, 0);
-		RenderMeshOutlined(meshList[FENCE], true);
-		modelStack.PopMatrix();
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
@@ -368,11 +382,7 @@ void SceneLevel04::RenderTombstone(bool Light)
 		{
 			posPartition = getPartition(pos);
 
-			if
-				(
-				(playerPartition == posPartition) || (playerPartition + 1 == posPartition) || (playerPartition + 3 == posPartition) || (playerPartition + 4 == posPartition) || (playerPartition + 5 == posPartition)
-				|| (playerPartition - 1 == posPartition) || (playerPartition - 3 == posPartition) || (playerPartition - 4 == posPartition) || (playerPartition - 5 == posPartition)
-				)
+			if (renderCheck(playerPartition, posPartition) == true)
 			{
 				modelStack.PushMatrix();
 				modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
@@ -404,6 +414,13 @@ void SceneLevel04::RenderEnvironment(bool Light)
 {
 	RenderTombstone(Light);
 	RenderFence(Light);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)),0);
+	modelStack.Scale(60, 70, 60);
+	RenderMeshOutlined(meshList[DEADTREE], true);
+	modelStack.PopMatrix();
+
 }
 
 

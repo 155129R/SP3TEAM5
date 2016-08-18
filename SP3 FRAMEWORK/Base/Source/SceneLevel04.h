@@ -48,10 +48,6 @@ private:
 
 	std::vector<Vector3> gravePos;
 
-	bool spatialPartitioning;
-
-	char playerPartition;
-	char posPartition;
 };
 
 #endif

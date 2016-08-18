@@ -118,7 +118,7 @@ void SceneBase::Init()
 	//lights[0].spotDirection.Set(0.f, 1.f, 0.f);
 
 	lights[1].type = Light::LIGHT_SPOT;
-	lights[1].position.Set(0, 0, 0);
+	lights[1].position.Set(1, 1, 1);
 	lights[1].color.Set(1, 1, 1);
 	lights[1].power = 0.0f;
 	lights[1].kC = 1.f;
@@ -162,7 +162,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_TYPE], 0);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	camera.Init(Vector3(0, 100, 10), Vector3(0, 100, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(1, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -289,8 +289,10 @@ void SceneBase::Init()
 	//Level 4 - Graveyard
 	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
 	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
-	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fene", "OBJ//wooden_fence.obj");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
 	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
@@ -358,6 +360,8 @@ void SceneBase::Init()
 
 		Enemy_list.push_back(Ghost);
 	}
+
+	InitPartitioning();
 }
 
 void SceneBase::Update(double dt)
@@ -405,6 +409,15 @@ void SceneBase::Update(double dt)
 	else if (Application::IsKeyPressed('9'))
 	{
 		bLightEnabled = false;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD1))
+	{
+		spatialPartitioning = true;
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD2))
+	{
+		spatialPartitioning = false;
 	}
 
 }
@@ -861,7 +874,7 @@ void SceneBase::InitPartitioning()
 
 	Partition D;
 	D.MINPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z);
-	D.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z);
+	D.MAXPOS.Set(Terrainsize.x, 0, -Terrainsize.z * 0.5f);
 	partitioning['D'] = D;
 	/////////////////////////////////////////////////////////////////////////
 	Partition E;
@@ -875,13 +888,13 @@ void SceneBase::InitPartitioning()
 	partitioning['F'] = F;
 
 	Partition G;
-	G.MINPOS.Set(0, 0, -Terrainsize.z);
-	G.MAXPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z * 0.5f);
+	G.MINPOS.Set(0, 0, -Terrainsize.z * 0.5f);
+	G.MAXPOS.Set(Terrainsize.x * 0.5f, 0,0);
 	partitioning['G'] = G;
 
 	Partition H;
-	H.MINPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z);
-	H.MAXPOS.Set(Terrainsize.x, 0, Terrainsize.z);
+	H.MINPOS.Set(Terrainsize.x * 0.5f, 0, -Terrainsize.z * 0.5f);
+	H.MAXPOS.Set(Terrainsize.x, 0, 0);
 	partitioning['H'] = H;
 	/////////////////////////////////////////////////////////////////////////
 	Partition I;
@@ -936,6 +949,17 @@ char SceneBase::getPartition(Vector3 pos)
 			return partition.first;
 		}
 	}
+}
+
+bool SceneBase::renderCheck(char partition1, char partition2)
+{
+	if
+		(
+		(partition1 == partition2) || (partition1 + 1 == partition2) || (partition1 + 3 == partition2) || (partition1 + 4 == partition2) || (partition1 + 5 == partition2)
+		|| (partition1 - 1 == partition2) || (partition1 - 3 == partition2) || (partition1 - 4 == partition2) || (partition1 - 5 == partition2)
+		)
+		return true;
+	else return false;
 }
 
 void SceneBase::Exit()

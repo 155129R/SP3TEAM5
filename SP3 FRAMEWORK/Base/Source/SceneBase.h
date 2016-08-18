@@ -146,8 +146,6 @@ public:
 		GEO_BUSH,
 		GEO_BRIDGE,
 		GEO_LOGS,
-		WATER,
-		WATER_SURFACE,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1,
@@ -169,6 +167,7 @@ public:
 		//level4
 		TOMBSTONE,
 		FENCE,
+		DEADTREE,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -211,6 +210,7 @@ public:
 
 	void InitPartitioning();
 	char getPartition(Vector3 pos);
+	bool renderCheck(char playerPartition, char posPartition);
 
 protected:
 	unsigned m_vertexArrayID;
@@ -274,8 +274,11 @@ protected:
 
 	std::map<char, Partition> partitioning;
 
-	Vector3 Terrainsize;
 	bool nightVision;
+
+	char playerPartition;
+	char posPartition;
+	bool spatialPartitioning;
 
 };
 
