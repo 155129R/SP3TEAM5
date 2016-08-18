@@ -160,15 +160,21 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
+
 	//scene = new SceneLevel01();
 	//scene = new SceneLevel02();
-    scene = new SceneLevel04();
-
+	//scene = new SceneLevel03();
+	//scene = new SceneLevel04();
 
 	//scene = new SceneShadow();
 
 
 	scene->Init();
+
+	//Need a change scene function
+	//if scene != Null , delete that scene
+	//if key pressed (?) , scene = new (scene)();
+	//if scene , scene->init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))

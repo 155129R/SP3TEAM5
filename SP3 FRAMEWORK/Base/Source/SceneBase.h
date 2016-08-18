@@ -20,7 +20,7 @@ struct Partition
 #include "MeshBuilder.h"
 
 #include "Player.h"
-
+#include "Enemy.h"
 
 class SceneBase : public Scene
 {
@@ -117,9 +117,11 @@ public:
 		TERRAIN_LEVEL02,
 		TERRAIN_LEVEL03,
 		TERRAIN_LEVEL04,
+
 		WATER,
 		WATER_SURFACE,
 		NIGHT_VISION,
+
 
 		CACTUS,
 
@@ -144,11 +146,14 @@ public:
 		GEO_BUSH,
 		GEO_BRIDGE,
 		GEO_LOGS,
+		WATER,
+		WATER_SURFACE,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1,
 		GEO_GHOST2,
 		GEO_GHOST3,
+		GEO_HITBOX,
 
 		//level 2
 		FOUNTAIN,
@@ -195,6 +200,12 @@ public:
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderNightVision();
 
+	//Used in all scenes
+	void UpdatePlayer(double dt);
+	void UpdateFearEffect(double dt);
+
+	void RenderEnemies(bool ShowHitbox = false);
+
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
@@ -227,6 +238,15 @@ protected:
 	std::vector<unsigned char>m_heightMap_3;
 	std::vector<unsigned char>m_heightMap_4;
 
+	float **level1_Heights;
+	float **level2_Heights;
+	float **level3_Heights;
+	float **level4_Heights;
+	float characterHeight;
+
+	float terrainHeight;
+	Vector3 Terrainsize;
+
 	//Shadow Stuff
 	unsigned m_gPassShaderID;
 	DepthFBO m_lightDepthFBO;
@@ -240,27 +260,23 @@ protected:
 	float FogAmount;
 	float fps;
 
-
 	//Player
 	Player* player;
+	Color Black;
+
+	//Enemy
+	std::vector<Enemy *> Enemy_list;
 
 	//Sprite Pointers
 	SpriteAnimation* G1;
 	SpriteAnimation* G2;
 	SpriteAnimation* G3;
 
-	float **level1_Heights;
-	float **level2_Heights;
-	float **level3_Heights;
-	float **level4_Heights;
-	float characterHeight;
-
-	float terrainHeight;
-
-
 	std::map<char, Partition> partitioning;
+
 	Vector3 Terrainsize;
 	bool nightVision;
+
 };
 
 #endif

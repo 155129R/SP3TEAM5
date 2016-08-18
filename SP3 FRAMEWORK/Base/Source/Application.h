@@ -4,14 +4,11 @@
 
 #include "timer.h"
 #include "Sound.h"
+#include "Scene.h"
 #include "SceneShadow.h"
-
+#include "SceneLevel01.h"
 #include "SceneLevel02.h"
-
-#include "SceneLevel01.h"
-
-#include "SceneLevel01.h"
-
+#include "SceneLevel03.h"
 #include "SceneLevel04.h"
 
 class Application
@@ -54,15 +51,13 @@ private:
 
 	// The handler for the scene
 
+
 	//SceneLevel01 *scene;
-
-
 	//SceneLevel02 *scene;
-
+	//SceneLevel03 *scene;
 	SceneLevel04 *scene;
 
 	//SceneShadow *scene;
-
 
 };
 

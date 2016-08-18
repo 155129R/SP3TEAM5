@@ -11,11 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AABB.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
@@ -27,6 +29,7 @@
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneLevel02.cpp" />
     <ClCompile Include="Source\SceneLevel01.cpp" />
+    <ClCompile Include="Source\SceneLevel03.cpp" />
     <ClCompile Include="Source\SceneLevel04.cpp" />
     <ClCompile Include="Source\SceneShadow.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -36,11 +39,13 @@
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AABB.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\DepthFBO.h" />
+    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
@@ -49,12 +54,14 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
     <ClInclude Include="Source\SceneLevel02.h" />
     <ClInclude Include="Source\SceneLevel01.h" />
+    <ClInclude Include="Source\SceneLevel03.h" />
     <ClInclude Include="Source\SceneLevel04.h" />
     <ClInclude Include="Source\SceneShadow.h" />
     <ClInclude Include="Source\shader.hpp" />

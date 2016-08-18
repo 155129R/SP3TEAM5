@@ -9,8 +9,8 @@ public:
 	GameObject();
 	~GameObject();
 	
-	virtual void Init() = 0;
-	virtual void Update(double dt) = 0;
+	virtual void Init();
+	virtual void Update(double dt);
 
 	Vector3 pos;
 	Vector3 dir;
