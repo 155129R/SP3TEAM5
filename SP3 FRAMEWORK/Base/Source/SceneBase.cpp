@@ -194,15 +194,21 @@ void SceneBase::Init()
 
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[TERRAIN]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
+
+	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
+	meshList[TERRAIN_LEVEL03]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[TERRAIN_LEVEL03]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
 
 	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
 	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
+	//weapon
+	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//rifle.obj");
+	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//rifle.tga");
 
-	//meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
-	//	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
-
-
+	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
+	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -223,8 +229,17 @@ void SceneBase::Init()
 	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
 	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
 
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
 	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	//meshList[TABLE]->textureArray[0] = LoadTGA("Image//bed.tga");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
 	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
 	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
@@ -280,9 +295,9 @@ void SceneBase::Init()
 
 	//Forest
 	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
-	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree.tga");
+	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
 	meshList[GEO_TREE_2] = MeshBuilder::GenerateQuad("Fat Tree", Color(0, 0, 0), 1.f);
-	meshList[GEO_TREE_2]->textureArray[0] = LoadTGA("Image//Forest//Fat_Tree.tga");
+	meshList[GEO_TREE_2]->textureArray[0] = LoadTGA("Image//Forest//Tree_2.tga");
 	meshList[GEO_TREE_3] = MeshBuilder::GenerateQuad("Dead Tree", Color(0, 0, 0), 1.f);
 	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
@@ -303,6 +318,7 @@ void SceneBase::Init()
 	meshList[GEO_GHOST2]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
 	meshList[GEO_GHOST3] = MeshBuilder::GenerateSpriteAnimation("Horsey", 3, 6);
 	meshList[GEO_GHOST3]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
+	meshList[GEO_HITBOX] = MeshBuilder::GenerateCube("Hitbox", Color(1, 0, 0));
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
@@ -331,6 +347,36 @@ void SceneBase::Init()
 	}
 
 	characterHeight = 7.f;
+
+	for (int i = 0; i < 40; ++i)
+	{
+		int Random = Math::RandIntMinMax(1, 3);
+		
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
+		switch (Random)
+		{
+			case 1:
+			{
+				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
+				break;
+			}
+			case 2:
+			{
+				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
+				break;
+			}
+			case 3:
+			{
+				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
+				break;
+			}
+		}
+		Ghost->active = true;
+		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+		Ghost->scale.Set(50, 50, 50);
+
+		Enemy_list.push_back(Ghost);
+	}
 }
 
 void SceneBase::Update(double dt)
@@ -554,6 +600,7 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 	{
 		for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
 		{
+
 			if (mesh->textureArray[i] > 0)
 			{
 				glUniform1i(m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED + i], 1);
@@ -622,6 +669,125 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneBase::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void SceneBase::UpdatePlayer(double dt)
+{
+	player->GetCamera(camera);
+	player->Update(dt);
+
+	if (Application::IsKeyPressed(VK_NUMPAD0))
+	{
+		player->InflictFear(5);
+	}
+
+	if (player->GetStamina() <= 0.0f)
+	{
+		camera.Tired = true;
+	}
+	else
+	{
+		camera.Tired = false;
+	}
+
+	UpdateFearEffect(dt);
+}
+void SceneBase::UpdateFearEffect(double dt)
+{
+	switch (player->GetFear())
+	{
+	case 1:
+		break;
+
+	case 2:
+		FogAmount = 1000.0f;
+		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+		Black.Set(0.0f, 0.0f, 0.0f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+		break;
+
+	case 3:
+		FogAmount = 700.0f;
+		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+		Black.Set(0.0f, 0.0f, 0.0f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+		break;
+
+	case 4:
+		FogAmount = 500.0f;
+		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+		Black.Set(0.0f, 0.0f, 0.0f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+		break;
+
+	case 5:
+		FogAmount = 100.0f;
+		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+		Black.Set(0.0f, 0.0f, 0.0f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+		break;
+	}
+}
+
+void SceneBase::RenderEnemies(bool ShowHitbox)
+{
+	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - player->pos.z), ghost->pos.x - player->pos.x));
+
+			if (ShowHitbox)
+			{
+				modelStack.PushMatrix();
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				modelStack.Translate(ghost->Hitbox.pos.x, ghost->Hitbox.pos.y, ghost->Hitbox.pos.z);
+				modelStack.Scale(ghost->Hitbox.size.x, ghost->Hitbox.size.y, ghost->Hitbox.size.z);
+				RenderMesh(meshList[GEO_HITBOX], false);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				modelStack.PopMatrix();
+			}
+
+			switch (ghost->Type)
+			{
+				case Enemy::ENEMY_TYPE::GHOST_1:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
+					RenderMesh(meshList[GEO_GHOST1], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case Enemy::ENEMY_TYPE::GHOST_2:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
+					RenderMesh(meshList[GEO_GHOST2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case Enemy::ENEMY_TYPE::GHOST_3:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
+					RenderMesh(meshList[GEO_GHOST3], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				default:
+				{
+					break;
+				}
+			}
+		}
+	}
 }
 
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)

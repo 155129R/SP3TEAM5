@@ -33,6 +33,9 @@ public:
 	void RenderPassMain();
 	void RenderWorld();
 
+	void UpdatePlayer(double dt);
+	void UpdateWeaponType(double dt);
+
 private:
 	float rotateAngle;
 
@@ -47,6 +50,9 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
+
+	//weapon
+	int weapontype;
 };
 
 #endif

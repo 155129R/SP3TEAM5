@@ -57,12 +57,12 @@ void SceneShadow::Init()
 
 	for (int i = 0; i < 400; ++i)
 	{
-		Tree[i].Set(Math::RandIntMinMax(-1800, 1800), 0, Math::RandIntMinMax(-800, 1800));
+		Tree[i].Set(Math::RandIntMinMax(-1800, 1800), 0, Math::RandIntMinMax(-1100, 1800));
 		Tree_Type[i] = Math::RandIntMinMax(1, 3);
 	}
 	for (int i = 0; i < 400; ++i)
 	{
-		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1000, 2000));
+		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
 	}
 }
 
@@ -394,91 +394,84 @@ void SceneShadow::RenderEnvironment(bool Light, bool inverted)
 {
 	if (!inverted)
 	{
-		for (int i = 0; i < 400; ++i)
-		{
-			float Degree = Math::RadianToDegree(atan2(-(Tree[i].z - player->pos.z), Tree[i].x - player->pos.x));
-			switch (Tree_Type[i])
-			{
-				case 1:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-					modelStack.Rotate(Degree - 90, 0, 1, 0);
-					modelStack.Scale(200, 300, 200);
-					RenderMeshOutlined(meshList[GEO_TREE_1], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case 2:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(Tree[i].x, 80 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-					modelStack.Rotate(Degree - 90, 0, 1, 0);
-					modelStack.Scale(300, 300, 300);
-					RenderMeshOutlined(meshList[GEO_TREE_2], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case 3:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-					modelStack.Rotate(Degree - 90, 0, 1, 0);
-					modelStack.Scale(100, 300, 100);
-					RenderMeshOutlined(meshList[GEO_TREE_3], false);
-					modelStack.PopMatrix();
-					break;
-				}
-			}
-		}
+		//for (int i = 0; i < 400; ++i)
+		//{
+		//	float Degree = Math::RadianToDegree(atan2(-(Tree[i].z - player->pos.z), Tree[i].x - player->pos.x));
+		//	switch (Tree_Type[i])
+		//	{
+		//		case 1:
+		//		{
+		//			modelStack.PushMatrix();
+		//			modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+		//			modelStack.Rotate(Degree - 90, 0, 1, 0);
+		//			modelStack.Scale(250, 400, 250);
+		//			RenderMeshOutlined(meshList[GEO_TREE_1], false);
+		//			modelStack.PopMatrix();
+		//			break;
+		//		}
+		//		case 2:
+		//		{
+		//			modelStack.PushMatrix();
+		//			modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+		//			modelStack.Rotate(Degree - 90, 0, 1, 0);
+		//			modelStack.Scale(400, 400, 400);
+		//			RenderMeshOutlined(meshList[GEO_TREE_2], false);
+		//			modelStack.PopMatrix();
+		//			break;
+		//		}
+		//		case 3:
+		//		{
+		//			modelStack.PushMatrix();
+		//			modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+		//			modelStack.Rotate(Degree - 90, 0, 1, 0);
+		//			modelStack.Scale(150, 400, 150);
+		//			RenderMeshOutlined(meshList[GEO_TREE_3], false);
+		//			modelStack.PopMatrix();
+		//			break;
+		//		}
+		//	}
+		//}
 
 		for (int i = 0; i < 400; ++i)
 		{
 			float Degree = Math::RadianToDegree(atan2(-(Bush[i].z - player->pos.z), Bush[i].x - player->pos.x));
 			modelStack.PushMatrix();
-			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
+			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
 			modelStack.Rotate(Degree - 90, 0, 1, 0);
 			modelStack.Scale(100, 100, 100);
 			RenderMeshOutlined(meshList[GEO_BUSH], false);
 			modelStack.PopMatrix();
 		}
 
-		//modelStack.PushMatrix();
-		//modelStack.Translate(0, 100, -1400);
-		//modelStack.Scale(10, 30, 10);
-		//RenderMeshOutlined(meshList[GEO_CACTUS], false);
-		//modelStack.PopMatrix();
-
 		modelStack.PushMatrix();
 		modelStack.Translate(1900, 0, -1400);
 		modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(4, 5, 5);
-		RenderMeshOutlined(meshList[GEO_LOGS], false);
+		RenderMeshOutlined(meshList[GEO_LOGS], true);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
 		modelStack.Translate(-1900, 0, -1400);
 		modelStack.Rotate(90, 0, 1, 0);
 		modelStack.Scale(4, 5, 5);
-		RenderMeshOutlined(meshList[GEO_LOGS], false);
+		RenderMeshOutlined(meshList[GEO_LOGS], true);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 60, -1420);
 		modelStack.Scale(5, 5, 5);
-		RenderMeshOutlined(meshList[GEO_BRIDGE], false);
+		RenderMeshOutlined(meshList[GEO_BRIDGE], true);
 		modelStack.PopMatrix();
 	}
 
-
 	if (inverted)
 	{
-		//modelStack.PushMatrix();
-		//modelStack.Translate(0, 100, -1400);
-		//modelStack.Rotate(180, 1, 0, 0);
-		//modelStack.Scale(10, 30, 10);
-		//RenderMesh(meshList[GEO_CACTUS], false);
-		//modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 40, -1420);
+		modelStack.Rotate(180, 1, 0, 0);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_BRIDGE], false);
+		modelStack.PopMatrix();
 	}
 }
 
@@ -574,8 +567,48 @@ void SceneShadow::RenderWorld()
 	RenderTerrain();
 	RenderEnvironment(false);
 	//RenderSprite();
-
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
+}
+
+void SceneShadow::RenderReflection()
+{
+	glDisable(GL_CULL_FACE);
+
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glEnable(GL_STENCIL_TEST);
+
+	// Reflection surface
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 4000, 1);
+	RenderMesh(meshList[WATER], false);
+	modelStack.PopMatrix();
+
+	// Reflection
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	RenderEnvironment(false, true);
+
+	glDisable(GL_STENCIL_TEST);
+
+	glEnable(GL_CULL_FACE);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 4000, 1);
+	RenderMesh(meshList[WATER], false);
+	modelStack.PopMatrix();
 }
 
 void SceneShadow::RenderPassGPass()
@@ -689,54 +722,9 @@ void SceneShadow::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
-
-	glDisable(GL_CULL_FACE);
 	
-	glDepthMask(GL_FALSE); // Don't write to depth buffer
-	glEnable(GL_STENCIL_TEST);
+	RenderReflection();
 	
-	// Reflection surface
-	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glStencilMask(0xFF); // Write to stencil buffer
-	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
-	
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 100, -1440);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(800, 4000, 1);
-	RenderMesh(meshList[WATER], false);
-	modelStack.PopMatrix();
-	
-	// Reflection
-	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
-	glStencilMask(0x00); // Don't write anything to stencil buffer
-	glDepthMask(GL_TRUE); // Write to depth buffer
-	
-	//modelStack.PushMatrix();
-	//modelStack.Scale(1,-1,1);
-	//RenderSkyplane();
-	//RenderEnvironment(false);
-	//modelStack.PopMatrix();
-
-
-	modelStack.PushMatrix();
-	RenderEnvironment(false,true);
-	modelStack.PopMatrix();
-	
-	glDisable(GL_STENCIL_TEST);
-	
-	glEnable(GL_CULL_FACE);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 100, -1440);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(800, 4000, 1);
-	RenderMesh(meshList[WATER], false);
-	modelStack.PopMatrix();
-
 	RenderHUD();
 
 	//On screen text

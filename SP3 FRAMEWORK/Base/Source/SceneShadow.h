@@ -32,6 +32,7 @@ public:
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
+	void RenderReflection();
 
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
