@@ -49,6 +49,9 @@ void SceneLevel02::Init()
 	FogEffect = false;
 	Switch = false;
 	soundTimer = 0;
+
+	openGate = false;
+	rotateGate = 90;
 }
 
 void SceneLevel02::Update(double dt)
@@ -65,8 +68,16 @@ void SceneLevel02::Update(double dt)
 			false);
 		soundTimer = 0;
 	}
-	
-	
+	if (Application::IsKeyPressed('Q'))
+	{
+		openGate = true;
+	}
+	if (openGate && rotateGate > 0)
+	{
+		rotateGate--;
+	}
+
+
 	UpdateParticle(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
@@ -96,7 +107,6 @@ void SceneLevel02::Update(double dt)
 	{
 		Axis_Wait += dt;
 	}
-
 	if (Application::IsKeyPressed('F') && Flashlight_Wait >= 0.5f)
 	{
 		Flashlight_Wait = 0.0f;
@@ -296,6 +306,27 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(-1200, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	modelStack.Rotate(rotateGate, 0, 1, 0);
+	modelStack.Scale(320, 320, 320);
+	RenderMeshOutlined(meshList[METAL_GATE], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1200, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 565);
+	modelStack.Rotate(-rotateGate, 0, 1, 0);
+	modelStack.Scale(320, 320, 320);
+	RenderMeshOutlined(meshList[METAL_GATE], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1000, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(60, 60, 60);
+	RenderMeshOutlined(meshList[HOUSE3], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
 	modelStack.Scale(20, 20, 40);
 	RenderMeshOutlined(meshList[HEDGE], Light);
@@ -333,19 +364,59 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	RenderMeshOutlined(meshList[HEDGE], Light);
 	modelStack.PopMatrix();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 4; i++)
 	{
 
 		modelStack.PushMatrix();
-		modelStack.Translate(i * 230 - 500, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -550);
+		modelStack.Translate(i * 450 - 750, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -700);
 		modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Scale(100, 100, 100);
+		modelStack.Scale(200, 200, 200);
 
 		if ((i % 2) == 0)
 			RenderMeshOutlined(meshList[HOUSE1], Light);
 		else
 			RenderMeshOutlined(meshList[HOUSE2], Light);
 		
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 12; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(i * 210 -1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -1000);
+		modelStack.Scale(0.5, 0.5, 0.5);
+		RenderMeshOutlined(meshList[METAL_FENCE], Light);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 12; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(i * 210 - 1000, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 1000);
+		modelStack.Rotate(180, 0, 1, 0);
+		modelStack.Scale(0.5, 0.5, 0.5);
+		RenderMeshOutlined(meshList[METAL_FENCE], Light);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 9; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), i * 225 - 800);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(0.5, 0.5, 0.5);
+		if (i != 5 && i != 6)
+			RenderMeshOutlined(meshList[METAL_FENCE], Light);
+		modelStack.PopMatrix();
+	}
+
+	for (int i = 0; i < 9; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), i * 225 - 1000);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Scale(0.5, 0.5, 0.5);
+		RenderMeshOutlined(meshList[METAL_FENCE], Light);
 		modelStack.PopMatrix();
 	}
 	Vector3 treePos1;
@@ -413,7 +484,7 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -49 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(100, 100, 100);
+	modelStack.Scale(140, 140, 140);
 	RenderMeshOutlined(meshList[FLOOR], Light);
 	modelStack.PopMatrix();
 }

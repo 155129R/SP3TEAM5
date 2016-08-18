@@ -10,6 +10,9 @@
 #include "Particle.h"
 #include "DepthFBO.h"
 #include <map>
+#include "LoadHmap.h"
+#include "LoadTGA.h"
+#include "Bullet.h"
 
 struct Partition
 {
@@ -21,6 +24,7 @@ struct Partition
 
 #include "Player.h"
 #include "Enemy.h"
+#include "AABBObject.h"
 
 class SceneBase : public Scene
 {
@@ -125,6 +129,10 @@ public:
 
 		CACTUS,
 
+		PISTOL,
+		RIFLE,
+
+		//level 01
 		LEVEL01_TERRAIN,
 		LEVEL01_WALLS,
 		LEVEL01,
@@ -133,12 +141,17 @@ public:
 		BED,
 		WINDOW,
 		TABLE,
+		CHAIR,
+		INDOORPLANT,
+		BLOCKAGE,
+		INDOORGATE,
+		CHANDELIER,
 		ELEVATORDOOR,
 
 		//PLAYER
 		GEO_STAMINA,
 
-		//FOREST
+		//level 03
 		GEO_CACTUS,
 		GEO_TREE_1,
 		GEO_TREE_2,
@@ -163,6 +176,9 @@ public:
 		COCONUT_TREE,
 		HEDGE,
 		BENCHES,
+		HOUSE3,
+		METAL_FENCE,
+		METAL_GATE,
 
 		//level4
 		TOMBSTONE,
@@ -202,7 +218,9 @@ public:
 	//Used in all scenes
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
+	void UpdateHitboxes(double dt);
 
+	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
@@ -226,6 +244,8 @@ protected:
 
 	Light lights[2];
 
+	bool mode = false;
+
 	//For particles
 	std::vector<ParticleObject*> particleList;  //Used to store particles
 	Vector3 m_gravity;							//Gravity affecting the particles
@@ -233,6 +253,8 @@ protected:
 	unsigned MAX_PARTICLE;						//Max no of particles
 
 	//Terrain
+	const Vector3 TERRAINSIZE;
+
 	std::vector<unsigned char>m_heightMap;
 	std::vector<unsigned char>m_heightMap_2;
 	std::vector<unsigned char>m_heightMap_3;
@@ -263,6 +285,9 @@ protected:
 	//Player
 	Player* player;
 	Color Black;
+
+	//Environment
+	std::vector<AABBObject *> Object_list;
 
 	//Enemy
 	std::vector<Enemy *> Enemy_list;

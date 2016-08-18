@@ -4,10 +4,7 @@
 #include "shader.hpp"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
-#include "Bullet.h"
 
 SceneLevel03::SceneLevel03()
 {
@@ -17,11 +14,12 @@ SceneLevel03::~SceneLevel03()
 {
 }
 
-static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
-
 void SceneLevel03::Init()
 {
 	SceneBase::Init();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	Object_list.clear();
 
 	player = new Player();
 
@@ -64,6 +62,58 @@ void SceneLevel03::Init()
 	{
 		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
 	}
+
+	for (int i = 0; i < 40; ++i)
+	{
+		int Random = Math::RandIntMinMax(1, 3);
+
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
+		switch (Random)
+		{
+		case 1:
+		{
+			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
+			break;
+		}
+		case 2:
+		{
+			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
+			break;
+		}
+		case 3:
+		{
+			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
+			break;
+		}
+		}
+		Ghost->active = true;
+		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+		Ghost->scale.Set(50, 50, 50);
+
+		Enemy_list.push_back(Ghost);
+	}
+
+	AABBObject * Logs = new AABBObject();
+	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs->active = true;
+	Logs->pos.Set(1900, 0, -1400);
+	Logs->scale.Set(4, 5, 5);
+	Object_list.push_back(Logs);
+
+	AABBObject * Logs2 = new AABBObject();
+	Logs2->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs2->active = true;
+	Logs2->pos.Set(-1900, 0, -1400);
+	Logs2->scale.Set(4, 5, 5);
+	Object_list.push_back(Logs2);
+
+	AABBObject * Bridge = new AABBObject();
+	Bridge->Object = AABBObject::OBJECT_TYPE::BRIDGE;
+	Bridge->active = true;
+	Bridge->pos.Set(0, 60, -1420);
+	Bridge->scale.Set(5, 5, 5);
+	Object_list.push_back(Bridge);
+
 }
 
 void SceneLevel03::Update(double dt)
@@ -73,13 +123,13 @@ void SceneLevel03::Update(double dt)
 	UpdateParticle(dt);
 	UpdateBullet(dt);
 	UpdatePlayer(dt);
+	UpdateHitboxes(dt);
 
 	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			ghost->pos.y =  TERRAINSIZE.y *  ReadHeightMap(m_heightMap_3, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
 			ghost->Update(dt, player->pos);
 		}
 	}
@@ -392,25 +442,18 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 			modelStack.PopMatrix();
 		}
 
-		modelStack.PushMatrix();
-		modelStack.Translate(1900, 0, -1400);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(4, 5, 5);
-		RenderMeshOutlined(meshList[GEO_LOGS], true);
-		modelStack.PopMatrix();
+		//modelStack.PushMatrix();
+		//modelStack.Translate(-1900, 0, -1400);
+		//modelStack.Rotate(90, 0, 1, 0);
+		//modelStack.Scale(4, 5, 5);
+		//RenderMeshOutlined(meshList[GEO_LOGS], true);
+		//modelStack.PopMatrix();
 
-		modelStack.PushMatrix();
-		modelStack.Translate(-1900, 0, -1400);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(4, 5, 5);
-		RenderMeshOutlined(meshList[GEO_LOGS], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 60, -1420);
-		modelStack.Scale(5, 5, 5);
-		RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-		modelStack.PopMatrix();
+		//modelStack.PushMatrix();
+		//modelStack.Translate(0, 60, -1420);
+		//modelStack.Scale(5, 5, 5);
+		//RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+		//modelStack.PopMatrix();
 	}
 
 
@@ -665,6 +708,7 @@ void SceneLevel03::RenderPassMain()
 
 	RenderReflection();
 
+	RenderObjects(true);
 	RenderEnemies(true);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 

@@ -50,14 +50,13 @@ private:
 	double m_dAccumlatedTime_ThreadFour;
 
 	// The handler for the scene
-
-
 	//SceneLevel01 *scene;
 	//SceneLevel02 *scene;
 	//SceneLevel03 *scene;
 	SceneLevel04 *scene;
 
 	//SceneShadow *scene;
+
 
 };
 

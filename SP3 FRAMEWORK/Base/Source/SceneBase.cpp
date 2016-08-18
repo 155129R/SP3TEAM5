@@ -8,7 +8,7 @@
 #include "LoadTGA.h"
 #include <sstream>
 
-SceneBase::SceneBase()
+SceneBase::SceneBase() : TERRAINSIZE(4000.0f, 200.0f, 4000.0f)
 {
 }
 
@@ -203,6 +203,13 @@ void SceneBase::Init()
 	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
 	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
+	//weapon
+	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//rifle.obj");
+	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//rifle.tga");
+
+	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
+	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
+
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
 	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
@@ -222,8 +229,17 @@ void SceneBase::Init()
 	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
 	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
 
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
 	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	//meshList[TABLE]->textureArray[0] = LoadTGA("Image//bed.tga");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
 	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
 	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
@@ -245,6 +261,15 @@ void SceneBase::Init()
 
 	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
 	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
+	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
+
+	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+
+	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
 
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
@@ -361,7 +386,7 @@ void SceneBase::Init()
 		Enemy_list.push_back(Ghost);
 	}
 
-	InitPartitioning();
+
 }
 
 void SceneBase::Update(double dt)
@@ -396,13 +421,20 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('2'))
 		glDisable(GL_CULL_FACE);
 	if (Application::IsKeyPressed('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mode = false;
 	if (Application::IsKeyPressed('4'))
+		mode = true;
+
+	if (mode)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 
-	else if (Application::IsKeyPressed('8'))
+	if (Application::IsKeyPressed('8'))
 	{
 		bLightEnabled = true;
 	}
@@ -723,7 +755,86 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 	}
 }
+void SceneBase::UpdateHitboxes(double dt)
+{
+	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	{
+		AABBObject *obj = (AABBObject *)*it;
+		if (obj->active)
+		{
+			switch (obj->Object)
+			{
+				case AABBObject::OBJECT_TYPE::LOGS:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
+					obj->Hitbox.Resize(Vector3(180, 100, 400));
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::BRIDGE:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3,50,0));
+					obj->Hitbox.Resize(Vector3(140, 65, 650));
+					break;
+				}
+			}
+		}
+	}
+	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->pos.y = TERRAINSIZE.y *  ReadHeightMap(m_heightMap_3, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
+			ghost->Hitbox.Resize(ghost->scale);
+		}
+	}
+}
 
+void SceneBase::RenderObjects(bool ShowHitbox)
+{
+	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	{
+		AABBObject *obj = (AABBObject *)*it;
+		if (obj->active)
+		{
+			if (ShowHitbox)
+			{
+				modelStack.PushMatrix();
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				modelStack.Translate(obj->Hitbox.pos.x, obj->Hitbox.pos.y + 100, obj->Hitbox.pos.z);
+				modelStack.Scale(obj->Hitbox.size.x, obj->Hitbox.size.y, obj->Hitbox.size.z);
+				RenderMesh(meshList[GEO_HITBOX], false);
+				if (!mode)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
+				modelStack.PopMatrix();
+			}
+			switch (obj->Object)
+			{
+				case AABBObject::OBJECT_TYPE::LOGS:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_LOGS], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::BRIDGE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+					modelStack.PopMatrix();
+					break;
+				}
+			}
+		}
+	}
+}
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
 	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
@@ -740,7 +851,10 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				modelStack.Translate(ghost->Hitbox.pos.x, ghost->Hitbox.pos.y, ghost->Hitbox.pos.z);
 				modelStack.Scale(ghost->Hitbox.size.x, ghost->Hitbox.size.y, ghost->Hitbox.size.z);
 				RenderMesh(meshList[GEO_HITBOX], false);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				if (!mode)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
 				modelStack.PopMatrix();
 			}
 
