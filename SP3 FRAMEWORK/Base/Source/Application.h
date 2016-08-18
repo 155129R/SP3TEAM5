@@ -1,15 +1,10 @@
-
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
 #include "timer.h"
 #include "Sound.h"
 #include "Scene.h"
-#include "SceneShadow.h"
-#include "SceneLevel01.h"
-#include "SceneLevel02.h"
-#include "SceneLevel03.h"
-#include "SceneLevel04.h"
+#include "SceneManager.h"
 
 class Application
 {
@@ -32,6 +27,7 @@ public:
 	static int GetWindowWidth();
 	static int GetWindowHeight();
 
+	SceneManager *sceneManager;
 private:
 	Application();
 	~Application();
@@ -53,7 +49,7 @@ private:
 	//SceneLevel01 *scene;
 	//SceneLevel02 *scene;
 	//SceneLevel03 *scene;
-	SceneLevel04 *scene;
+	//SceneLevel04 *scene;
 
 	//SceneShadow *scene;
 

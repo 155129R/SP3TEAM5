@@ -1,4 +1,3 @@
-
 #include "Application.h"
 
 //Include GLEW
@@ -155,18 +154,15 @@ void Application::Init()
 	m_dAccumlatedTime_ThreadTwo = 0.0;
 	m_dAccumlatedTime_ThreadThree = 0.0;
 	m_dAccumlatedTime_ThreadFour = 0.0;
+
+	// Initialise scene manager
+	sceneManager = new SceneManager();
 }
 
 void Application::Run()
 {
-	//Main Loop
-	//scene = new SceneLevel01();
-	//scene = new SceneLevel02();
-	//scene = new SceneLevel03();
-	scene = new SceneLevel04();
-
-
-	scene->Init();
+	//start 1st scene here
+	sceneManager->ChangeScene(1);
 
 	//Need a change scene function
 	//if scene != Null , delete that scene
@@ -176,6 +172,27 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
+		////////////////////////////
+		//    change scene here   //
+		////////////////////////////
+		if (Application::IsKeyPressed('V'))
+		{
+			sceneManager->ChangeScene(1);
+		}
+		if (Application::IsKeyPressed('B'))
+		{
+			sceneManager->ChangeScene(2);
+		}
+		if (Application::IsKeyPressed('N'))
+		{
+			sceneManager->ChangeScene(3);
+		}
+		if (Application::IsKeyPressed('M'))
+		{
+			sceneManager->ChangeScene(4);
+		}
+
+
 		//Get the elasped time
 		m_dElapsedTime = m_timer.getElapsedTime();
 		m_dAccumlatedTime_ThreadOne += m_dElapsedTime;
@@ -187,7 +204,7 @@ void Application::Run()
 		if (m_dAccumlatedTime_ThreadOne > 0.016) //60 times every second
 		{
 			GetMouseUpdate();
-			scene->Update(m_dElapsedTime);
+			sceneManager->Update(m_dElapsedTime);
 			m_dAccumlatedTime_ThreadOne = 0.0;
 		}
 
@@ -210,7 +227,7 @@ void Application::Run()
 			m_dAccumlatedTime_ThreadFour = 0.0;
 		}
 
-		scene->Render();
+		sceneManager->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
@@ -219,8 +236,8 @@ void Application::Run()
 
 	} 
 	//Check if the ESC key had been pressed or if the window had been closed
-	scene->Exit();
-	delete scene;
+	sceneManager->Exit();
+	delete sceneManager;
 }
 
 void Application::Exit()
