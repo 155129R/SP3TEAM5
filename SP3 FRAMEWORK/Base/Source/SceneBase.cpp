@@ -203,6 +203,13 @@ void SceneBase::Init()
 	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
 	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
+	//weapon
+	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//rifle.obj");
+	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//rifle.tga");
+
+	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
+	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
+
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
 	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
@@ -222,8 +229,17 @@ void SceneBase::Init()
 	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
 	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
 
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
 	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	//meshList[TABLE]->textureArray[0] = LoadTGA("Image//bed.tga");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
 	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
 	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
