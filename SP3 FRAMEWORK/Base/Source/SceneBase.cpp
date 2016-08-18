@@ -247,6 +247,15 @@ void SceneBase::Init()
 	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
 	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
 
+	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
+	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
+
+	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+
+	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
 
