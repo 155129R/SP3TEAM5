@@ -212,7 +212,7 @@
     <ClInclude Include="Source\SceneLevel03.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Object.h">
+    <ClInclude Include="Source\AABBObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,7 +11,9 @@ Enemy::~Enemy()
 
 void Enemy::Update(double dt, Vector3 PlayerPos)
 {
-	Hitbox.UpdateAABB(pos, scale);
+	//AABB hit box will always be on the Enemy
+	Hitbox.UpdateAABB(this->pos);
+
 	if (HP > 0)
 	{
 		switch (State)

@@ -8,7 +8,7 @@
 #include "LoadTGA.h"
 #include <sstream>
 
-SceneBase::SceneBase()
+SceneBase::SceneBase() : TERRAINSIZE(4000.0f, 200.0f, 4000.0f)
 {
 }
 
@@ -322,36 +322,6 @@ void SceneBase::Init()
 	}
 
 	characterHeight = 7.f;
-
-	for (int i = 0; i < 40; ++i)
-	{
-		int Random = Math::RandIntMinMax(1, 3);
-		
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
-		switch (Random)
-		{
-			case 1:
-			{
-				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-				break;
-			}
-			case 2:
-			{
-				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-				break;
-			}
-			case 3:
-			{
-				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-				break;
-			}
-		}
-		Ghost->active = true;
-		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
-		Ghost->scale.Set(50, 50, 50);
-
-		Enemy_list.push_back(Ghost);
-	}
 }
 
 void SceneBase::Update(double dt)
@@ -386,13 +356,20 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('2'))
 		glDisable(GL_CULL_FACE);
 	if (Application::IsKeyPressed('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mode = false;
 	if (Application::IsKeyPressed('4'))
+		mode = true;
+
+	if (mode)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 
-	else if (Application::IsKeyPressed('8'))
+	if (Application::IsKeyPressed('8'))
 	{
 		bLightEnabled = true;
 	}
@@ -703,7 +680,86 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 	}
 }
+void SceneBase::UpdateHitboxes(double dt)
+{
+	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	{
+		AABBObject *obj = (AABBObject *)*it;
+		if (obj->active)
+		{
+			switch (obj->Object)
+			{
+				case AABBObject::OBJECT_TYPE::LOGS:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
+					obj->Hitbox.Resize(Vector3(180, 100, 400));
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::BRIDGE:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3,50,0));
+					obj->Hitbox.Resize(Vector3(140, 65, 650));
+					break;
+				}
+			}
+		}
+	}
+	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->pos.y = TERRAINSIZE.y *  ReadHeightMap(m_heightMap_3, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
+			ghost->Hitbox.Resize(ghost->scale);
+		}
+	}
+}
 
+void SceneBase::RenderObjects(bool ShowHitbox)
+{
+	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	{
+		AABBObject *obj = (AABBObject *)*it;
+		if (obj->active)
+		{
+			if (ShowHitbox)
+			{
+				modelStack.PushMatrix();
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				modelStack.Translate(obj->Hitbox.pos.x, obj->Hitbox.pos.y + 100, obj->Hitbox.pos.z);
+				modelStack.Scale(obj->Hitbox.size.x, obj->Hitbox.size.y, obj->Hitbox.size.z);
+				RenderMesh(meshList[GEO_HITBOX], false);
+				if (!mode)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
+				modelStack.PopMatrix();
+			}
+			switch (obj->Object)
+			{
+				case AABBObject::OBJECT_TYPE::LOGS:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_LOGS], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::BRIDGE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+					modelStack.PopMatrix();
+					break;
+				}
+			}
+		}
+	}
+}
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
 	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
@@ -720,7 +776,10 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				modelStack.Translate(ghost->Hitbox.pos.x, ghost->Hitbox.pos.y, ghost->Hitbox.pos.z);
 				modelStack.Scale(ghost->Hitbox.size.x, ghost->Hitbox.size.y, ghost->Hitbox.size.z);
 				RenderMesh(meshList[GEO_HITBOX], false);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				if (!mode)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
 				modelStack.PopMatrix();
 			}
 
