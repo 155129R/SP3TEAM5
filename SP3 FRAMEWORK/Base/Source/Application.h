@@ -9,6 +9,7 @@
 #include "SceneLevel01.h"
 #include "SceneLevel02.h"
 #include "SceneLevel03.h"
+#include "SceneLevel04.h"
 
 class Application
 {
@@ -49,10 +50,15 @@ private:
 	double m_dAccumlatedTime_ThreadFour;
 
 	// The handler for the scene
+
 	SceneShadow *scene;
-	SceneLevel01 *scene1;
-	SceneLevel02 *scene2;
-	SceneLevel03 *scene3;
+	//SceneLevel01 *scene1;
+	//SceneLevel02 *scene2;
+	//SceneLevel03 *scene3;
+	//SceneLevel04 *scene4;
+
+
+
 };
 
 #endif

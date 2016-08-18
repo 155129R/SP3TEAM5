@@ -125,8 +125,12 @@ public:
 
 		LEVEL01_TERRAIN,
 		LEVEL01_WALLS,
+		LEVEL01,
 		STAIRS,
 		DOOR,
+		BED,
+		WINDOW,
+		TABLE,
 		ELEVATORDOOR,
 
 		//PLAYER
@@ -154,6 +158,8 @@ public:
 		HOUSE2,
 		POT,
 		COCONUT_TREE,
+		HEDGE,
+		BENCHES,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -188,7 +194,7 @@ public:
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
 	void InitPartitioning();
-	void updatePartition(Vector3 pos);
+	char getPartition(Vector3 pos);
 
 protected:
 	unsigned m_vertexArrayID;

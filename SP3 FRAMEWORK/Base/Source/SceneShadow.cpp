@@ -94,7 +94,7 @@ void SceneShadow::Update(double dt)
 	}
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level1_Heights);
+	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
 	camera.Update(dt);
 

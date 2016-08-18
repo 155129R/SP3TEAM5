@@ -160,6 +160,16 @@ void Application::Init()
 void Application::Run()
 {
 	scene = new SceneShadow();
+	//Main Loop
+	//scene = new SceneLevel01();
+
+	//scene = new SceneLevel04();
+
+	//scene = new SceneLevel01();
+
+	//scene = new SceneShadow();
+
+
 	scene->Init();
 
 	//Need a change scene function

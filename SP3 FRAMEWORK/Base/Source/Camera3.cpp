@@ -15,7 +15,7 @@ Camera3::~Camera3()
 
 void Camera3::Forward(double dt)
 {
-	Vector3 view = (target - position).Normalized();
+	view = (target - position).Normalized();
 	target.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
 	target.z += view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
 	position.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -34,7 +34,7 @@ void Camera3::Forward(double dt)
 
 void Camera3::Backward(double dt)
 {
-	Vector3 view = (target - position).Normalized();
+	view = (target - position).Normalized();
 	target.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
 	target.z -= view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
 	position.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -55,7 +55,7 @@ void Camera3::Sideway(double dt, bool Left)
 {
 	if (Left)
 	{
-		Vector3 view = (target - position).Normalized();
+		view = (target - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
@@ -76,7 +76,7 @@ void Camera3::Sideway(double dt, bool Left)
 	}
 	else
 	{
-		Vector3 view = (target - position).Normalized();
+		view = (target - position).Normalized();
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
@@ -99,7 +99,7 @@ void Camera3::Sideway(double dt, bool Left)
 
 void Camera3::Yaw(double dt)
 {
-	Vector3 view = (target - position).Normalized();
+	view = (target - position).Normalized();
 	float yaw = (float)(-MOUSE_SPEED * Application::camera_yaw * (float)dt);
 	Mtx44 rotation;
 	rotation.SetToRotation(yaw, 0, 1, 0);
@@ -114,7 +114,7 @@ void Camera3::Yaw(double dt)
 void Camera3::Pitch(double dt)
 {
 	float pitch = (float)(-MOUSE_SPEED * Application::camera_pitch * (float)dt);
-	Vector3 view = (target - position).Normalized();
+	view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
@@ -132,7 +132,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
-	Vector3 view = (target - position).Normalized();
+	view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
