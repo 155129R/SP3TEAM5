@@ -25,7 +25,24 @@ public:
 
 	void InflictFear(int amount);
 
+	//weapon
+	void UpdateWeapon(double dt);
+	int GetWeaponType();
+
 private:
+	//weapon
+	enum WEAPON_TYPE
+	{
+		W_RIFLE,
+		W_PISTOL,
+
+		W_TOTAL,
+	};
+
+	WEAPON_TYPE weaponType;
+	int weapon_value;
+
+	//fear
 	enum FEAR_LEVEL
 	{
 		NORMAL,

@@ -10,6 +10,8 @@ Player::~Player()
 
 void Player::Init()
 {
+	weaponType = WEAPON_TYPE::W_PISTOL;
+	weapon_value = 0;
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
 	stamina = 500.0f;
@@ -26,7 +28,7 @@ void Player::Update(double dt)
 	pos = camera.position;
 
 	UpdateStamina(dt);
-
+	UpdateWeapon(dt);
 	UpdateFear(dt);
 }
 
@@ -127,5 +129,34 @@ void Player::InflictFear(int amount)
 	if (fear_value > 100)
 	{
 		fear_value = 100;
+	}
+}
+
+void Player::UpdateWeapon(double dt)
+{
+	if (weapon_value == 0)
+	{
+		weaponType = WEAPON_TYPE::W_PISTOL;
+	}
+	else if (weapon_value == 1)
+	{
+		weaponType = WEAPON_TYPE::W_RIFLE;
+	}
+}
+
+int Player::GetWeaponType()
+{
+	switch (weaponType)
+	{
+		case WEAPON_TYPE::W_PISTOL:
+		{
+			return 1;
+		}
+		case WEAPON_TYPE::W_RIFLE:
+		{
+			return 2;
+		}
+		default:
+			return 0;
 	}
 }

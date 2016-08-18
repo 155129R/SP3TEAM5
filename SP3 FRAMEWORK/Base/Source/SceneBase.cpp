@@ -203,6 +203,13 @@ void SceneBase::Init()
 	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
 	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
+	//weapon
+	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//rifle.obj");
+	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//rifle.tga");
+
+	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
+	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
+
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
 	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
@@ -222,8 +229,17 @@ void SceneBase::Init()
 	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
 	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
 
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
 	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	//meshList[TABLE]->textureArray[0] = LoadTGA("Image//bed.tga");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
 	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
 	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
@@ -245,6 +261,15 @@ void SceneBase::Init()
 
 	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
 	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
+	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
+
+	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+
+	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
 
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");

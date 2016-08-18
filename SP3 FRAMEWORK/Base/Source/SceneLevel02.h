@@ -49,6 +49,9 @@ private:
 	Sound sound;
 
 	float soundTimer;
+
+	bool openGate;
+	int rotateGate;
 };
 
 #endif
