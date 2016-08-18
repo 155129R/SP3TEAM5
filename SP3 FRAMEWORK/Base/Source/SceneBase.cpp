@@ -193,6 +193,7 @@ void SceneBase::Init()
 	//meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[TERRAIN]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
 	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level4.raw", m_heightMap_4, level4_Heights);
 	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
 
@@ -522,6 +523,7 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 	{
 		for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
 		{
+
 			if (mesh->textureArray[i] > 0)
 			{
 				glUniform1i(m_parameters[U_SHADOW_COLOR_TEXTURE_ENABLED + i], 1);

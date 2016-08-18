@@ -155,7 +155,6 @@ public:
 		POT,
 		COCONUT_TREE,
 
-
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
 
@@ -229,7 +228,6 @@ protected:
 
 	float FogAmount;
 	float fps;
-
 
 	//Player
 	Player* player;
