@@ -14,6 +14,7 @@ public:
 	virtual void Update(double dt);
 	void GetCamera(Camera3 camera);
 
+	void UpdateMovement(double dt, unsigned short key);
 	void UpdateFear(double dt);
 	void UpdateStamina(double dt);
 

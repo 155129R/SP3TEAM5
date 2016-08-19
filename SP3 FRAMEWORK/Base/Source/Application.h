@@ -52,8 +52,6 @@ private:
 	//SceneLevel04 *scene;
 
 	//SceneShadow *scene;
-
-
 };
 
 #endif

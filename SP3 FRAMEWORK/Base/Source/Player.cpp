@@ -25,11 +25,42 @@ void Player::GetCamera(Camera3 camera)
 
 void Player::Update(double dt)
 {
-	pos = camera.position;
+	//camera.position = pos;
 
 	UpdateStamina(dt);
 	UpdateWeapon(dt);
 	UpdateFear(dt);
+}
+
+void Player::UpdateMovement(double dt, unsigned short key)
+{
+	std::cout << pos;
+	switch (key)
+	{
+		case 'W':
+		{
+			camera.Forward(dt);
+			break;
+		}
+		case 'S':
+		{
+			camera.Backward(dt);
+			break;
+		}
+		case 'A':
+		{
+			camera.Sideway(dt, true);
+			break;
+		}
+		case 'D':
+		{
+			camera.Sideway(dt, false);
+			break;
+		}
+	}
+	pos = camera.position;
+
+	std::cout << pos << std::endl;
 }
 
 void Player::UpdateFear(double dt)

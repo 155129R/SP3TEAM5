@@ -452,6 +452,7 @@ void SceneBase::Update(double dt)
 		spatialPartitioning = false;
 	}
 
+	UpdatePlayer(dt);
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)
@@ -702,6 +703,22 @@ void SceneBase::UpdatePlayer(double dt)
 {
 	player->GetCamera(camera);
 	player->Update(dt);
+	if (Application::IsKeyPressed('W'))
+	{
+		player->UpdateMovement(dt, 'W');
+	}
+	else if (Application::IsKeyPressed('S'))
+	{
+		player->UpdateMovement(dt, 'S');
+	}
+	else if (Application::IsKeyPressed('A'))
+	{
+		player->UpdateMovement(dt, 'A');
+	}
+	else if (Application::IsKeyPressed('D'))
+	{
+		player->UpdateMovement(dt, 'D');
+	}
 
 	if (Application::IsKeyPressed(VK_NUMPAD0))
 	{

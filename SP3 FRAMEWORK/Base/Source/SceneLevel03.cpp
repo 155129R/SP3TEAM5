@@ -122,7 +122,6 @@ void SceneLevel03::Update(double dt)
 
 	UpdateParticle(dt);
 	UpdateBullet(dt);
-	UpdatePlayer(dt);
 	UpdateHitboxes(dt);
 
 	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)

@@ -15,7 +15,9 @@ Camera3::~Camera3()
 
 void Camera3::Forward(double dt)
 {
+	std::cout << position.x;
 	view = (target - position).Normalized();
+
 	target.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
 	target.z += view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
 	position.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -30,6 +32,7 @@ void Camera3::Forward(double dt)
 		target.y -= position.y - Terrain;
 	}
 	position.y = Terrain;
+	std::cout << "   " << position.x << std::endl;
 }
 
 void Camera3::Backward(double dt)
@@ -185,22 +188,22 @@ void Camera3::Update(double dt)
 	//	position.z += right.z * CAMERA_SPEED * (float)dt;
 	//}
 
-	if(Application::IsKeyPressed('W'))
-	{
-		Forward(dt);
-	}
-	if (Application::IsKeyPressed('S'))
-	{
-		Backward(dt);
-	}
-	if(Application::IsKeyPressed('A'))
-	{
-		Sideway(dt, true);
-	}
-	if(Application::IsKeyPressed('D'))
-	{
-		Sideway(dt, false);
-	}
+	//if(Application::IsKeyPressed('W'))
+	//{
+	//	Forward(dt);
+	//}
+	//if (Application::IsKeyPressed('S'))
+	//{
+	//	Backward(dt);
+	//}
+	//if(Application::IsKeyPressed('A'))
+	//{
+	//	Sideway(dt, true);
+	//}
+	//if(Application::IsKeyPressed('D'))
+	//{
+	//	Sideway(dt, false);
+	//}
 
 	if (Application::IsKeyPressed(VK_LSHIFT) && !Tired)
 	{
