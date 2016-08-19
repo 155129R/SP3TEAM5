@@ -14,8 +14,7 @@ public:
 	bool Jumped;
 
 	bool Tired = false;
-	bool Run;
-	float RUN_SPEED;
+	int RUN_SPEED;
 	float Terrain;
 
 	Camera3();

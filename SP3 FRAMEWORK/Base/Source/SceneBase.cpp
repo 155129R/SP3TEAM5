@@ -395,7 +395,7 @@ void SceneBase::Init()
 		Enemy_list.push_back(Ghost);
 	}
 
-
+	Singleton::getInstance()->player->Init();
 }
 
 void SceneBase::Update(double dt)
@@ -463,6 +463,7 @@ void SceneBase::Update(double dt)
 		spatialPartitioning = false;
 	}
 
+
 	if (Application::IsKeyPressed(VK_SPACE))
 	{
 		Bullet::bulletList.push_back(new Bullet(
@@ -473,6 +474,10 @@ void SceneBase::Update(double dt)
 			10
 			));
 	}
+
+
+	UpdatePlayer(dt);
+	Singleton::getInstance()->player->setPosition(camera.position);
 
 }
 
@@ -722,15 +727,13 @@ void SceneBase::Render()
 
 void SceneBase::UpdatePlayer(double dt)
 {
-	player->GetCamera(camera);
-	player->Update(dt);
-
+	Singleton::getInstance()->player->Update(dt);
 	if (Application::IsKeyPressed(VK_NUMPAD0))
 	{
-		player->InflictFear(5);
+		Singleton::getInstance()->player->InflictFear(5);
 	}
 
-	if (player->GetStamina() <= 0.0f)
+	if (Singleton::getInstance()->player->GetStamina() <= 0.0f)
 	{
 		camera.Tired = true;
 	}
@@ -743,7 +746,7 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
-	switch (player->GetFear())
+	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
 		break;
@@ -873,7 +876,7 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - player->pos.z), ghost->pos.x - player->pos.x));
+			float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
 
 			if (ShowHitbox)
 			{

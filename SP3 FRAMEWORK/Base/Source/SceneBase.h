@@ -25,6 +25,8 @@ struct Partition
 #include "Enemy.h"
 #include "AABBObject.h"
 #include "Bullet.h"
+#include "Singleton.h"
+
 
 class SceneBase : public Scene
 {
@@ -288,7 +290,7 @@ protected:
 	Bullet* bullet;
 
 	//Player
-	Player* player;
+//	Player* player;
 	Color Black;
 
 	//Environment

@@ -67,6 +67,7 @@
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneShadow.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Singleton.h" />
     <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\Utility.h" />
