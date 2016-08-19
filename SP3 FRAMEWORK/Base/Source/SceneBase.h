@@ -27,7 +27,6 @@ struct Partition
 #include "Bullet.h"
 #include "Singleton.h"
 
-
 class SceneBase : public Scene
 {
 protected:
@@ -223,6 +222,7 @@ public:
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
 	void UpdateHitboxes(double dt);
+	void UpdateShoot(double dt);
 
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);

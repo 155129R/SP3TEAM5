@@ -18,12 +18,12 @@ public:
 	void Update(double dt);
 	void UpdateShoot(double dt);
 
-	static vector<Bullet*> bulletList;
+	//vector<Bullet*> bulletList;
 
 	Vector3 position;
 	bool deleteBullet;
 
-	AABB Hitbox;
+	//AABB Hitbox;
 
 private:
 	Vector3 direction;

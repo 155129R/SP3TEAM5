@@ -250,9 +250,6 @@ void SceneBase::Init()
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
-	meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
-	meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
-
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
@@ -400,7 +397,7 @@ void SceneBase::Init()
 
 void SceneBase::Update(double dt)
 {
-	bullet->UpdateShoot(dt);
+	//bullet->UpdateShoot(dt);
 
 	if (Application::IsKeyPressed('I'))
 	{
@@ -466,7 +463,7 @@ void SceneBase::Update(double dt)
 
 	if (Application::IsKeyPressed(VK_SPACE))
 	{
-		Bullet::bulletList.push_back(new Bullet(
+		bulletList.push_back(new Bullet(
 			Vector3(camera.position.x, camera.position.y, camera.position.z),
 			Vector3(camera.view.x, camera.view.y, camera.view.z),
 			150,
@@ -479,6 +476,20 @@ void SceneBase::Update(double dt)
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
 
+}
+
+void SceneBase::UpdateShoot(double dt)
+{
+	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end();){
+		if ((*it)->deleteBullet == true){
+			delete *it;
+			it = bulletList.erase(it);
+		}
+		else{
+			(*it)->Update(dt);
+			it++;
+		}
+	}
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)
@@ -813,15 +824,6 @@ void SceneBase::UpdateHitboxes(double dt)
 			ghost->Hitbox.Resize(ghost->scale);
 		}
 	}
-
-	for (std::vector<Bullet *>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
-	{
-		Bullet *bullet = (Bullet *)*it;
-		if (bullet->active)
-		{
-			bullet->Hitbox.Resize(bullet->scale);
-		}
-	}
 }
 
 void SceneBase::RenderObjects(bool ShowHitbox)
@@ -937,7 +939,7 @@ void SceneBase::RenderBullets(bool ShowHitbox)
 {
 
 	//bullet
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+	/*for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
 		Bullet* bullet = (Bullet *)* it;
 		if (bullet->active){
 			if (ShowHitbox)
@@ -964,7 +966,7 @@ void SceneBase::RenderBullets(bool ShowHitbox)
 			modelStack.PopMatrix();
 		}
 		
-	}
+	}*/
 }
 
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)

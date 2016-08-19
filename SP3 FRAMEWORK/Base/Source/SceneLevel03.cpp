@@ -118,10 +118,8 @@ void SceneLevel03::Update(double dt)
 
 	UpdateParticle(dt);
 
-	//UpdateBullet(dt);
 	UpdatePlayer(dt);
 
-	UpdateBullet(dt);
 	UpdateHitboxes(dt);
 
 	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
@@ -240,20 +238,6 @@ void SceneLevel03::Update(double dt)
 
 
 	fps = (float)(1.f / dt);
-}
-
-void SceneLevel03::UpdateBullet(double dt)
-{
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = Bullet::bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
-	}
 }
 
 void SceneLevel03::UpdateParticle(double dt)
@@ -670,7 +654,7 @@ void SceneLevel03::RenderPassMain()
 	RenderLight();
 
 	//bullet
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+	/*for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
 		modelStack.PushMatrix();
 		modelStack.Translate(
 			(*it)->position.x,
@@ -680,7 +664,7 @@ void SceneLevel03::RenderPassMain()
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], false);
 		modelStack.PopMatrix();
-	}
+	}*/
 
 
 	//Depth quad

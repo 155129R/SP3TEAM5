@@ -23,9 +23,9 @@ void SceneShadow::Init()
 {
 	SceneBase::Init();
 
-	player = new Player();
+	//player = new Player();
 
-	player->Init();
+	//player->Init();
 
 	terrainHeight = TERRAINSIZE.y;
 
@@ -184,19 +184,19 @@ void SceneShadow::Update(double dt)
 	fps = (float)(1.f / dt);
 }
 
-void SceneShadow::UpdateBullet(double dt)
-{
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = Bullet::bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
-	}
-}
+//void SceneShadow::UpdateBullet(double dt)
+//{
+//	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
+//		if ((*it)->deleteBullet == true){
+//			delete *it;
+//			it = Bullet::bulletList.erase(it);
+//		}
+//		else{
+//			(*it)->Update(dt);
+//			it++;
+//		}
+//	}
+//}
 
 void SceneShadow::UpdateParticle(double dt)
 {
@@ -255,10 +255,10 @@ void SceneShadow::UpdateParticle(double dt)
 
 void SceneShadow::UpdatePlayer(double dt)
 {
-	player->GetCamera(camera);
-	player->Update(dt);
+	//player->GetCamera(camera);
+	//player->Update(dt);
 
-	if (Application::IsKeyPressed(VK_NUMPAD0))
+	/*if (Application::IsKeyPressed(VK_NUMPAD0))
 	{
 		player->InflictFear(5);
 	}
@@ -270,15 +270,15 @@ void SceneShadow::UpdatePlayer(double dt)
 	else
 	{
 		camera.Tired = false;
-	}
+	}*/
 
 	UpdateFearEffect(dt);
 }
 
 void SceneShadow::UpdateFearEffect(double dt)
 {
-	switch (player->GetFear())
-	{
+	//switch (player->GetFear())
+	/*{
 		case 1:
 			break;
 
@@ -309,7 +309,7 @@ void SceneShadow::UpdateFearEffect(double dt)
 			Black.Set(0.0f, 0.0f, 0.0f);
 			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
 			break;
-	}
+	}*/
 }
 
 ParticleObject* SceneShadow::GetParticles(void)
@@ -425,7 +425,7 @@ void SceneShadow::RenderEnvironment(bool Light, bool inverted)
 		//	}
 		//}
 
-		for (int i = 0; i < 400; ++i)
+		/*for (int i = 0; i < 400; ++i)
 		{
 			float Degree = Math::RadianToDegree(atan2(-(Bush[i].z - player->pos.z), Bush[i].x - player->pos.x));
 			modelStack.PushMatrix();
@@ -434,7 +434,7 @@ void SceneShadow::RenderEnvironment(bool Light, bool inverted)
 			modelStack.Scale(100, 100, 100);
 			RenderMeshOutlined(meshList[GEO_BUSH], false);
 			modelStack.PopMatrix();
-		}
+		}*/
 
 		modelStack.PushMatrix();
 		modelStack.Translate(1900, 0, -1400);
@@ -471,7 +471,7 @@ void SceneShadow::RenderEnvironment(bool Light, bool inverted)
 void SceneShadow::RenderHUD()
 {
 	//std::cout << player->GetStamina() << std::endl;
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
+	//RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
 }
 
 void SceneShadow::RenderSprite()
@@ -687,18 +687,18 @@ void SceneShadow::RenderPassMain()
 	//Render objects
 	RenderLight();
 
-	//bullet
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
-		modelStack.PushMatrix();
-		modelStack.Translate(
-			(*it)->position.x,
-			(*it)->position.y,
-			(*it)->position.z
-			);
-		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], false);
-		modelStack.PopMatrix();
-	}
+	////bullet
+	//for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+	//	modelStack.PushMatrix();
+	//	modelStack.Translate(
+	//		(*it)->position.x,
+	//		(*it)->position.y,
+	//		(*it)->position.z
+	//		);
+	//	modelStack.Scale(1, 1, 1);
+	//	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	//	modelStack.PopMatrix();
+	//}
 
 
 	//Depth quad
@@ -741,7 +741,6 @@ void SceneShadow::Exit()
 {
 	SceneBase::Exit();
 }
-=======
 //#include "SceneShadow.h"
 //#include "GL\glew.h"
 //
@@ -1488,4 +1487,4 @@ void SceneShadow::Exit()
 //{
 //	SceneBase::Exit();
 //}
->>>>>>> origin/master
+

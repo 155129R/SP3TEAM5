@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg) : Hitbox(AABB(this->pos, this->scale))
+Bullet::Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg) /* : Hitbox(AABB(this->pos, this->scale))*/
 {
 	position = pos;
 	direction = dir;
@@ -20,7 +20,7 @@ Bullet::~Bullet()
 
 void Bullet::Update(double dt)
 {
-	Hitbox.UpdateAABB(this->position);
+	//Hitbox.UpdateAABB(this->position);
 
 	distanceTravelled += dt * speed;
 	position += direction * dt * speed;
@@ -29,24 +29,24 @@ void Bullet::Update(double dt)
 	position.y += vSpeed;
 
 	
-	if (Hitbox.Collide(position)){
+	/*if (Hitbox.Collide(position)){
 		deleteBullet = true;
-	}
-	else if (distanceTravelled >= range){
+	}*/
+	/*else */if (distanceTravelled >= range){
 		deleteBullet = true;
 	}
 }
 
-void Bullet::UpdateShoot(double dt)
-{
-	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
-	}
-}
+//void Bullet::UpdateShoot(double dt)
+//{
+//	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end();){
+//		if ((*it)->deleteBullet == true){
+//			delete *it;
+//			it = bulletList.erase(it);
+//		}
+//		else{
+//			(*it)->Update(dt);
+//			it++;
+//		}
+//	}
+//}

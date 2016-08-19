@@ -60,7 +60,7 @@ void SceneLevel01::Update(double dt)
 	UpdateParticle(dt);
 
 	//UpdatePlayer(dt);
-	bullet->UpdateShoot(dt);
+	//bullet->UpdateShoot(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Update(dt);
@@ -196,28 +196,20 @@ void SceneLevel01::UpdateParticle(double dt)
 		}
 	}
 }
-
-void SceneLevel01::UpdatePlayer(double dt)
-{
-	Singleton::getInstance()->player->Update(dt);
-
-	UpdateWeaponType(dt);
-}
-
-void SceneLevel01::UpdateWeaponType(double dt)
-{
-	switch (Singleton::getInstance()->player->GetWeaponType())
-	{
-	case 1:
-		weapontype = 1;
-		break;
-	case 2:
-		weapontype = 2;
-		break;
-	default:
-		break;
-	}
-}
+//void SceneLevel01::UpdateWeaponType(double dt)
+//{
+//	switch (Singleton::getInstance()->player->GetWeaponType())
+//	{
+//	case 1:
+//		weapontype = 1;
+//		break;
+//	case 2:
+//		weapontype = 2;
+//		break;
+//	default:
+//		break;
+//	}
+//}
 
 ParticleObject* SceneLevel01::GetParticles(void)
 {
@@ -634,6 +626,7 @@ void SceneLevel01::RenderLight()
 void SceneLevel01::RenderWorld()
 {
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 1);
+	//RenderBullets(true);
 	RenderSkyplane();
 	RenderTerrain();
 	RenderLevel(false);

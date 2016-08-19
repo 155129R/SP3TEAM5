@@ -28,8 +28,7 @@ void Player::Init()
 void Player::Update(double dt)
 {
 
-	pos = camera.position;
-
+//	pos = camera.position;
 	UpdateStamina(dt);
 	UpdateWeapon(dt);
 	UpdateFear(dt);
