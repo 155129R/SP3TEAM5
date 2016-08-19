@@ -63,7 +63,7 @@ void SceneLevel03::Init()
 	{
 		int Random = Math::RandIntMinMax(1, 3);
 
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::IDLE);
 		switch (Random)
 		{
 		case 1:

@@ -283,8 +283,8 @@ void SceneBase::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
-	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1));
-	meshList[NIGHT_VISION]->textureArray[0] = LoadTGA("Image//nightVision.tga");
+	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1), 1.f);
+	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -318,6 +318,8 @@ void SceneBase::Init()
 	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
 	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
+	meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
+	meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
@@ -387,6 +389,7 @@ void SceneBase::Init()
 	}
 
 	Singleton::getInstance()->player->Init();
+
 }
 
 void SceneBase::Update(double dt)
