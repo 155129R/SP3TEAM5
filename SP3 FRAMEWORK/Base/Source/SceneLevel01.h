@@ -53,6 +53,8 @@ private:
 
 	//weapon
 	int weapontype;
+
+	Bullet* bullet;
 };
 
 #endif

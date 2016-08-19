@@ -212,7 +212,7 @@ void SceneBase::Init()
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
 
 	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
 	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
@@ -226,8 +226,17 @@ void SceneBase::Init()
 	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
 	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
 
+	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//chandelier.obj");
+	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//chandelier.tga");
+
+	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
+	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
+
 	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
 	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+
+	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
+	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
 
 	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
 	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
@@ -241,8 +250,8 @@ void SceneBase::Init()
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
-	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
-	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
+	meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
+	meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
@@ -391,6 +400,8 @@ void SceneBase::Init()
 
 void SceneBase::Update(double dt)
 {
+	bullet->UpdateShoot(dt);
+
 	if (Application::IsKeyPressed('I'))
 	{
 		lights[0].position.z -= (float)50 * dt;
@@ -450,6 +461,17 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed(VK_NUMPAD2))
 	{
 		spatialPartitioning = false;
+	}
+
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		Bullet::bulletList.push_back(new Bullet(
+			Vector3(camera.position.x, camera.position.y, camera.position.z),
+			Vector3(camera.view.x, camera.view.y, camera.view.z),
+			150,
+			1000,
+			10
+			));
 	}
 
 }
@@ -788,6 +810,15 @@ void SceneBase::UpdateHitboxes(double dt)
 			ghost->Hitbox.Resize(ghost->scale);
 		}
 	}
+
+	for (std::vector<Bullet *>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
+	{
+		Bullet *bullet = (Bullet *)*it;
+		if (bullet->active)
+		{
+			bullet->Hitbox.Resize(bullet->scale);
+		}
+	}
 }
 
 void SceneBase::RenderObjects(bool ShowHitbox)
@@ -896,6 +927,40 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				}
 			}
 		}
+	}
+}
+
+void SceneBase::RenderBullets(bool ShowHitbox)
+{
+
+	//bullet
+	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+		Bullet* bullet = (Bullet *)* it;
+		if (bullet->active){
+			if (ShowHitbox)
+			{
+				modelStack.PushMatrix();
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				modelStack.Translate(bullet->Hitbox.pos.x, bullet->Hitbox.pos.y, bullet->Hitbox.pos.z);
+				modelStack.Scale(bullet->Hitbox.size.x, bullet->Hitbox.size.y, bullet->Hitbox.size.z);
+				RenderMesh(meshList[GEO_HITBOX], false);
+				if (!mode)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
+				modelStack.PopMatrix();
+			}
+			modelStack.PushMatrix();
+			modelStack.Translate(
+				(*it)->position.x,
+				(*it)->position.y,
+				(*it)->position.z
+				);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_LIGHTBALL], false);
+			modelStack.PopMatrix();
+		}
+		
 	}
 }
 

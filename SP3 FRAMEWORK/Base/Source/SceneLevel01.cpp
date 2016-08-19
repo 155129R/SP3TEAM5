@@ -58,16 +58,13 @@ void SceneLevel01::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-	UpdateBullet(dt);
+
+	//UpdatePlayer(dt);
+	bullet->UpdateShoot(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Update(dt);
 
-	//shoot
-	if (Application::IsKeyPressed(VK_SPACE))
-	{
-		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(camera.view.x, camera.view.y, camera.view.z), 150, 100, 10));
-	}
 
 	if (Flashlight)
 	{
@@ -156,19 +153,19 @@ void SceneLevel01::Update(double dt)
 	fps = (float)(1.f / dt);
 }
 
-void SceneLevel01::UpdateBullet(double dt)
-{
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = Bullet::bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
-	}
-}
+//void SceneLevel01::UpdateBullet(double dt)
+//{
+//	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
+//		if ((*it)->deleteBullet == true){
+//			delete *it;
+//			it = Bullet::bulletList.erase(it);
+//		}
+//		else{
+//			(*it)->Update(dt);
+//			it++;
+//		}
+//	}
+//}
 
 void SceneLevel01::UpdateParticle(double dt)
 {
@@ -311,6 +308,30 @@ void SceneLevel01::RenderLevel(bool Light)
 	RenderMeshOutlined(meshList[INDOORGATE], Light);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[TOILETBOWL], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[CHANDELIER], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(850, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[CHANDELIER], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[CHANDELIER], Light);
+	modelStack.PopMatrix();
+
 	//whole level
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
@@ -318,9 +339,12 @@ void SceneLevel01::RenderLevel(bool Light)
 	RenderMeshOutlined(meshList[LEVEL01], Light);
 	modelStack.PopMatrix();
 
-	
-
-
+	modelStack.PushMatrix();
+	modelStack.Translate(500, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	modelStack.Scale(1050, 1, 305);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[CEILING], Light);
+	modelStack.PopMatrix();
 }
 
 void SceneLevel01::RenderRoomObjects(bool Light)
@@ -701,20 +725,6 @@ void SceneLevel01::RenderPassMain()
 
 	//Render objects
 	RenderLight();
-
-	//bullet
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
-		modelStack.PushMatrix();
-		modelStack.Translate(
-			(*it)->position.x,
-			(*it)->position.y,
-			(*it)->position.z
-			);
-		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], false);
-		modelStack.PopMatrix();
-	}
-
 
 	//Depth quad
 	//viewStack.PushMatrix();
