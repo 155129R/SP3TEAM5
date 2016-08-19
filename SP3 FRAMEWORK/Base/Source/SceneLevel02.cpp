@@ -61,22 +61,21 @@ void SceneLevel02::Init()
 
 	item3pos = Vector3(0, 0, 200);
 	item3 = new AABB(item3pos, Vector3(10, 20, 10));
+
+	sound.playSoundEffect3D("Sound/fountain.wav",
+		irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
+		irrklang::vec3df(camera.target.x, camera.target.y, camera.target.z),
+		irrklang::vec3df(0, 0, 0),
+		true);
 }
 
 void SceneLevel02::Update(double dt)
 {
 	SceneBase::Update(dt);
-	sound.Init();
-	soundTimer += dt;
-	if (soundTimer > 0.1)
-	{
-		sound.playSoundEffect3D("Sound/fountain2.wav",
-			irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
-			irrklang::vec3df(camera.target.x, camera.target.y, camera.target.z),
-			irrklang::vec3df(0, 0, 0),
-			false);
-		soundTimer = 0;
-	}
+
+	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
+		irrklang::vec3df(camera.view.x, camera.view.y, camera.view.z));
+
 	if (Application::IsKeyPressed('Q'))
 	{
 		openGate = true;

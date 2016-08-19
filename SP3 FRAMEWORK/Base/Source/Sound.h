@@ -14,6 +14,7 @@ public:
 	Sound();
 	~Sound();
 	void Init();
+	void Update(irrklang::vec3df pos, irrklang::vec3df view);
 	void playMusic(string Music);
 	void stopMusic(string Music);
 	void playSoundEffect2D(string Music);
