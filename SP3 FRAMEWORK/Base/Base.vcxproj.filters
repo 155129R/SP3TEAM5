@@ -221,6 +221,9 @@
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Singleton.h">
+      <Filter>Header Files\Others</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\GPass.fragmentshader">
