@@ -1,10 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "GameObject.h"
 #include "Camera3.h"
 
-class Player : public GameObject
+class Player 
 {
 public:
 	Player();
@@ -12,7 +11,6 @@ public:
 
 	virtual void Init();
 	virtual void Update(double dt);
-	void GetCamera(Camera3 camera);
 
 	void UpdateMovement(double dt, unsigned short key);
 	void UpdateFear(double dt);
@@ -29,6 +27,26 @@ public:
 	//weapon
 	void UpdateWeapon(double dt);
 	int GetWeaponType();
+
+	Vector3 getPosition()
+	{
+		return position;
+	}
+
+	void setPosition(Vector3 pos)
+	{
+		position = pos;
+	}
+
+	bool getRun()
+	{
+		return Run;
+	}
+
+	void setRun(bool run)
+	{
+		Run = run;
+	}
 
 private:
 	//weapon
@@ -58,14 +76,15 @@ private:
 	FEAR_LEVEL fear;
 	int fear_value;
 
-	Camera3 camera;
-
 	//Stamina
+	bool Run;
 	float stamina;
 	float recharge;
 
 	//Weapon* equipped;
 	//Inventory
+
+	Vector3 position;
 };
 
 #endif

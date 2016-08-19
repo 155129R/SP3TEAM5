@@ -16,51 +16,21 @@ void Player::Init()
 	fear_value = 0;
 	stamina = 500.0f;
 	recharge = 5.0f;
-}
 
-void Player::GetCamera(Camera3 camera)
-{
-	this->camera = camera;
+	Run = false;
+	position.Set(0, 0, 0);
 }
 
 void Player::Update(double dt)
 {
-	//camera.position = pos;
-
 	UpdateStamina(dt);
 	UpdateWeapon(dt);
 	UpdateFear(dt);
+
 }
 
 void Player::UpdateMovement(double dt, unsigned short key)
 {
-	std::cout << pos;
-	switch (key)
-	{
-		case 'W':
-		{
-			camera.Forward(dt);
-			break;
-		}
-		case 'S':
-		{
-			camera.Backward(dt);
-			break;
-		}
-		case 'A':
-		{
-			camera.Sideway(dt, true);
-			break;
-		}
-		case 'D':
-		{
-			camera.Sideway(dt, false);
-			break;
-		}
-	}
-	pos = camera.position;
-
-	std::cout << pos << std::endl;
 }
 
 void Player::UpdateFear(double dt)
@@ -89,7 +59,7 @@ void Player::UpdateFear(double dt)
 
 void Player::UpdateStamina(double dt)
 {
-	if (camera.Run && stamina > 0.0f)
+	if (Run && stamina > 0.0f)
 	{
 		recharge = 5.0f;
 		DepleteStamina(dt);

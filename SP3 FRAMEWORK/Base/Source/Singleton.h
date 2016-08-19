@@ -17,6 +17,7 @@ private:
 	Singleton()
 	{
 		//init stuff here
+		player = new Player();
 	}
 };
 

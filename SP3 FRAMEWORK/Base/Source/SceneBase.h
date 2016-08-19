@@ -25,6 +25,7 @@ struct Partition
 #include "Player.h"
 #include "Enemy.h"
 #include "AABBObject.h"
+#include "Singleton.h"
 
 class SceneBase : public Scene
 {
@@ -283,7 +284,7 @@ protected:
 	float fps;
 
 	//Player
-	Player* player;
+//	Player* player;
 	Color Black;
 
 	//Environment

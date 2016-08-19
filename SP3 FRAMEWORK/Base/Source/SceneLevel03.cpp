@@ -21,10 +21,6 @@ void SceneLevel03::Init()
 
 	Object_list.clear();
 
-	player = new Player();
-
-	player->Init();
-
 	terrainHeight = TERRAINSIZE.y;
 
 	//Random my random randomly using srand
@@ -129,7 +125,7 @@ void SceneLevel03::Update(double dt)
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			ghost->Update(dt, player->pos);
+			ghost->Update(dt, Singleton::getInstance()->player->getPosition());
 		}
 	}
 
@@ -394,7 +390,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 	{
 		for (int i = 0; i < 400; ++i)
 		{
-			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - player->pos.z), Tree[i].x - player->pos.x));
+			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - Singleton::getInstance()->player->getPosition().z), Tree[i].x - Singleton::getInstance()->player->getPosition().x));
 			switch (Tree_Type[i])
 			{
 			case 1:
@@ -432,7 +428,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 
 		for (int i = 0; i < 400; ++i)
 		{
-			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - player->pos.z), Bush[i].x - player->pos.x));
+			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - Singleton::getInstance()->player->getPosition().z), Bush[i].x - Singleton::getInstance()->player->getPosition().x));
 			modelStack.PushMatrix();
 			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
 			modelStack.Rotate(Degree - 90, 0, 1, 0);
@@ -470,7 +466,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 void SceneLevel03::RenderHUD()
 {
 	//std::cout << player->GetStamina() << std::endl;
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
+	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - Singleton::getInstance()->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
 }
 
 void SceneLevel03::RenderSprite()

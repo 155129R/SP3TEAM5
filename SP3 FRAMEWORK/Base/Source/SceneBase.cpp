@@ -386,7 +386,7 @@ void SceneBase::Init()
 		Enemy_list.push_back(Ghost);
 	}
 
-
+	Singleton::getInstance()->player->Init();
 }
 
 void SceneBase::Update(double dt)
@@ -453,6 +453,7 @@ void SceneBase::Update(double dt)
 	}
 
 	UpdatePlayer(dt);
+	Singleton::getInstance()->player->setPosition(camera.position);
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)
@@ -701,31 +702,13 @@ void SceneBase::Render()
 
 void SceneBase::UpdatePlayer(double dt)
 {
-	player->GetCamera(camera);
-	player->Update(dt);
-	if (Application::IsKeyPressed('W'))
-	{
-		player->UpdateMovement(dt, 'W');
-	}
-	else if (Application::IsKeyPressed('S'))
-	{
-		player->UpdateMovement(dt, 'S');
-	}
-	else if (Application::IsKeyPressed('A'))
-	{
-		player->UpdateMovement(dt, 'A');
-	}
-	else if (Application::IsKeyPressed('D'))
-	{
-		player->UpdateMovement(dt, 'D');
-	}
-
+	Singleton::getInstance()->player->Update(dt);
 	if (Application::IsKeyPressed(VK_NUMPAD0))
 	{
-		player->InflictFear(5);
+		Singleton::getInstance()->player->InflictFear(5);
 	}
 
-	if (player->GetStamina() <= 0.0f)
+	if (Singleton::getInstance()->player->GetStamina() <= 0.0f)
 	{
 		camera.Tired = true;
 	}
@@ -738,7 +721,7 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
-	switch (player->GetFear())
+	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
 		break;
@@ -859,7 +842,7 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - player->pos.z), ghost->pos.x - player->pos.x));
+			float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
 
 			if (ShowHitbox)
 			{

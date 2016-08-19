@@ -202,15 +202,14 @@ void SceneLevel01::UpdateParticle(double dt)
 
 void SceneLevel01::UpdatePlayer(double dt)
 {
-	player->GetCamera(camera);
-	player->Update(dt);
+	Singleton::getInstance()->player->Update(dt);
 
 	UpdateWeaponType(dt);
 }
 
 void SceneLevel01::UpdateWeaponType(double dt)
 {
-	switch (player->GetWeaponType())
+	switch (Singleton::getInstance()->player->GetWeaponType())
 	{
 	case 1:
 		weapontype = 1;
