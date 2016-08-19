@@ -395,7 +395,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 	{
 		for (int i = 0; i < 400; ++i)
 		{
-			float Degree = Math::RadianToDegree(atan2(-(Tree[i].z - player->pos.z), Tree[i].x - player->pos.x));
+			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - player->pos.z), Tree[i].x - player->pos.x));
 			switch (Tree_Type[i])
 			{
 			case 1:
@@ -433,7 +433,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 
 		for (int i = 0; i < 400; ++i)
 		{
-			float Degree = Math::RadianToDegree(atan2(-(Bush[i].z - player->pos.z), Bush[i].x - player->pos.x));
+			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - player->pos.z), Bush[i].x - player->pos.x));
 			modelStack.PushMatrix();
 			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
 			modelStack.Rotate(Degree - 90, 0, 1, 0);

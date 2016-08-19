@@ -52,6 +52,8 @@ private:
 	Vector3 Tree[400];
 	int Tree_Type[400];
 	Vector3 Bush[400];
+
+	float Degree;
 };
 
 #endif
