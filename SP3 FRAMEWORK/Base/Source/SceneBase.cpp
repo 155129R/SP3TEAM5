@@ -397,7 +397,7 @@ void SceneBase::Init()
 
 void SceneBase::Update(double dt)
 {
-	//bullet->UpdateShoot(dt);
+	UpdateShoot(dt);
 
 	if (Application::IsKeyPressed('I'))
 	{
@@ -471,7 +471,7 @@ void SceneBase::Update(double dt)
 			10
 			));
 	}
-
+	
 
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
@@ -734,6 +734,7 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneBase::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -935,26 +936,10 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 	}
 }
 
-void SceneBase::RenderBullets(bool ShowHitbox)
+void SceneBase::RenderBullets(bool light)
 {
-
 	//bullet
-	/*for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
-		Bullet* bullet = (Bullet *)* it;
-		if (bullet->active){
-			if (ShowHitbox)
-			{
-				modelStack.PushMatrix();
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				modelStack.Translate(bullet->Hitbox.pos.x, bullet->Hitbox.pos.y, bullet->Hitbox.pos.z);
-				modelStack.Scale(bullet->Hitbox.size.x, bullet->Hitbox.size.y, bullet->Hitbox.size.z);
-				RenderMesh(meshList[GEO_HITBOX], false);
-				if (!mode)
-				{
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				}
-				modelStack.PopMatrix();
-			}
+	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it){
 			modelStack.PushMatrix();
 			modelStack.Translate(
 				(*it)->position.x,
@@ -962,11 +947,10 @@ void SceneBase::RenderBullets(bool ShowHitbox)
 				(*it)->position.z
 				);
 			modelStack.Scale(1, 1, 1);
-			RenderMesh(meshList[GEO_LIGHTBALL], false);
+			RenderMesh(meshList[GEO_LIGHTBALL], light);
 			modelStack.PopMatrix();
 		}
 		
-	}*/
 }
 
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
