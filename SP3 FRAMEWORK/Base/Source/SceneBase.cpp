@@ -18,6 +18,7 @@ SceneBase::~SceneBase()
 
 void SceneBase::Init()
 {
+	instance = Singleton::getInstance();
 	Math::InitRNG();
 
 	// Black background
@@ -354,8 +355,8 @@ void SceneBase::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
-	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1));
-	meshList[NIGHT_VISION]->textureArray[0] = LoadTGA("Image//nightVision.tga");
+	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1), 1.f);
+	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -389,6 +390,8 @@ void SceneBase::Init()
 	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
 	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
+	meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
+	meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
@@ -454,10 +457,11 @@ void SceneBase::Init()
 		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 		Ghost->scale.Set(50, 50, 50);
 
-		Enemy_list.push_back(Ghost);
+		instance->Enemy_list.push_back(Ghost);
 	}
 
 	Singleton::getInstance()->player->Init();
+
 }
 
 void SceneBase::Update(double dt)
@@ -930,7 +934,7 @@ void SceneBase::UpdateWeaponType(double dt)
 }
 void SceneBase::UpdateHitboxes(double dt)
 {
-	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
@@ -952,7 +956,7 @@ void SceneBase::UpdateHitboxes(double dt)
 			}
 		}
 	}
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
@@ -965,7 +969,7 @@ void SceneBase::UpdateHitboxes(double dt)
 
 void SceneBase::RenderObjects(bool ShowHitbox)
 {
-	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
@@ -1010,7 +1014,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 }
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)

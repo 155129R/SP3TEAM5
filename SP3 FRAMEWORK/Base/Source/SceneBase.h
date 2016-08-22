@@ -212,6 +212,7 @@ public:
 		TOMBSTONE,
 		FENCE,
 		DEADTREE,
+		POCONG,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -319,12 +320,7 @@ protected:
 //	Player* player;
 	Color Black;
 
-	//Environment
-	std::vector<AABBObject *> Object_list;
 
-	//Enemy
-	std::vector<Enemy *> Enemy_list;
-	
 	//bullet
 	std::vector<Bullet*> bulletList;
 
@@ -343,6 +339,9 @@ protected:
 
 	//weapon
 	int weaponType;
+
+	Singleton* instance;
+
 };
 
 #endif

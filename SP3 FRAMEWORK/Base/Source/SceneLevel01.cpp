@@ -58,7 +58,6 @@ void SceneLevel01::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-
 	//UpdatePlayer(dt);
 	//bullet->UpdateShoot(dt);
 	
@@ -151,6 +150,30 @@ void SceneLevel01::Update(double dt)
 	rotateAngle += (float)(1 * dt);
 
 
+	////////////////////////////////////////////////////////
+	//	for next time winning condition to go next scene  //
+	////////////////////////////////////////////////////////
+	if (Application::IsKeyPressed('V'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+	}
+	if (Application::IsKeyPressed('N'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+	}
+	if (Application::IsKeyPressed('M'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
+
 	fps = (float)(1.f / dt);
 }
 
@@ -183,6 +206,7 @@ void SceneLevel01::UpdateParticle(double dt)
 		}
 	}
 }
+
 
 
 ParticleObject* SceneLevel01::GetParticles(void)
