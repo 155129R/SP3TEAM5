@@ -28,25 +28,12 @@ void Bullet::Update(double dt)
 
 	position.y += vSpeed;
 
-	
-	/*if (Hitbox.Collide(position)){
-		deleteBullet = true;
-	}*/
-	/*else */if (distanceTravelled >= range){
+	/*if (Hitbox.Collide(enemy->pos)){
+		std::cout << "Hitttttttttt" << std::endl;
 		deleteBullet = true;
 	}
-}
+	else */if (distanceTravelled >= range){
+		deleteBullet = true;
+	}
 
-//void Bullet::UpdateShoot(double dt)
-//{
-//	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end();){
-//		if ((*it)->deleteBullet == true){
-//			delete *it;
-//			it = bulletList.erase(it);
-//		}
-//		else{
-//			(*it)->Update(dt);
-//			it++;
-//		}
-//	}
-//}
+}

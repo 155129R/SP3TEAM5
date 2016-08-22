@@ -60,6 +60,7 @@ void SceneLevel01::Update(double dt)
 	UpdateParticle(dt);
 	//UpdatePlayer(dt);
 	//bullet->UpdateShoot(dt);
+	
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Update(dt);
@@ -630,6 +631,7 @@ void SceneLevel01::RenderWorld()
 	RenderTerrain();
 	RenderLevel(false);
 	RenderRoomObjects(false);
+	RenderBullets(true);
 	//RenderSprite();
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }

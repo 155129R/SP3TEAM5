@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "AABB.h"
 #include "Vector3.h"
+#include "Enemy.h"
 #include "Sound.h"
 #include <vector>
 
@@ -16,14 +17,12 @@ public:
 	~Bullet();
 
 	void Update(double dt);
-	void UpdateShoot(double dt);
-
-	//vector<Bullet*> bulletList;
 
 	Vector3 position;
 	bool deleteBullet;
 
-	//AABB Hitbox;
+	AABB Hitbox;
+	Enemy* enemy;
 
 private:
 	Vector3 direction;
