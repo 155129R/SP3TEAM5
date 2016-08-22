@@ -26,6 +26,7 @@ struct Partition
 #include "Enemy.h"
 #include "AABBObject.h"
 #include "Minimap.h"
+#include "Bullet.h"
 #include "Singleton.h"
 
 class SceneBase : public Scene
@@ -53,6 +54,7 @@ protected:
 		U_LIGHT0_COSCUTOFF,
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
+
 		U_LIGHT1_TYPE,
 		U_LIGHT1_POSITION,
 		U_LIGHT1_COLOR,
@@ -64,6 +66,30 @@ protected:
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
+
+		U_LIGHT2_TYPE,
+		U_LIGHT2_POSITION,
+		U_LIGHT2_COLOR,
+		U_LIGHT2_POWER,
+		U_LIGHT2_KC,
+		U_LIGHT2_KL,
+		U_LIGHT2_KQ,
+		U_LIGHT2_SPOTDIRECTION,
+		U_LIGHT2_COSCUTOFF,
+		U_LIGHT2_COSINNER,
+		U_LIGHT2_EXPONENT,
+
+		U_LIGHT3_TYPE,
+		U_LIGHT3_POSITION,
+		U_LIGHT3_COLOR,
+		U_LIGHT3_POWER,
+		U_LIGHT3_KC,
+		U_LIGHT3_KL,
+		U_LIGHT3_KQ,
+		U_LIGHT3_SPOTDIRECTION,
+		U_LIGHT3_COSCUTOFF,
+		U_LIGHT3_COSINNER,
+		U_LIGHT3_EXPONENT,
 
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE_ENABLED1,
@@ -147,6 +173,8 @@ public:
 		BLOCKAGE,
 		INDOORGATE,
 		CHANDELIER,
+		CEILING,
+		TOILETBOWL,
 		ELEVATORDOOR,
 
 		//PLAYER
@@ -225,6 +253,7 @@ public:
 	void RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate);
 	void RenderMeshOutlined(Mesh* mesh, bool enableLight);
 	void RenderMesh(Mesh *mesh, bool enableLight);
+	void RenderOBJOnScreen(Mesh* mesh, float scale ,float x, float y, float z, float rotateX, float rotateY, float rotateZ, bool enableLight);
 	void RenderNightVision();
 
 	//Used in all scenes
@@ -235,6 +264,11 @@ public:
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
 	void RenderRadar();
+	void UpdateShoot(double dt);
+	void UpdateWeaponType(double dt);
+
+	void RenderBullets(bool light);
+	void RenderWeapons(bool light);
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
@@ -300,12 +334,9 @@ protected:
 	Minimap* m_Minimap;
 	Color Black;
 
-	//Environment
-	std::vector<AABBObject *> Object_list;
-
-	//Enemy
-	std::vector<Enemy *> Enemy_list;
-
+	//bullet
+	std::vector<Bullet*> bulletlist;
+	
 	//Sprite Pointers
 	SpriteAnimation* G1;
 	SpriteAnimation* G2;
@@ -318,6 +349,11 @@ protected:
 	char playerPartition;
 	char posPartition;
 	bool spatialPartitioning;
+
+	//weapon
+	int weaponType;
+
+	Singleton* instance;
 
 };
 

@@ -15,8 +15,6 @@ public:
 
 	void Update(double dt);
 
-	static vector<Bullet*> bulletList;
-
 	Vector3 position;
 	bool deleteBullet;
 
@@ -31,6 +29,7 @@ private:
 	int damage;
 
 	Sound sound;
+	
 };
 
 #endif

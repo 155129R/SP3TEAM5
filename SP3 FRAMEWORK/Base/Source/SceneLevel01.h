@@ -27,14 +27,9 @@ public:
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
 
-	void UpdateBullet(double dt);
-
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
-
-	void UpdatePlayer(double dt);
-	void UpdateWeaponType(double dt);
 
 private:
 	float rotateAngle;
@@ -50,9 +45,6 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
-
-	//weapon
-	int weapontype;
 };
 
 #endif

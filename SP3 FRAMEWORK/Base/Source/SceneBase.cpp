@@ -55,8 +55,10 @@ void SceneBase::Init()
 	m_parameters[U_MATERIAL_DIFFUSE] = glGetUniformLocation(m_programID, "material.kDiffuse");
 	m_parameters[U_MATERIAL_SPECULAR] = glGetUniformLocation(m_programID, "material.kSpecular");
 	m_parameters[U_MATERIAL_SHININESS] = glGetUniformLocation(m_programID, "material.kShininess");
+
 	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
+
 	m_parameters[U_LIGHT0_TYPE] = glGetUniformLocation(m_programID, "lights[0].type");
 	m_parameters[U_LIGHT0_POSITION] = glGetUniformLocation(m_programID, "lights[0].position_cameraspace");
 	m_parameters[U_LIGHT0_COLOR] = glGetUniformLocation(m_programID, "lights[0].color");
@@ -68,6 +70,7 @@ void SceneBase::Init()
 	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
 	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
 	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
+
 	m_parameters[U_LIGHT1_TYPE] = glGetUniformLocation(m_programID, "lights[1].type");
 	m_parameters[U_LIGHT1_POSITION] = glGetUniformLocation(m_programID, "lights[1].position_cameraspace");
 	m_parameters[U_LIGHT1_COLOR] = glGetUniformLocation(m_programID, "lights[1].color");
@@ -79,6 +82,31 @@ void SceneBase::Init()
 	m_parameters[U_LIGHT1_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[1].cosCutoff");
 	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
 	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
+
+	/*m_parameters[U_LIGHT2_TYPE] = glGetUniformLocation(m_programID, "lights[2].type");
+	m_parameters[U_LIGHT2_POSITION] = glGetUniformLocation(m_programID, "lights[2].position_cameraspace");
+	m_parameters[U_LIGHT2_COLOR] = glGetUniformLocation(m_programID, "lights[2].color");
+	m_parameters[U_LIGHT2_POWER] = glGetUniformLocation(m_programID, "lights[2].power");
+	m_parameters[U_LIGHT2_KC] = glGetUniformLocation(m_programID, "lights[2].kC");
+	m_parameters[U_LIGHT2_KL] = glGetUniformLocation(m_programID, "lights[2].kL");
+	m_parameters[U_LIGHT2_KQ] = glGetUniformLocation(m_programID, "lights[2].kQ");
+	m_parameters[U_LIGHT2_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[2].spotDirection");
+	m_parameters[U_LIGHT2_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[2].cosCutoff");
+	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
+	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
+
+	m_parameters[U_LIGHT3_TYPE] = glGetUniformLocation(m_programID, "lights[3].type");
+	m_parameters[U_LIGHT3_POSITION] = glGetUniformLocation(m_programID, "lights[3].position_cameraspace");
+	m_parameters[U_LIGHT3_COLOR] = glGetUniformLocation(m_programID, "lights[3].color");
+	m_parameters[U_LIGHT3_POWER] = glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT3_KC] = glGetUniformLocation(m_programID, "lights[3].kC");
+	m_parameters[U_LIGHT3_KL] = glGetUniformLocation(m_programID, "lights[3].kL");
+	m_parameters[U_LIGHT3_KQ] = glGetUniformLocation(m_programID, "lights[3].kQ");
+	m_parameters[U_LIGHT3_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[3].spotDirection");
+	m_parameters[U_LIGHT3_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[3].cosCutoff");
+	m_parameters[U_LIGHT3_COSINNER] = glGetUniformLocation(m_programID, "lights[3].cosInner");
+	m_parameters[U_LIGHT3_EXPONENT] = glGetUniformLocation(m_programID, "lights[3].exponent");*/
+
 	// Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled[0]");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture[0]");
@@ -129,7 +157,24 @@ void SceneBase::Init()
 	lights[1].exponent = 1.f;
 	lights[1].spotDirection.Set(0.f, 1.f, 0.f);
 
-	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
+	//level 1 lights
+	/*lights[2].type = Light::LIGHT_POINT;
+	lights[2].position.Set(20, 40, 20);
+	lights[2].color.Set(1, 1, 1);
+	lights[2].power = 1.0f;
+	lights[2].kC = 1.f;
+	lights[2].kL = 0.01f;
+	lights[2].kQ = 0.001f;
+
+	lights[3].type = Light::LIGHT_POINT;
+	lights[3].position.Set(1300, 40, 97);
+	lights[3].color.Set(1, 1, 1);
+	lights[3].power = 1.0f;
+	lights[3].kC = 1.f;
+	lights[3].kL = 0.01f;
+	lights[3].kQ = 0.001f;*/
+
+	glUniform1i(m_parameters[U_NUMLIGHTS], 3);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], lights[0].type);
@@ -151,6 +196,26 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSCUTOFF], lights[1].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], lights[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], lights[1].exponent);
+
+	/*glUniform1i(m_parameters[U_LIGHT2_TYPE], lights[2].type);
+	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &lights[2].color.r);
+	glUniform1f(m_parameters[U_LIGHT2_POWER], lights[2].power);
+	glUniform1f(m_parameters[U_LIGHT2_KC], lights[2].kC);
+	glUniform1f(m_parameters[U_LIGHT2_KL], lights[2].kL);
+	glUniform1f(m_parameters[U_LIGHT2_KQ], lights[2].kQ);
+	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], lights[2].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT2_COSINNER], lights[2].cosInner);
+	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], lights[2].exponent);
+
+	glUniform1i(m_parameters[U_LIGHT3_TYPE], lights[3].type);
+	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &lights[3].color.r);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], lights[3].power);
+	glUniform1f(m_parameters[U_LIGHT3_KC], lights[3].kC);
+	glUniform1f(m_parameters[U_LIGHT3_KL], lights[3].kL);
+	glUniform1f(m_parameters[U_LIGHT3_KQ], lights[3].kQ);
+	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], lights[3].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT3_COSINNER], lights[3].cosInner);
+	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], lights[3].exponent);*/
 
 	//FOG
 	Color fogColor(0.8f, 0.8f, 0.8f);
@@ -667,6 +732,63 @@ void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
 
 	glFrontFace(GL_CCW);
 }
+
+void SceneBase::RenderOBJOnScreen(Mesh* mesh, float scale ,float x, float y, float z, float rotateX, float rotateY, float rotateZ, bool enableLight)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100);
+
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, z);
+	modelStack.Rotate(rotateX, 1, 0, 0);
+	modelStack.Rotate(rotateY, 0, 1, 0);
+	modelStack.Rotate(rotateZ, 0, 0, 1);
+	modelStack.Scale(scale, scale, scale);
+
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	for (int i = 0; i < Mesh::MAX_TEXTURES; ++i)
+	{
+		if (mesh->textureArray[i] > 0)
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 1);
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, mesh->textureArray[i]);
+			glUniform1i(m_parameters[U_COLOR_TEXTURE + i], i);
+		}
+		else
+		{
+			glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED + i], 0);
+		}
+
+	}
+
+	mesh->Render(); //this line should only be called once 
+
+	if (mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	modelStack.PopMatrix();
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+
+}
+
+
 void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -763,7 +885,7 @@ void SceneBase::UpdatePlayer(double dt)
 	{
 		camera.Tired = false;
 	}
-
+	
 	UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
@@ -799,6 +921,20 @@ void SceneBase::UpdateFearEffect(double dt)
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+		break;
+	}
+}
+void SceneBase::UpdateWeaponType(double dt)
+{
+	switch (Singleton::getInstance()->player->GetWeaponType())
+	{
+	case 1:
+		weaponType = 1;
+		break;
+	case 2:
+		weaponType = 2;
+		break;
+	default:
 		break;
 	}
 }
@@ -1007,6 +1143,19 @@ void SceneBase::RenderRadar()
 	projectionStack.PopMatrix();
 
 	viewStack.PopMatrix();
+}
+
+void SceneBase::RenderWeapons(bool light)
+{
+	switch (weaponType)
+	{
+	case 1:
+		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, 5, light);
+		break;
+	case 2:
+		RenderOBJOnScreen(meshList[RIFLE], 1.2, 70, 5, -80, 0, -90, 5, light);
+		break;
+	}
 }
 
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)

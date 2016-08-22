@@ -50,7 +50,7 @@ void SceneLevel01::Init()
 	FogEffect = false;
 	Switch = false;
 
-	weapontype = 1;
+	weaponType = 1;
 }
 
 void SceneLevel01::Update(double dt)
@@ -58,16 +58,13 @@ void SceneLevel01::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-	UpdateBullet(dt);
+	//UpdatePlayer(dt);
+	//bullet->UpdateShoot(dt);
+	
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Update(dt);
 
-	//shoot
-	if (Application::IsKeyPressed(VK_SPACE))
-	{
-		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(camera.view.x, camera.view.y, camera.view.z), 150, 100, 10));
-	}
 
 	if (Flashlight)
 	{
@@ -153,21 +150,31 @@ void SceneLevel01::Update(double dt)
 	rotateAngle += (float)(1 * dt);
 
 
-	fps = (float)(1.f / dt);
-}
-
-void SceneLevel01::UpdateBullet(double dt)
-{
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = Bullet::bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
+	////////////////////////////////////////////////////////
+	//	for next time winning condition to go next scene  //
+	////////////////////////////////////////////////////////
+	if (Application::IsKeyPressed('V'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
+	if (Application::IsKeyPressed('B'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+	}
+	if (Application::IsKeyPressed('N'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+	}
+	if (Application::IsKeyPressed('M'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
+
+	fps = (float)(1.f / dt);
 }
 
 void SceneLevel01::UpdateParticle(double dt)
@@ -200,27 +207,7 @@ void SceneLevel01::UpdateParticle(double dt)
 	}
 }
 
-void SceneLevel01::UpdatePlayer(double dt)
-{
-	Singleton::getInstance()->player->Update(dt);
 
-	UpdateWeaponType(dt);
-}
-
-void SceneLevel01::UpdateWeaponType(double dt)
-{
-	switch (Singleton::getInstance()->player->GetWeaponType())
-	{
-	case 1:
-		weapontype = 1;
-		break;
-	case 2:
-		weapontype = 2;
-		break;
-	default:
-		break;
-	}
-}
 
 ParticleObject* SceneLevel01::GetParticles(void)
 {
@@ -541,11 +528,11 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
 	//weapon
-	/*modelStack.PushMatrix();
+	modelStack.PushMatrix();
 	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[PISTOL], Light);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 }
 
@@ -614,6 +601,8 @@ void SceneLevel01::RenderWorld()
 	RenderTerrain();
 	RenderLevel(false);
 	RenderRoomObjects(false);
+	RenderBullets(false);
+	RenderWeapons(false);
 	//RenderSprite();
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
