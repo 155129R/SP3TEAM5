@@ -33,8 +33,6 @@ private:
 	float vSpeed;
 
 	int damage;
-
-	Sound sound;
 	
 };
 

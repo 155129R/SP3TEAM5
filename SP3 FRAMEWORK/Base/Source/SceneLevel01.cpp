@@ -50,7 +50,7 @@ void SceneLevel01::Init()
 	FogEffect = false;
 	Switch = false;
 
-	weapontype = 1;
+	weaponType = 1;
 }
 
 void SceneLevel01::Update(double dt)
@@ -154,20 +154,6 @@ void SceneLevel01::Update(double dt)
 	fps = (float)(1.f / dt);
 }
 
-//void SceneLevel01::UpdateBullet(double dt)
-//{
-//	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-//		if ((*it)->deleteBullet == true){
-//			delete *it;
-//			it = Bullet::bulletList.erase(it);
-//		}
-//		else{
-//			(*it)->Update(dt);
-//			it++;
-//		}
-//	}
-//}
-
 void SceneLevel01::UpdateParticle(double dt)
 {
 	if (m_particlesCount < MAX_PARTICLE)
@@ -197,20 +183,7 @@ void SceneLevel01::UpdateParticle(double dt)
 		}
 	}
 }
-//void SceneLevel01::UpdateWeaponType(double dt)
-//{
-//	switch (Singleton::getInstance()->player->GetWeaponType())
-//	{
-//	case 1:
-//		weapontype = 1;
-//		break;
-//	case 2:
-//		weapontype = 2;
-//		break;
-//	default:
-//		break;
-//	}
-//}
+
 
 ParticleObject* SceneLevel01::GetParticles(void)
 {
@@ -558,11 +531,11 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
 	//weapon
-	/*modelStack.PushMatrix();
+	modelStack.PushMatrix();
 	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
 	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[PISTOL], Light);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 
 }
 
@@ -632,7 +605,8 @@ void SceneLevel01::RenderWorld()
 	RenderTerrain();
 	RenderLevel(false);
 	RenderRoomObjects(false);
-	RenderBullets(true);
+	RenderBullets(false);
+	RenderWeapons(false);
 	//RenderSprite();
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
