@@ -6,7 +6,6 @@
 #include "Vector3.h"
 #include "Enemy.h"
 #include "Sound.h"
-#include "Singleton.h"
 #include <vector>
 
 using std::vector;

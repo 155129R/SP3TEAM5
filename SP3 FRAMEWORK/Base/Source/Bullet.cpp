@@ -28,11 +28,11 @@ void Bullet::Update(double dt)
 
 	position.y += vSpeed;
 
-	if (Hitbox.Collide(enemy->pos)){
+	/*if (Hitbox.Collide(enemy->pos)){
 		std::cout << "Hitttttttttt" << std::endl;
 		deleteBullet = true;
 	}
-	else if (distanceTravelled >= range){
+	else */if (distanceTravelled >= range){
 		deleteBullet = true;
 	}
 
