@@ -677,20 +677,6 @@ void SceneLevel03::RenderPassMain()
 	//Render objects
 	RenderLight();
 
-	//bullet
-	/*for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
-		modelStack.PushMatrix();
-		modelStack.Translate(
-			(*it)->position.x,
-			(*it)->position.y,
-			(*it)->position.z
-			);
-		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], false);
-		modelStack.PopMatrix();
-	}*/
-
-
 	//Depth quad
 	//viewStack.PushMatrix();
 	//viewStack.LoadIdentity();

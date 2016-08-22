@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include "Camera3.h"
-#include "Bullet.h"
 
 class Player 
 {
@@ -55,6 +54,7 @@ private:
 	{
 		W_RIFLE,
 		W_PISTOL,
+		W_VACUUM,
 
 		W_TOTAL,
 	};

@@ -6,6 +6,7 @@
 #include "Vector3.h"
 #include "Enemy.h"
 #include "Sound.h"
+#include "Singleton.h"
 #include <vector>
 
 using std::vector;
@@ -22,8 +23,7 @@ public:
 	bool deleteBullet;
 
 	AABB Hitbox;
-	Enemy* enemy;
-
+	
 private:
 	Vector3 direction;
 
@@ -34,6 +34,7 @@ private:
 
 	int damage;
 	
+	Singleton* instance;
 };
 
 #endif

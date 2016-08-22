@@ -46,6 +46,10 @@ void Enemy::Update(double dt, Vector3 PlayerPos)
 			}
 		}
 	}
+	else if (HP < 0)
+	{
+		active = false;
+	}
 }
 
 bool Enemy::Chase(Vector3 PlayerPos)

@@ -276,6 +276,9 @@ void SceneBase::Init()
 	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
+	meshList[VACUUM] = MeshBuilder::GenerateOBJ("Vacuum", "OBJ//vacuum.obj");
+	//meshList[VACUUM]->textureArray[0] = LoadTGA("Image//vacuum.tga");
+
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
 	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
@@ -535,7 +538,7 @@ void SceneBase::Update(double dt)
 		bulletList.push_back(new Bullet(
 			Vector3(camera.position.x, camera.position.y, camera.position.z),
 			Vector3(camera.view.x, camera.view.y, camera.view.z),
-			150,
+			300,
 			1000,
 			10
 			));
@@ -928,6 +931,8 @@ void SceneBase::UpdateWeaponType(double dt)
 	case 2:
 		weaponType = 2;
 		break;
+	case 3:
+		weaponType = 3;
 	default:
 		break;
 	}
@@ -1102,6 +1107,9 @@ void SceneBase::RenderWeapons(bool light)
 		break;
 	case 2:
 		RenderOBJOnScreen(meshList[RIFLE], 1.2, 70, 5, -80, 0, -90, 5, light);
+		break;
+	case 3:
+		RenderOBJOnScreen(meshList[VACUUM], 1.2, 70, 5, -80, 0, -90, 5, light);
 		break;
 	}
 }

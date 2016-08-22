@@ -39,6 +39,8 @@ void SceneLevel01::Init()
 	MAX_PARTICLE = 1000;
 	m_gravity.Set(0, -9.8f, 0);
 
+	
+
 	//Shadow stuff
 	m_lightDepthFBO.Init(4096, 4096);
 
@@ -50,7 +52,7 @@ void SceneLevel01::Init()
 	FogEffect = false;
 	Switch = false;
 
-	weaponType = 1;
+	weaponType = 3;
 }
 
 void SceneLevel01::Update(double dt)
@@ -58,10 +60,7 @@ void SceneLevel01::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-	//UpdatePlayer(dt);
-	//bullet->UpdateShoot(dt);
 	
-
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Update(dt);
 

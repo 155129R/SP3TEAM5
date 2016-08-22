@@ -155,8 +155,10 @@ public:
 
 		CACTUS,
 
+		//weapons
 		PISTOL,
 		RIFLE,
+		VACUUM,
 
 		//level 01
 		LEVEL01_TERRAIN,

@@ -1,11 +1,11 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
-#include "Player.h"
 #include "Inventory.h"
 #include <map>
 #include <vector>
 #include "AABBObject.h"
 #include "Enemy.h"
+#include "Player.h"
 using std::map;
 using std::vector;
 

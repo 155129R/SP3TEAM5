@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg) /* : Hitbox(AABB(this->pos, this->scale))*/
+Bullet::Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg)
 {
 	position = pos;
 	direction = dir;
@@ -12,6 +12,8 @@ Bullet::Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg) /* : Hit
 	vSpeed = 0;
 
 	distanceTravelled = 0.f;
+
+	instance = Singleton::getInstance();
 }
 
 Bullet::~Bullet()
@@ -20,7 +22,7 @@ Bullet::~Bullet()
 
 void Bullet::Update(double dt)
 {
-	//Hitbox.UpdateAABB(this->position);
+	Hitbox.UpdateAABB(this->position);
 
 	distanceTravelled += dt * speed;
 	position += direction * dt * speed;
@@ -28,12 +30,19 @@ void Bullet::Update(double dt)
 
 	position.y += vSpeed;
 
-	/*if (Hitbox.Collide(enemy->pos)){
-		std::cout << "Hitttttttttt" << std::endl;
-		deleteBullet = true;
+	for (auto enemy : instance->Enemy_list)
+	{
+		if (enemy->active)
+		{
+			if (enemy->Hitbox.Collide(position)){
+				std::cout << enemy->HP << std::endl;
+				enemy->HP--;
+				deleteBullet = true;
+			}
+			else if (distanceTravelled >= range){
+				deleteBullet = true;
+			}
+		}
+		
 	}
-	else */if (distanceTravelled >= range){
-		deleteBullet = true;
-	}
-
 }

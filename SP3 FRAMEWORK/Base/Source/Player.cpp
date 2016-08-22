@@ -12,7 +12,7 @@ Player::~Player()
 void Player::Init()
 {
 	weaponType = WEAPON_TYPE::W_PISTOL;
-	weapon_value = 0;
+	weapon_value = 1;
 	fireRate = 1;
 
 	fear = FEAR_LEVEL::NORMAL;
@@ -143,13 +143,17 @@ void Player::InflictFear(int amount)
 
 void Player::UpdateWeapon(double dt)
 {
-	if (weapon_value == 0)
+	if (weapon_value == 1)
 	{
 		weaponType = WEAPON_TYPE::W_PISTOL;
 	}
-	else if (weapon_value == 1)
+	else if (weapon_value == 2)
 	{
 		weaponType = WEAPON_TYPE::W_RIFLE;
+	}
+	else if (weapon_value == 3)
+	{
+		weaponType = WEAPON_TYPE::W_VACUUM;
 	}
 }
 
@@ -164,6 +168,10 @@ int Player::GetWeaponType()
 		case WEAPON_TYPE::W_RIFLE:
 		{
 			return 2;
+		}
+		case WEAPON_TYPE::W_VACUUM:
+		{
+			return 3;
 		}
 		default:
 			return 0;
