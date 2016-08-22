@@ -1,6 +1,13 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 #include "Player.h"
+#include "Inventory.h"
+#include <map>
+#include <vector>
+#include "AABBObject.h"
+#include "Enemy.h"
+using std::map;
+using std::vector;
 
 class Singleton
 {
@@ -13,6 +20,15 @@ class Singleton
 		
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
+
+		map<AABB*, int> objectCount;
+
+		//Environment
+		std::vector<AABBObject*> Object_list;
+
+		//Enemy
+		std::vector<Enemy *> Enemy_list;
+
 private:
 	Singleton()
 	{

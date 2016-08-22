@@ -152,10 +152,10 @@ void SceneLevel03::Update(double dt)
 	camera.Update(dt);
 
 	//shoot
-	if (Application::IsKeyPressed(VK_SPACE))
-	{
-		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(1, 0, 1), 150, 100, 10));
-	}
+	//if (Application::IsKeyPressed(VK_SPACE))
+	//{
+	//	Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(1, 0, 1), 150, 100, 10));
+	//}
 
 	if (Flashlight)
 	{
@@ -246,16 +246,16 @@ void SceneLevel03::Update(double dt)
 
 void SceneLevel03::UpdateBullet(double dt)
 {
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = Bullet::bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
-	}
+	//for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
+	//	if ((*it)->deleteBullet == true){
+	//		delete *it;
+	//		it = Bullet::bulletList.erase(it);
+	//	}
+	//	else{
+	//		(*it)->Update(dt);
+	//		it++;
+	//	}
+	//}
 }
 
 void SceneLevel03::UpdateParticle(double dt)
@@ -671,18 +671,18 @@ void SceneLevel03::RenderPassMain()
 	//Render objects
 	RenderLight();
 
-	//bullet
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
-		modelStack.PushMatrix();
-		modelStack.Translate(
-			(*it)->position.x,
-			(*it)->position.y,
-			(*it)->position.z
-			);
-		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], false);
-		modelStack.PopMatrix();
-	}
+	////bullet
+	//for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+	//	modelStack.PushMatrix();
+	//	modelStack.Translate(
+	//		(*it)->position.x,
+	//		(*it)->position.y,
+	//		(*it)->position.z
+	//		);
+	//	modelStack.Scale(1, 1, 1);
+	//	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	//	modelStack.PopMatrix();
+	//}
 
 
 	//Depth quad

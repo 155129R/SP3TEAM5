@@ -1,7 +1,5 @@
 #include "Bullet.h"
 
-vector<Bullet*> Bullet::bulletList;
-
 Bullet::Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg)
 {
 	position = pos;
