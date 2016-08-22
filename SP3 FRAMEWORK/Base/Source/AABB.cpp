@@ -36,16 +36,32 @@ void AABB::Resize(Vector3 size)
 	min.z = this->pos.z - size.z * 0.5;
 }
 
-bool AABB::Collide(Vector3 pos)
+bool AABB::Collide(Vector3 pos, bool is3D)
 {
-	if ((pos.x >= min.x) && (pos.x <= max.x) &&
-		(pos.y >= min.y) && (pos.y <= max.y) &&
-		(pos.z >= min.z) && (pos.z <= max.z))
+	if (is3D)
 	{
-		return true;
+		if ((pos.x >= min.x) && (pos.x <= max.x) &&
+			(pos.y >= min.y) && (pos.y <= max.y) &&
+			(pos.z >= min.z) && (pos.z <= max.z))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	else
 	{
-		return false;
+		if ((pos.x >= min.x) && (pos.x <= max.x) &&
+			(pos.z >= min.z) && (pos.z <= max.z))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	
 	}
 }

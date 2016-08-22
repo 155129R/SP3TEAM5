@@ -6,6 +6,7 @@ static const float CAMERA_SPEED = 200.f;
 static const float MOUSE_SPEED = 200.f;
 
 Camera3::Camera3()
+	:willCollide(false)
 {
 }
 
@@ -16,12 +17,43 @@ Camera3::~Camera3()
 void Camera3::Forward(double dt)
 {
 	view = (target - position).Normalized();
-
-	target.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	target.z += view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	position.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	position.z += view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-
+	forwardPos = position + view * CAMERA_SPEED * RUN_SPEED * (float)dt;
+	for (auto enemy : Singleton::getInstance()->Enemy_list)
+	{
+		if (enemy->active)
+		{
+			if (enemy->Hitbox.Collide(forwardPos))
+			{
+				willCollide = true;
+				break;
+			}
+			else
+				willCollide = false;
+		}
+	}
+	if (!willCollide)
+	{
+		for (auto object : Singleton::getInstance()->Object_list)
+		{
+			if (object->active)
+			{
+				if (object->Hitbox.Collide(forwardPos))
+				{
+					willCollide = true;
+					break;
+				}
+				else
+					willCollide = false;
+			}
+		}
+	}
+	if (!willCollide)
+	{
+		target.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		target.z += view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		position.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		position.z += view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+	}
 	if (Terrain > position.y)
 	{
 		target.y += Terrain - position.y;
@@ -36,11 +68,37 @@ void Camera3::Forward(double dt)
 void Camera3::Backward(double dt)
 {
 	view = (target - position).Normalized();
-	target.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	target.z -= view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	position.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	position.z -= view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-
+	forwardPos = position - view * CAMERA_SPEED * RUN_SPEED * (float)dt;
+	for (auto enemy : Singleton::getInstance()->Enemy_list)
+	{
+		if (enemy->Hitbox.Collide(forwardPos))
+		{
+			willCollide = true;
+			break;
+		}
+		else
+			willCollide = false;
+	}
+	if (!willCollide)
+	{
+		for (auto object : Singleton::getInstance()->Object_list)
+		{
+			if (object->Hitbox.Collide(forwardPos))
+			{
+				willCollide = true;
+				break;
+			}
+			else
+				willCollide = false;
+		}
+	}
+	if (!willCollide)
+	{
+		target.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		target.z -= view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		position.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		position.z -= view.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+	}
 	if (Terrain > position.y)
 	{
 		target.y += Terrain - position.y;
@@ -60,10 +118,37 @@ void Camera3::Sideway(double dt, bool Left)
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
-		target.x -= right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		target.z -= right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		position.x -= right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		position.z -= right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		forwardPos = position - right * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		for (auto enemy : Singleton::getInstance()->Enemy_list)
+		{
+			if (enemy->Hitbox.Collide(forwardPos))
+			{
+				willCollide = true;
+				break;
+			}
+			else
+				willCollide = false;
+		}
+		if (!willCollide)
+		{
+			for (auto object : Singleton::getInstance()->Object_list)
+			{
+				if (object->Hitbox.Collide(forwardPos))
+				{
+					willCollide = true;
+					break;
+				}
+				else
+					willCollide = false;
+			}
+		}
+		if (!willCollide)
+		{
+			target.x -= right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+			target.z -= right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+			position.x -= right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+			position.z -= right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		}
 
 		if (Terrain > position.y)
 		{
@@ -81,11 +166,37 @@ void Camera3::Sideway(double dt, bool Left)
 		Vector3 right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
-		target.x += right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		target.z += right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		position.x += right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		position.z += right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
-
+		forwardPos = position + right * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		for (auto enemy : Singleton::getInstance()->Enemy_list)
+		{
+			if (enemy->Hitbox.Collide(forwardPos))
+			{
+				willCollide = true;
+				break;
+			}
+			else
+				willCollide = false;
+		}
+		if (!willCollide)
+		{
+			for (auto object : Singleton::getInstance()->Object_list)
+			{
+				if (object->Hitbox.Collide(forwardPos))
+				{
+					willCollide = true;
+					break;
+				}
+				else
+					willCollide = false;
+			}
+		}
+		if (!willCollide)
+		{
+			target.x += right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+			target.z += right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+			position.x += right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
+			position.z += right.z * CAMERA_SPEED * RUN_SPEED * (float)dt;
+		}
 		if (Terrain > position.y)
 		{
 			target.y += Terrain - position.y;
