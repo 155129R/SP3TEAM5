@@ -66,6 +66,8 @@ void SceneLevel02::Init()
 
 	sound.playSoundEffect3D("Sound/fountain.wav",
 		irrklang::vec3df(0, 0, 0), true);
+
+	showInventory = -1;
 }
 
 void SceneLevel02::Update(double dt)
@@ -112,6 +114,21 @@ void SceneLevel02::Update(double dt)
 	{
 		if (spaceButtonState2)
 			spaceButtonState2 = false;
+	}
+
+	static bool inventoryButtonState = false;
+	if (Application::IsKeyPressed('I'))
+	{
+		if (!inventoryButtonState)
+		{
+			inventoryButtonState = true;
+			showInventory *= -1;
+		}
+	}
+	else if (!Application::IsKeyPressed('I'))
+	{
+		if (inventoryButtonState)
+			inventoryButtonState = false;
 	}
 
 	////////////////////////////////////////////////////////
@@ -735,6 +752,15 @@ void SceneLevel02::RenderPassMain()
 		}
 	}
 
+	if (showInventory > 0)
+	{
+		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 50), Vector3(40, 30, 0), Vector3(0, 0, 0));
+	}
+	else
+	{
+
+	}
+
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -755,6 +781,11 @@ void SceneLevel02::RenderPassMain()
 	ss.precision(5);
 	ss << "ITEM 3: " << std::to_string(instance->objectCount[item3]);
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 12);
+
+	ss.str("");
+	ss.precision(5);
+	ss << "SHOW INVENTORY: " << showInventory;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 15);
 }
 
 void SceneLevel02::Render()

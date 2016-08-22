@@ -342,9 +342,11 @@ void SceneBase::Init()
 
 	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
 	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
 
 	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
 	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_GATE]->textureArray[1] = LoadTGA("Image//rust.tga");
 
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
@@ -357,6 +359,9 @@ void SceneBase::Init()
 
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
+
+	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
 
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");

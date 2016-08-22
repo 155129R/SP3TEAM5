@@ -61,6 +61,8 @@ private:
 	Vector3 item1pos;
 	Vector3 item2pos;
 	Vector3 item3pos;
+
+	int showInventory;
 };
 
 #endif

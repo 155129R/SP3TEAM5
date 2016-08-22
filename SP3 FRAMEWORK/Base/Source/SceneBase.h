@@ -209,6 +209,7 @@ public:
 		HOUSE3,
 		METAL_FENCE,
 		METAL_GATE,
+		INVENTORY_UI,
 
 		//level4
 		TOMBSTONE,
