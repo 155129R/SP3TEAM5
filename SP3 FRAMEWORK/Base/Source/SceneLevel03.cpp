@@ -106,7 +106,7 @@ void SceneLevel03::Init()
 	AABBObject * Bridge = new AABBObject();
 	Bridge->Object = AABBObject::OBJECT_TYPE::BRIDGE;
 	Bridge->active = true;
-	Bridge->pos.Set(0, 60, -1420);
+	Bridge->pos.Set(0, 58, -1420);
 	Bridge->scale.Set(5, 5, 5);
 	Object_list.push_back(Bridge);
 
