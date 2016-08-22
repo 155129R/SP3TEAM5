@@ -65,10 +65,7 @@ void SceneLevel02::Init()
 	item3 = new AABB(item3pos, Vector3(10, 20, 10));
 
 	sound.playSoundEffect3D("Sound/fountain.wav",
-		irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
-		irrklang::vec3df(camera.target.x, camera.target.y, camera.target.z),
-		irrklang::vec3df(0, 0, 0),
-		true);
+		irrklang::vec3df(0, 0, 0), true);
 }
 
 void SceneLevel02::Update(double dt)
@@ -116,6 +113,35 @@ void SceneLevel02::Update(double dt)
 		if (spaceButtonState2)
 			spaceButtonState2 = false;
 	}
+
+	////////////////////////////////////////////////////////
+	//	for next time winning condition to go next scene  //
+	////////////////////////////////////////////////////////
+	if (Application::IsKeyPressed('V'))
+	{
+		sound.stopSoundEffect3D();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		sound.stopSoundEffect3D();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+	}
+	if (Application::IsKeyPressed('N'))
+	{
+		sound.stopSoundEffect3D();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+	}
+	if (Application::IsKeyPressed('M'))
+	{
+		sound.stopSoundEffect3D();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
+
 	UpdateParticle(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);

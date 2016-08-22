@@ -18,6 +18,21 @@ class Singleton
 			return &instance;
 		}
 		
+		enum PROGRAM_STATE
+		{
+			PROGRAM_MENU,
+			PROGRAM_GAME1,
+			PROGRAM_GAME2,
+			PROGRAM_GAME3,
+			PROGRAM_GAME4,
+			PROGRAM_EXIT,
+
+			PROGRAM_TOTAL
+		};
+
+		PROGRAM_STATE program_state;
+		bool stateCheck;
+
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 
@@ -33,6 +48,9 @@ private:
 	{
 		//init stuff here
 		player = new Player();
+
+		program_state = PROGRAM_MENU;
+		stateCheck = false;
 	}
 };
 

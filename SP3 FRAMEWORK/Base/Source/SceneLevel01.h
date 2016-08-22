@@ -46,9 +46,6 @@ private:
 	bool FogEffect;
 	bool Switch;
 
-	//weapon
-	int weapontype;
-
 };
 
 #endif
