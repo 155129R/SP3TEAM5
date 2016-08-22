@@ -210,7 +210,55 @@ Mesh* MeshBuilder::GenerateQuad2(const std::string &meshName, Color color, float
 
 	return mesh;
 }
+/******************************************************************************/
 
+/******************************************************************************/
+Mesh* MeshBuilder::GenerateCircle(const std::string &meshName, Color color, float)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float yPos = 0.0f;
+	float xPos = 0.0f;
+
+	v.pos.Set(0, 0, 0);
+	v.color = color;
+	v.texCoord.Set(0, 0);
+	vertex_buffer_data.push_back(v);
+
+	for (int i = 0; i < 36; ++i)
+	{
+		yPos = sin(Math::DegreeToRadian(i * 10)) * 0.5f;
+		xPos = cos(Math::DegreeToRadian(i * 10)) * 0.5f;
+
+		v.pos.Set(xPos, yPos, 0);
+		v.color = color;
+		v.texCoord.Set(xPos, yPos);
+		vertex_buffer_data.push_back(v);
+	}
+
+	//index buffer
+	for (size_t i = 1; i <= 36; ++i)
+	{
+		if (i + 1 > 36)
+			index_buffer_data.push_back(1);
+		else
+			index_buffer_data.push_back(i + 1);
+
+		index_buffer_data.push_back(0);
+		index_buffer_data.push_back(i);
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+	return mesh;
+}
 /******************************************************************************/
 /*!
 \brief
@@ -783,5 +831,158 @@ SpriteAnimation* MeshBuilder::GenerateSpriteAnimation(const std::string
 	mesh->indexSize = index_buffer_data.size();
 	mesh->mode = Mesh::DRAW_TRIANGLES;
 
+	return mesh;
+}
+
+
+//MINIMAP STUFF
+/******************************************************************************/
+/*!
+\brief
+Generate the vertices of a quad for a minimap; Use random color for each vertex
+Then generate the VBO/IBO and store them in Mesh object
+\param meshName - name of mesh
+\param lengthX - width of quad
+\param lengthY - height of quad
+\return Pointer to mesh storing VBO/IBO of quad
+*/
+/******************************************************************************/
+Mesh* MeshBuilder::GenerateMinimap(const std::string &meshName, Color color, float length)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	// Draw the quad which contains the minimap's texture
+	v.pos.Set(-0.5f * length, -0.5f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(0, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f * length, -0.5f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(2.0f, 0);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(0.5f * length, 0.5f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(2.0f, 2.0f);
+	vertex_buffer_data.push_back(v);
+
+	v.pos.Set(-0.5f * length, 0.5f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(0, 2.0f);
+	vertex_buffer_data.push_back(v);
+
+	index_buffer_data.push_back(3);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(2);
+	index_buffer_data.push_back(0);
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
+	return mesh;
+}
+/******************************************************************************/
+/*!
+\brief
+Generate the borders for a minimap; Use random color for each vertex
+Then generate the VBO/IBO and store them in Mesh object
+\param meshName - name of mesh
+\param lengthX - width of quad
+\param lengthY - height of quad
+\return Pointer to mesh storing VBO/IBO of quad
+*/
+/******************************************************************************/
+Mesh* MeshBuilder::GenerateMinimapBorder(const std::string &meshName, Color color, float length)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+
+	float yPos = 0.0f;
+	float xPos = 0.0f;
+
+	for (int i = 0; i < 36; ++i)
+	{
+		yPos = sin(Math::DegreeToRadian(i * 10)) * 0.5f;
+		xPos = cos(Math::DegreeToRadian(i * 10)) * 0.5f;
+
+		v.pos.Set(xPos, yPos, 0);
+		v.color = color;
+		vertex_buffer_data.push_back(v);
+	}
+
+	//index buffer
+	for (size_t i = 0; i < 36; ++i)
+	{
+		index_buffer_data.push_back(i);
+		if (i + 1 < 36)
+			index_buffer_data.push_back(i + 1);
+		else
+			index_buffer_data.push_back(0);
+	}
+
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_LINES;
+	return mesh;
+}
+/******************************************************************************/
+/*!
+\brief
+Generate the avatar for a minimap; Use random color for each vertex
+Then generate the VBO/IBO and store them in Mesh object
+\param meshName - name of mesh
+\param lengthX - width of quad
+\param lengthY - height of quad
+\return Pointer to mesh storing VBO/IBO of quad
+*/
+/******************************************************************************/
+Mesh* MeshBuilder::GenerateMinimapAvatar(const std::string &meshName, Color color, float length)
+{
+	Vertex v;
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	// Draw the quad which contains the minimap's texture
+	v.pos.Set(-0.05f * length, -0.10f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(0, 0);
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0.05f * length, -0.10f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(1.0f, 0);
+	vertex_buffer_data.push_back(v);
+	v.pos.Set(0, 0.15f * length, 0);
+	v.color = color;
+	v.normal.Set(0, 0, 1);
+	v.texCoord.Set(1.0f, 1.0f);
+	vertex_buffer_data.push_back(v);
+	index_buffer_data.push_back(0);
+	index_buffer_data.push_back(1);
+	index_buffer_data.push_back(2);
+	Mesh *mesh = new Mesh(meshName);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	mesh->indexSize = index_buffer_data.size();
+	mesh->mode = Mesh::DRAW_TRIANGLES;
 	return mesh;
 }

@@ -423,7 +423,6 @@ void SceneLevel04::RenderEnvironment(bool Light)
 
 }
 
-
 void SceneLevel04::RenderHUD()
 {
 	if (nightVision == true)

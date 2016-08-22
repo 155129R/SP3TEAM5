@@ -25,6 +25,7 @@ struct Partition
 #include "Player.h"
 #include "Enemy.h"
 #include "AABBObject.h"
+#include "Minimap.h"
 #include "Singleton.h"
 
 class SceneBase : public Scene
@@ -127,7 +128,6 @@ public:
 		WATER_SURFACE,
 		NIGHT_VISION,
 
-
 		CACTUS,
 
 		PISTOL,
@@ -151,6 +151,11 @@ public:
 
 		//PLAYER
 		GEO_STAMINA,
+
+		//Minimap
+		GEO_VIEW,
+		GEO_GREENBALL,
+		GEO_REDBALL,
 
 		//level 03
 		GEO_CACTUS,
@@ -186,6 +191,12 @@ public:
 		FENCE,
 		DEADTREE,
 
+		//Screen
+		GEO_LOAD_1,
+		GEO_LOAD_2,
+		GEO_LOAD_3,
+		GEO_LOAD_4,
+
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
 
@@ -210,7 +221,7 @@ public:
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size = 1.0f, float x = 0.0f, float y = 0.0f);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale = (1.0f, 1.0f, 1.0f), float x = 0.0f, float y = 0.0f, bool rotate_Mini = false, float rotate = 0.0f);
 	void RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate);
 	void RenderMeshOutlined(Mesh* mesh, bool enableLight);
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -223,6 +234,7 @@ public:
 
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
+	void RenderRadar();
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
@@ -284,7 +296,8 @@ protected:
 	float fps;
 
 	//Player
-//	Player* player;
+	float rotateAngle = 0;
+	Minimap* m_Minimap;
 	Color Black;
 
 	//Environment

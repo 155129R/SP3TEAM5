@@ -708,11 +708,12 @@ void SceneLevel03::RenderPassMain()
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
 	RenderHUD();
+	RenderRadar();
 
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
-	ss << "FPS: " << fps;
+	ss << "DICKS OUT FOR HARAMBE: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
 }

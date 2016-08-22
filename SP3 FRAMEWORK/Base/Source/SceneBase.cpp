@@ -293,6 +293,27 @@ void SceneBase::Init()
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
 
+	//Minimap
+	m_Minimap = new Minimap();
+	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
+	m_Minimap->GetBackground()->textureArray[0] = LoadTGA("Image//HUD//Radar.tga");
+	m_Minimap->SetBorder(MeshBuilder::GenerateMinimapBorder("Minimap border", Color(1, 1, 0), 1.f));
+	m_Minimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("Minimap avatar", Color(1, 1, 0), 1.f));
+	meshList[GEO_VIEW] = MeshBuilder::GenerateCircle("View on minimap", Color(0, 0, 0), 1.f);
+	meshList[GEO_VIEW]->textureArray[0] = LoadTGA("Image//HUD//Radar.tga");
+	meshList[GEO_GREENBALL] = MeshBuilder::GenerateCircle("You on minimap", Color(0, 1, 0), 1.f);
+	meshList[GEO_REDBALL] = MeshBuilder::GenerateCircle("Enemy on minimap", Color(1, 0, 0), 1.f);
+
+	//Screen
+	meshList[GEO_LOAD_1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[GEO_LOAD_1]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen01.tga");
+	meshList[GEO_LOAD_2] = MeshBuilder::GenerateQuad("Level 2 loading screen", Color(0, 0, 0), 1.f);
+	meshList[GEO_LOAD_2]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen02.tga");
+	meshList[GEO_LOAD_3] = MeshBuilder::GenerateQuad("Level 3 loading screen", Color(0, 0, 0), 1.f);
+	meshList[GEO_LOAD_3]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen03.tga");
+	meshList[GEO_LOAD_4] = MeshBuilder::GenerateQuad("Level 4 loading screen", Color(0, 0, 0), 1.f);
+	meshList[GEO_LOAD_4]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen04.tga");
+
 	//Forest
 	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
 	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
@@ -452,8 +473,31 @@ void SceneBase::Update(double dt)
 		spatialPartitioning = false;
 	}
 
+	if (Application::IsKeyPressed('V'))
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+	}
+
+	if (Application::IsKeyPressed('B'))
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+	}
+
+	if (Application::IsKeyPressed('N'))
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+	}
+
+	if (Application::IsKeyPressed('M'))
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+	}
+
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
+
+	Vector3 View = (camera.target - camera.position).Normalized();
+	rotateAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)
@@ -521,18 +565,23 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	projectionStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
-void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, float y)
+void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale, float x, float y, bool rotate_Mini, float rotate)
 {
-	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity();
+	//viewStack.PushMatrix();
+	//	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
+	if (rotate_Mini)
+	{
+		modelStack.Rotate(rotateAngle, 0, 0, 1);
+	}
+	else
+	{
+		modelStack.Rotate(rotate, 0, 0, 1);
+	}
+
+	modelStack.Scale(Scale.x, Scale.y, Scale.z);
 
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -556,8 +605,7 @@ void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x
 	}
 
 	modelStack.PopMatrix();
-	viewStack.PopMatrix();
-	projectionStack.PopMatrix();
+	//viewStack.PopMatrix();
 }
 void SceneBase::RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate)
 {
@@ -611,10 +659,10 @@ void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
 
 	//OUTLINING THE MESH
 	glFrontFace(GL_CW);
-	glPolygonOffset(-4.0f, -4.0f);
+	glPolygonOffset(-2.0f, -2.0f);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
 	mesh->Render();
-	glPolygonOffset(4.0f, 4.0f);
+	glPolygonOffset(2.0f, 2.0f);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
 	mesh->Render();
 
@@ -897,6 +945,78 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 			}
 		}
 	}
+}
+void SceneBase::RenderRadar()
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+
+	//STENCILNG STUFF
+	glEnable(GL_STENCIL_TEST);
+
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	//What is visible
+	modelStack.PushMatrix();
+	modelStack.Translate(65, 45, 0);
+	modelStack.Scale(30, 30, 30);
+	RenderMesh(meshList[GEO_VIEW], false);
+	modelStack.PopMatrix();
+
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	//What is going to be seen
+	RenderMeshIn2D(meshList[GEO_GREENBALL], false, Vector3(1,1,1), 65, 45, true);
+
+	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(65, 45, 0);
+			modelStack.Rotate(rotateAngle, 0, 0, 1);
+			modelStack.Translate(-ghost->pos.x / 70 + camera.position.x / 70, -ghost->pos.z / 70 + camera.position.z / 70, 0);
+			RenderMesh(meshList[GEO_REDBALL], false);
+			modelStack.PopMatrix();
+		}
+	}
+
+	modelStack.PushMatrix();
+	modelStack.Translate(65, 45, 0);
+	modelStack.Rotate(rotateAngle, 0, 0, 1);
+	modelStack.Translate(camera.position.x / 70, camera.position.z / 70, 0);
+	modelStack.Scale(100, 100, 100);
+	RenderMesh(m_Minimap->GetBackground(), false);
+	modelStack.PopMatrix();
+
+	glDisable(GL_STENCIL_TEST);
+
+	RenderMeshIn2D(m_Minimap->GetBorder(), false, Vector3(30,30,30), 65, 45, false);
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(65, 45, 0);
+	//modelStack.Rotate(rotateAngle, 0, 0, 1);
+	//modelStack.Translate(camera.position.x / 70, camera.position.z / 70, 0);
+	//modelStack.Scale(100, 100, 100);
+	//RenderMesh(m_Minimap->GetBackground(), false);
+	//modelStack.PopMatrix();
+
+	projectionStack.PopMatrix();
+
+	viewStack.PopMatrix();
+
 }
 
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
