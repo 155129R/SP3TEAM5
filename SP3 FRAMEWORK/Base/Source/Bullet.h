@@ -1,13 +1,16 @@
 #ifndef BULLET_H
 #define BULLET_H
 
+#include "GameObject.h"
+#include "AABB.h"
 #include "Vector3.h"
+#include "Enemy.h"
 #include "Sound.h"
 #include <vector>
 
 using std::vector;
 
-class Bullet
+class Bullet : public GameObject
 {
 public:
 	Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg);
@@ -15,10 +18,11 @@ public:
 
 	void Update(double dt);
 
-	static vector<Bullet*> bulletList;
-
 	Vector3 position;
 	bool deleteBullet;
+
+	AABB Hitbox;
+	Enemy* enemy;
 
 private:
 	Vector3 direction;
@@ -31,6 +35,7 @@ private:
 	int damage;
 
 	Sound sound;
+	
 };
 
 #endif

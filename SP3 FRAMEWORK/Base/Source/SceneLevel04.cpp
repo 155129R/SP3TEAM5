@@ -51,29 +51,36 @@ void SceneLevel04::Init()
 	camera.position.Set(0, 200, 10);
 	camera.target.Set(0, 200, 1);
 	
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
 		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
 		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
 		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		Vector3 temp;
 		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
 		gravePos.push_back(temp);
+	}
+	////////////
+	for (int i = 0; i < 5; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(-Terrainsize.x * 0.5f, Terrainsize.x * 0.5f), 0, Math::RandFloatMinMax(-Terrainsize.z * 0.5f, Terrainsize.z * 0.5f));
+		pocongPos.push_back(temp);
 	}
 
 	lights[0].power = 0.8f;
@@ -109,6 +116,18 @@ void SceneLevel04::Update(double dt)
 	if (Application::IsKeyPressed('6'))
 	{
 		nightVision = true;
+		lights[0].power = 4.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
+	if (Application::IsKeyPressed('7'))
+	{
+		nightVision = false;
+		lights[0].power = 0.5f;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	}
 	//TOGGLE AXIS
 	if (Application::IsKeyPressed('X') && Axis_Wait >= 0.5f)
@@ -185,6 +204,30 @@ void SceneLevel04::Update(double dt)
 	}
 
 	rotateAngle += (float)(1 * dt);
+
+	////////////////////////////////////////////////////////
+	//	for next time winning condition to go next scene  //
+	////////////////////////////////////////////////////////
+	if (Application::IsKeyPressed('V'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+	}
+	if (Application::IsKeyPressed('N'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+	}
+	if (Application::IsKeyPressed('M'))
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
 
 	fps = (float)(1.f / dt);
 }
@@ -390,6 +433,21 @@ void SceneLevel04::RenderTombstone(bool Light)
 				RenderMeshOutlined(meshList[TOMBSTONE], true);
 				modelStack.PopMatrix();
 			}
+		}
+
+		for (auto pos : pocongPos)
+		{
+			posPartition = getPartition(pos);
+
+			//if (renderCheck(playerPartition, posPartition) == true)
+			//{
+			//	modelStack.PushMatrix();
+			//	modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
+			//	modelStack.Scale(60, 60, 60);
+			//	modelStack.Rotate(180, 0, 0, 1);
+			//	RenderMeshOutlined(meshList[POCONG], true);
+			//	modelStack.PopMatrix();
+			//}
 
 		}
 	}
@@ -404,6 +462,19 @@ void SceneLevel04::RenderTombstone(bool Light)
 			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
 			modelStack.Scale(10, 10, 10);
 			RenderMeshOutlined(meshList[TOMBSTONE], true);
+			modelStack.PopMatrix();
+
+		}
+		for (auto pos : pocongPos)
+		{
+			//char playerPartition = getPartition(camera.position);
+			//char posPartition = getPartition(pos);
+
+			modelStack.PushMatrix();
+			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
+			modelStack.Scale(60, 60, 60);
+			modelStack.Rotate(180, 0, 0, 1);
+			RenderMeshOutlined(meshList[POCONG], true);
 			modelStack.PopMatrix();
 
 		}
@@ -427,7 +498,7 @@ void SceneLevel04::RenderHUD()
 {
 	if (nightVision == true)
 	{
-		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
 }
 

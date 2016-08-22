@@ -12,7 +12,6 @@
 #include <map>
 #include "LoadHmap.h"
 #include "LoadTGA.h"
-#include "Bullet.h"
 
 struct Partition
 {
@@ -26,6 +25,7 @@ struct Partition
 #include "Enemy.h"
 #include "AABBObject.h"
 #include "Minimap.h"
+#include "Bullet.h"
 #include "Singleton.h"
 
 class SceneBase : public Scene
@@ -147,6 +147,8 @@ public:
 		BLOCKAGE,
 		INDOORGATE,
 		CHANDELIER,
+		CEILING,
+		TOILETBOWL,
 		ELEVATORDOOR,
 
 		//PLAYER
@@ -190,6 +192,7 @@ public:
 		TOMBSTONE,
 		FENCE,
 		DEADTREE,
+		POCONG,
 
 		//Screen
 		GEO_LOAD_1,
@@ -231,10 +234,12 @@ public:
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
 	void UpdateHitboxes(double dt);
+	void UpdateShoot(double dt);
 
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
 	void RenderRadar();
+	void RenderBullets(bool light);
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
@@ -300,11 +305,9 @@ protected:
 	Minimap* m_Minimap;
 	Color Black;
 
-	//Environment
-	std::vector<AABBObject *> Object_list;
 
-	//Enemy
-	std::vector<Enemy *> Enemy_list;
+	//bullet
+	std::vector<Bullet*> bulletList;
 
 	//Sprite Pointers
 	SpriteAnimation* G1;
@@ -318,6 +321,8 @@ protected:
 	char playerPartition;
 	char posPartition;
 	bool spatialPartitioning;
+
+	Singleton* instance;
 
 };
 
