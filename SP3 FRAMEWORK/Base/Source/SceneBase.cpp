@@ -476,6 +476,8 @@ void SceneBase::Update(double dt)
 {
 	UpdateShoot(dt);
 
+	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
+
 	if (Application::IsKeyPressed('I'))
 	{
 		lights[0].position.z -= (float)50 * dt;

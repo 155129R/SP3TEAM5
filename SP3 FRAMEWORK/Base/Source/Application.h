@@ -20,7 +20,9 @@ public:
 	void Exit();
 	static bool IsKeyPressed(unsigned short key);
 	bool GetMouseUpdate();
-
+	static void ShowCursor();
+	static void HideCursor();
+	static void GetCursorPos(double *xpos, double *ypos);
 	//Declare variables to store the last and current mouse position
 	static double mouse_last_x, mouse_last_y, mouse_current_x, mouse_current_y, mouse_diff_x, mouse_diff_y;
 	static double camera_yaw, camera_pitch;
@@ -45,14 +47,6 @@ private:
 	double m_dAccumlatedTime_ThreadTwo;
 	double m_dAccumlatedTime_ThreadThree;
 	double m_dAccumlatedTime_ThreadFour;
-
-	// The handler for the scene
-	//SceneLevel01 *scene;
-	//SceneLevel02 *scene;
-	//SceneLevel03 *scene;
-	//SceneLevel04 *scene;
-
-	//SceneShadow *scene;
 };
 
 #endif

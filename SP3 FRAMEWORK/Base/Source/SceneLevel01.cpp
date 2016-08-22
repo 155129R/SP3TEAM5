@@ -22,6 +22,8 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 
 void SceneLevel01::Init()
 {
+	Application::HideCursor();
+
 	SceneBase::Init();
 
 	//Random my random randomly using srand

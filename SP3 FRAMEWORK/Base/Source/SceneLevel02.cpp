@@ -21,6 +21,8 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 
 void SceneLevel02::Init()
 {
+	Application::HideCursor();
+
 	SceneBase::Init();
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));

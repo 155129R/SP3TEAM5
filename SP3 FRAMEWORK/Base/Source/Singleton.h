@@ -33,6 +33,9 @@ class Singleton
 		PROGRAM_STATE program_state;
 		bool stateCheck;
 
+		double mousex;
+		double mousey;
+
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 
@@ -49,8 +52,11 @@ private:
 		//init stuff here
 		player = new Player();
 
-		program_state = PROGRAM_MENU;
+		program_state = PROGRAM_GAME3;
 		stateCheck = false;
+
+		mousex = 400;
+		mousey = 300;
 	}
 };
 

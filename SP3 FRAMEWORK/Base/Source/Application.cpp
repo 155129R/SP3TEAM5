@@ -20,7 +20,6 @@ double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
 int m_width = 800;
 int m_height = 600;
 
-
 //Define an error callback
 static void error_callback(int error, const char* description)
 {
@@ -56,7 +55,18 @@ bool Application::IsKeyPressed(unsigned short key)
 {
     return ((GetAsyncKeyState(key) & 0x8001) != 0);
 }
-
+void Application::ShowCursor()
+{
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+void Application::HideCursor()
+{
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+void Application::GetCursorPos(double *xpos, double *ypos)
+{
+	glfwGetCursorPos(m_window, xpos, ypos);
+}
 bool Application::GetMouseUpdate()
 {
     glfwGetCursorPos(m_window, &mouse_current_x, &mouse_current_y);
@@ -145,9 +155,6 @@ void Application::Init()
 		//return -1;
 	}
 
-	// Hide the cursor
-	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
 	//Real time loop stuff
 	m_dElapsedTime = 0.0;
 	m_dAccumlatedTime_ThreadOne = 0.0;
@@ -210,7 +217,8 @@ void Application::Run()
 		//First thread (Scene update)
 		if (m_dAccumlatedTime_ThreadOne > 0.016) //60 times every second
 		{
-			GetMouseUpdate();
+			if (Singleton::getInstance()->program_state != Singleton::PROGRAM_MENU)
+				GetMouseUpdate();
 			sceneManager->Update(m_dElapsedTime);
 			m_dAccumlatedTime_ThreadOne = 0.0;
 		}
