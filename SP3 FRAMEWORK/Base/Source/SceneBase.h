@@ -294,12 +294,6 @@ protected:
 //	Player* player;
 	Color Black;
 
-	//Environment
-	std::vector<AABBObject *> Object_list;
-
-	//Enemy
-	std::vector<Enemy *> Enemy_list;
-
 	//bullet
 	std::vector<Bullet*> bulletList;
 
@@ -315,6 +309,8 @@ protected:
 	char playerPartition;
 	char posPartition;
 	bool spatialPartitioning;
+
+	Singleton* instance;
 
 };
 

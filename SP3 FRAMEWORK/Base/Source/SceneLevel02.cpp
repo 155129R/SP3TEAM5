@@ -22,6 +22,8 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 void SceneLevel02::Init()
 {
 	SceneBase::Init();
+
+	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -715,17 +717,17 @@ void SceneLevel02::RenderPassMain()
 
 	ss.str("");
 	ss.precision(5);
-	ss << "ITEM 1: " << std::to_string(Singleton::getInstance()->objectCount[item1]);
+	ss << "ITEM 1: " << std::to_string(instance->objectCount[item1]);
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);
 
 	ss.str("");
 	ss.precision(5);
-	ss << "ITEM 2: " << std::to_string(Singleton::getInstance()->objectCount[item2]);
+	ss << "ITEM 2: " << std::to_string(instance->objectCount[item2]);
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
 
 	ss.str("");
 	ss.precision(5);
-	ss << "ITEM 3: " << std::to_string(Singleton::getInstance()->objectCount[item3]);
+	ss << "ITEM 3: " << std::to_string(instance->objectCount[item3]);
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 12);
 }
 

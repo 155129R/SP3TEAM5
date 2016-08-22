@@ -18,6 +18,7 @@ SceneBase::~SceneBase()
 
 void SceneBase::Init()
 {
+	instance = Singleton::getInstance();
 	Math::InitRNG();
 
 	// Black background
@@ -391,7 +392,7 @@ void SceneBase::Init()
 		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 		Ghost->scale.Set(50, 50, 50);
 
-		Enemy_list.push_back(Ghost);
+		instance->Enemy_list.push_back(Ghost);
 	}
 
 	Singleton::getInstance()->player->Init();
@@ -796,7 +797,7 @@ void SceneBase::UpdateFearEffect(double dt)
 }
 void SceneBase::UpdateHitboxes(double dt)
 {
-	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
@@ -818,7 +819,7 @@ void SceneBase::UpdateHitboxes(double dt)
 			}
 		}
 	}
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
@@ -831,7 +832,7 @@ void SceneBase::UpdateHitboxes(double dt)
 
 void SceneBase::RenderObjects(bool ShowHitbox)
 {
-	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
@@ -876,7 +877,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 }
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)

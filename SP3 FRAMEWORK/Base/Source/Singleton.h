@@ -4,7 +4,8 @@
 #include "Inventory.h"
 #include <map>
 #include <vector>
-
+#include "AABBObject.h"
+#include "Enemy.h"
 using std::map;
 using std::vector;
 
@@ -21,6 +22,12 @@ class Singleton
 		Player* player;
 
 		map<AABB*, int> objectCount;
+
+		//Environment
+		std::vector<AABBObject *> Object_list;
+
+		//Enemy
+		std::vector<Enemy *> Enemy_list;
 private:
 	Singleton()
 	{

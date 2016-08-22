@@ -58,7 +58,6 @@ void SceneLevel01::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-
 	//UpdatePlayer(dt);
 	//bullet->UpdateShoot(dt);
 
@@ -198,7 +197,7 @@ void SceneLevel01::UpdateParticle(double dt)
 }
 //void SceneLevel01::UpdateWeaponType(double dt)
 //{
-//	switch (Singleton::getInstance()->player->GetWeaponType())
+//	switch (instance->player->GetWeaponType())
 //	{
 //	case 1:
 //		weapontype = 1;
