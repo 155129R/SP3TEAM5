@@ -162,7 +162,7 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-	sceneManager->ChangeScene(1);
+	sceneManager->ChangeScene(2);
 
 	//Need a change scene function
 	//if scene != Null , delete that scene
@@ -175,21 +175,26 @@ void Application::Run()
 		////////////////////////////
 		//    change scene here   //
 		////////////////////////////
-		if (Application::IsKeyPressed('V'))
+		if (Singleton::getInstance()->stateCheck)
 		{
-			sceneManager->ChangeScene(1);
-		}
-		if (Application::IsKeyPressed('B'))
-		{
-			sceneManager->ChangeScene(2);
-		}
-		if (Application::IsKeyPressed('N'))
-		{
-			sceneManager->ChangeScene(3);
-		}
-		if (Application::IsKeyPressed('M'))
-		{
-			sceneManager->ChangeScene(4);
+			Singleton::getInstance()->stateCheck = false;
+
+			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+			{
+				sceneManager->ChangeScene(1);
+			}
+			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+			{
+				sceneManager->ChangeScene(2);
+			}
+			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
+			{
+				sceneManager->ChangeScene(3);
+			}
+			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+			{
+				sceneManager->ChangeScene(4);
+			}
 		}
 
 
