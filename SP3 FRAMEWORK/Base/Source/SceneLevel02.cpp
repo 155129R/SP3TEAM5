@@ -22,8 +22,6 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 void SceneLevel02::Init()
 {
 	SceneBase::Init();
-
-	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -54,27 +52,22 @@ void SceneLevel02::Init()
 
 	openGate = false;
 	rotateGate = 90;
-
-	item1pos = Vector3(0, 200, 0);
-	item1 = new AABB(item1pos, Vector3(10, 20, 10));
-
-	item2pos = Vector3(200, 0, 0);
-	item2 = new AABB(item2pos, Vector3(10, 20, 10));
-
-	item3pos = Vector3(0, 0, 200);
-	item3 = new AABB(item3pos, Vector3(10, 20, 10));
-
-	sound.playSoundEffect3D("Sound/fountain.wav",
-		irrklang::vec3df(0, 0, 0), true);
 }
 
 void SceneLevel02::Update(double dt)
 {
 	SceneBase::Update(dt);
-
-	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
-		irrklang::vec3df(camera.view.x, camera.view.y, camera.view.z));
-
+	sound.Init();
+	soundTimer += dt;
+	if (soundTimer > 0.1)
+	{
+		sound.playSoundEffect3D("Sound/fountain2.wav",
+			irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
+			irrklang::vec3df(camera.target.x, camera.target.y, camera.target.z),
+			irrklang::vec3df(0, 0, 0),
+			false);
+		soundTimer = 0;
+	}
 	if (Application::IsKeyPressed('Q'))
 	{
 		openGate = true;
@@ -84,63 +77,6 @@ void SceneLevel02::Update(double dt)
 		rotateGate--;
 	}
 
-	static bool spaceButtonState = false;
-	if (Application::IsKeyPressed('E'))
-	{
-		if (!spaceButtonState)
-		{
-			spaceButtonState = true;
-			Inventory::addObject(item1);
-		}
-	}
-	else if (!Application::IsKeyPressed('E'))
-	{
-		if (spaceButtonState)
-			spaceButtonState = false;
-	}
-
-	static bool spaceButtonState2 = false;
-	if (Application::IsKeyPressed('Y'))
-	{
-		if (!spaceButtonState2)
-		{
-			spaceButtonState2 = true;
-			Inventory::addObject(item2);
-		}
-	}
-	else if (!Application::IsKeyPressed('Y'))
-	{
-		if (spaceButtonState2)
-			spaceButtonState2 = false;
-	}
-
-	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
-	////////////////////////////////////////////////////////
-	if (Application::IsKeyPressed('V'))
-	{
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
-	}
-	if (Application::IsKeyPressed('B'))
-	{
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
-	}
-	if (Application::IsKeyPressed('N'))
-	{
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
-	}
-	if (Application::IsKeyPressed('M'))
-	{
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
-	}
 
 	UpdateParticle(dt);
 
@@ -741,20 +677,6 @@ void SceneLevel02::RenderPassMain()
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "ITEM 1: " << std::to_string(instance->objectCount[item1]);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "ITEM 2: " << std::to_string(instance->objectCount[item2]);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "ITEM 3: " << std::to_string(instance->objectCount[item3]);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 12);
 }
 
 void SceneLevel02::Render()

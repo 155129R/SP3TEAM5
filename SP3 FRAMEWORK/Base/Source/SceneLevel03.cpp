@@ -19,7 +19,7 @@ void SceneLevel03::Init()
 	SceneBase::Init();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	instance->Object_list.clear();
+	Object_list.clear();
 
 	terrainHeight = TERRAINSIZE.y;
 
@@ -63,7 +63,7 @@ void SceneLevel03::Init()
 	{
 		int Random = Math::RandIntMinMax(1, 3);
 
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::IDLE);
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
 		switch (Random)
 		{
 		case 1:
@@ -86,7 +86,7 @@ void SceneLevel03::Init()
 		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 		Ghost->scale.Set(50, 50, 50);
 
-		instance->Enemy_list.push_back(Ghost);
+		Enemy_list.push_back(Ghost);
 	}
 
 	AABBObject * Logs = new AABBObject();
@@ -94,21 +94,21 @@ void SceneLevel03::Init()
 	Logs->active = true;
 	Logs->pos.Set(1900, 0, -1400);
 	Logs->scale.Set(4, 5, 5);
-	instance->Object_list.push_back(Logs);
+	Object_list.push_back(Logs);
 
 	AABBObject * Logs2 = new AABBObject();
 	Logs2->Object = AABBObject::OBJECT_TYPE::LOGS;
 	Logs2->active = true;
 	Logs2->pos.Set(-1900, 0, -1400);
 	Logs2->scale.Set(4, 5, 5);
-	instance->Object_list.push_back(Logs2);
+	Object_list.push_back(Logs2);
 
 	AABBObject * Bridge = new AABBObject();
 	Bridge->Object = AABBObject::OBJECT_TYPE::BRIDGE;
 	Bridge->active = true;
 	Bridge->pos.Set(0, 60, -1420);
 	Bridge->scale.Set(5, 5, 5);
-	instance->Object_list.push_back(Bridge);
+	Object_list.push_back(Bridge);
 
 }
 
@@ -117,17 +117,15 @@ void SceneLevel03::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-
-	UpdatePlayer(dt);
-
+	UpdateBullet(dt);
 	UpdateHitboxes(dt);
 
-	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			ghost->Update(dt, instance->player->getPosition());
+			ghost->Update(dt, Singleton::getInstance()->player->getPosition());
 		}
 	}
 
@@ -152,6 +150,12 @@ void SceneLevel03::Update(double dt)
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
 	camera.Update(dt);
+
+	//shoot
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(1, 0, 1), 150, 100, 10));
+	}
 
 	if (Flashlight)
 	{
@@ -236,31 +240,22 @@ void SceneLevel03::Update(double dt)
 
 	rotateAngle += (float)(1 * dt);
 
-	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
-	////////////////////////////////////////////////////////
-	if (Application::IsKeyPressed('V'))
-	{
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
-	}
-	if (Application::IsKeyPressed('B'))
-	{
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
-	}
-	if (Application::IsKeyPressed('N'))
-	{
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
-	}
-	if (Application::IsKeyPressed('M'))
-	{
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
-	}
 
 	fps = (float)(1.f / dt);
+}
+
+void SceneLevel03::UpdateBullet(double dt)
+{
+	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
+		if ((*it)->deleteBullet == true){
+			delete *it;
+			it = Bullet::bulletList.erase(it);
+		}
+		else{
+			(*it)->Update(dt);
+			it++;
+		}
+	}
 }
 
 void SceneLevel03::UpdateParticle(double dt)
@@ -395,7 +390,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 	{
 		for (int i = 0; i < 400; ++i)
 		{
-			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - instance->player->getPosition().z), Tree[i].x - instance->player->getPosition().x));
+			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - Singleton::getInstance()->player->getPosition().z), Tree[i].x - Singleton::getInstance()->player->getPosition().x));
 			switch (Tree_Type[i])
 			{
 			case 1:
@@ -433,7 +428,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 
 		for (int i = 0; i < 400; ++i)
 		{
-			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - instance->player->getPosition().z), Bush[i].x - instance->player->getPosition().x));
+			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - Singleton::getInstance()->player->getPosition().z), Bush[i].x - Singleton::getInstance()->player->getPosition().x));
 			modelStack.PushMatrix();
 			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
 			modelStack.Rotate(Degree - 90, 0, 1, 0);
@@ -471,7 +466,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 void SceneLevel03::RenderHUD()
 {
 	//std::cout << player->GetStamina() << std::endl;
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
+	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - Singleton::getInstance()->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
 }
 
 void SceneLevel03::RenderSprite()
@@ -549,7 +544,6 @@ void SceneLevel03::RenderWorld()
 {
 	RenderSkyplane();
 	RenderTerrain();
-	RenderBullets(true);
 	RenderEnvironment(false);
 }
 
@@ -678,7 +672,7 @@ void SceneLevel03::RenderPassMain()
 	RenderLight();
 
 	//bullet
-	/*for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
 		modelStack.PushMatrix();
 		modelStack.Translate(
 			(*it)->position.x,
@@ -688,7 +682,7 @@ void SceneLevel03::RenderPassMain()
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], false);
 		modelStack.PopMatrix();
-	}*/
+	}
 
 
 	//Depth quad
@@ -719,7 +713,7 @@ void SceneLevel03::RenderPassMain()
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
-	ss << "DICKS OUT FOR HARAMBE: " << fps;
+	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
 }

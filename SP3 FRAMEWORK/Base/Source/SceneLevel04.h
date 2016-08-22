@@ -47,7 +47,6 @@ private:
 	bool Switch;
 
 	std::vector<Vector3> gravePos;
-	std::vector<Vector3> pocongPos;
 
 };
 

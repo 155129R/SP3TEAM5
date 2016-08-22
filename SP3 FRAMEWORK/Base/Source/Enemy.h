@@ -39,8 +39,6 @@ struct Enemy : public GameObject
 	bool Chase(Vector3 PlayerPos);
 	int DealDamage();
 	void TakeDamage(int Damage);
-	Vector3 initPos;
-	bool chasing;
 };
 
 #endif

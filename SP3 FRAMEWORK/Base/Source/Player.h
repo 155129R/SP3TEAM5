@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include "Camera3.h"
-#include "Bullet.h"
 
 class Player 
 {
@@ -60,8 +59,7 @@ private:
 	};
 
 	WEAPON_TYPE weaponType;
-	int weapon_value = 0;
-	int fireRate = 1;
+	int weapon_value;
 
 	//fear
 	enum FEAR_LEVEL

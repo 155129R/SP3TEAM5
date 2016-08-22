@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE) : MAX_HP(10), Attack(5), Hitbox(AABB(this->pos, this->scale)), initPos(this->pos), chasing(false)
+Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE) : MAX_HP(10), Attack(5), Hitbox(AABB(this->pos,this->scale))
 {
 	HP = MAX_HP;
 }
@@ -20,11 +20,6 @@ void Enemy::Update(double dt, Vector3 PlayerPos)
 		{
 			case ENEMY_STATE::IDLE:
 			{
-				if (this->pos.x < (initPos + Vector3(50, 50, 50)).x && this->pos.z < (initPos + Vector3(50, 50, 50)).z)
-				{
-					if (!chasing)
-					Chase(initPos + Vector3(50, 50, 50));
-				}
 				break;
 			}
 			case ENEMY_STATE::ATTACK:
@@ -55,23 +50,6 @@ bool Enemy::Chase(Vector3 PlayerPos)
 
 	if (distance < threshhold)
 	{
-		if (pos.x > PlayerPos.x)
-		{
-			pos.x -= speed;
-		}
-		if (pos.x < PlayerPos.x)
-		{
-			pos.x += speed;
-		}
-		if (pos.z < PlayerPos.z)
-		{
-			pos.z += speed;
-		}
-		if (pos.z > PlayerPos.z)
-		{
-			pos.z -= speed;
-		}
-		chasing = true;
 		return true;
 	}
 	return false;

@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Application.h"
 
 Player::Player()
 {
@@ -13,11 +12,8 @@ void Player::Init()
 {
 	weaponType = WEAPON_TYPE::W_PISTOL;
 	weapon_value = 0;
-	fireRate = 1;
-
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
-
 	stamina = 500.0f;
 	recharge = 5.0f;
 
@@ -27,18 +23,14 @@ void Player::Init()
 
 void Player::Update(double dt)
 {
-
-//	pos = camera.position;
 	UpdateStamina(dt);
 	UpdateWeapon(dt);
 	UpdateFear(dt);
-
 
 }
 
 void Player::UpdateMovement(double dt, unsigned short key)
 {
-
 }
 
 void Player::UpdateFear(double dt)

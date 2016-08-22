@@ -26,6 +26,8 @@ public:
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
 
+	void UpdateBullet(double dt);
+
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
