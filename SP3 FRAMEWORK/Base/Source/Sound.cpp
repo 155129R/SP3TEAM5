@@ -15,6 +15,10 @@ void Sound::Init()
 	SoundEffect3D->setDefault3DSoundMaxDistance(5000.0f);
 	//SoundEffect3D->setSoundVolume(10.0f);
 }
+void Sound::Update(irrklang::vec3df pos, irrklang::vec3df view)
+{
+	SoundEffect3D->setListenerPosition(pos, view);
+}
 void Sound::playMusic(string Music)
 {
 	BGM = musicEngine->play2D(Music.c_str(), true, false, true);

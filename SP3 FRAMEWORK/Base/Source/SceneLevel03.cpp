@@ -117,7 +117,9 @@ void SceneLevel03::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
-	UpdateBullet(dt);
+
+	UpdatePlayer(dt);
+
 	UpdateHitboxes(dt);
 
 	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
@@ -150,12 +152,6 @@ void SceneLevel03::Update(double dt)
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
 	camera.Update(dt);
-
-	//shoot
-	if (Application::IsKeyPressed(VK_SPACE))
-	{
-		Bullet::bulletList.push_back(new Bullet(Vector3(camera.position.x, camera.position.y - 2, camera.position.z), Vector3(1, 0, 1), 150, 100, 10));
-	}
 
 	if (Flashlight)
 	{
@@ -242,20 +238,6 @@ void SceneLevel03::Update(double dt)
 
 
 	fps = (float)(1.f / dt);
-}
-
-void SceneLevel03::UpdateBullet(double dt)
-{
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end();){
-		if ((*it)->deleteBullet == true){
-			delete *it;
-			it = Bullet::bulletList.erase(it);
-		}
-		else{
-			(*it)->Update(dt);
-			it++;
-		}
-	}
 }
 
 void SceneLevel03::UpdateParticle(double dt)
@@ -672,7 +654,7 @@ void SceneLevel03::RenderPassMain()
 	RenderLight();
 
 	//bullet
-	for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
+	/*for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
 		modelStack.PushMatrix();
 		modelStack.Translate(
 			(*it)->position.x,
@@ -682,7 +664,7 @@ void SceneLevel03::RenderPassMain()
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], false);
 		modelStack.PopMatrix();
-	}
+	}*/
 
 
 	//Depth quad

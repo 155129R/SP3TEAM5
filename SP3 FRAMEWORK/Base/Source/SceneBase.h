@@ -12,7 +12,6 @@
 #include <map>
 #include "LoadHmap.h"
 #include "LoadTGA.h"
-#include "Bullet.h"
 
 struct Partition
 {
@@ -25,6 +24,7 @@ struct Partition
 #include "Player.h"
 #include "Enemy.h"
 #include "AABBObject.h"
+#include "Bullet.h"
 #include "Singleton.h"
 
 class SceneBase : public Scene
@@ -147,6 +147,8 @@ public:
 		BLOCKAGE,
 		INDOORGATE,
 		CHANDELIER,
+		CEILING,
+		TOILETBOWL,
 		ELEVATORDOOR,
 
 		//PLAYER
@@ -221,9 +223,11 @@ public:
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
 	void UpdateHitboxes(double dt);
+	void UpdateShoot(double dt);
 
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
+	void RenderBullets(bool ShowHitbox = false);
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
@@ -284,6 +288,8 @@ protected:
 	float FogAmount;
 	float fps;
 
+	Bullet* bullet;
+
 	//Player
 //	Player* player;
 	Color Black;
@@ -293,6 +299,9 @@ protected:
 
 	//Enemy
 	std::vector<Enemy *> Enemy_list;
+
+	//bullet
+	std::vector<Bullet*> bulletList;
 
 	//Sprite Pointers
 	SpriteAnimation* G1;
