@@ -29,6 +29,10 @@ public:
 
 	void Yaw(double dt);
 	void Pitch(double dt);
+
+	Vector3 forwardPos;
+
+	bool willCollide;
 };
 
 #endif

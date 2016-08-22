@@ -814,7 +814,7 @@ void SceneBase::UpdateHitboxes(double dt)
 				case AABBObject::OBJECT_TYPE::BRIDGE:
 				{
 					obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3,50,0));
-					obj->Hitbox.Resize(Vector3(140, 65, 650));
+					obj->Hitbox.Resize(Vector3(140, 75, 650));
 					break;
 				}
 			}

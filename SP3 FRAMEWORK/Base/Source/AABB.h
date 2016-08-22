@@ -13,7 +13,7 @@ struct AABB
 
 	void UpdateAABB(Vector3 pos);
 	void Resize(Vector3 size);
-	bool Collide(Vector3 pos);
+	bool Collide(Vector3 pos, bool is3D = false);
 
 	Vector3 max, min;
 	Vector3 pos, size;
