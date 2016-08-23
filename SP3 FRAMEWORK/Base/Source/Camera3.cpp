@@ -18,19 +18,19 @@ void Camera3::Forward(double dt)
 {
 	view = (target - position).Normalized();
 	forwardPos = position + view * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	for (auto enemy : Singleton::getInstance()->Enemy_list)
-	{
-		if (enemy->active)
-		{
-			if (enemy->Hitbox.Collide(forwardPos))
-			{
-				willCollide = true;
-				break;
-			}
-			else
-				willCollide = false;
-		}
-	}
+	//for (auto enemy : Singleton::getInstance()->Enemy_list)
+	//{
+	//	if (enemy->active)
+	//	{
+	//		if (enemy->Hitbox.Collide(forwardPos))
+	//		{
+	//			willCollide = true;
+	//			break;
+	//		}
+	//		else
+	//			willCollide = false;
+	//	}
+	//}
 	if (!willCollide)
 	{
 		for (auto object : Singleton::getInstance()->Object_list)
@@ -69,16 +69,16 @@ void Camera3::Backward(double dt)
 {
 	view = (target - position).Normalized();
 	forwardPos = position - view * CAMERA_SPEED * RUN_SPEED * (float)dt;
-	for (auto enemy : Singleton::getInstance()->Enemy_list)
-	{
-		if (enemy->Hitbox.Collide(forwardPos))
-		{
-			willCollide = true;
-			break;
-		}
-		else
-			willCollide = false;
-	}
+	//for (auto enemy : Singleton::getInstance()->Enemy_list)
+	//{
+	//	if (enemy->Hitbox.Collide(forwardPos))
+	//	{
+	//		willCollide = true;
+	//		break;
+	//	}
+	//	else
+	//		willCollide = false;
+	//}
 	if (!willCollide)
 	{
 		for (auto object : Singleton::getInstance()->Object_list)
@@ -119,7 +119,7 @@ void Camera3::Sideway(double dt, bool Left)
 		right.y = 0;
 		right.Normalize();
 		forwardPos = position - right * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		for (auto enemy : Singleton::getInstance()->Enemy_list)
+	/*	for (auto enemy : Singleton::getInstance()->Enemy_list)
 		{
 			if (enemy->Hitbox.Collide(forwardPos))
 			{
@@ -128,7 +128,7 @@ void Camera3::Sideway(double dt, bool Left)
 			}
 			else
 				willCollide = false;
-		}
+		}*/
 		if (!willCollide)
 		{
 			for (auto object : Singleton::getInstance()->Object_list)
@@ -167,7 +167,7 @@ void Camera3::Sideway(double dt, bool Left)
 		right.y = 0;
 		right.Normalize();
 		forwardPos = position + right * CAMERA_SPEED * RUN_SPEED * (float)dt;
-		for (auto enemy : Singleton::getInstance()->Enemy_list)
+		/*for (auto enemy : Singleton::getInstance()->Enemy_list)
 		{
 			if (enemy->Hitbox.Collide(forwardPos))
 			{
@@ -176,7 +176,7 @@ void Camera3::Sideway(double dt, bool Left)
 			}
 			else
 				willCollide = false;
-		}
+		}*/
 		if (!willCollide)
 		{
 			for (auto object : Singleton::getInstance()->Object_list)

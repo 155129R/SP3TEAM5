@@ -16,27 +16,30 @@ struct Enemy : public GameObject
 	};
 	enum ENEMY_STATE
 	{
-		IDLE,
+		PATROL,
 		ATTACK,
-		RUN,
 		WEAKEN,
+		CAPTURED,
 		MAX_ENEMY_STATE
 	};
 
 	ENEMY_TYPE Type;
 	ENEMY_STATE State;
 
-	Enemy(ENEMY_TYPE type = GHOST_1, ENEMY_STATE state = IDLE);
+	Enemy(ENEMY_TYPE type = GHOST_1, ENEMY_STATE state = PATROL);
 	~Enemy();
 
 	AABB Hitbox;
 
-	const int MAX_HP;
+	int MAX_HP;
 	int HP;
-	const int Attack;
+	int Attack;
 
-	void Update(double dt, Vector3 PlayerPos);
-	bool Chase(Vector3 PlayerPos);
+	bool captured = false;
+
+	void Update(double dt, Vector3 playerPos);
+	void Chase(double dt,Vector3 PlayerPos);
+	void scaleDown(double dt);
 	int DealDamage();
 	void TakeDamage(int Damage);
 	Vector3 initPos;

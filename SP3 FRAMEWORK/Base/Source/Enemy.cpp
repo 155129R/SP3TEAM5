@@ -1,84 +1,111 @@
-#include "Enemy.h"
+#include "Singleton.h"
 
-Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE) : MAX_HP(10), Attack(5), Hitbox(AABB(this->pos, this->scale)), initPos(this->pos), chasing(false)
+Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 {
-	HP = MAX_HP;
+	switch (Type)
+	{
+		case ENEMY_TYPE::GHOST_1:
+		{
+			MAX_HP = 6;
+			speed = 100;
+			Attack = 3;
+			break;
+		}
+		case ENEMY_TYPE::GHOST_2:
+		{
+			MAX_HP = 10;
+			speed = 200;
+			Attack = 6;
+			break;
+		}
+		case ENEMY_TYPE::GHOST_3:
+		{
+			MAX_HP = 3;
+			speed = 300;
+			Attack = 10;
+			break;
+		}
+	}
+	active = true;
+	pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+	scale.Set(50, 50, 50);
 }
 
 Enemy::~Enemy()
 {
 }
 
-void Enemy::Update(double dt, Vector3 PlayerPos)
+void Enemy::Update(double dt, Vector3 playerPos)
 {
 	//AABB hit box will always be on the Enemy
 	Hitbox.UpdateAABB(this->pos);
 
-	if (HP > 0)
+	if (HP <= 0)
 	{
-		switch (State)
+		State = ENEMY_STATE::WEAKEN;
+	}
+
+	switch (State)
+	{
+		case ENEMY_STATE::PATROL:
 		{
-			case ENEMY_STATE::IDLE:
+			//std::cout << "PATROL" << std::endl;
+			//if (this->pos.x < (initPos + Vector3(50, 50, 50)).x && this->pos.z < (initPos + Vector3(50, 50, 50)).z)
+			//{
+			//	if (!chasing)
+			//		Chase(dt, initPos + Vector3(50, 50, 50));
+			//}
+			break;
+		}
+		case ENEMY_STATE::ATTACK:
+		{
+			//std::cout << "ATTACK" << std::endl;
+			Chase(dt, Singleton::getInstance()->player->getPosition());
+			break;
+		}
+		case ENEMY_STATE::WEAKEN:
+		{
+			if (captured)
 			{
-				if (this->pos.x < (initPos + Vector3(50, 50, 50)).x && this->pos.z < (initPos + Vector3(50, 50, 50)).z)
-				{
-					if (!chasing)
-					Chase(initPos + Vector3(50, 50, 50));
-				}
-				break;
+				State = ENEMY_STATE::CAPTURED;
 			}
-			case ENEMY_STATE::ATTACK:
+			break;
+		}
+		case ENEMY_STATE::CAPTURED:
+		{
+			Vector3 dir = (Singleton::getInstance()->player->getPosition() - pos).Normalized();
+			pos += dir * 100 * dt;
+
+			if (scale.x > 0.5 && 
+				scale.y > 0.5 && 
+				scale.z > 0.5)
 			{
-				if (Chase(PlayerPos))
-				{
-					std::cout << "Deal DMG" << std::endl;
-					break;
-				}
-				break;
+				scale -= Vector3(30, 30, 30) * dt;
 			}
-			case ENEMY_STATE::RUN:
+			else
 			{
-				break;
-			}
-			default:
-			{
+				active = false;
 				break;
 			}
 		}
-	}
-	else if (HP < 0)
-	{
-		active = false;
+		default:
+		{
+			break;
+		}
 	}
 }
 
-bool Enemy::Chase(Vector3 PlayerPos)
+void Enemy::Chase(double dt, Vector3 playerPos)
 {
-	float distance = (pos - PlayerPos ).LengthSquared();
-	float threshhold = 50;
-
-	if (distance < threshhold)
+	//Move in to attack player
+	Vector3 dir = (Singleton::getInstance()->player->getPosition() - pos).Normalized();
+	pos += dir * speed * dt;
+	if (Hitbox.Collide(Singleton::getInstance()->player->getPosition()))
 	{
-		if (pos.x > PlayerPos.x)
-		{
-			pos.x -= speed;
-		}
-		if (pos.x < PlayerPos.x)
-		{
-			pos.x += speed;
-		}
-		if (pos.z < PlayerPos.z)
-		{
-			pos.z += speed;
-		}
-		if (pos.z > PlayerPos.z)
-		{
-			pos.z -= speed;
-		}
-		chasing = true;
-		return true;
+		//DEAL FEAR
+		Singleton::getInstance()->player->InflictFear(Attack);
+		State = ENEMY_STATE::PATROL;
 	}
-	return false;
 }
 
 int Enemy::DealDamage()
@@ -87,13 +114,6 @@ int Enemy::DealDamage()
 }
 
 void Enemy::TakeDamage(int Damage)
-{
-	if (State != ENEMY_STATE::WEAKEN)
-	{
-		HP -= Damage;
-	}
-	if (HP <= 0)
-	{
-		State = ENEMY_STATE::WEAKEN;
-	}
+{	
+	HP -= Damage;
 }

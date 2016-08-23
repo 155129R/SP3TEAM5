@@ -21,8 +21,6 @@ void SceneLevel03::Init()
 	SceneBase::Init();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	instance->Object_list.clear();
-
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	//Random my random randomly using srand
@@ -61,33 +59,34 @@ void SceneLevel03::Init()
 		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
 	}
 
-	for (int i = 0; i < 40; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		int Random = Math::RandIntMinMax(1, 3);
 
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::IDLE);
-		switch (Random)
-		{
-		case 1:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-			break;
-		}
-		case 2:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-			break;
-		}
-		case 3:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-			break;
-		}
-		}
-		Ghost->active = true;
-		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
-		Ghost->scale.Set(50, 50, 50);
-
+		//switch (Random)
+		//{
+		//	case 1:
+		//	{
+		//
+		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::CAPTURED);
+		//		instance->Enemy_list.push_back(Ghost);
+		//		break;
+		//	}
+		//	case 2:
+		//	{
+		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::CAPTURED);
+		//		instance->Enemy_list.push_back(Ghost);
+		//		break;
+		//	}
+		//	case 3:
+		//	{
+		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::CAPTURED);
+		//		instance->Enemy_list.push_back(Ghost);
+		//		break;
+		//	}
+		//}
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::CAPTURED);
+		Ghost->pos.Set(0, 0, 0);
 		instance->Enemy_list.push_back(Ghost);
 	}
 
@@ -113,7 +112,6 @@ void SceneLevel03::Init()
 	instance->Object_list.push_back(Bridge);
 
 	InitPartitioning();
-
 }
 
 void SceneLevel03::Update(double dt)
@@ -126,13 +124,13 @@ void SceneLevel03::Update(double dt)
 
 	UpdateHitboxes(dt);
 
-	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
+	if (delay >= 2)
 	{
-		Enemy *ghost = (Enemy *)*it;
-		if (ghost->active)
-		{
-			ghost->Update(dt, instance->player->getPosition());
-		}
+		UpdateEnemy(dt);
+	}
+	else
+	{
+		delay += dt;
 	}
 
 	//Update sprites

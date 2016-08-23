@@ -459,7 +459,7 @@ void SceneBase::Init()
 
 	characterHeight = 7.f;
 
-	for (int i = 0; i < 40; ++i)
+	/*for (int i = 0; i < 40; ++i)
 	{
 		int Random = Math::RandIntMinMax(1, 3);
 
@@ -488,7 +488,7 @@ void SceneBase::Init()
 
 		instance->Enemy_list.push_back(Ghost);
 	}
-
+*/
 	Singleton::getInstance()->player->Init();
 
 }
@@ -571,11 +571,12 @@ void SceneBase::Update(double dt)
 			10
 			));
 	}
+
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
 
 	Vector3 View = (camera.target - camera.position).Normalized();
-	rotateAngle = Math::RadianToDegree(atan2(-View.z, View.x));
+	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -890,8 +891,7 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (Singleton::getInstance()->stateCheck)
 	{
@@ -971,6 +971,17 @@ void SceneBase::UpdateFearEffect(double dt)
 		Black.Set(0.0f, 0.0f, 0.0f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
 		break;
+	}
+}
+void SceneBase::UpdateEnemy(double dt)
+{
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->Update(dt, instance->player->getPosition());
+		}
 	}
 }
 void SceneBase::UpdateWeaponType(double dt)
@@ -1177,7 +1188,7 @@ void SceneBase::RenderRadar()
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(65, 45, 0);
-			modelStack.Rotate(rotateAngle, 0, 0, 1);
+			modelStack.Rotate(radarAngle - 90, 0, 0, 1);
 			modelStack.Translate(-ghost->pos.x / 70 + camera.position.x / 70, -ghost->pos.z / 70 + camera.position.z / 70, 0);
 			RenderMesh(meshList[GEO_REDBALL], false);
 			modelStack.PopMatrix();
@@ -1186,7 +1197,7 @@ void SceneBase::RenderRadar()
 
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 45, 0);
-	modelStack.Rotate(rotateAngle, 0, 0, 1);
+	modelStack.Rotate(radarAngle - 90, 0, 0, 1);
 	modelStack.Translate(camera.position.x / 70, camera.position.z / 70, 0);
 	modelStack.Scale(100, 100, 100);
 	RenderMesh(m_Minimap->GetBackground(), false);

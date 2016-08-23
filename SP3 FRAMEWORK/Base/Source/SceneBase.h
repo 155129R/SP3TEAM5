@@ -262,6 +262,7 @@ public:
 	//Used in all scenes
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
+	void UpdateEnemy(double dt);
 	void UpdateHitboxes(double dt);
 	void UpdateShoot(double dt);
 	void UpdateWeaponType(double dt);
@@ -332,10 +333,13 @@ protected:
 	float fps;
 
 	//Player
+	float radarAngle = 0;
 	float rotateAngle = 0;
 	Minimap* m_Minimap;
 	Color Black;
 
+	//Enemy 
+	float delay = 0;
 
 	//bullet
 	std::vector<Bullet*> bulletList;
