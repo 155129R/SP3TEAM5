@@ -19,6 +19,7 @@ void SceneLevel03::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	instance->Object_list.clear();
