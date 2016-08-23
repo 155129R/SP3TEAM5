@@ -186,6 +186,7 @@ void Application::Run()
 		////////////////////////////
 		if (Singleton::getInstance()->stateCheck)
 		{
+			
 			Singleton::getInstance()->stateCheck = false;
 
 			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
@@ -205,7 +206,6 @@ void Application::Run()
 				sceneManager->ChangeScene(4);
 			}
 		}
-
 
 		//Get the elasped time
 		m_dElapsedTime = m_timer.getElapsedTime();

@@ -559,13 +559,14 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
 	modelStack.Scale(1, 1, 1);
-	RenderMesh(meshList[PISTOL], Light);
+	RenderMesh(meshList[VACUUM], Light);
 	modelStack.PopMatrix();
 
 }
 
 void SceneLevel01::RenderHUD()
 {
+	RenderRadar();
 }
 
 void SceneLevel01::RenderSprite()
@@ -630,7 +631,11 @@ void SceneLevel01::RenderWorld()
 	RenderTerrain();
 	RenderLevel(false);
 	RenderRoomObjects(false);
-	RenderBullets(false);
+	if (weaponType != 3)
+	{
+		RenderBullets(false);
+	}
+	
 	RenderWeapons(false);
 	//RenderSprite();
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
@@ -733,6 +738,13 @@ void SceneLevel01::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
+
+	if (!Singleton::getInstance()->stateCheck)
+	{
+		RenderHUD();
+	}
+
+	SceneBase::Render();
 
 	//On screen text
 	std::ostringstream ss;

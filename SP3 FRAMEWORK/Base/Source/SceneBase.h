@@ -24,6 +24,7 @@ struct Partition
 #include "Player.h"
 #include "Enemy.h"
 #include "AABBObject.h"
+#include "Minimap.h"
 #include "Bullet.h"
 #include "Singleton.h"
 
@@ -148,10 +149,7 @@ public:
 		TERRAIN_LEVEL03,
 		TERRAIN_LEVEL04,
 
-		WATER,
-		WATER_SURFACE,
 		NIGHT_VISION,
-
 
 		CACTUS,
 
@@ -181,6 +179,17 @@ public:
 		//PLAYER
 		GEO_STAMINA,
 
+		//Minimap
+		GEO_VIEW,
+		GEO_GREENBALL,
+		GEO_REDBALL,
+
+		//Screen
+		GEO_LOAD_1,
+		GEO_LOAD_2,
+		GEO_LOAD_3,
+		GEO_LOAD_4,
+
 		//level 03
 		GEO_CACTUS,
 		GEO_TREE_1,
@@ -189,6 +198,8 @@ public:
 		GEO_BUSH,
 		GEO_BRIDGE,
 		GEO_LOGS,
+		WATER,
+		WATER_SURFACE,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1,
@@ -241,7 +252,7 @@ public:
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size = 1.0f, float x = 0.0f, float y = 0.0f);
+	void RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale = (1.0f, 1.0f, 1.0f), float x = 0.0f, float y = 0.0f, bool rotate_Mini = false, float rotate = 0.0f);
 	void RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate);
 	void RenderMeshOutlined(Mesh* mesh, bool enableLight);
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -257,6 +268,7 @@ public:
 
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
+	void RenderRadar(void);
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 
@@ -320,7 +332,8 @@ protected:
 	float fps;
 
 	//Player
-//	Player* player;
+	float rotateAngle = 0;
+	Minimap* m_Minimap;
 	Color Black;
 
 

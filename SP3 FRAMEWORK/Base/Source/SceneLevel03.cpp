@@ -483,8 +483,9 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 
 void SceneLevel03::RenderHUD()
 {
-	//std::cout << player->GetStamina() << std::endl;
 	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
+
+	RenderRadar();
 }
 
 void SceneLevel03::RenderSprite()
@@ -712,7 +713,12 @@ void SceneLevel03::RenderPassMain()
 	RenderEnemies(true);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
-	RenderHUD();
+	if (!Singleton::getInstance()->stateCheck)
+	{
+		RenderHUD();
+	}
+
+	SceneBase::Render();
 
 	//On screen text
 	{

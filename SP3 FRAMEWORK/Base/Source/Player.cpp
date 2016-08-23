@@ -13,7 +13,9 @@ void Player::Init()
 {
 	weaponType = WEAPON_TYPE::W_PISTOL;
 	weapon_value = 1;
-	fireRate = 5;
+
+	fireRate = 1;
+
 
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
@@ -27,13 +29,9 @@ void Player::Init()
 
 void Player::Update(double dt)
 {
-
-//	pos = camera.position;
 	UpdateStamina(dt);
 	UpdateWeapon(dt);
 	UpdateFear(dt);
-
-
 }
 
 void Player::UpdateMovement(double dt, unsigned short key)

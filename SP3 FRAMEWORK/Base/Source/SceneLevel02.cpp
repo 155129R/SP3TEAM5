@@ -574,6 +574,7 @@ void SceneLevel02::RenderEnvironment(bool Light)
 
 void SceneLevel02::RenderHUD()
 {
+	RenderRadar();
 }
 
 void SceneLevel02::RenderSprite()
@@ -754,6 +755,13 @@ void SceneLevel02::RenderPassMain()
 		}
 	}
 
+	if (!Singleton::getInstance()->stateCheck)
+	{
+		RenderHUD();
+	}
+
+	SceneBase::Render();
+
 	if (showInventory > 0)
 	{
 		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 50), Vector3(40, 30, 0), Vector3(0, 0, 0));
@@ -762,6 +770,7 @@ void SceneLevel02::RenderPassMain()
 	{
 
 	}
+
 
 	//On screen text
 	std::ostringstream ss;
