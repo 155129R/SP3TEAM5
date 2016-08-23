@@ -19,6 +19,7 @@ void SceneLevel03::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	terrainHeight = TERRAINSIZE.y;
@@ -562,6 +563,7 @@ void SceneLevel03::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderBullets(true);
+	RenderWeapons(false);
 	RenderEnvironment(false);
 }
 

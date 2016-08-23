@@ -23,6 +23,7 @@ void SceneLevel04::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
@@ -56,42 +57,77 @@ void SceneLevel04::Init()
 	camera.position.Set(0, 200, 10);
 	camera.target.Set(0, 200, 1);
 
+	//////for (int i = 0; i < 5; ++i)
+	//////{
+	//////	int Random = Math::RandIntMinMax(1, 3);
 
-	for (int i = 0; i < 30; i++)
+	//////	Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::IDLE);
+	//////	switch (Random)
+	//////	{
+	//////	case 1:
+	//////	{
+	//////		Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
+	//////		break;
+	//////	}
+	//////	case 2:
+	//////	{
+	//////		Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
+	//////		break;
+	//////	}
+	//////	case 3:
+	//////	{
+	//////		Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
+	//////		break;
+	//////	}
+	//////	}
+	//////	Ghost->active = true;
+	//////	Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 20, Math::RandFloatMinMax(-1100, 1800));
+	//////	Ghost->scale.Set(50, 50, 50);
+
+	//////	instance->Enemy_list.push_back(Ghost);
+	//////}
 	{
-		AABBObject* Tombstone = new AABBObject();
-		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-		Tombstone->active = true;
-		Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
-		Tombstone->scale.Set(10, 10, 10);
-		instance->Object_list.push_back(Tombstone);
-	}
-	for (int i = 0; i < 30; i++)
-	{
-		AABBObject* Tombstone = new AABBObject();
-		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-		Tombstone->active = true;
-		Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
-		Tombstone->scale.Set(10, 10, 10);
-		instance->Object_list.push_back(Tombstone);
-	}
-	for (int i = 0; i < 30; i++)
-	{
-		AABBObject* Tombstone = new AABBObject();
-		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-		Tombstone->active = true;
-		Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
-		Tombstone->scale.Set(10, 10, 10);
-		instance->Object_list.push_back(Tombstone);
-	}
-	for (int i = 0; i < 30; i++)
-	{
-		AABBObject* Tombstone = new AABBObject();
-		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-		Tombstone->active = true;
-		Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
-		Tombstone->scale.Set(10, 10, 10);
-		instance->Object_list.push_back(Tombstone);
+		int yOffset = 80;
+		for (int i = 0; i < 30; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+		for (int i = 0; i < 30; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+		for (int i = 0; i < 30; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+		for (int i = 0; i < 30; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
 	}
 	////////////
 	for (int i = 0; i < 5; i++)
@@ -118,6 +154,8 @@ void SceneLevel04::Update(double dt)
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
+
+	UpdateHitboxes(dt);
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
@@ -514,7 +552,7 @@ void SceneLevel04::RenderTombstone(bool Light)
 
 void SceneLevel04::RenderEnvironment(bool Light)
 {
-	RenderTombstone(Light);
+	//RenderTombstone(Light);
 	RenderFence(Light);
 
 	modelStack.PushMatrix();
@@ -594,7 +632,8 @@ void SceneLevel04::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(true);
-
+	RenderBullets(false);
+	RenderWeapons(false);
 	//RenderSprite();
 }
 
@@ -704,6 +743,8 @@ void SceneLevel04::RenderPassMain()
 		RenderHUD();
 	}
 
+	RenderObjects(true);
+	RenderEnemies(true);
 	//bLightEnabled = false;
 
 	//On screen text

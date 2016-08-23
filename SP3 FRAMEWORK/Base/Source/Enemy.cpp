@@ -88,11 +88,13 @@ void Enemy::Update(double dt, Vector3 playerPos)
 				break;
 			}
 		}
+
 		default:
 		{
 			break;
 		}
 	}
+
 }
 
 void Enemy::Chase(double dt, Vector3 playerPos)

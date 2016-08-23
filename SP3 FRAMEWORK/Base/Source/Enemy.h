@@ -44,6 +44,8 @@ struct Enemy : public GameObject
 	void TakeDamage(int Damage);
 	Vector3 initPos;
 	bool chasing;
+
+	bool captured;
 };
 
 #endif

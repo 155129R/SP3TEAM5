@@ -170,7 +170,10 @@ void Application::Run()
 {
 	//start 1st scene here
 
-	sceneManager->ChangeScene(3);
+
+	sceneManager->ChangeScene(0);
+
+
 
 	//Need a change scene function
 	//if scene != Null , delete that scene

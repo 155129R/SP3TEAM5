@@ -2,12 +2,12 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
+#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
 #include "LoadTGA.h"
 #include <sstream>
 #include "LoadHmap.h"
-#include "Bullet.h"
 
 SceneMenu::SceneMenu()
 {
@@ -17,21 +17,18 @@ SceneMenu::~SceneMenu()
 {
 }
 
-static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
-
+static const Vector3 TERRAINSIZE(4000.0f, 800.0f, 4000.0f);
 void SceneMenu::Init()
 {
+	cameraMove = -922.831;
+	checkCameraMove = false;
 	Application::ShowCursor();
 
 	SceneBase::Init();
-	//player = new Player();
-
-	//player->Init();
-
 	terrainHeight = TERRAINSIZE.y;
-
+	Terrainsize = TERRAINSIZE * 0.5f;
+	InitPartitioning();
 	//Random my random randomly using srand
-	srand(time(NULL));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -55,46 +52,72 @@ void SceneMenu::Init()
 
 	FogEffect = false;
 	Switch = false;
+	camera.position.Set(-923.128, 109.882, 1015.94);
+	camera.target.Set(cameraMove, 109.91, 1014.98);
 
-	for (int i = 0; i < 400; ++i)
+	for (int i = 0; i < 30; i++)
 	{
-		Tree[i].Set(Math::RandIntMinMax(-1800, 1800), 0, Math::RandIntMinMax(-1100, 1800));
-		Tree_Type[i] = Math::RandIntMinMax(1, 3);
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+		gravePos.push_back(temp);
 	}
-	for (int i = 0; i < 400; ++i)
+	for (int i = 0; i < 30; i++)
 	{
-		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+		gravePos.push_back(temp);
 	}
+	for (int i = 0; i < 30; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+		gravePos.push_back(temp);
+	}
+	for (int i = 0; i < 30; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+		gravePos.push_back(temp);
+	}
+	////////////
+	for (int i = 0; i < 5; i++)
+	{
+		Vector3 temp;
+		temp.Set(Math::RandFloatMinMax(-Terrainsize.x * 0.5f, Terrainsize.x * 0.5f), 0, Math::RandFloatMinMax(-Terrainsize.z * 0.5f, Terrainsize.z * 0.5f));
+		pocongPos.push_back(temp);
+	}
+
+	lights[0].power = 0.8f;
+	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+
+	spatialPartitioning = true;
+	nightVision = false;
+
+	lights[0].power = 0.5f;
+	lights[0].color = (0.f, 0.2f, 0.4f);
+	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	Color fogColor(0.2f, 0.2f, 0.2f);
+	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 }
 
 void SceneMenu::Update(double dt)
 {
 	SceneBase::Update(dt);
 
+
+	if (!checkCameraMove)cameraMove += 0.005;
+	if (cameraMove > -921)checkCameraMove = true;
+	if (checkCameraMove)cameraMove -= 0.005;
+	if (cameraMove < -923)checkCameraMove = false;
+
+	camera.target.Set(cameraMove, 109.91, 1014.98);
+	//std::cout << camera.target  << std::endl;
+	//std::cout << Application::GetWindowWidth() << std::endl;
 	UpdateParticle(dt);
 
-	//UpdatePlayer(dt);
-
-	//Update sprites
-	if (G1)
-	{
-		G1->Update(dt);
-		G1->m_anim->animActive = true;
-	}
-	if (G2)
-	{
-		G2->Update(dt);
-		G2->m_anim->animActive = true;
-	}
-	if (G3)
-	{
-		G3->Update(dt);
-		G3->m_anim->animActive = true;
-	}
-
-	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
-
+	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
 	//camera.Update(dt);
 
 	if (Flashlight)
@@ -103,7 +126,22 @@ void SceneMenu::Update(double dt)
 		lights[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 		lights[1].spotDirection.Set(-view.x, -view.y, -view.z);
 	}
-
+	if (Application::IsKeyPressed('6'))
+	{
+		nightVision = true;
+		lights[0].power = 4.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
+	if (Application::IsKeyPressed('7'))
+	{
+		nightVision = false;
+		lights[0].power = 0.5f;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
 	//TOGGLE AXIS
 	if (Application::IsKeyPressed('X') && Axis_Wait >= 0.5f)
 	{
@@ -206,6 +244,7 @@ void SceneMenu::Update(double dt)
 
 	fps = (float)(1.f / dt);
 }
+
 void SceneMenu::UpdateParticle(double dt)
 {
 	if (m_particlesCount < MAX_PARTICLE)
@@ -216,16 +255,6 @@ void SceneMenu::UpdateParticle(double dt)
 		particle->vel.Set(0, -10, 0);
 		particle->scale.Set(10, 10, 10);
 		particle->rotateSpeed = Math::RandFloatMinMax(20.0f, 40.0f);
-
-		ParticleObject* particleSmoke = GetParticles();
-		particleSmoke->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
-		//particleSmoke->scale.Set(5, 5, 5);
-		float range = 2;
-		particleSmoke->vel.Set(Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range));
-		particleSmoke->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
-		particleSmoke->pos.Set(0, 20 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
 	}
 	for (auto it : particleList)
 	{
@@ -236,39 +265,14 @@ void SceneMenu::UpdateParticle(double dt)
 			{
 				particle->vel += m_gravity *(float)dt * 10.0f;
 				particle->pos += particle->vel *(float)dt * 10.0f;
-
-				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
-				{
-					particle->active = false;
-					m_particlesCount--;
-				}
 			}
-
-			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
+			if (particle->pos.y < (ReadHeightMap(m_heightMap_4, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
 			{
-				particle->vel += m_gravity * (float)dt;
-				particle->pos += particle->vel * (float)dt * 10.f;
-
-				//if particle reaches the terrain, it should not be inacitve
-				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
-				{
-					//particle->vel.y = particle->pos.y;
-					particle->active = false;
-					m_particlesCount--;
-				}
+				particle->active = false;
+				m_particlesCount--;
 			}
 		}
 	}
-}
-
-void SceneMenu::UpdatePlayer(double dt)
-{
-	UpdateFearEffect(dt);
-}
-
-void SceneMenu::UpdateFearEffect(double dt)
-{
-
 }
 
 ParticleObject* SceneMenu::GetParticles(void)
@@ -320,15 +324,11 @@ void SceneMenu::RenderGround()
 	modelStack.PopMatrix();
 }
 
-void SceneMenu::RenderSkyplane(bool inverted)
+void SceneMenu::RenderSkyplane()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(camera.position.x, 1800, camera.position.z);
 	modelStack.Rotate(rotateAngle, 0, 1, 0);
-	if (inverted)
-	{
-		modelStack.Rotate(180, 1, 0, 0);
-	}
 	RenderMesh(meshList[SKYPLANE], false);
 	modelStack.PopMatrix();
 }
@@ -338,85 +338,296 @@ void SceneMenu::RenderTerrain()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
-	RenderMesh(meshList[TERRAIN], true);
+	RenderMesh(meshList[TERRAIN_LEVEL04], true);
 	modelStack.PopMatrix();
 }
 
-void SceneMenu::RenderEnvironment(bool Light, bool inverted)
+void SceneMenu::RenderFence(bool Light)
 {
-	if (!inverted)
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(1900, 0, -1400);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(4, 5, 5);
-		RenderMeshOutlined(meshList[GEO_LOGS], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(-1900, 0, -1400);
-		modelStack.Rotate(90, 0, 1, 0);
-		modelStack.Scale(4, 5, 5);
-		RenderMeshOutlined(meshList[GEO_LOGS], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 60, -1420);
-		modelStack.Scale(5, 5, 5);
-		RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-		modelStack.PopMatrix();
+		Vector3 fencePos;
+		fencePos.Set(Terrainsize.x - 400, 0, -Terrainsize.z + 600);
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 
-	if (inverted)
 	{
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 40, -1420);
-		modelStack.Rotate(180, 1, 0, 0);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_BRIDGE], false);
-		modelStack.PopMatrix();
+		Vector3 fencePos;
+		fencePos.Set(Terrainsize.x - 400, 0, Terrainsize.z - 600);
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(Terrainsize.x - 400, 0, 0);
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
+	}
+	////
+	{
+		Vector3 fencePos;
+		fencePos.Set(-Terrainsize.x + 400, 0, -Terrainsize.z + 600);
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(-Terrainsize.x + 400, 0, Terrainsize.z - 600);
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
+	}
+
+	{
+		Vector3 fencePos;
+		fencePos.Set(-Terrainsize.x + 400, 0, 0);
+		posPartition = getPartition(fencePos);
+		if (renderCheck(playerPartition, posPartition) == true)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Rotate(90, 0, 1, 0);
+			RenderMeshOutlined(meshList[FENCE], true);
+			modelStack.PopMatrix();
+		}
 	}
 }
 
+void SceneMenu::RenderTombstone(bool Light)
+{
+	if (spatialPartitioning)
+	{
+		playerPartition = getPartition(camera.position);
+		for (auto pos : gravePos)
+		{
+			posPartition = getPartition(pos);
+
+			if (renderCheck(playerPartition, posPartition) == true)
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
+				modelStack.Scale(10, 10, 10);
+				RenderMeshOutlined(meshList[TOMBSTONE], true);
+				modelStack.PopMatrix();
+			}
+		}
+
+		for (auto pos : pocongPos)
+		{
+			posPartition = getPartition(pos);
+
+			//if (renderCheck(playerPartition, posPartition) == true)
+			//{
+			//	modelStack.PushMatrix();
+			//	modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
+			//	modelStack.Scale(60, 60, 60);
+			//	modelStack.Rotate(180, 0, 0, 1);
+			//	RenderMeshOutlined(meshList[POCONG], true);
+			//	modelStack.PopMatrix();
+			//}
+
+		}
+	}
+	else
+	{
+		for (auto pos : gravePos)
+		{
+			//char playerPartition = getPartition(camera.position);
+			//char posPartition = getPartition(pos);
+
+			modelStack.PushMatrix();
+			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
+			modelStack.Scale(10, 10, 10);
+			RenderMeshOutlined(meshList[TOMBSTONE], true);
+			modelStack.PopMatrix();
+
+		}
+		for (auto pos : pocongPos)
+		{
+			//char playerPartition = getPartition(camera.position);
+			//char posPartition = getPartition(pos);
+
+			modelStack.PushMatrix();
+			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
+			modelStack.Scale(60, 60, 60);
+			modelStack.Rotate(180, 0, 0, 1);
+			RenderMeshOutlined(meshList[POCONG], true);
+			modelStack.PopMatrix();
+
+		}
+	}
+}
+
+void SceneMenu::RenderEnvironment(bool Light)
+{
+	RenderTombstone(Light);
+	RenderFence(Light);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)), 0);
+	modelStack.Scale(60, 70, 60);
+	RenderMeshOutlined(meshList[DEADTREE], true);
+	modelStack.PopMatrix();
+
+}
+
+
 void SceneMenu::RenderHUD()
 {
-	//std::cout << player->GetStamina() << std::endl;
-	//RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
+
+
+
+	//////////////////////////
+	//     START BUTTON     //
+	/////////////////////////
+	if ((638 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 563 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+		(312 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 271 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+	{
+		//MOUSE CLICK
+		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+		{
+			Singleton::getInstance()->stateCheck = true;
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
+		//MOUSE HOVER
+		else
+		{
+			RenderImageOnScreen(meshList[BUTTON_PLAY], Vector3(10.4, 8, 0), Vector3(60, 30, 0), Vector3(0, 0, 0));
+		}
+	}
+	//DEFAULT
+	else
+	{
+		RenderImageOnScreen(meshList[BUTTON_PLAY], Vector3(7.8, 6, 0), Vector3(60, 30, 0), Vector3(0, 0, 0));
+	}
+
+	//////////////////////////////////
+	////     INSTRUCTION BUTTON     //
+	//////////////////////////////////
+	//if ((693 * Application::GetWindowWidth() / 1920 > Singleton::getInstance()->mousex && 506 * Application::GetWindowWidth() / 1920 < Singleton::getInstance()->mousex) &&
+	//	(439 * Application::GetWindowHeight() / 1080 > Singleton::getInstance()->mousey && 400 * Application::GetWindowHeight() / 1080 <Singleton::getInstance()->mousey))
+	//{
+	//	//MOUSE CLICK
+	//	if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+	//	{
+	//		RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
+	//	}
+	//	//MOUSE HOVER
+	//	else
+	//	{
+	//		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
+	//	}
+	//}
+	////DEFAULT
+	//else
+	//{
+	//	RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
+	//}
+
+	//////////////////////////////
+	////     CREDITS BUTTON     //
+	//////////////////////////////
+	//if ((1152 * Application::GetWindowWidth() / 1920 > Singleton::getInstance()->mousex && 767 * Application::GetWindowWidth() / 1920 < Singleton::getInstance()->mousex) &&
+	//	(755 * Application::GetWindowHeight() / 1080 > Singleton::getInstance()->mousey && 685 * Application::GetWindowHeight() / 1080 <Singleton::getInstance()->mousey))
+	//{
+	//	//MOUSE CLICK
+	//	if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+	//	{
+	//		RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
+	//	}
+	//	//MOUSE HOVER
+	//	else
+	//	{
+	//		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
+	//	}
+	//}
+	////DEFAULT
+	//else
+	//{
+	//	RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
+	//}
+
+	///////////////////////////
+	////     EXIT BUTTON     //
+	///////////////////////////
+	//if ((630 * Application::GetWindowWidth() / 1920 > Singleton::getInstance()->mousex && 569 * Application::GetWindowWidth() / 1920 < Singleton::getInstance()->mousex) &&
+	//	(580 * Application::GetWindowHeight() / 1080 > Singleton::getInstance()->mousey && 557 * Application::GetWindowHeight() / 1080 <Singleton::getInstance()->mousey))
+	//{
+	//	//MOUSE CLICK
+	//	if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+	//	{
+	//		RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
+	//		Singleton::getInstance()->program_state = Singleton::PROGRAM_EXIT;
+	//	}
+	//	//MOUSE HOVER
+	//	else
+	//	{
+	//		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
+	//	}
+	//}
+	////DEFAULT
+	//else
+	//{
+	//	RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
+	//}
+	if (!Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+	{
+		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(50, 10, 50), Vector3(30, 50, 0), Vector3(0, 0, 0));
+
+		//RenderImageOnScreen(meshList[BUTTON_PLAY], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[BUTTON_OPTIONS], Vector3(11.5, 5, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
+	}
+
 }
 
 void SceneMenu::RenderSprite()
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(150, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST1], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(100, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST2], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(50, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST3], false);
-	modelStack.PopMatrix();
 }
 
 void SceneMenu::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
-	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		//insert billboard code
-		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
-		RenderMesh(meshList[FOUNTAIN_WATER1], false);
-		modelStack.PopMatrix();
-		break;
 
 	default:
 		break;
@@ -468,50 +679,10 @@ void SceneMenu::RenderWorld()
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
-	RenderEnvironment(false);
+	RenderEnvironment(true);
+
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
-}
-
-void SceneMenu::RenderReflection()
-{
-	glDisable(GL_CULL_FACE);
-
-	glDepthMask(GL_FALSE); // Don't write to depth buffer
-	glEnable(GL_STENCIL_TEST);
-
-	// Reflection surface
-	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glStencilMask(0xFF); // Write to stencil buffer
-	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 100, -1440);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(800, 4000, 1);
-	RenderMesh(meshList[WATER], false);
-	modelStack.PopMatrix();
-
-	// Reflection
-	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
-	glStencilMask(0x00); // Don't write anything to stencil buffer
-	glDepthMask(GL_TRUE); // Write to depth buffer
-
-	RenderEnvironment(false, true);
-
-	glDisable(GL_STENCIL_TEST);
-
-	glEnable(GL_CULL_FACE);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 100, -1440);
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(800, 4000, 1);
-	RenderMesh(meshList[WATER], false);
-	modelStack.PopMatrix();
 }
 
 void SceneMenu::RenderPassGPass()
@@ -596,32 +767,39 @@ void SceneMenu::RenderPassMain()
 
 	//Render objects
 	RenderLight();
+	RenderHUD();
+	//Depth quad
+	//viewStack.PushMatrix();
+	//viewStack.LoadIdentity();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-0.4, -0.25, -1);
+	//modelStack.Scale(0.25, 0.25, 0.25);
+	//RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], false);
+	//modelStack.PopMatrix();
+	//viewStack.PopMatrix();
 
 	// Render the crosshair
 	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
 
-	RenderReflection();
-
-	RenderHUD();
-
 	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "Mouse Pos X: " << std::to_string(Singleton::getInstance()->mousex);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);
+		ss.str("");
+		ss.precision(5);
+		ss << "Mouse Pos X: " << std::to_string(Singleton::getInstance()->mousex);
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "Mouse Pos Y: " << std::to_string(Singleton::getInstance()->mousey);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
-
+		ss.str("");
+		ss.precision(5);
+		ss << "Mouse Pos Y: " << std::to_string(Singleton::getInstance()->mousey);
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
+	}
 }
 
 void SceneMenu::Render()

@@ -2,7 +2,6 @@
 #define SCENEMENU_H
 
 #include "SceneBase.h"
-#include "MeshBuilder.h"
 
 class SceneMenu : public SceneBase
 {
@@ -16,26 +15,21 @@ public:
 	virtual void Exit();
 
 	void RenderGround();
-	void RenderSkyplane(bool inverted = false);
+	void RenderSkyplane();
 	void RenderTerrain();
-	void RenderEnvironment(bool Light, bool inverted = false);
+	void RenderEnvironment(bool Light);
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
-
+	void RenderTombstone(bool Light);
+	void RenderFence(bool Light);
 	void UpdateParticle(double dt);
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
 
-	void UpdateBullet(double dt);
-
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
-	void RenderReflection();
-
-	void UpdatePlayer(double dt);
-	void UpdateFearEffect(double dt);
 
 private:
 	float rotateAngle;
@@ -52,12 +46,11 @@ private:
 	bool FogEffect;
 	bool Switch;
 
-	Color Black;
+	std::vector<Vector3> gravePos;
+	std::vector<Vector3> pocongPos;
 
-	//Forest
-	Vector3 Tree[400];
-	int Tree_Type[400];
-	Vector3 Bush[400];
+	float cameraMove;
+	bool checkCameraMove;
 };
 
 #endif
