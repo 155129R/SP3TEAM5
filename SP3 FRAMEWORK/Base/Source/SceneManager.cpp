@@ -4,6 +4,7 @@
 #include "SceneLevel02.h"
 #include "SceneLevel03.h"
 #include "SceneLevel04.h"
+#include "SceneMenu.h"
 
 SceneManager::SceneManager() : m_scene(0)
 {
@@ -22,7 +23,7 @@ void SceneManager::ChangeScene(short scene)
 	}
 	switch (scene)
 	{
-	case 0:
+	case 0: m_scene = new SceneMenu();
 		break;
 	case 1: m_scene = new SceneLevel01();
 		break;

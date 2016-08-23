@@ -54,6 +54,7 @@ private:
 	{
 		W_RIFLE,
 		W_PISTOL,
+		W_VACUUM,
 
 		W_TOTAL,
 	};

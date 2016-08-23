@@ -3,6 +3,7 @@
 
 #include "Vector3.h"
 #include "Sound.h"
+#include "Singleton.h"
 #include <vector>
 
 using std::vector;
@@ -18,6 +19,8 @@ public:
 	Vector3 position;
 	bool deleteBullet;
 
+	AABB Hitbox;
+
 private:
 	Vector3 direction;
 
@@ -30,6 +33,7 @@ private:
 
 	Sound sound;
 	
+	Singleton* instance;
 };
 
 #endif

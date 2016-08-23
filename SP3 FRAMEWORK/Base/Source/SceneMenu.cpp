@@ -1,27 +1,32 @@
-#include "SceneLevel03.h"
+#include "SceneMenu.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
 #include "Application.h"
 #include "Utility.h"
+#include "LoadTGA.h"
 #include <sstream>
+#include "LoadHmap.h"
+#include "Bullet.h"
 
-SceneLevel03::SceneLevel03()
+SceneMenu::SceneMenu()
 {
 }
 
-SceneLevel03::~SceneLevel03()
+SceneMenu::~SceneMenu()
 {
 }
 
-void SceneLevel03::Init()
+static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
+
+void SceneMenu::Init()
 {
-	Application::HideCursor();
+	Application::ShowCursor();
 
 	SceneBase::Init();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//player = new Player();
 
-	instance->Object_list.clear();
+	//player->Init();
 
 	terrainHeight = TERRAINSIZE.y;
 
@@ -60,78 +65,15 @@ void SceneLevel03::Init()
 	{
 		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
 	}
-
-	for (int i = 0; i < 40; ++i)
-	{
-		int Random = Math::RandIntMinMax(1, 3);
-
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::IDLE);
-		switch (Random)
-		{
-		case 1:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-			break;
-		}
-		case 2:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-			break;
-		}
-		case 3:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-			break;
-		}
-		}
-		Ghost->active = true;
-		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
-		Ghost->scale.Set(50, 50, 50);
-
-		instance->Enemy_list.push_back(Ghost);
-	}
-
-	AABBObject * Logs = new AABBObject();
-	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
-	Logs->active = true;
-	Logs->pos.Set(1900, 0, -1400);
-	Logs->scale.Set(4, 5, 5);
-	instance->Object_list.push_back(Logs);
-
-	AABBObject * Logs2 = new AABBObject();
-	Logs2->Object = AABBObject::OBJECT_TYPE::LOGS;
-	Logs2->active = true;
-	Logs2->pos.Set(-1900, 0, -1400);
-	Logs2->scale.Set(4, 5, 5);
-	instance->Object_list.push_back(Logs2);
-
-	AABBObject * Bridge = new AABBObject();
-	Bridge->Object = AABBObject::OBJECT_TYPE::BRIDGE;
-	Bridge->active = true;
-	Bridge->pos.Set(0, 58, -1420);
-	Bridge->scale.Set(5, 5, 5);
-	instance->Object_list.push_back(Bridge);
-
 }
 
-void SceneLevel03::Update(double dt)
+void SceneMenu::Update(double dt)
 {
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
 
-	UpdatePlayer(dt);
-
-	UpdateHitboxes(dt);
-
-	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
-	{
-		Enemy *ghost = (Enemy *)*it;
-		if (ghost->active)
-		{
-			ghost->Update(dt, instance->player->getPosition());
-		}
-	}
+	//UpdatePlayer(dt);
 
 	//Update sprites
 	if (G1)
@@ -153,7 +95,7 @@ void SceneLevel03::Update(double dt)
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
-	camera.Update(dt);
+	//camera.Update(dt);
 
 	if (Flashlight)
 	{
@@ -264,8 +206,7 @@ void SceneLevel03::Update(double dt)
 
 	fps = (float)(1.f / dt);
 }
-
-void SceneLevel03::UpdateParticle(double dt)
+void SceneMenu::UpdateParticle(double dt)
 {
 	if (m_particlesCount < MAX_PARTICLE)
 	{
@@ -320,7 +261,17 @@ void SceneLevel03::UpdateParticle(double dt)
 	}
 }
 
-ParticleObject* SceneLevel03::GetParticles(void)
+void SceneMenu::UpdatePlayer(double dt)
+{
+	UpdateFearEffect(dt);
+}
+
+void SceneMenu::UpdateFearEffect(double dt)
+{
+
+}
+
+ParticleObject* SceneMenu::GetParticles(void)
 {
 	for (auto it : particleList)
 	{
@@ -345,7 +296,7 @@ ParticleObject* SceneLevel03::GetParticles(void)
 	return particle;
 }
 
-void SceneLevel03::RenderGround()
+void SceneMenu::RenderGround()
 {
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
@@ -369,7 +320,7 @@ void SceneLevel03::RenderGround()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel03::RenderSkyplane(bool inverted)
+void SceneMenu::RenderSkyplane(bool inverted)
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(camera.position.x, 1800, camera.position.z);
@@ -382,7 +333,7 @@ void SceneLevel03::RenderSkyplane(bool inverted)
 	modelStack.PopMatrix();
 }
 
-void SceneLevel03::RenderTerrain()
+void SceneMenu::RenderTerrain()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
@@ -391,73 +342,30 @@ void SceneLevel03::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
+void SceneMenu::RenderEnvironment(bool Light, bool inverted)
 {
 	if (!inverted)
 	{
-		for (int i = 0; i < 400; ++i)
-		{
-			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - instance->player->getPosition().z), Tree[i].x - instance->player->getPosition().x));
-			switch (Tree_Type[i])
-			{
-			case 1:
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-				modelStack.Rotate(Degree - 90, 0, 1, 0);
-				modelStack.Scale(250, 400, 250);
-				RenderMeshOutlined(meshList[GEO_TREE_1], false);
-				modelStack.PopMatrix();
-				break;
-			}
-			case 2:
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-				modelStack.Rotate(Degree - 90, 0, 1, 0);
-				modelStack.Scale(400, 400, 400);
-				RenderMeshOutlined(meshList[GEO_TREE_2], false);
-				modelStack.PopMatrix();
-				break;
-			}
-			case 3:
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-				modelStack.Rotate(Degree - 90, 0, 1, 0);
-				modelStack.Scale(150, 400, 150);
-				RenderMeshOutlined(meshList[GEO_TREE_3], false);
-				modelStack.PopMatrix();
-				break;
-			}
-			}
-		}
+		modelStack.PushMatrix();
+		modelStack.Translate(1900, 0, -1400);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(4, 5, 5);
+		RenderMeshOutlined(meshList[GEO_LOGS], true);
+		modelStack.PopMatrix();
 
-		for (int i = 0; i < 400; ++i)
-		{
-			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - instance->player->getPosition().z), Bush[i].x - instance->player->getPosition().x));
-			modelStack.PushMatrix();
-			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
-			modelStack.Rotate(Degree - 90, 0, 1, 0);
-			modelStack.Scale(100, 100, 100);
-			RenderMeshOutlined(meshList[GEO_BUSH], false);
-			modelStack.PopMatrix();
-		}
+		modelStack.PushMatrix();
+		modelStack.Translate(-1900, 0, -1400);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Scale(4, 5, 5);
+		RenderMeshOutlined(meshList[GEO_LOGS], true);
+		modelStack.PopMatrix();
 
-		//modelStack.PushMatrix();
-		//modelStack.Translate(-1900, 0, -1400);
-		//modelStack.Rotate(90, 0, 1, 0);
-		//modelStack.Scale(4, 5, 5);
-		//RenderMeshOutlined(meshList[GEO_LOGS], true);
-		//modelStack.PopMatrix();
-
-		//modelStack.PushMatrix();
-		//modelStack.Translate(0, 60, -1420);
-		//modelStack.Scale(5, 5, 5);
-		//RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-		//modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 60, -1420);
+		modelStack.Scale(5, 5, 5);
+		RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+		modelStack.PopMatrix();
 	}
-
 
 	if (inverted)
 	{
@@ -470,14 +378,13 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 	}
 }
 
-void SceneLevel03::RenderHUD()
+void SceneMenu::RenderHUD()
 {
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
-
-	RenderRadar();
+	//std::cout << player->GetStamina() << std::endl;
+	//RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - player->GetStamina() / 3) , 1, 0), Vector3(0, 0, 0));
 }
 
-void SceneLevel03::RenderSprite()
+void SceneMenu::RenderSprite()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(150, 0, 0);
@@ -498,17 +405,25 @@ void SceneLevel03::RenderSprite()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel03::RenderParticle(ParticleObject* particle)
+void SceneMenu::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
+	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
+		modelStack.PushMatrix();
+		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+		//insert billboard code
+		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
+		RenderMesh(meshList[FOUNTAIN_WATER1], false);
+		modelStack.PopMatrix();
+		break;
 
 	default:
 		break;
 	}
 }
 
-void SceneLevel03::RenderLight()
+void SceneMenu::RenderLight()
 {
 	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
 	{
@@ -548,15 +463,17 @@ void SceneLevel03::RenderLight()
 	}
 }
 
-void SceneLevel03::RenderWorld()
+void SceneMenu::RenderWorld()
 {
+	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
-	RenderBullets(true);
 	RenderEnvironment(false);
+	//RenderSprite();
+	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
-void SceneLevel03::RenderReflection()
+void SceneMenu::RenderReflection()
 {
 	glDisable(GL_CULL_FACE);
 
@@ -597,7 +514,7 @@ void SceneLevel03::RenderReflection()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel03::RenderPassGPass()
+void SceneMenu::RenderPassGPass()
 {
 	m_renderPass = RENDER_PASS_PRE;
 
@@ -620,7 +537,7 @@ void SceneLevel03::RenderPassGPass()
 	RenderWorld();
 }
 
-void SceneLevel03::RenderPassMain()
+void SceneMenu::RenderPassMain()
 {
 	m_renderPass = RENDER_PASS_MAIN;
 
@@ -680,34 +597,14 @@ void SceneLevel03::RenderPassMain()
 	//Render objects
 	RenderLight();
 
-	//Depth quad
-	//viewStack.PushMatrix();
-	//viewStack.LoadIdentity();
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-0.4, -0.25, -1);
-	//modelStack.Scale(0.25, 0.25, 0.25);
-	//RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], false);
-	//modelStack.PopMatrix();
-	//viewStack.PopMatrix();
-
 	// Render the crosshair
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
+	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
-	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderWorld();
 
 	RenderReflection();
 
-	RenderObjects(true);
-	RenderEnemies(true);
-	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
-
-	if (!Singleton::getInstance()->stateCheck)
-	{
-		RenderHUD();
-	}
-
-	SceneBase::Render();
+	RenderHUD();
 
 	//On screen text
 	std::ostringstream ss;
@@ -715,9 +612,19 @@ void SceneLevel03::RenderPassMain()
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
+	ss.str("");
+	ss.precision(5);
+	ss << "Mouse Pos X: " << std::to_string(Singleton::getInstance()->mousex);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);
+
+	ss.str("");
+	ss.precision(5);
+	ss << "Mouse Pos Y: " << std::to_string(Singleton::getInstance()->mousey);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
+
 }
 
-void SceneLevel03::Render()
+void SceneMenu::Render()
 {
 	//PRE RENDER PASS
 	RenderPassGPass();
@@ -726,7 +633,7 @@ void SceneLevel03::Render()
 	RenderPassMain();
 }
 
-void SceneLevel03::Exit()
+void SceneMenu::Exit()
 {
 	SceneBase::Exit();
 }

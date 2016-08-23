@@ -1,15 +1,14 @@
-#ifndef SCENELEVEL02_H
-#define SCENELEVEL02_H
+#ifndef SCENEMENU_H
+#define SCENEMENU_H
 
 #include "SceneBase.h"
-#include "Sound.h"
-#include "AABB.h"
+#include "MeshBuilder.h"
 
-class SceneLevel02 : public SceneBase
+class SceneMenu : public SceneBase
 {
 public:
-	SceneLevel02();
-	~SceneLevel02();
+	SceneMenu();
+	~SceneMenu();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -17,9 +16,9 @@ public:
 	virtual void Exit();
 
 	void RenderGround();
-	void RenderSkyplane();
+	void RenderSkyplane(bool inverted = false);
 	void RenderTerrain();
-	void RenderEnvironment(bool Light);
+	void RenderEnvironment(bool Light, bool inverted = false);
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
@@ -28,9 +27,15 @@ public:
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
 
+	void UpdateBullet(double dt);
+
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
+	void RenderReflection();
+
+	void UpdatePlayer(double dt);
+	void UpdateFearEffect(double dt);
 
 private:
 	float rotateAngle;
@@ -47,22 +52,12 @@ private:
 	bool FogEffect;
 	bool Switch;
 
-	Sound sound;
+	Color Black;
 
-	float soundTimer;
-
-	bool openGate;
-	int rotateGate;
-
-	AABB* item1;
-	AABB* item2;
-	AABB* item3;
-
-	Vector3 item1pos;
-	Vector3 item2pos;
-	Vector3 item3pos;
-
-	int showInventory;
+	//Forest
+	Vector3 Tree[400];
+	int Tree_Type[400];
+	Vector3 Bush[400];
 };
 
 #endif

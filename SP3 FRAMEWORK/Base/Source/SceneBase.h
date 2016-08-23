@@ -153,8 +153,10 @@ public:
 
 		CACTUS,
 
+		//weapons
 		PISTOL,
 		RIFLE,
+		VACUUM,
 
 		//level 01
 		LEVEL01_TERRAIN,
@@ -218,6 +220,7 @@ public:
 		HOUSE3,
 		METAL_FENCE,
 		METAL_GATE,
+		INVENTORY_UI,
 
 		//level4
 		TOMBSTONE,

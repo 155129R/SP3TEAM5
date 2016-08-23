@@ -20,6 +20,8 @@ SceneLevel04::~SceneLevel04()
 static const Vector3 TERRAINSIZE(4000.0f, 800.0f, 4000.0f);
 void SceneLevel04::Init()
 {
+	Application::HideCursor();
+
 	SceneBase::Init();
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
