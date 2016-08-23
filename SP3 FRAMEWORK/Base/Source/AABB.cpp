@@ -1,5 +1,6 @@
 #include "AABB.h"
 
+map<AABB*, int> AABB::objectMap;
 AABB::AABB(Vector3 pos, Vector3 size)
 {
 	this->pos = pos;

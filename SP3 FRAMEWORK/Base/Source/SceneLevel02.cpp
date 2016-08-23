@@ -57,7 +57,7 @@ void SceneLevel02::Init()
 	openGate = false;
 	rotateGate = 90;
 
-	item1pos = Vector3(0, 200, 0);
+	item1pos = Vector3(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	item1 = new AABB(item1pos, Vector3(10, 20, 10));
 
 	item2pos = Vector3(200, 0, 0);
@@ -191,9 +191,9 @@ void SceneLevel02::Update(double dt)
 	SceneBase::Update(dt);
 
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
-		irrklang::vec3df(camera.view.x, camera.view.y, camera.view.z));
+		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 
-	if (Application::IsKeyPressed('Q'))
+	if (Application::IsKeyPressed('Q') && instance->objectCount[item1] > 0)
 	{
 		openGate = true;
 	}
@@ -208,6 +208,10 @@ void SceneLevel02::Update(double dt)
 		if (!spaceButtonState)
 		{
 			spaceButtonState = true;
+			//////////////////////////////////////////////////////////////////
+			// will add more condition if player is near and facing the key //
+			//////////////////////////////////////////////////////////////////
+
 			Inventory::addObject(item1);
 		}
 	}
@@ -582,6 +586,21 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+
+	for (auto q : AABB::objectMap)
+	{
+		if (q.first->pos.x == item1pos.x && q.first->pos.z == item1pos.z && instance->objectCount[item1] == 0)
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(item1pos.x, item1pos.y, item1pos.z);
+			modelStack.Rotate(rotateAngle * 20, 0, 1, 0);
+			modelStack.Scale(10, 10, 10);
+			RenderMeshOutlined(meshList[GEO_KEY], Light);
+			modelStack.PopMatrix();
+		}
+	}
+
+	modelStack.PushMatrix();
 	modelStack.Translate(treePos4.x, treePos4.y + 75, treePos4.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - treePos4.x, camera.position.z - treePos4.z)), 0, 1, 0);
 	modelStack.Scale(150, 150, 150);
@@ -791,7 +810,9 @@ void SceneLevel02::RenderPassMain()
 
 	if (showInventory > 0)
 	{
-		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 50), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		if (instance->objectCount[item1] > 0)
+			RenderOBJOnScreen(meshList[GEO_KEY], 1, 20, 38, 10, 0, rotateAngle * 20, 0, false);
 	}
 	else
 	{

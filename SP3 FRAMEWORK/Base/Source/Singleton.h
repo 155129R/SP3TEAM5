@@ -52,7 +52,7 @@ private:
 		//init stuff here
 		player = new Player();
 
-		/*program_state = PROGRAM_GAME3;
+		/*program_state = PROGRAM_GAME2;
 		stateCheck = false;*/
 
 		mousex = 400;
