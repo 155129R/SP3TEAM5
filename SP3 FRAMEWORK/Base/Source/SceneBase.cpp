@@ -357,6 +357,9 @@ void SceneBase::Init()
 	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
 	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
 
+	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
+	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
+
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 

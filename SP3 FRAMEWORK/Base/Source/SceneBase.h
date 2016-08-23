@@ -228,6 +228,8 @@ public:
 		BUTTON_CREDITS,
 		BUTTON_INSTRUCTION,
 		BUTTON_EXIT,
+		GEO_KEY,
+
 
 		//level4
 		TOMBSTONE,
