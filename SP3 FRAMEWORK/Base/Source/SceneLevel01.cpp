@@ -297,6 +297,30 @@ void SceneLevel01::RenderLevel(bool Light)
 	RenderMeshOutlined(meshList[INDOORGATE], Light);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[TOILETBOWL], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[CHANDELIER], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(850, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[CHANDELIER], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	modelStack.Scale(1, 1, 1);
+	RenderMeshOutlined(meshList[CHANDELIER], Light);
+	modelStack.PopMatrix();
+
 	//whole level
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
@@ -304,9 +328,12 @@ void SceneLevel01::RenderLevel(bool Light)
 	RenderMeshOutlined(meshList[LEVEL01], Light);
 	modelStack.PopMatrix();
 
-	
-
-
+	modelStack.PushMatrix();
+	modelStack.Translate(500, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	modelStack.Scale(1050, 1, 305);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[CEILING], Light);
+	modelStack.PopMatrix();
 }
 
 void SceneLevel01::RenderRoomObjects(bool Light)
@@ -538,6 +565,7 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 
 void SceneLevel01::RenderHUD()
 {
+	RenderRadar();
 }
 
 void SceneLevel01::RenderSprite()
@@ -597,6 +625,7 @@ void SceneLevel01::RenderLight()
 void SceneLevel01::RenderWorld()
 {
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 1);
+	//RenderBullets(true);
 	RenderSkyplane();
 	RenderTerrain();
 	RenderLevel(false);
@@ -690,20 +719,6 @@ void SceneLevel01::RenderPassMain()
 	//Render objects
 	RenderLight();
 
-	//bullet
-	//for (vector<Bullet*>::iterator it = Bullet::bulletList.begin(); it != Bullet::bulletList.end(); ++it){
-	//	modelStack.PushMatrix();
-	//	modelStack.Translate(
-	//		(*it)->position.x,
-	//		(*it)->position.y,
-	//		(*it)->position.z
-	//		);
-	//	modelStack.Scale(1, 1, 1);
-	//	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	//	modelStack.PopMatrix();
-	//}
-
-
 	//Depth quad
 	//viewStack.PushMatrix();
 	//viewStack.LoadIdentity();
@@ -718,6 +733,13 @@ void SceneLevel01::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
+
+	if (!Singleton::getInstance()->stateCheck)
+	{
+		RenderHUD();
+	}
+
+	SceneBase::Render();
 
 	//On screen text
 	std::ostringstream ss;

@@ -45,6 +45,7 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
+
 };
 
 #endif

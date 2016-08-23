@@ -3,6 +3,7 @@
 
 #include "SceneBase.h"
 #include "Sound.h"
+#include "AABB.h"
 
 class SceneLevel02 : public SceneBase
 {
@@ -52,6 +53,14 @@ private:
 
 	bool openGate;
 	int rotateGate;
+
+	AABB* item1;
+	AABB* item2;
+	AABB* item3;
+
+	Vector3 item1pos;
+	Vector3 item2pos;
+	Vector3 item3pos;
 };
 
 #endif

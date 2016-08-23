@@ -18,6 +18,7 @@ SceneBase::~SceneBase()
 
 void SceneBase::Init()
 {
+	instance = Singleton::getInstance();
 	Math::InitRNG();
 
 	// Black background
@@ -277,7 +278,7 @@ void SceneBase::Init()
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
 
 	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
 	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
@@ -291,8 +292,17 @@ void SceneBase::Init()
 	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
 	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
 
+	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//chandelier.obj");
+	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//chandelier.tga");
+
+	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
+	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
+
 	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
 	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+
+	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
+	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
 
 	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
 	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
@@ -305,9 +315,6 @@ void SceneBase::Init()
 
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
-
-	//meshList[ELEVATORDOOR] = MeshBuilder::GenerateOBJ("elevator", "OBJ//elevator.obj");
-	//meshList[ELEVATORDOOR]->textureArray[0] = LoadTGA("Image//elevator.tga");
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
@@ -348,8 +355,8 @@ void SceneBase::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
-	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1));
-	meshList[NIGHT_VISION]->textureArray[0] = LoadTGA("Image//nightVision.tga");
+	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1), 1.f);
+	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -357,7 +364,7 @@ void SceneBase::Init()
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
-
+	
 	//Minimap
 	m_Minimap = new Minimap();
 	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
@@ -369,14 +376,15 @@ void SceneBase::Init()
 	meshList[GEO_GREENBALL] = MeshBuilder::GenerateCircle("You on minimap", Color(0, 1, 0), 1.f);
 	meshList[GEO_REDBALL] = MeshBuilder::GenerateCircle("Enemy on minimap", Color(1, 0, 0), 1.f);
 
+	//Loading screens
 	meshList[GEO_LOAD_1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
-	meshList[GEO_LOAD_1]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen01.tga");
+	meshList[GEO_LOAD_1]->textureID = LoadTGA("Image//Screen//Load_Screen01.tga");
 	meshList[GEO_LOAD_2] = MeshBuilder::GenerateQuad("Level 2 loading screen", Color(0, 0, 0), 1.f);
-	meshList[GEO_LOAD_2]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen02.tga");
+	meshList[GEO_LOAD_2]->textureID = LoadTGA("Image//Screen//Load_Screen02.tga");
 	meshList[GEO_LOAD_3] = MeshBuilder::GenerateQuad("Level 3 loading screen", Color(0, 0, 0), 1.f);
-	meshList[GEO_LOAD_3]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen03.tga");
+	meshList[GEO_LOAD_3]->textureID = LoadTGA("Image//Screen//Load_Screen03.tga");
 	meshList[GEO_LOAD_4] = MeshBuilder::GenerateQuad("Level 4 loading screen", Color(0, 0, 0), 1.f);
-	meshList[GEO_LOAD_4]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen04.tga");
+	meshList[GEO_LOAD_4]->textureID = LoadTGA("Image//Screen//Load_Screen04.tga");
 
 	//Forest
 	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
@@ -403,6 +411,8 @@ void SceneBase::Init()
 	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
 	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
+	meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
+	meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
@@ -468,14 +478,17 @@ void SceneBase::Init()
 		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 		Ghost->scale.Set(50, 50, 50);
 
-		Enemy_list.push_back(Ghost);
+		instance->Enemy_list.push_back(Ghost);
 	}
 
 	Singleton::getInstance()->player->Init();
+
 }
 
 void SceneBase::Update(double dt)
 {
+	UpdateShoot(dt);
+
 	if (Application::IsKeyPressed('I'))
 	{
 		lights[0].position.z -= (float)50 * dt;
@@ -537,31 +550,37 @@ void SceneBase::Update(double dt)
 		spatialPartitioning = false;
 	}
 
-	if (Application::IsKeyPressed('V'))
-	{
-		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
-	}
 
-	if (Application::IsKeyPressed('B'))
+	if (Application::IsKeyPressed(VK_SPACE))
 	{
-		RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
+		bulletList.push_back(new Bullet(
+			Vector3(camera.position.x, camera.position.y, camera.position.z),
+			Vector3(camera.view.x, camera.view.y, camera.view.z),
+			150,
+			1000,
+			10
+			));
 	}
-
-	if (Application::IsKeyPressed('N'))
-	{
-		RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
-	}
-
-	if (Application::IsKeyPressed('M'))
-	{
-		RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(100, 2, 1), Vector3(50 - (100), 1, 0), Vector3(0, 0, 0));
-	}
-	s
+	
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	rotateAngle = Math::RadianToDegree(atan2(-View.z, View.x));
+}
+
+void SceneBase::UpdateShoot(double dt)
+{
+	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end();){
+		if ((*it)->deleteBullet == true){
+			delete *it;
+			it = bulletList.erase(it);
+		}
+		else{
+			(*it)->Update(dt);
+			it++;
+		}
+	}
 }
 
 void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)
@@ -631,8 +650,6 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 }
 void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale, float x, float y, bool rotate_Mini, float rotate)
 {
-	//viewStack.PushMatrix();
-	//	viewStack.LoadIdentity();
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0);
@@ -669,7 +686,6 @@ void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale, floa
 	}
 
 	modelStack.PopMatrix();
-	//viewStack.PopMatrix();
 }
 void SceneBase::RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate)
 {
@@ -723,10 +739,10 @@ void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
 
 	//OUTLINING THE MESH
 	glFrontFace(GL_CW);
-	glPolygonOffset(-2.0f, -2.0f);
+	glPolygonOffset(-4.0f, -4.0f);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
 	mesh->Render();
-	glPolygonOffset(2.0f, 2.0f);
+	glPolygonOffset(4.0f, 4.0f);
 	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
 	mesh->Render();
 
@@ -787,7 +803,6 @@ void SceneBase::RenderOBJOnScreen(Mesh* mesh, float scale ,float x, float y, flo
 	viewStack.PopMatrix();
 
 }
-
 
 void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 {
@@ -866,7 +881,28 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (Singleton::getInstance()->stateCheck)
+	{
+		glUniform1f(m_parameters[U_FOG_ENABLE], 0);
+
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
+
+	}
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -940,7 +976,7 @@ void SceneBase::UpdateWeaponType(double dt)
 }
 void SceneBase::UpdateHitboxes(double dt)
 {
-	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
@@ -962,7 +998,7 @@ void SceneBase::UpdateHitboxes(double dt)
 			}
 		}
 	}
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
@@ -975,7 +1011,7 @@ void SceneBase::UpdateHitboxes(double dt)
 
 void SceneBase::RenderObjects(bool ShowHitbox)
 {
-	for (std::vector<AABBObject *>::iterator it = Object_list.begin(); it != Object_list.end(); ++it)
+	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
@@ -1020,7 +1056,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 }
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
@@ -1112,9 +1148,9 @@ void SceneBase::RenderRadar()
 	glDepthMask(GL_TRUE); // Write to depth buffer
 
 	//What is going to be seen
-	RenderMeshIn2D(meshList[GEO_GREENBALL], false, Vector3(1,1,1), 65, 45, true);
+	RenderMeshIn2D(meshList[GEO_GREENBALL], false, Vector3(1, 1, 1), 65, 45, true);
 
-	for (std::vector<Enemy *>::iterator it = Enemy_list.begin(); it != Enemy_list.end(); ++it)
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
@@ -1138,11 +1174,28 @@ void SceneBase::RenderRadar()
 
 	glDisable(GL_STENCIL_TEST);
 
-	RenderMeshIn2D(m_Minimap->GetBorder(), false, Vector3(30,30,30), 65, 45, false);
+	RenderMeshIn2D(m_Minimap->GetBorder(), false, Vector3(30, 30, 30), 65, 45, false);
 
 	projectionStack.PopMatrix();
 
 	viewStack.PopMatrix();
+}
+
+void SceneBase::RenderBullets(bool light)
+{
+	//bullet
+	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it){
+			modelStack.PushMatrix();
+			modelStack.Translate(
+				(*it)->position.x,
+				(*it)->position.y,
+				(*it)->position.z
+				);
+			modelStack.Scale(1, 1, 1);
+			RenderMesh(meshList[GEO_LIGHTBALL], light);
+			modelStack.PopMatrix();
+		}
+		
 }
 
 void SceneBase::RenderWeapons(bool light)

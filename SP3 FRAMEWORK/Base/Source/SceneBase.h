@@ -12,7 +12,6 @@
 #include <map>
 #include "LoadHmap.h"
 #include "LoadTGA.h"
-#include "Bullet.h"
 
 struct Partition
 {
@@ -150,8 +149,6 @@ public:
 		TERRAIN_LEVEL03,
 		TERRAIN_LEVEL04,
 
-		WATER,
-		WATER_SURFACE,
 		NIGHT_VISION,
 
 		CACTUS,
@@ -185,6 +182,12 @@ public:
 		GEO_GREENBALL,
 		GEO_REDBALL,
 
+		//Screen
+		GEO_LOAD_1,
+		GEO_LOAD_2,
+		GEO_LOAD_3,
+		GEO_LOAD_4,
+
 		//level 03
 		GEO_CACTUS,
 		GEO_TREE_1,
@@ -193,6 +196,8 @@ public:
 		GEO_BUSH,
 		GEO_BRIDGE,
 		GEO_LOGS,
+		WATER,
+		WATER_SURFACE,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1,
@@ -218,12 +223,7 @@ public:
 		TOMBSTONE,
 		FENCE,
 		DEADTREE,
-
-		//Screen
-		GEO_LOAD_1,
-		GEO_LOAD_2,
-		GEO_LOAD_3,
-		GEO_LOAD_4,
+		POCONG,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -260,13 +260,12 @@ public:
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
 	void UpdateHitboxes(double dt);
-
-	void RenderObjects(bool ShowHitbox = false);
-	void RenderEnemies(bool ShowHitbox = false);
-	void RenderRadar();
 	void UpdateShoot(double dt);
 	void UpdateWeaponType(double dt);
 
+	void RenderObjects(bool ShowHitbox = false);
+	void RenderEnemies(bool ShowHitbox = false);
+	void RenderRadar(void);
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 
@@ -334,9 +333,10 @@ protected:
 	Minimap* m_Minimap;
 	Color Black;
 
+
 	//bullet
-	std::vector<Bullet*> bulletlist;
-	
+	std::vector<Bullet*> bulletList;
+
 	//Sprite Pointers
 	SpriteAnimation* G1;
 	SpriteAnimation* G2;
