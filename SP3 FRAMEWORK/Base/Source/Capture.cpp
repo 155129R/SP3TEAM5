@@ -33,7 +33,6 @@ void Capture::Update(double dt)
 		{
 			if (enemy->Hitbox.Collide(position)){
 				enemy->captured = true;
-				enemy->scale -= 500 * (float)dt;
 				deleteProj = true;
 			}
 

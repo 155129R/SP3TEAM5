@@ -722,12 +722,6 @@ void SceneLevel03::RenderPassMain()
 	SceneBase::Render();
 
 	//On screen text
-
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "weapontype: " << weaponType;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
 	{
 		std::ostringstream ss;
 		ss.precision(5);
