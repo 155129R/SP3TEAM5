@@ -563,7 +563,8 @@ void SceneLevel04::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(true);
-
+	RenderBullets(false);
+	RenderWeapons(false);
 	//RenderSprite();
 }
 

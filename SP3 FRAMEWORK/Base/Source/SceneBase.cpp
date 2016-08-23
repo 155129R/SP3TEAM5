@@ -435,6 +435,8 @@ void SceneBase::Init()
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
+	weaponType = 1;
+
 	G1 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1]);
 	G2 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2]);
 	G3 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3]);
@@ -494,8 +496,15 @@ void SceneBase::Init()
 }
 
 void SceneBase::Update(double dt)
-{
-	UpdateShoot(dt);
+{	
+	if (weaponType == 3)
+	{
+		UpdateCapture(dt);
+	}
+	else
+	{
+		UpdateShoot(dt);
+	}
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
@@ -525,13 +534,16 @@ void SceneBase::Update(double dt)
 	}
 
 	if (Application::IsKeyPressed('1'))
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
+		weaponType = 1;
 	if (Application::IsKeyPressed('2'))
-		glDisable(GL_CULL_FACE);
+		//glDisable(GL_CULL_FACE);
+		weaponType = 2;
 	if (Application::IsKeyPressed('3'))
-		mode = false;
+		//mode = false;
+		weaponType = 3;
 	if (Application::IsKeyPressed('4'))
-		mode = true;
+		//mode = true;
 
 	if (mode)
 	{
@@ -563,13 +575,26 @@ void SceneBase::Update(double dt)
 
 	if (Application::IsKeyPressed(VK_SPACE))
 	{
-		bulletList.push_back(new Bullet(
-			Vector3(camera.position.x, camera.position.y, camera.position.z),
-			Vector3(camera.view.x, camera.view.y, camera.view.z),
-			300,
-			1000,
-			10
-			));
+		if (weaponType == 3)
+		{
+			captureList.push_back(new Capture(
+				Vector3(camera.position.x, camera.position.y, camera.position.z),
+				Vector3(camera.view.x, camera.view.y, camera.view.z),
+				300,
+				1000
+				));
+		}
+		else
+		{
+			bulletList.push_back(new Bullet(
+				Vector3(camera.position.x, camera.position.y, camera.position.z),
+				Vector3(camera.view.x, camera.view.y, camera.view.z),
+				300,
+				1000,
+				10
+				));
+		}
+		
 	}
 	
 	UpdatePlayer(dt);
@@ -585,6 +610,20 @@ void SceneBase::UpdateShoot(double dt)
 		if ((*it)->deleteBullet == true){
 			delete *it;
 			it = bulletList.erase(it);
+		}
+		else{
+			(*it)->Update(dt);
+			it++;
+		}
+	}
+}
+
+void SceneBase::UpdateCapture(double dt)
+{
+	for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end();){
+		if ((*it)->deleteProj == true){
+			delete *it;
+			it = captureList.erase(it);
 		}
 		else{
 			(*it)->Update(dt);
@@ -1217,10 +1256,10 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, 5, light);
 		break;
 	case 2:
-		RenderOBJOnScreen(meshList[RIFLE], 1.2, 70, 5, -80, 0, -90, 5, light);
+		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
 		break;
 	case 3:
-		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, -80, 0, -180, 0, light);
+		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
 		break;
 	}
 }

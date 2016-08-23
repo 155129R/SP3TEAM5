@@ -26,6 +26,7 @@ struct Partition
 #include "AABBObject.h"
 #include "Minimap.h"
 #include "Bullet.h"
+#include "Capture.h"
 #include "Singleton.h"
 
 class SceneBase : public Scene
@@ -264,6 +265,7 @@ public:
 	void UpdateFearEffect(double dt);
 	void UpdateHitboxes(double dt);
 	void UpdateShoot(double dt);
+	void UpdateCapture(double dt);
 	void UpdateWeaponType(double dt);
 
 	void RenderObjects(bool ShowHitbox = false);
@@ -339,6 +341,9 @@ protected:
 
 	//bullet
 	std::vector<Bullet*> bulletList;
+	//capture
+	std::vector<Capture*> captureList;
+	Capture* cap;
 
 	//Sprite Pointers
 	SpriteAnimation* G1;
