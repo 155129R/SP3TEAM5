@@ -2,6 +2,9 @@
 #define AABB_H
 
 #include "Vector3.h"
+#include <map>
+
+using std::map;
 
 struct AABB
 {
@@ -14,6 +17,8 @@ struct AABB
 
 	Vector3 max, min;
 	Vector3 pos, size;
+
+	map<AABB*, int> objectMap;
 };
 
 #endif

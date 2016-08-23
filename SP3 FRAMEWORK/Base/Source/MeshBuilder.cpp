@@ -834,7 +834,6 @@ SpriteAnimation* MeshBuilder::GenerateSpriteAnimation(const std::string
 	return mesh;
 }
 
-
 //MINIMAP STUFF
 /******************************************************************************/
 /*!

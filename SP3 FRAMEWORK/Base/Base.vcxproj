@@ -18,6 +18,7 @@
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\Inventory.cpp" />
     <ClCompile Include="Source\LoadCSV.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -52,6 +53,7 @@
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\Inventory.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadCSV.h" />
     <ClInclude Include="Source\LoadHmap.h" />

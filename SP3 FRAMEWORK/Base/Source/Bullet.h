@@ -1,14 +1,17 @@
 #ifndef BULLET_H
 #define BULLET_H
 
+#include "GameObject.h"
+#include "AABB.h"
 #include "Vector3.h"
+#include "Enemy.h"
 #include "Sound.h"
 #include "Singleton.h"
 #include <vector>
 
 using std::vector;
 
-class Bullet
+class Bullet : public GameObject
 {
 public:
 	Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg);
@@ -30,8 +33,6 @@ private:
 	float vSpeed;
 
 	int damage;
-
-	Sound sound;
 	
 	Singleton* instance;
 };

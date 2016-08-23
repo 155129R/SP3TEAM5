@@ -13,7 +13,11 @@ void Sound::Init()
 {
 	SoundEffect3D->setDefault3DSoundMinDistance(10.0f);
 	SoundEffect3D->setDefault3DSoundMaxDistance(5000.0f);
-	//SoundEffect3D->setSoundVolume(10.0f);
+	SoundEffect3D->setSoundVolume(1);
+}
+void Sound::Update(irrklang::vec3df pos, irrklang::vec3df view)
+{
+	SoundEffect3D->setListenerPosition(pos, view);
 }
 void Sound::Update(irrklang::vec3df pos, irrklang::vec3df view)
 {

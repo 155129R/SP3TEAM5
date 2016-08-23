@@ -33,6 +33,7 @@ class Singleton
 		PROGRAM_STATE program_state;
 		bool stateCheck;
 
+
 		double mousex;
 		double mousey;
 
@@ -42,23 +43,24 @@ class Singleton
 		map<AABB*, int> objectCount;
 
 		//Environment
-		std::vector<AABBObject*> Object_list;
+		std::vector<AABBObject *> Object_list;
 
 		//Enemy
 		std::vector<Enemy *> Enemy_list;
-
 private:
 	Singleton()
 	{
 		//init stuff here
 		player = new Player();
 
-
 		program_state = PROGRAM_GAME3;
 		stateCheck = false;
 
 		mousex = 400;
 		mousey = 300;
+
+		program_state = PROGRAM_MENU;
+		stateCheck = false;
 
 	}
 };
