@@ -61,6 +61,7 @@ private:
 
 	WEAPON_TYPE weaponType;
 	int weapon_value;
+	int fireRate = 1;
 
 	//fear
 	enum FEAR_LEVEL

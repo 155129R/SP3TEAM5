@@ -35,7 +35,6 @@ void Bullet::Update(double dt)
 	if (distanceTravelled >= range){
 		deleteBullet = true;
 	}
-}
 
 	for (auto enemy : instance->Enemy_list)
 	{
