@@ -22,7 +22,7 @@ Bullet::~Bullet()
 
 void Bullet::Update(double dt)
 {
-
+	
 	//Hitbox.UpdateAABB(this->position);
 
 	distanceTravelled += dt * speed;
@@ -30,15 +30,6 @@ void Bullet::Update(double dt)
 	vSpeed -= (0.2f / 4) * dt;
 
 	position.y += vSpeed;
-
-	/*if (Hitbox.Collide(enemy->pos)){
-		std::cout << "Hitttttttttt" << std::endl;
-		deleteBullet = true;
-	}
-	else */if (distanceTravelled >= range){
-		deleteBullet = true;
-	}
-
 
 	for (auto enemy : instance->Enemy_list)
 	{
@@ -53,7 +44,5 @@ void Bullet::Update(double dt)
 				deleteBullet = true;
 			}
 		}
-		
 	}
-
 }

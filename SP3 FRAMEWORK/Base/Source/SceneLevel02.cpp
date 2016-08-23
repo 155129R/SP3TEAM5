@@ -645,6 +645,8 @@ void SceneLevel02::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(false);
+	RenderBullets(false);
+	RenderWeapons(false);
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }

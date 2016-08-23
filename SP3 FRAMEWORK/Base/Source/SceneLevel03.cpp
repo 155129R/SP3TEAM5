@@ -564,6 +564,7 @@ void SceneLevel03::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderBullets(true);
+	RenderWeapons(false);
 	RenderEnvironment(false);
 }
 
