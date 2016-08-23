@@ -277,7 +277,7 @@ void SceneBase::Init()
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
 	meshList[VACUUM] = MeshBuilder::GenerateOBJ("Vacuum", "OBJ//vacuum.obj");
-	//meshList[VACUUM]->textureArray[0] = LoadTGA("Image//vacuum.tga");
+	meshList[VACUUM]->textureArray[0] = LoadTGA("Image//vacuum.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -1101,8 +1101,7 @@ void SceneBase::RenderBullets(bool light)
 			modelStack.Scale(1, 1, 1);
 			RenderMesh(meshList[GEO_LIGHTBALL], light);
 			modelStack.PopMatrix();
-		}
-		
+	}
 }
 
 void SceneBase::RenderWeapons(bool light)
@@ -1116,7 +1115,7 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[RIFLE], 1.2, 70, 5, -80, 0, -90, 5, light);
 		break;
 	case 3:
-		RenderOBJOnScreen(meshList[VACUUM], 1.2, 70, 5, -80, 0, -90, 5, light);
+		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, -80, 0, -180, 0, light);
 		break;
 	}
 }
