@@ -17,7 +17,7 @@ class Singleton
 			static Singleton instance;
 			return &instance;
 		}
-		
+
 		enum PROGRAM_STATE
 		{
 			PROGRAM_MENU,
@@ -57,6 +57,10 @@ private:
 
 		mousex = 400;
 		mousey = 300;
+
+		//program_state = PROGRAM_MENU;
+		//stateCheck = false;
+
 	}
 };
 

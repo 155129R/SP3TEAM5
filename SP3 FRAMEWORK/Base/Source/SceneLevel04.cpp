@@ -85,14 +85,12 @@ void SceneLevel04::Init()
 		pocongPos.push_back(temp);
 	}
 
-	lights[0].power = 0.8f;
-	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-
 	spatialPartitioning = true;
 	nightVision = false;
 
-	lights[0].power = 0.5f;
-	lights[0].color = (0.f, 0.2f, 0.4f);
+	lights[0].power = 0.8f;
+	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	lights[0].color = (0.0f, 0.2f, 0.4f);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	Color fogColor(0.2f, 0.2f, 0.2f);
@@ -496,9 +494,10 @@ void SceneLevel04::RenderEnvironment(bool Light)
 
 }
 
-
 void SceneLevel04::RenderHUD()
 {
+	RenderRadar();
+
 	if (nightVision == true)
 	{
 		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
@@ -561,13 +560,11 @@ void SceneLevel04::RenderLight()
 
 void SceneLevel04::RenderWorld()
 {
-	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(true);
 
 	//RenderSprite();
-	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
 void SceneLevel04::RenderPassGPass()
@@ -650,9 +647,10 @@ void SceneLevel04::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
+	SceneBase::Render();
+
 	//Render objects
 	RenderLight();
-	RenderHUD();
 	//Depth quad
 	//viewStack.PushMatrix();
 	//viewStack.LoadIdentity();
@@ -666,7 +664,16 @@ void SceneLevel04::RenderPassMain()
 	// Render the crosshair
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
+	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderWorld();
+	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
+
+	if (!Singleton::getInstance()->stateCheck)
+	{
+		RenderHUD();
+	}
+
+	//bLightEnabled = false;
 
 	//On screen text
 	{

@@ -23,7 +23,7 @@ public:
 	bool deleteBullet;
 
 	AABB Hitbox;
-	
+
 private:
 	Vector3 direction;
 

@@ -566,6 +566,7 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 
 void SceneLevel01::RenderHUD()
 {
+	RenderRadar();
 }
 
 void SceneLevel01::RenderSprite()
@@ -737,6 +738,13 @@ void SceneLevel01::RenderPassMain()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	RenderWorld();
+
+	if (!Singleton::getInstance()->stateCheck)
+	{
+		RenderHUD();
+	}
+
+	SceneBase::Render();
 
 	//On screen text
 	std::ostringstream ss;

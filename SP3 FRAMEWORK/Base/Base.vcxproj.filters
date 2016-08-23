@@ -129,6 +129,12 @@
     <ClCompile Include="Source\Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Minimap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadCSV.cpp">
+      <Filter>Source Files\Load</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SceneMenu.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -232,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="Source\Inventory.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Minimap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadCSV.h">
+      <Filter>Header Files\Load</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneMenu.h">
       <Filter>Header Files\Scene</Filter>
