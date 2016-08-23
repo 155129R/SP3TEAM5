@@ -339,6 +339,7 @@ protected:
 
 	float FogAmount;
 	float fps;
+	bool ShowHitbox = false;
 
 	//Player
 	float radarAngle = 0;

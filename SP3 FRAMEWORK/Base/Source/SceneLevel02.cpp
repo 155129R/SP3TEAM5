@@ -70,6 +70,120 @@ void SceneLevel02::Init()
 		irrklang::vec3df(0, 0, 0), true);
 
 	showInventory = -1;
+
+	//Fountain
+	AABBObject * Fountain = new AABBObject();
+	Fountain->Object = AABBObject::OBJECT_TYPE::FOUNTAIN;
+	Fountain->active = true;
+	Fountain->pos.Set(0, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	Fountain->scale.Set(2, 2, 2);
+	instance->Object_list.push_back(Fountain);
+
+	//Hedges
+	AABBObject * Hedge = new AABBObject();
+	Hedge->Object = AABBObject::OBJECT_TYPE::HEDGE;
+	Hedge->active = true;
+	Hedge->pos.Set(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	Hedge->scale.Set(20, 20, 40);
+	instance->Object_list.push_back(Hedge);
+
+	Hedge = new AABBObject();
+	Hedge->Object = AABBObject::OBJECT_TYPE::HEDGE;
+	Hedge->active = true;
+	Hedge->pos.Set(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	Hedge->scale.Set(20, 20, 40);
+	instance->Object_list.push_back(Hedge);
+
+	Hedge = new AABBObject();
+	Hedge->Object = AABBObject::OBJECT_TYPE::HEDGE;
+	Hedge->active = true;
+	Hedge->pos.Set(-200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
+	Hedge->scale.Set(20, 20, 40);
+	instance->Object_list.push_back(Hedge);
+
+	Hedge = new AABBObject();
+	Hedge->Object = AABBObject::OBJECT_TYPE::HEDGE;
+	Hedge->active = true;
+	Hedge->pos.Set(-200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	Hedge->scale.Set(20, 20, 40);
+	instance->Object_list.push_back(Hedge);
+
+	//Benches
+	AABBObject * Bench = new AABBObject();
+	Bench->Object = AABBObject::OBJECT_TYPE::BENCH;
+	Bench->active = true;
+	Bench->angle = -90;
+	Bench->rotate.Set(0, 1, 0);
+	Bench->pos.Set(200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	Bench->scale.Set(5, 5, 5);
+	instance->Object_list.push_back(Bench);
+
+	Bench = new AABBObject();
+	Bench->Object = AABBObject::OBJECT_TYPE::BENCH;
+	Bench->active = true;
+	Bench->angle = 90;
+	Bench->rotate.Set(0, 1, 0);
+	Bench->pos.Set(-200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	Bench->scale.Set(5, 5, 5);
+	instance->Object_list.push_back(Bench);
+
+	//Houses
+	for (int i = 0; i < 4; i++)
+	{
+		AABBObject * House = new AABBObject();
+		House->active = true;
+		House->angle = -90;
+		House->rotate.Set(0, 1, 0);
+		House->pos.Set(i * 450 - 750, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -700);
+		House->scale.Set(200, 200, 200);
+
+		if ((i % 2) == 0)
+			House->Object = AABBObject::OBJECT_TYPE::HOUSE1;
+		else
+			House->Object = AABBObject::OBJECT_TYPE::HOUSE2;
+
+		instance->Object_list.push_back(House);
+	}
+
+
+	//Pots
+	Vector3 treePos1;
+	Vector3 treePos2;
+	Vector3 treePos3;
+	Vector3 treePos4;
+
+	treePos1.Set(-200, -60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	treePos2.Set(200, -60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -200);
+	treePos3.Set(-200, -60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
+	treePos4.Set(200, -60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
+
+	AABBObject * Pot = new AABBObject();
+	Pot->Object = AABBObject::OBJECT_TYPE::POT;
+	Pot->active = true;
+	Pot->pos = treePos1;
+	Pot->scale.Set(20, 10, 20);
+	instance->Object_list.push_back(Pot);
+
+	Pot = new AABBObject();
+	Pot->Object = AABBObject::OBJECT_TYPE::POT;
+	Pot->active = true;
+	Pot->pos = treePos2;
+	Pot->scale.Set(20, 10, 20);
+	instance->Object_list.push_back(Pot);
+
+	Pot = new AABBObject();
+	Pot->Object = AABBObject::OBJECT_TYPE::POT;
+	Pot->active = true;
+	Pot->pos = treePos3;
+	Pot->scale.Set(20, 10, 20);
+	instance->Object_list.push_back(Pot);
+
+	Pot = new AABBObject();
+	Pot->Object = AABBObject::OBJECT_TYPE::POT;
+	Pot->active = true;
+	Pot->pos = treePos4;
+	Pot->scale.Set(20, 10, 20);
+	instance->Object_list.push_back(Pot);
 }
 
 void SceneLevel02::Update(double dt)
@@ -376,18 +490,6 @@ void SceneLevel02::RenderTerrain()
 
 void SceneLevel02::RenderEnvironment(bool Light)
 {
-	/*modelStack.PushMatrix();
-	modelStack.Translate(0, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Scale(10, 30, 10);
-	RenderMeshOutlined(meshList[CACTUS], Light);
-	modelStack.PopMatrix();*/
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Scale(2, 2, 2);
-	RenderMeshOutlined(meshList[FOUNTAIN], Light);
-	modelStack.PopMatrix();
-
 	modelStack.PushMatrix();
 	modelStack.Translate(-1200, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
 	modelStack.Rotate(rotateGate, 0, 1, 0);
@@ -408,60 +510,6 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.Scale(60, 60, 60);
 	RenderMeshOutlined(meshList[HOUSE3], Light);
 	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
-	modelStack.Scale(20, 20, 40);
-	RenderMeshOutlined(meshList[HEDGE], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMeshOutlined(meshList[BENCHES], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
-	modelStack.Scale(20, 20, 40);
-	RenderMeshOutlined(meshList[HEDGE], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
-	modelStack.Scale(20, 20, 40);
-	RenderMeshOutlined(meshList[HEDGE], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(5, 5, 5);
-	RenderMeshOutlined(meshList[BENCHES], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-200, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
-	modelStack.Scale(20, 20, 40);
-	RenderMeshOutlined(meshList[HEDGE], Light);
-	modelStack.PopMatrix();
-
-	for (int i = 0; i < 4; i++)
-	{
-
-		modelStack.PushMatrix();
-		modelStack.Translate(i * 450 - 750, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -700);
-		modelStack.Rotate(-90, 0, 1, 0);
-		modelStack.Scale(200, 200, 200);
-
-		if ((i % 2) == 0)
-			RenderMeshOutlined(meshList[HOUSE1], Light);
-		else
-			RenderMeshOutlined(meshList[HOUSE2], Light);
-		
-		modelStack.PopMatrix();
-	}
 
 	for (int i = 0; i < 12; i++)
 	{
@@ -513,22 +561,10 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	treePos4.Set(200, -60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 200);
 
 	modelStack.PushMatrix();
-	modelStack.Translate(treePos1.x, treePos1.y, treePos1.z);
-	modelStack.Scale(20, 10, 20);
-	RenderMeshOutlined(meshList[POT], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
 	modelStack.Translate(treePos1.x, treePos1.y + 75, treePos1.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - treePos1.x, camera.position.z - treePos1.z)), 0, 1, 0);
 	modelStack.Scale(150, 150, 150);
 	RenderMeshOutlined(meshList[COCONUT_TREE], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(treePos2.x, treePos2.y, treePos2.z);
-	modelStack.Scale(20, 10, 20);
-	RenderMeshOutlined(meshList[POT], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -539,22 +575,10 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(treePos3.x, treePos3.y, treePos3.z);
-	modelStack.Scale(20, 10, 20);
-	RenderMeshOutlined(meshList[POT], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
 	modelStack.Translate(treePos3.x, treePos3.y + 75, treePos3.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - treePos3.x, camera.position.z - treePos3.z)), 0, 1, 0);
 	modelStack.Scale(150, 150, 150);
 	RenderMeshOutlined(meshList[COCONUT_TREE], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(treePos4.x, treePos4.y, treePos4.z);
-	modelStack.Scale(20, 10, 20);
-	RenderMeshOutlined(meshList[POT], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -644,6 +668,7 @@ void SceneLevel02::RenderWorld()
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
+	RenderObjects(ShowHitbox);
 	RenderEnvironment(false);
 	RenderBullets(false);
 	RenderWeapons(false);

@@ -169,11 +169,7 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-
-
 	sceneManager->ChangeScene(0);
-
-
 
 	//Need a change scene function
 	//if scene != Null , delete that scene
@@ -188,7 +184,6 @@ void Application::Run()
 		////////////////////////////
 		if (Singleton::getInstance()->stateCheck)
 		{
-			
 			Singleton::getInstance()->stateCheck = false;
 
 			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
