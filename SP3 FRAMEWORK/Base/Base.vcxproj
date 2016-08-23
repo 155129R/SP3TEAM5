@@ -16,6 +16,7 @@
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\Capture.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\Capture.h" />
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameObject.h" />
