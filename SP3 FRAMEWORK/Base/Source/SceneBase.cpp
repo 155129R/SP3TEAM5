@@ -328,7 +328,7 @@ void SceneBase::Init()
 	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
 	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
 
-	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10,10,TexCoord(10,10));
+	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
 	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
 
 	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
@@ -363,7 +363,7 @@ void SceneBase::Init()
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
 
-	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1,1,1), 1.f);
+	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
 
 	//Particles
@@ -419,8 +419,8 @@ void SceneBase::Init()
 	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
 	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
-	meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
-	meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
+	//meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
+	//meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
 	//Sprite
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
@@ -452,7 +452,7 @@ void SceneBase::Init()
 		G2->m_anim = new Animation();
 		G2->m_anim->Set(0, 11, 0, 2.0f, true);
 	}
-	
+
 	if (G3)
 	{
 		G3->m_anim = new Animation();
@@ -464,25 +464,25 @@ void SceneBase::Init()
 	for (int i = 0; i < 40; ++i)
 	{
 		int Random = Math::RandIntMinMax(1, 3);
-		
+
 		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
 		switch (Random)
 		{
-			case 1:
-			{
-				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-				break;
-			}
-			case 2:
-			{
-				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-				break;
-			}
-			case 3:
-			{
-				Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-				break;
-			}
+		case 1:
+		{
+			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
+			break;
+		}
+		case 2:
+		{
+			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
+			break;
+		}
+		case 3:
+		{
+			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
+			break;
+		}
 		}
 		Ghost->active = true;
 		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
@@ -596,7 +596,6 @@ void SceneBase::Update(double dt)
 		}
 		
 	}
-	
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
 
@@ -798,7 +797,7 @@ void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
 	glFrontFace(GL_CCW);
 }
 
-void SceneBase::RenderOBJOnScreen(Mesh* mesh, float scale ,float x, float y, float z, float rotateX, float rotateY, float rotateZ, bool enableLight)
+void SceneBase::RenderOBJOnScreen(Mesh* mesh, float scale, float x, float y, float z, float rotateX, float rotateY, float rotateZ, bool enableLight)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -100, 100);
@@ -930,6 +929,9 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	if (Singleton::getInstance()->stateCheck)
 	{
 		glUniform1f(m_parameters[U_FOG_ENABLE], 0);
@@ -952,6 +954,7 @@ void SceneBase::Render()
 		}
 
 	}
+
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -1034,18 +1037,18 @@ void SceneBase::UpdateHitboxes(double dt)
 		{
 			switch (obj->Object)
 			{
-				case AABBObject::OBJECT_TYPE::LOGS:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
-					obj->Hitbox.Resize(Vector3(180, 100, 400));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::BRIDGE:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3,50,0));
-					obj->Hitbox.Resize(Vector3(140, 75, 650));
-					break;
-				}
+			case AABBObject::OBJECT_TYPE::LOGS:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
+				obj->Hitbox.Resize(Vector3(180, 100, 400));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::BRIDGE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3, 50, 0));
+				obj->Hitbox.Resize(Vector3(140, 75, 650));
+				break;
+			}
 			}
 		}
 	}
@@ -1082,54 +1085,58 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 			}
 			switch (obj->Object)
 			{
-				case AABBObject::OBJECT_TYPE::LOGS:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Rotate(90, 0, 1, 0);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[GEO_LOGS], true);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::BRIDGE:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-					modelStack.PopMatrix();
-					break;
-				}
+			case AABBObject::OBJECT_TYPE::LOGS:
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+				modelStack.Rotate(90, 0, 1, 0);
+				modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+				RenderMeshOutlined(meshList[GEO_LOGS], true);
+				modelStack.PopMatrix();
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::BRIDGE:
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+				modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+				RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+				modelStack.PopMatrix();
+				break;
+			}
 			}
 		}
 	}
 }
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
+	playerPartition = getPartition(camera.position);
 	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
-
-			if (ShowHitbox)
+			posPartition = getPartition(ghost->pos);
+			if (renderCheck(playerPartition, posPartition))
 			{
-				modelStack.PushMatrix();
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				modelStack.Translate(ghost->Hitbox.pos.x, ghost->Hitbox.pos.y, ghost->Hitbox.pos.z);
-				modelStack.Scale(ghost->Hitbox.size.x, ghost->Hitbox.size.y, ghost->Hitbox.size.z);
-				RenderMesh(meshList[GEO_HITBOX], false);
-				if (!mode)
+				float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
+
+				if (ShowHitbox)
 				{
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					modelStack.PushMatrix();
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					modelStack.Translate(ghost->Hitbox.pos.x, ghost->Hitbox.pos.y, ghost->Hitbox.pos.z);
+					modelStack.Scale(ghost->Hitbox.size.x, ghost->Hitbox.size.y, ghost->Hitbox.size.z);
+					RenderMesh(meshList[GEO_HITBOX], false);
+					if (!mode)
+					{
+						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					}
+					modelStack.PopMatrix();
 				}
-				modelStack.PopMatrix();
-			}
 
-			switch (ghost->Type)
-			{
+				switch (ghost->Type)
+				{
 				case Enemy::ENEMY_TYPE::GHOST_1:
 				{
 					modelStack.PushMatrix();
@@ -1163,6 +1170,7 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				default:
 				{
 					break;
+				}
 				}
 			}
 		}
@@ -1235,17 +1243,32 @@ void SceneBase::RenderRadar()
 void SceneBase::RenderBullets(bool light)
 {
 	//bullet
-	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it){
-			modelStack.PushMatrix();
-			modelStack.Translate(
-				(*it)->position.x,
-				(*it)->position.y,
-				(*it)->position.z
-				);
-			modelStack.Scale(1, 1, 1);
-			RenderMesh(meshList[GEO_LIGHTBALL], light);
-			modelStack.PopMatrix();
+	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
+	{
+
+		modelStack.PushMatrix();
+		modelStack.Translate(
+			(*it)->position.x,
+			(*it)->position.y,
+			(*it)->position.z
+			);
+		modelStack.Scale(1, 1, 1);
+		RenderMesh(meshList[GEO_LIGHTBALL], light);
+		modelStack.PopMatrix();
+
+
+
+		modelStack.PushMatrix();
+		modelStack.Translate(
+			(*it)->position.x,
+			(*it)->position.y,
+			(*it)->position.z
+			);
+		modelStack.Scale(1, 1, 1);
+		RenderMesh(meshList[GEO_LIGHTBALL], light);
+		modelStack.PopMatrix();
 	}
+
 }
 
 void SceneBase::RenderWeapons(bool light)
@@ -1368,7 +1391,7 @@ void SceneBase::InitPartitioning()
 
 	Partition G;
 	G.MINPOS.Set(0, 0, -Terrainsize.z * 0.5f);
-	G.MAXPOS.Set(Terrainsize.x * 0.5f, 0,0);
+	G.MAXPOS.Set(Terrainsize.x * 0.5f, 0, 0);
 	partitioning['G'] = G;
 
 	Partition H;
@@ -1432,6 +1455,8 @@ char SceneBase::getPartition(Vector3 pos)
 
 bool SceneBase::renderCheck(char partition1, char partition2)
 {
+	if (spatialPartitioning == false)
+		return true;
 	if
 		(
 		(partition1 == partition2) || (partition1 + 1 == partition2) || (partition1 + 3 == partition2) || (partition1 + 4 == partition2) || (partition1 + 5 == partition2)
@@ -1456,7 +1481,8 @@ void SceneBase::Exit()
 		delete particle;
 		particleList.pop_back();
 	}
-
+	instance->Object_list.clear();
+	instance->Enemy_list.clear();
 	glDeleteProgram(m_programID);
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);

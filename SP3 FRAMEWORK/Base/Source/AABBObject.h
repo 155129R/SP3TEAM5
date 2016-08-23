@@ -9,8 +9,13 @@ struct AABBObject : public GameObject
 public:
 	enum OBJECT_TYPE
 	{
+		//FOREST
 		LOGS,
 		BRIDGE,
+
+		//GRAVEYARD
+		TOMBSTONE,
+		DEADTREE,
 
 		MAX_OBJECT_TYPE,
 	};

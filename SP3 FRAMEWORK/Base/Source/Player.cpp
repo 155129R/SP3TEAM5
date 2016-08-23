@@ -16,6 +16,7 @@ void Player::Init()
 
 	fireRate = 1;
 
+
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
 

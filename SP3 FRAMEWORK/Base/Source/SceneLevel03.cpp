@@ -24,7 +24,7 @@ void SceneLevel03::Init()
 	instance->Object_list.clear();
 
 	terrainHeight = TERRAINSIZE.y;
-
+	Terrainsize = TERRAINSIZE * 0.5f;
 	//Random my random randomly using srand
 	srand(time(NULL));
 
@@ -111,6 +111,8 @@ void SceneLevel03::Init()
 	Bridge->pos.Set(0, 58, -1420);
 	Bridge->scale.Set(5, 5, 5);
 	instance->Object_list.push_back(Bridge);
+
+	InitPartitioning();
 
 }
 
@@ -393,55 +395,64 @@ void SceneLevel03::RenderTerrain()
 
 void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 {
+	playerPartition = getPartition(camera.position);
 	if (!inverted)
 	{
 		for (int i = 0; i < 400; ++i)
 		{
-			Degree = Math::RadianToDegree(atan2(-(Tree[i].z - instance->player->getPosition().z), Tree[i].x - instance->player->getPosition().x));
-			switch (Tree_Type[i])
+			posPartition = getPartition(Tree[i]);
+			if (renderCheck(playerPartition, posPartition))
 			{
-			case 1:
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-				modelStack.Rotate(Degree - 90, 0, 1, 0);
-				modelStack.Scale(250, 400, 250);
-				RenderMeshOutlined(meshList[GEO_TREE_1], false);
-				modelStack.PopMatrix();
-				break;
-			}
-			case 2:
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-				modelStack.Rotate(Degree - 90, 0, 1, 0);
-				modelStack.Scale(400, 400, 400);
-				RenderMeshOutlined(meshList[GEO_TREE_2], false);
-				modelStack.PopMatrix();
-				break;
-			}
-			case 3:
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
-				modelStack.Rotate(Degree - 90, 0, 1, 0);
-				modelStack.Scale(150, 400, 150);
-				RenderMeshOutlined(meshList[GEO_TREE_3], false);
-				modelStack.PopMatrix();
-				break;
-			}
+				Degree = Math::RadianToDegree(atan2(-(Tree[i].z - instance->player->getPosition().z), Tree[i].x - instance->player->getPosition().x));
+				switch (Tree_Type[i])
+				{
+				case 1:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(Tree[i].x, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(250, 400, 250);
+					RenderMeshOutlined(meshList[GEO_TREE_1], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case 2:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(Tree[i].x, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(400, 400, 400);
+					RenderMeshOutlined(meshList[GEO_TREE_2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case 3:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(150, 400, 150);
+					RenderMeshOutlined(meshList[GEO_TREE_3], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				}
 			}
 		}
 
 		for (int i = 0; i < 400; ++i)
 		{
-			Degree = Math::RadianToDegree(atan2(-(Bush[i].z - instance->player->getPosition().z), Bush[i].x - instance->player->getPosition().x));
-			modelStack.PushMatrix();
-			modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
-			modelStack.Rotate(Degree - 90, 0, 1, 0);
-			modelStack.Scale(100, 100, 100);
-			RenderMeshOutlined(meshList[GEO_BUSH], false);
-			modelStack.PopMatrix();
+			posPartition = getPartition(Tree[i]);
+			if (renderCheck(playerPartition, posPartition))
+			{
+				Degree = Math::RadianToDegree(atan2(-(Bush[i].z - instance->player->getPosition().z), Bush[i].x - instance->player->getPosition().x));
+				modelStack.PushMatrix();
+				modelStack.Translate(Bush[i].x, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Bush[i].x / TERRAINSIZE.x, Bush[i].z / TERRAINSIZE.z), Bush[i].z);
+				modelStack.Rotate(Degree - 90, 0, 1, 0);
+				modelStack.Scale(100, 100, 100);
+				RenderMeshOutlined(meshList[GEO_BUSH], false);
+				modelStack.PopMatrix();
+			}
 		}
 
 		//modelStack.PushMatrix();
@@ -711,10 +722,30 @@ void SceneLevel03::RenderPassMain()
 	SceneBase::Render();
 
 	//On screen text
+
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "weapontype: " << weaponType;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	}
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "Partition: " << getPartition(camera.position);
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+	}
+	{
+		std::ostringstream ss;
+		ss.precision(5);
+		ss << "Position: " << camera.position;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+	}
 
 }
 
