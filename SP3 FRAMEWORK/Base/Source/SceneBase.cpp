@@ -1204,7 +1204,8 @@ void SceneBase::RenderRadar()
 void SceneBase::RenderBullets(bool light)
 {
 	//bullet
-	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it){
+	for (vector<Bullet*>::iterator it = bulletList.begin(); it != bulletList.end(); ++it)
+	{
 
 		modelStack.PushMatrix();
 		modelStack.Translate(
@@ -1215,18 +1216,18 @@ void SceneBase::RenderBullets(bool light)
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], light);
 		modelStack.PopMatrix();
-	}
 
 
-			modelStack.PushMatrix();
-			modelStack.Translate(
-				(*it)->position.x,
-				(*it)->position.y,
-				(*it)->position.z
-				);
-			modelStack.Scale(1, 1, 1);
-			RenderMesh(meshList[GEO_LIGHTBALL], light);
-			modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(
+			(*it)->position.x,
+			(*it)->position.y,
+			(*it)->position.z
+			);
+		modelStack.Scale(1, 1, 1);
+		RenderMesh(meshList[GEO_LIGHTBALL], light);
+		modelStack.PopMatrix();
 	}
 
 }
