@@ -363,6 +363,24 @@ void SceneBase::Init()
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
 
+	meshList[GAME_TITLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[GAME_TITLE]->textureID = LoadTGA("Image//title.tga");
+
+	meshList[BUTTON_PLAY] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_PLAY]->textureID = LoadTGA("Image//play.tga");
+
+	meshList[BUTTON_CREDITS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_CREDITS]->textureID = LoadTGA("Image//credits.tga");
+
+	meshList[BUTTON_INSTRUCTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_INSTRUCTION]->textureID = LoadTGA("Image//instruction.tga");
+
+	meshList[BUTTON_OPTIONS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_OPTIONS]->textureID = LoadTGA("Image//options.tga");
+
+	meshList[BUTTON_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_EXIT]->textureID = LoadTGA("Image//exit.tga");
+
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
 
@@ -891,12 +909,15 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneBase::Render()
 {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (Singleton::getInstance()->stateCheck)
 	{
 		glUniform1f(m_parameters[U_FOG_ENABLE], 0);
-
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
 		{
 			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));

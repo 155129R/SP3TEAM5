@@ -170,7 +170,7 @@ void Application::Run()
 {
 	//start 1st scene here
 
-	sceneManager->ChangeScene(4);
+	sceneManager->ChangeScene(0);
 
 
 	//Need a change scene function
