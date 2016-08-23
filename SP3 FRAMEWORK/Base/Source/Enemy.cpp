@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE) : MAX_HP(10), Attack(5), Hitbox(AABB(this->pos, this->scale)), initPos(this->pos), chasing(false)
+Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE) : MAX_HP(10), Attack(5), Hitbox(AABB(this->pos, this->scale)), initPos(this->pos), chasing(false), captured(false)
 {
 	HP = MAX_HP;
 }
@@ -48,7 +48,7 @@ void Enemy::Update(double dt, Vector3 PlayerPos)
 	}
 	else if (HP < 0)
 	{
-		active = false;
+		State = ENEMY_STATE::WEAKEN;
 	}
 }
 

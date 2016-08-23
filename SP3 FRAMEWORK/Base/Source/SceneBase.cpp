@@ -363,6 +363,24 @@ void SceneBase::Init()
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
 
+	meshList[GAME_TITLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[GAME_TITLE]->textureID = LoadTGA("Image//title.tga");
+
+	meshList[BUTTON_PLAY] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_PLAY]->textureID = LoadTGA("Image//play.tga");
+
+	meshList[BUTTON_CREDITS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_CREDITS]->textureID = LoadTGA("Image//credits.tga");
+
+	meshList[BUTTON_INSTRUCTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_INSTRUCTION]->textureID = LoadTGA("Image//instruction.tga");
+
+	meshList[BUTTON_OPTIONS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_OPTIONS]->textureID = LoadTGA("Image//options.tga");
+
+	meshList[BUTTON_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[BUTTON_EXIT]->textureID = LoadTGA("Image//exit.tga");
+
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
 
@@ -435,6 +453,8 @@ void SceneBase::Init()
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
+	weaponType = 1;
+
 	G1 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1]);
 	G2 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2]);
 	G3 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3]);
@@ -494,8 +514,15 @@ void SceneBase::Init()
 }
 
 void SceneBase::Update(double dt)
-{
-	UpdateShoot(dt);
+{	
+	if (weaponType == 3)
+	{
+		UpdateCapture(dt);
+	}
+	else
+	{
+		UpdateShoot(dt);
+	}
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
@@ -525,13 +552,16 @@ void SceneBase::Update(double dt)
 	}
 
 	if (Application::IsKeyPressed('1'))
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
+		weaponType = 1;
 	if (Application::IsKeyPressed('2'))
-		glDisable(GL_CULL_FACE);
+		//glDisable(GL_CULL_FACE);
+		weaponType = 2;
 	if (Application::IsKeyPressed('3'))
-		mode = false;
+		//mode = false;
+		weaponType = 3;
 	if (Application::IsKeyPressed('4'))
-		mode = true;
+		//mode = true;
 
 	if (mode)
 	{
@@ -563,13 +593,26 @@ void SceneBase::Update(double dt)
 
 	if (Application::IsKeyPressed(VK_SPACE))
 	{
-		bulletList.push_back(new Bullet(
-			Vector3(camera.position.x, camera.position.y, camera.position.z),
-			Vector3(camera.view.x, camera.view.y, camera.view.z),
-			300,
-			1000,
-			10
-			));
+		if (weaponType == 3)
+		{
+			captureList.push_back(new Capture(
+				Vector3(camera.position.x, camera.position.y, camera.position.z),
+				Vector3(camera.view.x, camera.view.y, camera.view.z),
+				300,
+				1000
+				));
+		}
+		else
+		{
+			bulletList.push_back(new Bullet(
+				Vector3(camera.position.x, camera.position.y, camera.position.z),
+				Vector3(camera.view.x, camera.view.y, camera.view.z),
+				300,
+				1000,
+				10
+				));
+		}
+		
 	}
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
@@ -584,6 +627,20 @@ void SceneBase::UpdateShoot(double dt)
 		if ((*it)->deleteBullet == true){
 			delete *it;
 			it = bulletList.erase(it);
+		}
+		else{
+			(*it)->Update(dt);
+			it++;
+		}
+	}
+}
+
+void SceneBase::UpdateCapture(double dt)
+{
+	for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end();){
+		if ((*it)->deleteProj == true){
+			delete *it;
+			it = captureList.erase(it);
 		}
 		else{
 			(*it)->Update(dt);
@@ -891,12 +948,15 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneBase::Render()
 {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (Singleton::getInstance()->stateCheck)
 	{
 		glUniform1f(m_parameters[U_FOG_ENABLE], 0);
-
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
 		{
 			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
@@ -1240,10 +1300,10 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, 5, light);
 		break;
 	case 2:
-		RenderOBJOnScreen(meshList[RIFLE], 1.2, 70, 5, -80, 0, -90, 5, light);
+		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
 		break;
 	case 3:
-		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, -80, 0, -180, 0, light);
+		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
 		break;
 	}
 }

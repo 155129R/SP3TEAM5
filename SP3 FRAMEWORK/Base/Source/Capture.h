@@ -1,5 +1,5 @@
-#ifndef BULLET_H
-#define BULLET_H
+#ifndef CAPTURE_H
+#define CAPTURE_H
 
 #include "GameObject.h"
 #include "AABB.h"
@@ -12,30 +12,31 @@
 
 using std::vector;
 
-class Bullet : public GameObject
+class Capture : public GameObject
 {
 public:
-	Bullet(Vector3 pos, Vector3 dir, float rng, float spd, int dmg);
-	~Bullet();
+	Capture(Vector3 pos, Vector3 dir, float rng, float spd);
+	~Capture();
 
 	void Update(double dt);
 
 	Vector3 position;
-	bool deleteBullet;
+	bool deleteProj;
 
 	AABB Hitbox;
+
 	//Player* player;
 
 private:
 	Vector3 direction;
+
+	
 
 	float range;
 	float speed;
 	float distanceTravelled;
 	float vSpeed;
 
-	int damage;
-	
 	Singleton* instance;
 };
 
