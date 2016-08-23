@@ -33,7 +33,6 @@ class Singleton
 		PROGRAM_STATE program_state;
 		bool stateCheck;
 
-
 		double mousex;
 		double mousey;
 
@@ -59,8 +58,8 @@ private:
 		mousex = 400;
 		mousey = 300;
 
-		program_state = PROGRAM_MENU;
-		stateCheck = false;
+		//program_state = PROGRAM_MENU;
+		//stateCheck = false;
 
 	}
 };

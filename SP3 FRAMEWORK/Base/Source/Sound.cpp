@@ -19,10 +19,6 @@ void Sound::Update(irrklang::vec3df pos, irrklang::vec3df view)
 {
 	SoundEffect3D->setListenerPosition(pos, view);
 }
-void Sound::Update(irrklang::vec3df pos, irrklang::vec3df view)
-{
-	SoundEffect3D->setListenerPosition(pos, view);
-}
 void Sound::playMusic(string Music)
 {
 	BGM = musicEngine->play2D(Music.c_str(), true, false, true);

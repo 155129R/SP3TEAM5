@@ -28,13 +28,9 @@ void Player::Init()
 
 void Player::Update(double dt)
 {
-
-//	pos = camera.position;
 	UpdateStamina(dt);
 	UpdateWeapon(dt);
 	UpdateFear(dt);
-
-
 }
 
 void Player::UpdateMovement(double dt, unsigned short key)

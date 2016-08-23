@@ -2,7 +2,6 @@
 #define PLAYER_H
 
 #include "Camera3.h"
-#include "Bullet.h"
 
 class Player 
 {
