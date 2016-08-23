@@ -13,7 +13,7 @@ void Player::Init()
 {
 	weaponType = WEAPON_TYPE::W_PISTOL;
 	weapon_value = 1;
-	fireRate = 1;
+	fireRate = 5;
 
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;

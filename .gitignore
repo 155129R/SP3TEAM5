@@ -22,3 +22,7 @@
 # Executables
 *.out
 *.app
+
+#Directories to ignore
+SP3 FRAMEWORK\Base\Debug
+SP3 FRAMEWORK\Common\Debug

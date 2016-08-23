@@ -26,6 +26,9 @@ void SceneLevel04::Init()
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
+
+	camera.Init(Vector3(1, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
+
 	//Random my random randomly using srand
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
@@ -52,30 +55,43 @@ void SceneLevel04::Init()
 	Switch = false;
 	camera.position.Set(0, 200, 10);
 	camera.target.Set(0, 200, 1);
-	
+
+
 	for (int i = 0; i < 30; i++)
 	{
-		Vector3 temp;
-		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
-		gravePos.push_back(temp);
+		AABBObject* Tombstone = new AABBObject();
+		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+		Tombstone->active = true;
+		Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+		Tombstone->scale.Set(10, 10, 10);
+		instance->Object_list.push_back(Tombstone);
 	}
 	for (int i = 0; i < 30; i++)
 	{
-		Vector3 temp;
-		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
-		gravePos.push_back(temp);
+		AABBObject* Tombstone = new AABBObject();
+		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+		Tombstone->active = true;
+		Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+		Tombstone->scale.Set(10, 10, 10);
+		instance->Object_list.push_back(Tombstone);
 	}
 	for (int i = 0; i < 30; i++)
 	{
-		Vector3 temp;
-		temp.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
-		gravePos.push_back(temp);
+		AABBObject* Tombstone = new AABBObject();
+		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+		Tombstone->active = true;
+		Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+		Tombstone->scale.Set(10, 10, 10);
+		instance->Object_list.push_back(Tombstone);
 	}
 	for (int i = 0; i < 30; i++)
 	{
-		Vector3 temp;
-		temp.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
-		gravePos.push_back(temp);
+		AABBObject* Tombstone = new AABBObject();
+		Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+		Tombstone->active = true;
+		Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+		Tombstone->scale.Set(10, 10, 10);
+		instance->Object_list.push_back(Tombstone);
 	}
 	////////////
 	for (int i = 0; i < 5; i++)
@@ -423,23 +439,29 @@ void SceneLevel04::RenderTombstone(bool Light)
 	if (spatialPartitioning)
 	{
 		playerPartition = getPartition(camera.position);
-		for (auto pos : gravePos)
+		for (auto Object : instance->Object_list)
 		{
-			posPartition = getPartition(pos);
-
-			if (renderCheck(playerPartition, posPartition) == true)
+			if (Object->active)
 			{
-				modelStack.PushMatrix();
-				modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
-				modelStack.Scale(10, 10, 10);
-				RenderMeshOutlined(meshList[TOMBSTONE], true);
-				modelStack.PopMatrix();
+				if (Object->Object == AABBObject::OBJECT_TYPE::TOMBSTONE)
+				{
+					posPartition = getPartition(Object->pos);
+
+					if (renderCheck(playerPartition, posPartition) == true)
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(Object->pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, Object->pos.x / TERRAINSIZE.x, Object->pos.z / TERRAINSIZE.z)) - 20, Object->pos.z);
+						modelStack.Scale(10, 10, 10);
+						RenderMeshOutlined(meshList[TOMBSTONE], true);
+						modelStack.PopMatrix();
+					}
+				}
 			}
 		}
 
 		for (auto pos : pocongPos)
 		{
-			posPartition = getPartition(pos);
+			//posPartition = getPartition(pos);
 
 			//if (renderCheck(playerPartition, posPartition) == true)
 			//{
@@ -455,29 +477,38 @@ void SceneLevel04::RenderTombstone(bool Light)
 	}
 	else
 	{
-		for (auto pos : gravePos)
+		playerPartition = getPartition(camera.position);
+		for (auto Object : instance->Object_list)
 		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
+			if (Object->active)
+			{
+				if (Object->Object == AABBObject::OBJECT_TYPE::TOMBSTONE)
+				{
+					posPartition = getPartition(Object->pos);
 
-			modelStack.PushMatrix();
-			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
-			modelStack.Scale(10, 10, 10);
-			RenderMeshOutlined(meshList[TOMBSTONE], true);
-			modelStack.PopMatrix();
-
+					if (renderCheck(playerPartition, posPartition) == true)
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(Object->pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, Object->pos.x / TERRAINSIZE.x, Object->pos.z / TERRAINSIZE.z)) - 20, Object->pos.z);
+						modelStack.Scale(10, 10, 10);
+						RenderMeshOutlined(meshList[TOMBSTONE], true);
+						modelStack.PopMatrix();
+					}
+				}
+			}
 		}
+
 		for (auto pos : pocongPos)
 		{
 			//char playerPartition = getPartition(camera.position);
 			//char posPartition = getPartition(pos);
 
-			modelStack.PushMatrix();
-			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			modelStack.Scale(60, 60, 60);
-			modelStack.Rotate(180, 0, 0, 1);
-			RenderMeshOutlined(meshList[POCONG], true);
-			modelStack.PopMatrix();
+			//modelStack.PushMatrix();
+			//modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
+			//modelStack.Scale(60, 60, 60);
+			//modelStack.Rotate(180, 0, 0, 1);
+			//RenderMeshOutlined(meshList[POCONG], true);
+			//modelStack.PopMatrix();
 
 		}
 	}
