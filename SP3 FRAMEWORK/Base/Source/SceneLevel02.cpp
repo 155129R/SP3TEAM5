@@ -24,7 +24,7 @@ void SceneLevel02::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
-
+	lights[0].position.Set(0, 500, 0);
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
 	//Random my random randomly using srand
@@ -70,6 +70,14 @@ void SceneLevel02::Init()
 		irrklang::vec3df(0, 0, 0), true);
 
 	showInventory = -1;
+
+	AABBObject * key = new AABBObject();
+	key->Object = AABBObject::OBJECT_TYPE::KEY;
+	key->active = true;
+	key->pos.Set(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	key->scale.Set(10, 10, 10);
+	keyPtr = key;
+	instance->Object_list.push_back(key);
 
 	//Fountain
 	AABBObject * Fountain = new AABBObject();
@@ -201,24 +209,31 @@ void SceneLevel02::Update(double dt)
 	{
 		rotateGate--;
 	}
-
-	static bool spaceButtonState = false;
+	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
 	{
-		if (!spaceButtonState)
+		if (!eButtonState)
 		{
-			spaceButtonState = true;
-			//////////////////////////////////////////////////////////////////
-			// will add more condition if player is near and facing the key //
-			//////////////////////////////////////////////////////////////////
-
-			Inventory::addObject(item1);
+			eButtonState = true;
+			
+			for (auto object : instance->Object_list)
+			{
+				if (object->active)
+				{
+					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95)
+					{
+						Singleton::getInstance()->gotKey = true;
+						Inventory::addObject(item1);
+						object->active = false;
+					}
+				}
+			}
 		}
 	}
 	else if (!Application::IsKeyPressed('E'))
 	{
-		if (spaceButtonState)
-			spaceButtonState = false;
+		if (eButtonState)
+			eButtonState = false;
 	}
 
 	static bool spaceButtonState2 = false;
@@ -236,20 +251,7 @@ void SceneLevel02::Update(double dt)
 			spaceButtonState2 = false;
 	}
 
-	static bool inventoryButtonState = false;
-	if (Application::IsKeyPressed('I'))
-	{
-		if (!inventoryButtonState)
-		{
-			inventoryButtonState = true;
-			showInventory *= -1;
-		}
-	}
-	else if (!Application::IsKeyPressed('I'))
-	{
-		if (inventoryButtonState)
-			inventoryButtonState = false;
-	}
+	
 
 	////////////////////////////////////////////////////////
 	//	for next time winning condition to go next scene  //
@@ -498,7 +500,7 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.Translate(-1200, -48 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
 	modelStack.Rotate(rotateGate, 0, 1, 0);
 	modelStack.Scale(320, 320, 320);
-	RenderMeshOutlined(meshList[METAL_GATE], Light);
+	RenderMeshOutlined(meshList[METAL_GATE], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -554,6 +556,9 @@ void SceneLevel02::RenderEnvironment(bool Light)
 		RenderMeshOutlined(meshList[METAL_FENCE], Light);
 		modelStack.PopMatrix();
 	}
+}
+void SceneLevel02::RenderOthers(bool Light)
+{
 	Vector3 treePos1;
 	Vector3 treePos2;
 	Vector3 treePos3;
@@ -586,21 +591,6 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-
-	for (auto q : AABB::objectMap)
-	{
-		if (q.first->pos.x == item1pos.x && q.first->pos.z == item1pos.z && instance->objectCount[item1] == 0)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(item1pos.x, item1pos.y, item1pos.z);
-			modelStack.Rotate(rotateAngle * 20, 0, 1, 0);
-			modelStack.Scale(10, 10, 10);
-			RenderMeshOutlined(meshList[GEO_KEY], Light);
-			modelStack.PopMatrix();
-		}
-	}
-
-	modelStack.PushMatrix();
 	modelStack.Translate(treePos4.x, treePos4.y + 75, treePos4.z);
 	modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - treePos4.x, camera.position.z - treePos4.z)), 0, 1, 0);
 	modelStack.Scale(150, 150, 150);
@@ -614,7 +604,6 @@ void SceneLevel02::RenderEnvironment(bool Light)
 	RenderMeshOutlined(meshList[FLOOR], Light);
 	modelStack.PopMatrix();
 }
-
 void SceneLevel02::RenderHUD()
 {
 	RenderRadar();
@@ -689,8 +678,10 @@ void SceneLevel02::RenderWorld()
 	RenderTerrain();
 	RenderObjects(ShowHitbox);
 	RenderEnvironment(false);
+	RenderOthers(false);
 	RenderBullets(false);
 	RenderWeapons(false);
+	RenderInventory();
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
@@ -807,18 +798,6 @@ void SceneLevel02::RenderPassMain()
 	}
 
 	SceneBase::Render();
-
-	if (showInventory > 0)
-	{
-		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
-		if (instance->objectCount[item1] > 0)
-			RenderOBJOnScreen(meshList[GEO_KEY], 1, 20, 38, 10, 0, rotateAngle * 20, 0, false);
-	}
-	else
-	{
-
-	}
-
 
 	//On screen text
 	std::ostringstream ss;
