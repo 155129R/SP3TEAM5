@@ -28,8 +28,8 @@ void SceneLevel04::Init()
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
 
-	camera.Init(Vector3(1, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
-
+	camera.Init(Vector3(1, 80, 500), Vector3(0, 200, 1), Vector3(0, 1, 0));
+	camera.Reset();
 	//Random my random randomly using srand
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
@@ -86,6 +86,14 @@ void SceneLevel04::Init()
 
 	//////	instance->Enemy_list.push_back(Ghost);
 	//////}
+	AABBObject* Tree = new AABBObject();
+	Tree->Object = AABBObject::OBJECT_TYPE::DEADTREE;
+	Tree->active = true;
+	Tree->pos.SetZero();
+	Tree->pos.y = (ReadHeightMap(m_heightMap_4, Tree->pos.x / TERRAINSIZE.x, Tree->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y);
+	Tree->pos.y -= 50;
+	Tree->scale.Set(60, 70, 60);
+	instance->Object_list.push_back(Tree);
 	{
 		int yOffset = 80;
 		for (int i = 0; i < 30; i++)
@@ -153,13 +161,15 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
+	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+
+
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
 
 	UpdateHitboxes(dt);
 
-	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
 	camera.Update(dt);
 
@@ -391,10 +401,12 @@ void SceneLevel04::RenderFence(bool Light)
 		Vector3 fencePos;
 		fencePos.Set(Terrainsize.x - 400, 0, -Terrainsize.z + 600);
 		posPartition = getPartition(fencePos);
+
 		if (renderCheck(playerPartition, posPartition) == true)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Scale(0.6f, 0.6f, 0.6f);
 			modelStack.Rotate(90, 0, 1, 0);
 			RenderMeshOutlined(meshList[FENCE], true);
 			modelStack.PopMatrix();
@@ -409,6 +421,7 @@ void SceneLevel04::RenderFence(bool Light)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Scale(0.6f, 0.6f, 0.6f);
 			modelStack.Rotate(90, 0, 1, 0);
 			RenderMeshOutlined(meshList[FENCE], true);
 			modelStack.PopMatrix();
@@ -423,6 +436,7 @@ void SceneLevel04::RenderFence(bool Light)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Scale(0.6f, 0.6f, 0.6f);
 			modelStack.Rotate(90, 0, 1, 0);
 			RenderMeshOutlined(meshList[FENCE], true);
 			modelStack.PopMatrix();
@@ -437,6 +451,7 @@ void SceneLevel04::RenderFence(bool Light)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Scale(0.6f, 0.6f, 0.6f);
 			modelStack.Rotate(90, 0, 1, 0);
 			RenderMeshOutlined(meshList[FENCE], true);
 			modelStack.PopMatrix();
@@ -451,6 +466,7 @@ void SceneLevel04::RenderFence(bool Light)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Scale(0.6f, 0.6f, 0.6f);
 			modelStack.Rotate(90, 0, 1, 0);
 			RenderMeshOutlined(meshList[FENCE], true);
 			modelStack.PopMatrix();
@@ -465,11 +481,14 @@ void SceneLevel04::RenderFence(bool Light)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
+			modelStack.Scale(0.6f, 0.6f, 0.6f);
 			modelStack.Rotate(90, 0, 1, 0);
 			RenderMeshOutlined(meshList[FENCE], true);
 			modelStack.PopMatrix();
 		}
 	}
+
+
 }
 
 void SceneLevel04::RenderTombstone(bool Light)
@@ -557,13 +576,13 @@ void SceneLevel04::RenderEnvironment(bool Light)
 	//RenderTombstone(Light);
 	RenderFence(Light);
 
-	modelStack.PushMatrix();
-	modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)),0);
-	modelStack.Scale(60, 70, 60);
-	RenderMeshOutlined(meshList[DEADTREE], true);
-	modelStack.PopMatrix();
-	RenderObjects(true);
-	RenderEnemies(true);
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)),0);
+	//modelStack.Scale(60, 70, 60);
+	//RenderMeshOutlined(meshList[DEADTREE], true);
+	//modelStack.PopMatrix();
+	RenderObjects(false);
+	RenderEnemies(false);
 }
 
 void SceneLevel04::RenderHUD()
@@ -635,8 +654,8 @@ void SceneLevel04::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(true);
+	RenderWeapons(true);
 	RenderBullets(false);
-	RenderWeapons(false);
 	//RenderSprite();
 }
 

@@ -843,6 +843,7 @@ void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
 
 void SceneBase::RenderOBJOnScreen(Mesh* mesh, float scale, float x, float y, float z, float rotateX, float rotateY, float rotateZ, bool enableLight)
 {
+
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -100, 100);
 
@@ -973,6 +974,7 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
+	bLightEnabled = false;
 	if (Singleton::getInstance()->stateCheck)
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
@@ -996,6 +998,8 @@ void SceneBase::Render()
 			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 		}
 	}
+	bLightEnabled = true;
+
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -1134,8 +1138,14 @@ void SceneBase::UpdateHitboxes(double dt)
 				}
 				case AABBObject::OBJECT_TYPE::TOMBSTONE:
 				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
+					obj->Hitbox.Resize(Vector3(45, 55, 25));
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::DEADTREE:
+				{
 					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 0, 0));
-					obj->Hitbox.Resize(Vector3(100, 100, 100));
+					obj->Hitbox.Resize(Vector3(160, 240, 160));
 					break;
 				}
 				default:
@@ -1260,7 +1270,17 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[TOMBSTONE], false);
+					RenderMeshOutlined(meshList[TOMBSTONE], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::DEADTREE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[DEADTREE], true);
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1417,7 +1437,7 @@ void SceneBase::RenderBullets(bool light)
 			(*it)->position.z
 			);
 		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], light);
+		RenderMesh(meshList[GEO_LIGHTBALL], true);
 		modelStack.PopMatrix();
 
 
@@ -1429,7 +1449,7 @@ void SceneBase::RenderBullets(bool light)
 			(*it)->position.z
 			);
 		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], light);
+		RenderMesh(meshList[GEO_LIGHTBALL], true);
 		modelStack.PopMatrix();
 	}
 
