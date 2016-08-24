@@ -161,7 +161,11 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
+
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+
+
+	camera.Update(dt);
 
 
 	SceneBase::Update(dt);
@@ -171,7 +175,7 @@ void SceneLevel04::Update(double dt)
 	UpdateHitboxes(dt);
 
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
-	camera.Update(dt);
+	
 
 	if (Flashlight)
 	{
@@ -656,6 +660,7 @@ void SceneLevel04::RenderWorld()
 	RenderEnvironment(true);
 	RenderWeapons(true);
 	RenderBullets(false);
+	RenderInventory();
 	//RenderSprite();
 }
 

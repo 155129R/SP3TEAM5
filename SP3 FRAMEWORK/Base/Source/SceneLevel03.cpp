@@ -60,36 +60,7 @@ void SceneLevel03::Init()
 		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
 	}
 
-	for (int i = 0; i < 1; ++i)
-	{
-		int Random = Math::RandIntMinMax(1, 3);
-
-		//switch (Random)
-		//{
-		//	case 1:
-		//	{
-		//
-		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::CAPTURED);
-		//		instance->Enemy_list.push_back(Ghost);
-		//		break;
-		//	}
-		//	case 2:
-		//	{
-		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::CAPTURED);
-		//		instance->Enemy_list.push_back(Ghost);
-		//		break;
-		//	}
-		//	case 3:
-		//	{
-		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::CAPTURED);
-		//		instance->Enemy_list.push_back(Ghost);
-		//		break;
-		//	}
-		//}
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::ATTACK);
-		Ghost->pos.Set(0, 0, 0);
-		instance->Enemy_list.push_back(Ghost);
-	}
+	SpawnGhost();
 
 	AABBObject * Logs = new AABBObject();
 	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
@@ -117,6 +88,8 @@ void SceneLevel03::Init()
 
 void SceneLevel03::Update(double dt)
 {
+	camera.Update(dt);
+
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
@@ -150,7 +123,7 @@ void SceneLevel03::Update(double dt)
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
-	camera.Update(dt);
+	
 
 	if (Flashlight)
 	{
@@ -558,9 +531,11 @@ void SceneLevel03::RenderWorld()
 {
 	RenderSkyplane();
 	RenderTerrain();
-	RenderBullets(false);
-	RenderWeapons(false);
 	RenderEnvironment(false);
+	RenderWeapons(false); 
+	RenderBullets(false);
+	RenderInventory();
+
 }
 
 void SceneLevel03::RenderReflection()

@@ -9,6 +9,9 @@ struct AABBObject : public GameObject
 public:
 	enum OBJECT_TYPE
 	{
+		//INDOOR
+		BARRICADE,
+
 		//OUTDOOR
 		FOUNTAIN,
 		METAL_GATE,
@@ -18,6 +21,7 @@ public:
 		POT,
 		HOUSE1,
 		HOUSE2,
+		KEY,
 
 		//FOREST
 		LOGS,

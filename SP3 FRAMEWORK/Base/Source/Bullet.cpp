@@ -46,7 +46,6 @@ void Bullet::Update(double dt)
 					deleteBullet = true;
 				}
 			}
-			
 		}
 	}
 }

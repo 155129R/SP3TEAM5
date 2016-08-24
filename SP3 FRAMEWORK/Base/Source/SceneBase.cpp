@@ -276,8 +276,8 @@ void SceneBase::Init()
 	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
-	meshList[VACUUM] = MeshBuilder::GenerateOBJ("Vacuum", "OBJ//vacuum.obj");
-	meshList[VACUUM]->textureArray[0] = LoadTGA("Image//vacuum.tga");
+	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
+	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -345,8 +345,8 @@ void SceneBase::Init()
 	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
 
 	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
-	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_GATE]->textureArray[1] = LoadTGA("Image//rust.tga");
+	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
 
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
@@ -399,11 +399,11 @@ void SceneBase::Init()
 	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
 	m_Minimap->GetBackground()->textureArray[0] = LoadTGA("Image//HUD//Radar.tga");
 	m_Minimap->SetBorder(MeshBuilder::GenerateMinimapBorder("Minimap border", Color(1, 1, 0), 1.f));
-	m_Minimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("Minimap avatar", Color(1, 1, 0), 1.f));
 	meshList[GEO_VIEW] = MeshBuilder::GenerateCircle("View on minimap", Color(0, 0, 0), 1.f);
 	meshList[GEO_VIEW]->textureArray[0] = LoadTGA("Image//HUD//Radar.tga");
 	meshList[GEO_GREENBALL] = MeshBuilder::GenerateCircle("You on minimap", Color(0, 1, 0), 1.f);
 	meshList[GEO_REDBALL] = MeshBuilder::GenerateCircle("Enemy on minimap", Color(1, 0, 0), 1.f);
+	meshList[GEO_BLUEBALL] = MeshBuilder::GenerateCircle("Enemy(WEAKEN) on minimap", Color(0, 1, 1), 1.f);
 
 	//Loading screens
 	meshList[GEO_LOAD_1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
@@ -482,55 +482,86 @@ void SceneBase::Init()
 
 	characterHeight = 7.f;
 
-	/*for (int i = 0; i < 40; ++i)
+	Singleton::getInstance()->player->Init();
+
+	//Loading text file
+	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
+
+	int Counter = 0;
+	for (int i = 0; i < 3; i++)
 	{
-		int Random = Math::RandIntMinMax(1, 3);
-
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
-		switch (Random)
+		for (int j = 0; j < 3; j++)
 		{
-		case 1:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-			break;
+			cout << ghost_Amount[Counter] << " , ";
+			Counter++;
 		}
-		case 2:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-			break;
-		}
-		case 3:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-			break;
-		}
-		}
-		Ghost->active = true;
-		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
-		Ghost->scale.Set(50, 50, 50);
-
-		instance->Enemy_list.push_back(Ghost);
+		cout << endl;
 	}
+
 */
 	Singleton::getInstance()->player->Init();
 
 	delay = 0;
+
+}
+
+void SceneBase::SpawnGhost()
+{
+	int Counter = 0;
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+	{
+		Counter = 0;
+	}
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+	{
+		Counter = 3;
+	}
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
+	{
+		Counter = 6;
+	}
+
+	int Type = 1;
+	for (int j = 0; j < 3; j++)
+	{
+		for (int i = 0; i < ghost_Amount[Counter]; i++)
+		{
+			switch (Type)
+			{
+				case 1:
+				{
+					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::PATROL);
+					instance->Enemy_list.push_back(Ghost);
+					break;
+				}
+				case 2:
+				{
+					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::PATROL);
+					instance->Enemy_list.push_back(Ghost);
+					break;
+				}
+				case 3:
+				{
+					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::PATROL);
+					instance->Enemy_list.push_back(Ghost);
+					break;
+				}
+			}
+		}
+		Counter++;
+		Type++;
+	}
 }
 
 void SceneBase::Update(double dt)
 {
-	if (weaponType == 3)
-	{
-		UpdateCapture(dt);
-	}
-	else if (weaponType == 1 || weaponType == 2)
-	{
-		UpdateShoot(dt);
-	}
+	instance->singletonCamera = &camera;
+	UpdatePlayer(dt);
+	Singleton::getInstance()->player->setPosition(camera.position);
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
-	if (Application::IsKeyPressed('I'))
+	/*if (Application::IsKeyPressed('I'))
 	{
 		lights[0].position.z -= (float)50 * dt;
 	}
@@ -553,6 +584,21 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 	{
 		lights[0].position.y += (float)50 * dt;
+	}*/
+
+	static bool inventoryButtonState = false;
+	if (Application::IsKeyPressed('I'))
+	{
+		if (!inventoryButtonState)
+		{
+			inventoryButtonState = true;
+			showInventory *= -1;
+		}
+	}
+	else if (!Application::IsKeyPressed('I'))
+	{
+		if (inventoryButtonState)
+			inventoryButtonState = false;
 	}
 
 	if (Application::IsKeyPressed('1'))
@@ -624,7 +670,7 @@ void SceneBase::Update(double dt)
 				1000
 				));
 		}
-		else
+		else if (weaponType == 1 || weaponType == 2)
 		{
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -637,14 +683,21 @@ void SceneBase::Update(double dt)
 		
 	}
 
-	UpdatePlayer(dt);
-	Singleton::getInstance()->player->setPosition(camera.position);
+	
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
+
+
+	UpdateCapture(dt);
+
+	UpdateShoot(dt);
+
+	rotateKey += (float)(1 * dt);
+
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1019,7 +1072,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 	
-	UpdateFearEffect(dt);
+	//UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
@@ -1064,7 +1117,7 @@ void SceneBase::UpdateEnemy(double dt)
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			ghost->Update(dt, instance->player->getPosition());
+			ghost->Update(dt);
 		}
 	}
 }
@@ -1136,6 +1189,7 @@ void SceneBase::UpdateHitboxes(double dt)
 					obj->Hitbox.Resize(Vector3(410, 410, 410));
 					break;
 				}
+
 				case AABBObject::OBJECT_TYPE::TOMBSTONE:
 				{
 					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
@@ -1148,6 +1202,17 @@ void SceneBase::UpdateHitboxes(double dt)
 					obj->Hitbox.Resize(Vector3(160, 240, 160));
 					break;
 				}
+
+				case AABBObject::OBJECT_TYPE::BARRICADE:
+					break;
+
+				case AABBObject::OBJECT_TYPE::KEY:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+					obj->Hitbox.Resize(Vector3(15, 50, 15));
+					break;
+				}
+
 				default:
 				{
 					break;
@@ -1264,6 +1329,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.PopMatrix();
 					break;
 				}
+
 				case AABBObject::OBJECT_TYPE::TOMBSTONE:
 				{
 					modelStack.PushMatrix();
@@ -1281,6 +1347,16 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 					RenderMeshOutlined(meshList[DEADTREE], true);
+
+
+				case AABBObject::OBJECT_TYPE::KEY:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(rotateKey * 20, 0, 1, 0);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_KEY], false);
+
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1402,7 +1478,14 @@ void SceneBase::RenderRadar()
 			modelStack.Translate(65, 45, 0);
 			modelStack.Rotate(radarAngle - 90, 0, 0, 1);
 			modelStack.Translate(-ghost->pos.x / 70 + camera.position.x / 70, -ghost->pos.z / 70 + camera.position.z / 70, 0);
-			RenderMesh(meshList[GEO_REDBALL], false);
+			if (ghost->State == Enemy::ENEMY_STATE::WEAKEN)
+			{
+				RenderMesh(meshList[GEO_BLUEBALL], false);
+			}
+			else
+			{
+				RenderMesh(meshList[GEO_REDBALL], false);
+			}
 			modelStack.PopMatrix();
 		}
 	}
@@ -1439,9 +1522,9 @@ void SceneBase::RenderBullets(bool light)
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], true);
 		modelStack.PopMatrix();
-
-
-
+	}
+	for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end(); ++it)
+	{
 		modelStack.PushMatrix();
 		modelStack.Translate(
 			(*it)->position.x,
@@ -1452,7 +1535,6 @@ void SceneBase::RenderBullets(bool light)
 		RenderMesh(meshList[GEO_LIGHTBALL], true);
 		modelStack.PopMatrix();
 	}
-
 }
 
 void SceneBase::RenderWeapons(bool light)
@@ -1466,11 +1548,25 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
 		break;
 	case 3:
-		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
+		//RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
+		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
 		break;
 	}
 }
+void SceneBase::RenderInventory()
+{
+	if (showInventory > 0)
+	{
+		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		if (Singleton::getInstance()->gotKey == true)
+			RenderOBJOnScreen(meshList[GEO_KEY], 1, 20, 38, 10, 0, rotateKey * 20, 0, false);
+	}
+	else
+	{
 
+	}
+
+}
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
 {
 	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);

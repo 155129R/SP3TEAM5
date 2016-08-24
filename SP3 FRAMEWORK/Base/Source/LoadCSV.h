@@ -14,8 +14,6 @@ using std::getline;
 using std::stringstream;
 using std::stoi;
 
-#include "Vector3.h"
-
-void ReadFile(string file_path, int level[]);
+void ReadFile(string file_path, int ghost[]);
 
 #endif 
