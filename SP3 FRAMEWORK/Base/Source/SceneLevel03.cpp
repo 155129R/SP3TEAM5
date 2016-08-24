@@ -121,10 +121,6 @@ void SceneLevel03::Update(double dt)
 
 	UpdateParticle(dt);
 
-	UpdatePlayer(dt);
-
-	UpdateHitboxes(dt);
-
 	if (delay >= 2)
 	{
 		UpdateEnemy(dt);
@@ -709,7 +705,7 @@ void SceneLevel03::RenderPassMain()
 
 	RenderReflection();
 
-	RenderObjects(true);
+	RenderObjects(ShowHitbox);
 	RenderEnemies(true);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 

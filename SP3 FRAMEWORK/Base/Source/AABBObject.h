@@ -9,6 +9,16 @@ struct AABBObject : public GameObject
 public:
 	enum OBJECT_TYPE
 	{
+		//OUTDOOR
+		FOUNTAIN,
+		METAL_GATE,
+		HOUSE,
+		HEDGE,
+		BENCH,
+		POT,
+		HOUSE1,
+		HOUSE2,
+
 		//FOREST
 		LOGS,
 		BRIDGE,
@@ -22,10 +32,17 @@ public:
 
 	OBJECT_TYPE Object;
 
-	AABBObject() {};
+	AABBObject() 
+	{
+		angle = 0;
+		rotate.Set(0, 1, 0);
+	}
 	~AABBObject() {};
 
 	AABB Hitbox;
+
+	float angle;
+	Vector3 rotate;
 };
 
 #endif

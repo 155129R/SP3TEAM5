@@ -228,6 +228,8 @@ public:
 		BUTTON_CREDITS,
 		BUTTON_INSTRUCTION,
 		BUTTON_EXIT,
+		GEO_KEY,
+
 
 		//level4
 		TOMBSTONE,
@@ -339,6 +341,7 @@ protected:
 
 	float FogAmount;
 	float fps;
+	bool ShowHitbox = false;
 
 	//Player
 	float radarAngle = 0;

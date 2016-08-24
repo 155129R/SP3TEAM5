@@ -790,6 +790,7 @@ void SceneMenu::RenderPassMain()
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
+		/*
 		ss.str("");
 		ss.precision(5);
 		ss << "Mouse Pos X: " << std::to_string(Singleton::getInstance()->mousex);
@@ -798,7 +799,7 @@ void SceneMenu::RenderPassMain()
 		ss.str("");
 		ss.precision(5);
 		ss << "Mouse Pos Y: " << std::to_string(Singleton::getInstance()->mousey);
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);*/
 	}
 }
 
