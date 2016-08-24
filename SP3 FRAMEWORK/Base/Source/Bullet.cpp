@@ -36,8 +36,8 @@ void Bullet::Update(double dt)
 		if (enemy->active)
 		{
 			if (enemy->Hitbox.Collide(position)){
-				std::cout << enemy->HP << std::endl;
-				enemy->HP--;
+				//std::cout << enemy->HP << std::endl;
+				enemy->TakeDamage(1);
 				deleteBullet = true;
 			}
 			else if (distanceTravelled >= range){

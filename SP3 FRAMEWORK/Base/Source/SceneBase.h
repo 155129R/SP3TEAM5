@@ -12,6 +12,7 @@
 #include <map>
 #include "LoadHmap.h"
 #include "LoadTGA.h"
+#include "LoadCSV.h"
 
 struct Partition
 {
@@ -184,6 +185,7 @@ public:
 		GEO_VIEW,
 		GEO_GREENBALL,
 		GEO_REDBALL,
+		GEO_BLUEBALL,
 
 		//Screen
 		GEO_LOAD_1,
@@ -269,6 +271,8 @@ public:
 	void RenderNightVision();
 
 	//Used in all scenes
+	void SpawnGhost();
+
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
 	void UpdateEnemy(double dt);
@@ -350,6 +354,7 @@ protected:
 	Color Black;
 
 	//Enemy 
+	int ghost_Amount[9];
 	float delay = 0;
 
 	//bullet

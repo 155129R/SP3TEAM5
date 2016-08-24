@@ -169,12 +169,8 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-	sceneManager->ChangeScene(0);
-
-	//Need a change scene function
-	//if scene != Null , delete that scene
-	//if key pressed (?) , scene = new (scene)();
-	//if scene , scene->init();
+	sceneManager->ChangeScene(3);
+	// done by clinton
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))

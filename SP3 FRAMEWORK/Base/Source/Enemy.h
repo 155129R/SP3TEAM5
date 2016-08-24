@@ -31,18 +31,25 @@ struct Enemy : public GameObject
 
 	AABB Hitbox;
 
-	int MAX_HP;
-	int HP;
-	int Attack;
-
 	bool captured = false;
 
-	void Update(double dt, Vector3 playerPos);
+	void Update(double dt);
+	void SetWaypoint();
 	void Chase(double dt,Vector3 PlayerPos);
 	void scaleDown(double dt);
 	int DealDamage();
 	void TakeDamage(int Damage);
-	Vector3 initPos;
+
+private:
+	//Stats
+	int MAX_HP;
+	int HP;
+	int Attack;
+
+	//Patrol waypoints
+	Vector3 waypoint[2];
+	int travel_to;
+
 	bool chasing;
 };
 

@@ -184,6 +184,8 @@ void SceneLevel02::Init()
 	Pot->pos = treePos4;
 	Pot->scale.Set(20, 10, 20);
 	instance->Object_list.push_back(Pot);
+
+	SpawnGhost();
 }
 
 void SceneLevel02::Update(double dt)

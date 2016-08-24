@@ -41,8 +41,6 @@ void SceneLevel01::Init()
 	MAX_PARTICLE = 1000;
 	m_gravity.Set(0, -9.8f, 0);
 
-	
-
 	//Shadow stuff
 	m_lightDepthFBO.Init(4096, 4096);
 
@@ -54,6 +52,7 @@ void SceneLevel01::Init()
 	FogEffect = false;
 	Switch = false;
 
+	SpawnGhost();
 }
 
 void SceneLevel01::Update(double dt)

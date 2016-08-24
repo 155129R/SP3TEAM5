@@ -1,9 +1,10 @@
 #include "LoadCSV.h"
 
-void ReadFile(string file_path, Vector3 level[])
+void ReadFile(string file_path, int ghost[])
 {
 	ifstream Level(file_path);
 	string Line;
+	int i = 0;
 
 	if (Level.is_open())
 	{
@@ -12,12 +13,11 @@ void ReadFile(string file_path, Vector3 level[])
 		{
 			stringstream Enemy(Line);
 			string Amount;
-			int i = 1;
 
 			//Read comma by comma,storing it as the block's type
 			while (getline(Enemy, Amount, ','))
 			{
-				level[i].Set(i, stoi(Amount), 0);
+				ghost[i] = stoi(Amount);
 				i++;
 			}
 		}

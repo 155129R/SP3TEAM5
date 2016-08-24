@@ -7,35 +7,41 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 		case ENEMY_TYPE::GHOST_1:
 		{
 			MAX_HP = 6;
-			speed = 100;
+			speed = 50;
 			Attack = 3;
 			break;
 		}
 		case ENEMY_TYPE::GHOST_2:
 		{
 			MAX_HP = 10;
-			speed = 200;
+			speed = 100;
 			Attack = 6;
 			break;
 		}
 		case ENEMY_TYPE::GHOST_3:
 		{
 			MAX_HP = 3;
-			speed = 300;
+			speed = 150;
 			Attack = 10;
 			break;
 		}
 	}
 	active = true;
+	HP = MAX_HP;
 	pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+	//pos.Set(Math::RandFloatMinMax(-500, 500), 0, Math::RandFloatMinMax(-500, 500));
 	scale.Set(50, 50, 50);
+
+	waypoint[0] = pos;
+	waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+	travel_to = 1;
 }
 
 Enemy::~Enemy()
 {
 }
 
-void Enemy::Update(double dt, Vector3 playerPos)
+void Enemy::Update(double dt)
 {
 	//AABB hit box will always be on the Enemy
 	Hitbox.UpdateAABB(this->pos);
@@ -44,23 +50,53 @@ void Enemy::Update(double dt, Vector3 playerPos)
 	{
 		State = ENEMY_STATE::WEAKEN;
 	}
-
 	switch (State)
 	{
 		case ENEMY_STATE::PATROL:
 		{
-			//std::cout << "PATROL" << std::endl;
-			//if (this->pos.x < (initPos + Vector3(50, 50, 50)).x && this->pos.z < (initPos + Vector3(50, 50, 50)).z)
-			//{
-			//	if (!chasing)
-			//		Chase(dt, initPos + Vector3(50, 50, 50));
-			//}
+			float distance = (waypoint[travel_to] - pos).Length();
+			if (distance <= 200)
+			{
+				switch (travel_to)
+				{
+					case 0:
+					{
+						travel_to = 1;
+						break;
+					}
+					case 1:
+					{
+						travel_to = 0;
+						break;
+					}
+				}
+			}
+			else
+			{
+				Vector3 dir = (waypoint[travel_to] - pos).Normalized();
+				pos.x += dir.x * 80 * dt;
+				pos.z += dir.z * 80 * dt;
+			}
+
+			float distance_to_player = (Singleton::getInstance()->player->getPosition() - pos).Length();
+			if (distance_to_player <= 250)
+			{
+				State = ENEMY_STATE::ATTACK;
+			}
+
 			break;
 		}
 		case ENEMY_STATE::ATTACK:
 		{
-			//std::cout << "ATTACK" << std::endl;
-			Chase(dt, Singleton::getInstance()->player->getPosition());
+			float distance_to_player = (Singleton::getInstance()->player->getPosition() - pos).Length();
+			if (distance_to_player >= 300)
+			{
+				State = ENEMY_STATE::PATROL;
+			}
+			else
+			{
+				Chase(dt, Singleton::getInstance()->player->getPosition());
+			}
 			break;
 		}
 		case ENEMY_STATE::WEAKEN:
@@ -95,6 +131,13 @@ void Enemy::Update(double dt, Vector3 playerPos)
 		}
 	}
 
+}
+
+void Enemy::SetWaypoint()
+{
+	waypoint[0] = pos;
+	waypoint[1] = pos + (Math::RandFloatMinMax(-250, 250), 0, Math::RandFloatMinMax(-250, 250));
+	travel_to = 1;
 }
 
 void Enemy::Chase(double dt, Vector3 playerPos)

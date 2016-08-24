@@ -60,36 +60,7 @@ void SceneLevel03::Init()
 		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
 	}
 
-	for (int i = 0; i < 1; ++i)
-	{
-		int Random = Math::RandIntMinMax(1, 3);
-
-		//switch (Random)
-		//{
-		//	case 1:
-		//	{
-		//
-		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::CAPTURED);
-		//		instance->Enemy_list.push_back(Ghost);
-		//		break;
-		//	}
-		//	case 2:
-		//	{
-		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::CAPTURED);
-		//		instance->Enemy_list.push_back(Ghost);
-		//		break;
-		//	}
-		//	case 3:
-		//	{
-		//		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::CAPTURED);
-		//		instance->Enemy_list.push_back(Ghost);
-		//		break;
-		//	}
-		//}
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::CAPTURED);
-		Ghost->pos.Set(0, 0, 0);
-		instance->Enemy_list.push_back(Ghost);
-	}
+	SpawnGhost();
 
 	AABBObject * Logs = new AABBObject();
 	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;

@@ -399,11 +399,11 @@ void SceneBase::Init()
 	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
 	m_Minimap->GetBackground()->textureArray[0] = LoadTGA("Image//HUD//Radar.tga");
 	m_Minimap->SetBorder(MeshBuilder::GenerateMinimapBorder("Minimap border", Color(1, 1, 0), 1.f));
-	m_Minimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("Minimap avatar", Color(1, 1, 0), 1.f));
 	meshList[GEO_VIEW] = MeshBuilder::GenerateCircle("View on minimap", Color(0, 0, 0), 1.f);
 	meshList[GEO_VIEW]->textureArray[0] = LoadTGA("Image//HUD//Radar.tga");
 	meshList[GEO_GREENBALL] = MeshBuilder::GenerateCircle("You on minimap", Color(0, 1, 0), 1.f);
 	meshList[GEO_REDBALL] = MeshBuilder::GenerateCircle("Enemy on minimap", Color(1, 0, 0), 1.f);
+	meshList[GEO_BLUEBALL] = MeshBuilder::GenerateCircle("Enemy(WEAKEN) on minimap", Color(0, 1, 1), 1.f);
 
 	//Loading screens
 	meshList[GEO_LOAD_1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
@@ -482,38 +482,69 @@ void SceneBase::Init()
 
 	characterHeight = 7.f;
 
-	/*for (int i = 0; i < 40; ++i)
-	{
-		int Random = Math::RandIntMinMax(1, 3);
-
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1);
-		switch (Random)
-		{
-		case 1:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-			break;
-		}
-		case 2:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-			break;
-		}
-		case 3:
-		{
-			Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-			break;
-		}
-		}
-		Ghost->active = true;
-		Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
-		Ghost->scale.Set(50, 50, 50);
-
-		instance->Enemy_list.push_back(Ghost);
-	}
-*/
 	Singleton::getInstance()->player->Init();
 
+	//Loading text file
+	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
+
+	int Counter = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			cout << ghost_Amount[Counter] << " , ";
+			Counter++;
+		}
+		cout << endl;
+	}
+}
+
+void SceneBase::SpawnGhost()
+{
+	int Counter = 0;
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+	{
+		Counter = 0;
+	}
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+	{
+		Counter = 3;
+	}
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
+	{
+		Counter = 6;
+	}
+
+	int Type = 1;
+	for (int j = 0; j < 3; j++)
+	{
+		for (int i = 0; i < ghost_Amount[Counter]; i++)
+		{
+			switch (Type)
+			{
+				case 1:
+				{
+					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::PATROL);
+					instance->Enemy_list.push_back(Ghost);
+					break;
+				}
+				case 2:
+				{
+					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::PATROL);
+					instance->Enemy_list.push_back(Ghost);
+					break;
+				}
+				case 3:
+				{
+					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::PATROL);
+					instance->Enemy_list.push_back(Ghost);
+					break;
+				}
+			}
+		}
+		Counter++;
+		Type++;
+	}
 }
 
 void SceneBase::Update(double dt)
@@ -1015,7 +1046,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 	
-	UpdateFearEffect(dt);
+	//UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
@@ -1060,7 +1091,7 @@ void SceneBase::UpdateEnemy(double dt)
 		Enemy *ghost = (Enemy *)*it;
 		if (ghost->active)
 		{
-			ghost->Update(dt, instance->player->getPosition());
+			ghost->Update(dt);
 		}
 	}
 }
@@ -1366,7 +1397,14 @@ void SceneBase::RenderRadar()
 			modelStack.Translate(65, 45, 0);
 			modelStack.Rotate(radarAngle - 90, 0, 0, 1);
 			modelStack.Translate(-ghost->pos.x / 70 + camera.position.x / 70, -ghost->pos.z / 70 + camera.position.z / 70, 0);
-			RenderMesh(meshList[GEO_REDBALL], false);
+			if (ghost->State == Enemy::ENEMY_STATE::WEAKEN)
+			{
+				RenderMesh(meshList[GEO_BLUEBALL], false);
+			}
+			else
+			{
+				RenderMesh(meshList[GEO_REDBALL], false);
+			}
 			modelStack.PopMatrix();
 		}
 	}
