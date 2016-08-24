@@ -32,14 +32,18 @@ void Capture::Update(double dt)
 		if (enemy->active)
 		{
 			if (enemy->Hitbox.Collide(position)){
-				enemy->captured = true;
+				if (enemy->State == Enemy::WEAKEN)
+				{
+					enemy->canCatch = true;
+				
+				}
 				deleteProj = true;
 			}
-
+			else if (distanceTravelled >= range){
+				deleteProj = true;
+			}
 		}
-		else if (distanceTravelled >= range){
-			deleteProj = true;
-		}
+		
 
 
 	}

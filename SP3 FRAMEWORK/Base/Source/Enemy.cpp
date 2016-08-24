@@ -2,6 +2,7 @@
 
 Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 {
+	canCatch = false;
 	switch (Type)
 	{
 		case ENEMY_TYPE::GHOST_1:
@@ -29,7 +30,6 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 	active = true;
 	HP = MAX_HP;
 	pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
-	//pos.Set(Math::RandFloatMinMax(-500, 500), 0, Math::RandFloatMinMax(-500, 500));
 	scale.Set(50, 50, 50);
 
 	waypoint[0] = pos;
@@ -50,6 +50,11 @@ void Enemy::Update(double dt)
 	{
 		State = ENEMY_STATE::WEAKEN;
 	}
+	if (canCatch)
+	{
+		State = ENEMY_STATE::CAPTURED;
+	}
+
 	switch (State)
 	{
 		case ENEMY_STATE::PATROL:
@@ -100,27 +105,25 @@ void Enemy::Update(double dt)
 			break;
 		}
 		case ENEMY_STATE::WEAKEN:
-		{
-			if (captured)
-			{
-				State = ENEMY_STATE::CAPTURED;
-			}
+		{	
 			break;
 		}
 		case ENEMY_STATE::CAPTURED:
 		{
 			Vector3 dir = (Singleton::getInstance()->player->getPosition() - pos).Normalized();
-			pos += dir * 100 * dt;
+			Vector3 vaccum = dir + Singleton::getInstance()->singletonCamera->right;
+			pos += vaccum + Vector3(0, -1, 0) * 80 * dt;
 
 			if (scale.x > 0.5 && 
 				scale.y > 0.5 && 
 				scale.z > 0.5)
 			{
-				scale -= Vector3(30, 30, 30) * dt;
+			scale -= Vector3(50, 50, 50) * dt;
 			}
 			else
 			{
 				active = false;
+				canCatch = false;
 				break;
 			}
 		}
@@ -130,6 +133,8 @@ void Enemy::Update(double dt)
 			break;
 		}
 	}
+
+	
 
 }
 

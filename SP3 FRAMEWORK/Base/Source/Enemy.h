@@ -33,6 +33,8 @@ struct Enemy : public GameObject
 
 	bool captured = false;
 
+	bool canCatch = false;
+
 	void Update(double dt);
 	void SetWaypoint();
 	void Chase(double dt,Vector3 PlayerPos);

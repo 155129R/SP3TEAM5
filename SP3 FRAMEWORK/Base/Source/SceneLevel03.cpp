@@ -88,6 +88,8 @@ void SceneLevel03::Init()
 
 void SceneLevel03::Update(double dt)
 {
+	camera.Update(dt);
+
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
@@ -121,7 +123,7 @@ void SceneLevel03::Update(double dt)
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
-	camera.Update(dt);
+	
 
 	if (Flashlight)
 	{
@@ -529,9 +531,11 @@ void SceneLevel03::RenderWorld()
 {
 	RenderSkyplane();
 	RenderTerrain();
-	RenderBullets(true);
-	RenderWeapons(false);
 	RenderEnvironment(false);
+	RenderWeapons(false); 
+	RenderBullets(false);
+	RenderInventory();
+
 }
 
 void SceneLevel03::RenderReflection()

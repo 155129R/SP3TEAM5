@@ -276,8 +276,8 @@ void SceneBase::Init()
 	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
-	meshList[VACUUM] = MeshBuilder::GenerateOBJ("Vacuum", "OBJ//vacuum.obj");
-	meshList[VACUUM]->textureArray[0] = LoadTGA("Image//vacuum.tga");
+	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
+	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -345,8 +345,8 @@ void SceneBase::Init()
 	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
 
 	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
-	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_GATE]->textureArray[1] = LoadTGA("Image//rust.tga");
+	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
 
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
@@ -549,18 +549,13 @@ void SceneBase::SpawnGhost()
 
 void SceneBase::Update(double dt)
 {
-	if (weaponType == 3)
-	{
-		UpdateCapture(dt);
-	}
-	else
-	{
-		UpdateShoot(dt);
-	}
+	instance->singletonCamera = &camera;
+	UpdatePlayer(dt);
+	Singleton::getInstance()->player->setPosition(camera.position);
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
-	if (Application::IsKeyPressed('I'))
+	/*if (Application::IsKeyPressed('I'))
 	{
 		lights[0].position.z -= (float)50 * dt;
 	}
@@ -583,6 +578,21 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 	{
 		lights[0].position.y += (float)50 * dt;
+	}*/
+
+	static bool inventoryButtonState = false;
+	if (Application::IsKeyPressed('I'))
+	{
+		if (!inventoryButtonState)
+		{
+			inventoryButtonState = true;
+			showInventory *= -1;
+		}
+	}
+	else if (!Application::IsKeyPressed('I'))
+	{
+		if (inventoryButtonState)
+			inventoryButtonState = false;
 	}
 
 	if (Application::IsKeyPressed('1'))
@@ -654,7 +664,7 @@ void SceneBase::Update(double dt)
 				1000
 				));
 		}
-		else
+		else if (weaponType == 1 || weaponType == 2)
 		{
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -667,14 +677,21 @@ void SceneBase::Update(double dt)
 		
 	}
 
-	UpdatePlayer(dt);
-	Singleton::getInstance()->player->setPosition(camera.position);
+	
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
+
+
+	UpdateCapture(dt);
+
+	UpdateShoot(dt);
+
+	rotateKey += (float)(1 * dt);
+
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1163,6 +1180,17 @@ void SceneBase::UpdateHitboxes(double dt)
 					obj->Hitbox.Resize(Vector3(410, 410, 410));
 					break;
 				}
+
+				case AABBObject::OBJECT_TYPE::BARRICADE:
+					break;
+
+				case AABBObject::OBJECT_TYPE::KEY:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+					obj->Hitbox.Resize(Vector3(15, 50, 15));
+					break;
+				}
+
 				default:
 				{
 					break;
@@ -1276,6 +1304,17 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 					RenderMeshOutlined(meshList[HOUSE2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+
+				case AABBObject::OBJECT_TYPE::KEY:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(rotateKey * 20, 0, 1, 0);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_KEY], false);
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1441,9 +1480,9 @@ void SceneBase::RenderBullets(bool light)
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], light);
 		modelStack.PopMatrix();
-
-
-
+	}
+	for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end(); ++it)
+	{
 		modelStack.PushMatrix();
 		modelStack.Translate(
 			(*it)->position.x,
@@ -1454,7 +1493,6 @@ void SceneBase::RenderBullets(bool light)
 		RenderMesh(meshList[GEO_LIGHTBALL], light);
 		modelStack.PopMatrix();
 	}
-
 }
 
 void SceneBase::RenderWeapons(bool light)
@@ -1468,11 +1506,25 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
 		break;
 	case 3:
-		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
+		//RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
+		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
 		break;
 	}
 }
+void SceneBase::RenderInventory()
+{
+	if (showInventory > 0)
+	{
+		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		if (Singleton::getInstance()->gotKey == true)
+			RenderOBJOnScreen(meshList[GEO_KEY], 1, 20, 38, 10, 0, rotateKey * 20, 0, false);
+	}
+	else
+	{
 
+	}
+
+}
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
 {
 	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
