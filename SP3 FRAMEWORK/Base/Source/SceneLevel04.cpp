@@ -147,6 +147,8 @@ void SceneLevel04::Init()
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	Color fogColor(0.2f, 0.2f, 0.2f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+
+
 }
 
 void SceneLevel04::Update(double dt)
@@ -560,7 +562,8 @@ void SceneLevel04::RenderEnvironment(bool Light)
 	modelStack.Scale(60, 70, 60);
 	RenderMeshOutlined(meshList[DEADTREE], true);
 	modelStack.PopMatrix();
-
+	RenderObjects(true);
+	RenderEnemies(true);
 }
 
 void SceneLevel04::RenderHUD()
@@ -743,8 +746,6 @@ void SceneLevel04::RenderPassMain()
 		RenderHUD();
 	}
 
-	RenderObjects(true);
-	RenderEnemies(true);
 	//bLightEnabled = false;
 
 	//On screen text

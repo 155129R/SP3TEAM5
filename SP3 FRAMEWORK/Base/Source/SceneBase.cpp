@@ -514,6 +514,7 @@ void SceneBase::Init()
 */
 	Singleton::getInstance()->player->Init();
 
+	delay = 0;
 }
 
 void SceneBase::Update(double dt)
@@ -972,7 +973,6 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (Singleton::getInstance()->stateCheck)
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
@@ -1132,6 +1132,12 @@ void SceneBase::UpdateHitboxes(double dt)
 					obj->Hitbox.Resize(Vector3(410, 410, 410));
 					break;
 				}
+				case AABBObject::OBJECT_TYPE::TOMBSTONE:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 0, 0));
+					obj->Hitbox.Resize(Vector3(100, 100, 100));
+					break;
+				}
 				default:
 				{
 					break;
@@ -1245,6 +1251,16 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 					RenderMeshOutlined(meshList[HOUSE2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::TOMBSTONE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[TOMBSTONE], false);
 					modelStack.PopMatrix();
 					break;
 				}
