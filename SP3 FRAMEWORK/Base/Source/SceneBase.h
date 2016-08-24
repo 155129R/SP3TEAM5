@@ -6,29 +6,22 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
-#include <vector>
 #include "Particle.h"
 #include "DepthFBO.h"
-#include <map>
 #include "LoadHmap.h"
 #include "LoadTGA.h"
 #include "LoadCSV.h"
+#include "MeshBuilder.h"
+#include "Minimap.h"
+#include "Bullet.h"
+#include "Capture.h"
+#include "Singleton.h"
 
 struct Partition
 {
 	Vector3 MINPOS;
 	Vector3 MAXPOS;
 };
-
-#include "MeshBuilder.h"
-
-#include "Player.h"
-#include "Enemy.h"
-#include "AABBObject.h"
-#include "Minimap.h"
-#include "Bullet.h"
-#include "Capture.h"
-#include "Singleton.h"
 
 class SceneBase : public Scene
 {

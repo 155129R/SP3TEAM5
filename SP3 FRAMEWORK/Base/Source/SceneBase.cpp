@@ -393,7 +393,7 @@ void SceneBase::Init()
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
-	
+
 	//Minimap
 	m_Minimap = new Minimap();
 	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
@@ -498,7 +498,6 @@ void SceneBase::Init()
 		cout << endl;
 	}
 
-*/
 	Singleton::getInstance()->player->Init();
 
 	delay = 0;
@@ -528,24 +527,24 @@ void SceneBase::SpawnGhost()
 		{
 			switch (Type)
 			{
-				case 1:
-				{
-					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::PATROL);
-					instance->Enemy_list.push_back(Ghost);
-					break;
-				}
-				case 2:
-				{
-					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::PATROL);
-					instance->Enemy_list.push_back(Ghost);
-					break;
-				}
-				case 3:
-				{
-					Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::PATROL);
-					instance->Enemy_list.push_back(Ghost);
-					break;
-				}
+			case 1:
+			{
+				Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::PATROL);
+				instance->Enemy_list.push_back(Ghost);
+				break;
+			}
+			case 2:
+			{
+				Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_2, Enemy::PATROL);
+				instance->Enemy_list.push_back(Ghost);
+				break;
+			}
+			case 3:
+			{
+				Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::PATROL);
+				instance->Enemy_list.push_back(Ghost);
+				break;
+			}
 			}
 		}
 		Counter++;
@@ -563,27 +562,27 @@ void SceneBase::Update(double dt)
 
 	/*if (Application::IsKeyPressed('I'))
 	{
-		lights[0].position.z -= (float)50 * dt;
+	lights[0].position.z -= (float)50 * dt;
 	}
 	if (Application::IsKeyPressed('K'))
 	{
-		lights[0].position.z += (float)50 * dt;
+	lights[0].position.z += (float)50 * dt;
 	}
 	if (Application::IsKeyPressed('J'))
 	{
-		lights[0].position.x -= (float)50 * dt;
+	lights[0].position.x -= (float)50 * dt;
 	}
 	if (Application::IsKeyPressed('L'))
 	{
-		lights[0].position.x += (float)50 * dt;
+	lights[0].position.x += (float)50 * dt;
 	}
 	if (Application::IsKeyPressed('O'))
 	{
-		lights[0].position.y -= (float)50 * dt;
+	lights[0].position.y -= (float)50 * dt;
 	}
 	if (Application::IsKeyPressed('P'))
 	{
-		lights[0].position.y += (float)50 * dt;
+	lights[0].position.y += (float)50 * dt;
 	}*/
 
 	static bool inventoryButtonState = false;
@@ -613,10 +612,10 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('4'))
 		//mode = true;
 
-	if (Application::IsKeyPressed('G'))
-	{
-		mode = false;
-	}
+		if (Application::IsKeyPressed('G'))
+		{
+			mode = false;
+		}
 
 	if (Application::IsKeyPressed('H'))
 	{
@@ -680,10 +679,10 @@ void SceneBase::Update(double dt)
 				10
 				));
 		}
-		
+
 	}
 
-	
+
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
@@ -1071,7 +1070,7 @@ void SceneBase::UpdatePlayer(double dt)
 	{
 		camera.Tired = false;
 	}
-	
+
 	//UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
@@ -1146,77 +1145,77 @@ void SceneBase::UpdateHitboxes(double dt)
 		{
 			switch (obj->Object)
 			{
-				case AABBObject::OBJECT_TYPE::LOGS:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
-					obj->Hitbox.Resize(Vector3(180, 100, 400));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::BRIDGE:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3, 50, 0));
-					obj->Hitbox.Resize(Vector3(140, 75, 650));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::FOUNTAIN:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 50, 0));
-					obj->Hitbox.Resize(Vector3(100, 70, 100));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::HEDGE:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 100, 0));
-					obj->Hitbox.Resize(Vector3(40, 40, 80));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::BENCH:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 75, 0));
-					obj->Hitbox.Resize(Vector3(40, 40, 50));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::POT:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 50, 0));
-					obj->Hitbox.Resize(Vector3(20, 100, 20));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::HOUSE1:
-				case AABBObject::OBJECT_TYPE::HOUSE2:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 0, 0));
-					obj->Hitbox.Resize(Vector3(410, 410, 410));
-					break;
-				}
+			case AABBObject::OBJECT_TYPE::LOGS:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
+				obj->Hitbox.Resize(Vector3(180, 100, 400));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::BRIDGE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(-3, 50, 0));
+				obj->Hitbox.Resize(Vector3(140, 75, 650));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::FOUNTAIN:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 50, 0));
+				obj->Hitbox.Resize(Vector3(100, 70, 100));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::HEDGE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 100, 0));
+				obj->Hitbox.Resize(Vector3(40, 40, 80));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::BENCH:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 75, 0));
+				obj->Hitbox.Resize(Vector3(40, 40, 50));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::POT:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 50, 0));
+				obj->Hitbox.Resize(Vector3(20, 100, 20));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::HOUSE1:
+			case AABBObject::OBJECT_TYPE::HOUSE2:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 0, 0));
+				obj->Hitbox.Resize(Vector3(410, 410, 410));
+				break;
+			}
 
-				case AABBObject::OBJECT_TYPE::TOMBSTONE:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
-					obj->Hitbox.Resize(Vector3(45, 55, 25));
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::DEADTREE:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 0, 0));
-					obj->Hitbox.Resize(Vector3(160, 240, 160));
-					break;
-				}
+			case AABBObject::OBJECT_TYPE::TOMBSTONE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
+				obj->Hitbox.Resize(Vector3(45, 55, 25));
+				break;
+			}
+			case AABBObject::OBJECT_TYPE::DEADTREE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 0, 0));
+				obj->Hitbox.Resize(Vector3(160, 240, 160));
+				break;
+			}
 
-				case AABBObject::OBJECT_TYPE::BARRICADE:
-					break;
+			case AABBObject::OBJECT_TYPE::BARRICADE:
+				break;
 
-				case AABBObject::OBJECT_TYPE::KEY:
-				{
-					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
-					obj->Hitbox.Resize(Vector3(15, 50, 15));
-					break;
-				}
+			case AABBObject::OBJECT_TYPE::KEY:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(15, 50, 15));
+				break;
+			}
 
-				default:
-				{
-					break;
-				}
+			default:
+			{
+				break;
+			}
 			}
 		}
 	}
@@ -1347,7 +1346,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 					RenderMeshOutlined(meshList[DEADTREE], true);
-
+				}
 
 				case AABBObject::OBJECT_TYPE::KEY:
 				{
@@ -1364,10 +1363,12 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 				{
 					break;
 				}
+			
 			}
 		}
 	}
 }
+
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
 	playerPartition = getPartition(camera.position);

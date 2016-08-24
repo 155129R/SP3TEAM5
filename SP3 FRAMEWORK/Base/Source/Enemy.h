@@ -30,7 +30,7 @@ struct Enemy : public GameObject
 	~Enemy();
 
 	AABB Hitbox;
-
+	int HP;
 	bool captured = false;
 
 	bool canCatch = false;
@@ -45,7 +45,6 @@ struct Enemy : public GameObject
 private:
 	//Stats
 	int MAX_HP;
-	int HP;
 	int Attack;
 
 	//Patrol waypoints

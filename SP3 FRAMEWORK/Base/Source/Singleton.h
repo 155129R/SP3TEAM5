@@ -62,13 +62,11 @@ private:
 		mousex = 400;
 		mousey = 300;
 		
-		program_state = PROGRAM_GAME1;
+		program_state = PROGRAM_MENU;
 		stateCheck = false;
 
 		singletonCamera = new Camera3();
 
-		program_state = PROGRAM_GAME2;
-		stateCheck = false;
 		gotKey = false;
 	}
 };
