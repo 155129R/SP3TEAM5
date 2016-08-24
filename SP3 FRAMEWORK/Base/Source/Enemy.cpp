@@ -2,7 +2,7 @@
 
 Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 {
-	captured = false;
+	canCatch = false;
 	switch (Type)
 	{
 		case ENEMY_TYPE::GHOST_1:
@@ -48,6 +48,10 @@ void Enemy::Update(double dt, Vector3 playerPos)
 	{
 		State = ENEMY_STATE::WEAKEN;
 	}
+	if (canCatch)
+	{
+		State = ENEMY_STATE::CAPTURED;
+	}
 
 	switch (State)
 	{
@@ -68,27 +72,25 @@ void Enemy::Update(double dt, Vector3 playerPos)
 			break;
 		}
 		case ENEMY_STATE::WEAKEN:
-		{
-			if (captured)
-			{
-				State = ENEMY_STATE::CAPTURED;
-			}
+		{	
 			break;
 		}
 		case ENEMY_STATE::CAPTURED:
 		{
 			Vector3 dir = (Singleton::getInstance()->player->getPosition() - pos).Normalized();
-			pos += dir * 100 * dt;
+			Vector3 vaccum = dir + Singleton::getInstance()->singletonCamera->right;
+			pos += vaccum + Vector3(0, -1, 0) * 80 * dt;
 
 			if (scale.x > 0.5 && 
 				scale.y > 0.5 && 
 				scale.z > 0.5)
 			{
-				scale -= Vector3(30, 30, 30) * dt;
+			scale -= Vector3(50, 50, 50) * dt;
 			}
 			else
 			{
 				active = false;
+				canCatch = false;
 				break;
 			}
 		}
@@ -98,6 +100,8 @@ void Enemy::Update(double dt, Vector3 playerPos)
 			break;
 		}
 	}
+
+	
 
 }
 

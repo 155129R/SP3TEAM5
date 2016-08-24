@@ -151,6 +151,8 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
+	camera.Update(dt);
+
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
@@ -159,7 +161,7 @@ void SceneLevel04::Update(double dt)
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
-	camera.Update(dt);
+	
 
 	if (Flashlight)
 	{

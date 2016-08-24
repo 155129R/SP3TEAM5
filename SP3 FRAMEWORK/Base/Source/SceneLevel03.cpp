@@ -86,7 +86,7 @@ void SceneLevel03::Init()
 		//		break;
 		//	}
 		//}
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::ATTACK);
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::PATROL);
 		Ghost->pos.Set(0, 0, 0);
 		instance->Enemy_list.push_back(Ghost);
 	}
@@ -117,6 +117,8 @@ void SceneLevel03::Init()
 
 void SceneLevel03::Update(double dt)
 {
+	camera.Update(dt);
+
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
@@ -150,7 +152,7 @@ void SceneLevel03::Update(double dt)
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
-	camera.Update(dt);
+	
 
 	if (Flashlight)
 	{
@@ -558,9 +560,9 @@ void SceneLevel03::RenderWorld()
 {
 	RenderSkyplane();
 	RenderTerrain();
-	RenderBullets(false);
-	RenderWeapons(false);
 	RenderEnvironment(false);
+	RenderWeapons(false); 
+	RenderBullets(false);
 }
 
 void SceneLevel03::RenderReflection()

@@ -6,6 +6,7 @@
 #include "AABBObject.h"
 #include "Enemy.h"
 #include "Player.h"
+
 using std::map;
 using std::vector;
 
@@ -39,6 +40,8 @@ class Singleton
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 
+		Camera3* singletonCamera;
+
 		map<AABB*, int> objectCount;
 
 		//Environment
@@ -58,8 +61,10 @@ private:
 		mousex = 400;
 		mousey = 300;
 
-		program_state = PROGRAM_MENU;
+		program_state = PROGRAM_GAME1;
 		stateCheck = false;
+
+		singletonCamera = new Camera3();
 
 	}
 };

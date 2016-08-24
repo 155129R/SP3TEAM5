@@ -188,6 +188,8 @@ void SceneLevel02::Init()
 
 void SceneLevel02::Update(double dt)
 {
+	camera.Update(dt);
+
 	SceneBase::Update(dt);
 
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
@@ -282,7 +284,7 @@ void SceneLevel02::Update(double dt)
 	UpdateParticle(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	camera.Update(dt);
+	
 
 	if (Flashlight)
 	{

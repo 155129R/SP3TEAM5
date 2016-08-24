@@ -10,6 +10,7 @@ public:
 	Vector3 target;
 	Vector3 up;
 	Vector3 view;
+	Vector3 right;
 
 	Camera();
 	~Camera();

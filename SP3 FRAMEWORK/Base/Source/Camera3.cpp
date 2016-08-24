@@ -115,7 +115,7 @@ void Camera3::Sideway(double dt, bool Left)
 	if (Left)
 	{
 		view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
+		right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
 		forwardPos = position - right * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -163,7 +163,7 @@ void Camera3::Sideway(double dt, bool Left)
 	else
 	{
 		view = (target - position).Normalized();
-		Vector3 right = view.Cross(up);
+		right = view.Cross(up);
 		right.y = 0;
 		right.Normalize();
 		forwardPos = position + right * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -217,7 +217,7 @@ void Camera3::Yaw(double dt)
 	rotation.SetToRotation(yaw, 0, 1, 0);
 	view = rotation * view;
 	target = position + view;
-	Vector3 right = view.Cross(up);
+	right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
 	up = right.Cross(view).Normalized();
@@ -227,7 +227,7 @@ void Camera3::Pitch(double dt)
 {
 	float pitch = (float)(-MOUSE_SPEED * Application::camera_pitch * (float)dt);
 	view = (target - position).Normalized();
-	Vector3 right = view.Cross(up);
+	right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
 	up = right.Cross(view).Normalized();
@@ -245,7 +245,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
 	view = (target - position).Normalized();
-	Vector3 right = view.Cross(up);
+	right = view.Cross(up);
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();

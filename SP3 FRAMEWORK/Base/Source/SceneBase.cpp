@@ -276,8 +276,8 @@ void SceneBase::Init()
 	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
-	meshList[VACUUM] = MeshBuilder::GenerateOBJ("Vacuum", "OBJ//vacuum.obj");
-	meshList[VACUUM]->textureArray[0] = LoadTGA("Image//vacuum.tga");
+	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
+	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -518,14 +518,9 @@ void SceneBase::Init()
 
 void SceneBase::Update(double dt)
 {
-	if (weaponType == 3)
-	{
-		UpdateCapture(dt);
-	}
-	else if (weaponType == 1 || weaponType == 2)
-	{
-		UpdateShoot(dt);
-	}
+	instance->singletonCamera = &camera;
+	UpdatePlayer(dt);
+	Singleton::getInstance()->player->setPosition(camera.position);
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
@@ -623,7 +618,7 @@ void SceneBase::Update(double dt)
 				1000
 				));
 		}
-		else
+		else if (weaponType == 1 || weaponType == 2)
 		{
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -636,14 +631,17 @@ void SceneBase::Update(double dt)
 		
 	}
 
-	UpdatePlayer(dt);
-	Singleton::getInstance()->player->setPosition(camera.position);
+	
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
+
+	UpdateCapture(dt);
+
+	UpdateShoot(dt);
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1132,6 +1130,8 @@ void SceneBase::UpdateHitboxes(double dt)
 					obj->Hitbox.Resize(Vector3(410, 410, 410));
 					break;
 				}
+				case AABBObject::OBJECT_TYPE::BARRICADE:
+					break;
 				default:
 				{
 					break;
@@ -1403,9 +1403,9 @@ void SceneBase::RenderBullets(bool light)
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], light);
 		modelStack.PopMatrix();
-
-
-
+	}
+	for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end(); ++it)
+	{
 		modelStack.PushMatrix();
 		modelStack.Translate(
 			(*it)->position.x,
@@ -1416,7 +1416,6 @@ void SceneBase::RenderBullets(bool light)
 		RenderMesh(meshList[GEO_LIGHTBALL], light);
 		modelStack.PopMatrix();
 	}
-
 }
 
 void SceneBase::RenderWeapons(bool light)
@@ -1430,7 +1429,8 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
 		break;
 	case 3:
-		RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
+		//RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
+		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
 		break;
 	}
 }

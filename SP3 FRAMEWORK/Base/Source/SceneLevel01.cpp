@@ -25,6 +25,8 @@ void SceneLevel01::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+	
+	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -58,12 +60,14 @@ void SceneLevel01::Init()
 
 void SceneLevel01::Update(double dt)
 {
+	camera.Update(dt);
+
 	SceneBase::Update(dt);
 
 	UpdateParticle(dt);
 	
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	camera.Update(dt);
+	
 
 
 	if (Flashlight)
@@ -298,12 +302,6 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
-	modelStack.Scale(1, 1, 1);
-	RenderMeshOutlined(meshList[TOILETBOWL], Light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
 	modelStack.Translate(400, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
 	modelStack.Scale(1, 1, 1);
 	RenderMeshOutlined(meshList[CHANDELIER], Light);
@@ -431,6 +429,13 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMeshOutlined(meshList[TOILETBOWL], Light);
+	modelStack.PopMatrix();
+
 	//[Left] Second room
 	modelStack.PushMatrix();
 	modelStack.Translate(1195, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -659);
@@ -472,6 +477,12 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
+	modelStack.Scale(1, 1, 1);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMeshOutlined(meshList[TOILETBOWL], Light);
+	modelStack.PopMatrix();
 
 	//[Right] first room
 	modelStack.PushMatrix();
