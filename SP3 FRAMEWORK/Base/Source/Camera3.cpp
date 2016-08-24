@@ -31,8 +31,7 @@ void Camera3::Forward(double dt)
 	//			willCollide = false;
 	//	}
 	//}
-	if (!willCollide)
-	{
+
 		for (auto object : Singleton::getInstance()->Object_list)
 		{
 			if (object->active)
@@ -46,7 +45,7 @@ void Camera3::Forward(double dt)
 					willCollide = false;
 			}
 		}
-	}
+
 	if (!willCollide)
 	{
 		target.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -79,8 +78,7 @@ void Camera3::Backward(double dt)
 	//	else
 	//		willCollide = false;
 	//}
-	if (!willCollide)
-	{
+
 		for (auto object : Singleton::getInstance()->Object_list)
 		{
 			if (object->Hitbox.Collide(forwardPos))
@@ -91,7 +89,7 @@ void Camera3::Backward(double dt)
 			else
 				willCollide = false;
 		}
-	}
+	
 	if (!willCollide)
 	{
 		target.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -129,8 +127,7 @@ void Camera3::Sideway(double dt, bool Left)
 			else
 				willCollide = false;
 		}*/
-		if (!willCollide)
-		{
+
 			for (auto object : Singleton::getInstance()->Object_list)
 			{
 				if (object->Hitbox.Collide(forwardPos))
@@ -141,7 +138,7 @@ void Camera3::Sideway(double dt, bool Left)
 				else
 					willCollide = false;
 			}
-		}
+		
 		if (!willCollide)
 		{
 			target.x -= right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -177,8 +174,7 @@ void Camera3::Sideway(double dt, bool Left)
 			else
 				willCollide = false;
 		}*/
-		if (!willCollide)
-		{
+
 			for (auto object : Singleton::getInstance()->Object_list)
 			{
 				if (object->Hitbox.Collide(forwardPos))
@@ -189,7 +185,7 @@ void Camera3::Sideway(double dt, bool Left)
 				else
 					willCollide = false;
 			}
-		}
+		
 		if (!willCollide)
 		{
 			target.x += right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;

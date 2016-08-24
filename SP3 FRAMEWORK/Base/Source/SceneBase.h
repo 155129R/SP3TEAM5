@@ -282,6 +282,7 @@ public:
 	void RenderRadar(void);
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
+	void RenderInventory();
 
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
@@ -341,11 +342,12 @@ protected:
 
 	float FogAmount;
 	float fps;
-	bool ShowHitbox = false;
+	bool ShowHitbox = true;
 
 	//Player
 	float radarAngle = 0;
 	float rotateAngle = 0;
+	float rotateKey = 0;
 	Minimap* m_Minimap;
 	Color Black;
 
@@ -373,6 +375,8 @@ protected:
 
 	//weapon
 	int weaponType;
+
+	int showInventory;
 
 	Singleton* instance;
 

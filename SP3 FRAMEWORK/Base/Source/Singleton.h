@@ -36,7 +36,8 @@ class Singleton
 
 		double mousex;
 		double mousey;
-
+		bool gotKey;
+		
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 
@@ -60,12 +61,15 @@ private:
 
 		mousex = 400;
 		mousey = 300;
-
+		
 		program_state = PROGRAM_GAME1;
 		stateCheck = false;
 
 		singletonCamera = new Camera3();
 
+		program_state = PROGRAM_GAME2;
+		stateCheck = false;
+		gotKey = false;
 	}
 };
 

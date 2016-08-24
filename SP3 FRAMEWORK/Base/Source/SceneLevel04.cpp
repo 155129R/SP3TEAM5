@@ -636,6 +636,7 @@ void SceneLevel04::RenderWorld()
 	RenderEnvironment(true);
 	RenderBullets(false);
 	RenderWeapons(false);
+	RenderInventory();
 	//RenderSprite();
 }
 

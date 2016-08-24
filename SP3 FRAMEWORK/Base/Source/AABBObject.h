@@ -21,6 +21,7 @@ public:
 		POT,
 		HOUSE1,
 		HOUSE2,
+		KEY,
 
 		//FOREST
 		LOGS,

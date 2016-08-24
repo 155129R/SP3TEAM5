@@ -345,8 +345,8 @@ void SceneBase::Init()
 	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
 
 	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
-	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_GATE]->textureArray[1] = LoadTGA("Image//rust.tga");
+	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
 
 	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
 	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
@@ -524,7 +524,7 @@ void SceneBase::Update(double dt)
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
-	if (Application::IsKeyPressed('I'))
+	/*if (Application::IsKeyPressed('I'))
 	{
 		lights[0].position.z -= (float)50 * dt;
 	}
@@ -547,6 +547,21 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('P'))
 	{
 		lights[0].position.y += (float)50 * dt;
+	}*/
+
+	static bool inventoryButtonState = false;
+	if (Application::IsKeyPressed('I'))
+	{
+		if (!inventoryButtonState)
+		{
+			inventoryButtonState = true;
+			showInventory *= -1;
+		}
+	}
+	else if (!Application::IsKeyPressed('I'))
+	{
+		if (inventoryButtonState)
+			inventoryButtonState = false;
 	}
 
 	if (Application::IsKeyPressed('1'))
@@ -639,9 +654,13 @@ void SceneBase::Update(double dt)
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
 
+
 	UpdateCapture(dt);
 
 	UpdateShoot(dt);
+
+	rotateKey += (float)(1 * dt);
+
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1130,8 +1149,17 @@ void SceneBase::UpdateHitboxes(double dt)
 					obj->Hitbox.Resize(Vector3(410, 410, 410));
 					break;
 				}
+
 				case AABBObject::OBJECT_TYPE::BARRICADE:
 					break;
+
+				case AABBObject::OBJECT_TYPE::KEY:
+				{
+					obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+					obj->Hitbox.Resize(Vector3(15, 50, 15));
+					break;
+				}
+
 				default:
 				{
 					break;
@@ -1245,6 +1273,17 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 					RenderMeshOutlined(meshList[HOUSE2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+
+				case AABBObject::OBJECT_TYPE::KEY:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(rotateKey * 20, 0, 1, 0);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_KEY], false);
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1434,7 +1473,20 @@ void SceneBase::RenderWeapons(bool light)
 		break;
 	}
 }
+void SceneBase::RenderInventory()
+{
+	if (showInventory > 0)
+	{
+		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		if (Singleton::getInstance()->gotKey == true)
+			RenderOBJOnScreen(meshList[GEO_KEY], 1, 20, 38, 10, 0, rotateKey * 20, 0, false);
+	}
+	else
+	{
 
+	}
+
+}
 float SceneBase::getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos)
 {
 	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);

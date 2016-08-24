@@ -563,6 +563,8 @@ void SceneLevel03::RenderWorld()
 	RenderEnvironment(false);
 	RenderWeapons(false); 
 	RenderBullets(false);
+	RenderInventory();
+
 }
 
 void SceneLevel03::RenderReflection()

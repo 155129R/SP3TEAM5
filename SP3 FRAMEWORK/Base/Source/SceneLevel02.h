@@ -20,6 +20,7 @@ public:
 	void RenderSkyplane();
 	void RenderTerrain();
 	void RenderEnvironment(bool Light);
+	void RenderOthers(bool Light);
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
@@ -62,7 +63,7 @@ private:
 	Vector3 item2pos;
 	Vector3 item3pos;
 
-	int showInventory;
+	AABBObject* keyPtr;
 };
 
 #endif
