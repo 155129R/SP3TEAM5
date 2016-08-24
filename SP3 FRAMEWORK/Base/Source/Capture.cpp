@@ -32,7 +32,7 @@ void Capture::Update(double dt)
 		if (enemy->active)
 		{
 			if (enemy->Hitbox.Collide(position)){
-				enemy->captured = true;
+ 				enemy->captured = true;
 				deleteProj = true;
 			}
 

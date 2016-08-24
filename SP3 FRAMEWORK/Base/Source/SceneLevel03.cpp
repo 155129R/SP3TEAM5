@@ -86,7 +86,7 @@ void SceneLevel03::Init()
 		//		break;
 		//	}
 		//}
-		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::CAPTURED);
+		Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_3, Enemy::ATTACK);
 		Ghost->pos.Set(0, 0, 0);
 		instance->Enemy_list.push_back(Ghost);
 	}
@@ -562,7 +562,7 @@ void SceneLevel03::RenderWorld()
 {
 	RenderSkyplane();
 	RenderTerrain();
-	RenderBullets(true);
+	RenderBullets(false);
 	RenderWeapons(false);
 	RenderEnvironment(false);
 }
