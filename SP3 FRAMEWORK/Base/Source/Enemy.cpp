@@ -2,11 +2,13 @@
 
 Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 {
+	captured = false;
 	switch (Type)
 	{
 		case ENEMY_TYPE::GHOST_1:
 		{
 			MAX_HP = 6;
+			HP = MAX_HP;
 			speed = 100;
 			Attack = 3;
 			break;
@@ -14,6 +16,7 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 		case ENEMY_TYPE::GHOST_2:
 		{
 			MAX_HP = 10;
+			HP = MAX_HP;
 			speed = 200;
 			Attack = 6;
 			break;
@@ -21,6 +24,7 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 		case ENEMY_TYPE::GHOST_3:
 		{
 			MAX_HP = 3;
+			HP = MAX_HP;
 			speed = 300;
 			Attack = 10;
 			break;

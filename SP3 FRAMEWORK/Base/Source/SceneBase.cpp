@@ -523,7 +523,7 @@ void SceneBase::Update(double dt)
 	{
 		UpdateCapture(dt);
 	}
-	else
+	else if (weaponType == 1 || weaponType == 2)
 	{
 		UpdateShoot(dt);
 	}
