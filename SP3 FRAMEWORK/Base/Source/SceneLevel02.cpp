@@ -25,6 +25,48 @@ void SceneLevel02::Init()
 	
 	SceneBase::Init();
 	lights[0].position.Set(0, 500, 0);
+
+	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
+	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
+
+	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
+	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
+
+	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
+	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+
+	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
+
+	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
+	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
+
+	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
+
+	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
+	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
+
+	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
+	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
+
+	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//bench.obj");
+	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//bench.tga");
+
+	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
+	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
+
+	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
+	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
+
+	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
+
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
 	//Random my random randomly using srand
@@ -71,6 +113,16 @@ void SceneLevel02::Init()
 
 	
 
+	initSceneObjects();
+
+	SpawnGhost();
+
+	lights[0].position.Set(130, 150, 100);
+	lights[0].power = 2.f;
+}
+
+void SceneLevel02::initSceneObjects()
+{
 	AABBObject * key = new AABBObject();
 	key->Object = AABBObject::OBJECT_TYPE::KEY;
 	key->active = true;
@@ -193,7 +245,6 @@ void SceneLevel02::Init()
 	Pot->scale.Set(20, 10, 20);
 	instance->Object_list.push_back(Pot);
 
-	SpawnGhost();
 }
 
 void SceneLevel02::Update(double dt)
@@ -687,9 +738,8 @@ void SceneLevel02::RenderWorld()
 	RenderObjects(ShowHitbox);
 	RenderEnvironment(false);
 	RenderOthers(false);
+	RenderEnemies(false);
 	RenderBullets(false);
-	RenderWeapons(false);
-	RenderInventory();
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
@@ -773,6 +823,8 @@ void SceneLevel02::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
+	RenderWeapons(false);
+	RenderInventory();
 	//Render objects
 	RenderLight();
 

@@ -351,6 +351,14 @@ protected:
 	int ghost_Amount[9];
 	float delay = 0;
 
+	//shooting 
+	float readyToShoot = 0.f;
+	int fireRate = 1;
+	int rotatePistol;
+	int rotateRifle;
+	bool gunUp;
+	bool gunDown;
+
 	//bullet
 	std::vector<Bullet*> bulletList;
 	//capture
