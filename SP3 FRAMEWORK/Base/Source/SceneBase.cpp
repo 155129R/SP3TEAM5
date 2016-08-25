@@ -1419,7 +1419,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					{
 						modelStack.PushMatrix();
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Rotate(rotateKey * 20, 0, 1, 0);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 						RenderMeshOutlined(meshList[GEO_KEY], true);
 						modelStack.PopMatrix();

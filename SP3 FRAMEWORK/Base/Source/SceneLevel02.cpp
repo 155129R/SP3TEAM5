@@ -42,8 +42,8 @@ void SceneLevel02::Init()
 	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
 
 	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
-	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
+	//meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//rust.tga");
 
 	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
 	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
@@ -98,16 +98,7 @@ void SceneLevel02::Init()
 
 	spatialPartitioning = false;
 
-	item1pos = Vector3(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	item1 = new AABB(item1pos, Vector3(10, 20, 10));
-
-	item2pos = Vector3(200, 0, 0);
-	item2 = new AABB(item2pos, Vector3(10, 20, 10));
-
-	item3pos = Vector3(0, 0, 200);
-	item3 = new AABB(item3pos, Vector3(10, 20, 10));
-
-	sound.playSoundEffect3D("Sound/fountain.wav",
+	sound.playSoundEffect3D("Sound/fountain.mp3",
 		irrklang::vec3df(0, 0, 0), true);
 
 	
