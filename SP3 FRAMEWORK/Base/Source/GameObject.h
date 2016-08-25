@@ -18,6 +18,7 @@ public:
 
 	bool active;
 	float speed;
+	float lifetime;
 };
 
 #endif

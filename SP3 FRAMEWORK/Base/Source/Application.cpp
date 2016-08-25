@@ -169,7 +169,7 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-	sceneManager->ChangeScene(0);
+	sceneManager->ChangeScene(4);
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))

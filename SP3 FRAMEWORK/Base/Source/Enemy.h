@@ -36,23 +36,22 @@ struct Enemy : public GameObject
 	bool canCatch = false;
 
 	void Update(double dt);
-	void SetWaypoint();
-	void Chase(double dt,Vector3 PlayerPos);
+	void Chase(double dt, Vector3 PlayerPos);
 	void scaleDown(double dt);
 	int DealDamage();
 	void TakeDamage(int Damage);
 
+	int GetHP();
+
 private:
 	//Stats
-	int MAX_HP;
-	int HP;
-	int Attack;
+		int MAX_HP;
+		int HP;
+		int Attack;
 
 	//Patrol waypoints
 	Vector3 waypoint[2];
 	int travel_to;
-
-	bool chasing;
 };
 
 #endif

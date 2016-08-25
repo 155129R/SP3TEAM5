@@ -103,23 +103,6 @@ void SceneLevel03::Update(double dt)
 		delay += dt;
 	}
 
-	//Update sprites
-	if (G1)
-	{
-		G1->Update(dt);
-		G1->m_anim->animActive = true;
-	}
-	if (G2)
-	{
-		G2->Update(dt);
-		G2->m_anim->animActive = true;
-	}
-	if (G3)
-	{
-		G3->Update(dt);
-		G3->m_anim->animActive = true;
-	}
-
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
 
@@ -532,10 +515,6 @@ void SceneLevel03::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderEnvironment(false);
-	RenderWeapons(false); 
-	RenderBullets(false);
-	RenderInventory();
-
 }
 
 void SceneLevel03::RenderReflection()
@@ -681,7 +660,7 @@ void SceneLevel03::RenderPassMain()
 	RenderReflection();
 
 	RenderObjects(ShowHitbox);
-	RenderEnemies(true);
+	RenderEnemies(ShowHitbox);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
 	if (!Singleton::getInstance()->stateCheck)
@@ -690,6 +669,9 @@ void SceneLevel03::RenderPassMain()
 	}
 
 	SceneBase::Render();
+	RenderWeapons(false);
+	RenderBullets(false);
+	RenderInventory();
 
 	//On screen text
 	{

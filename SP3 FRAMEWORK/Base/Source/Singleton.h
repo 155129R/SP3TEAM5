@@ -6,6 +6,7 @@
 #include "AABBObject.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "Boss.h"
 
 using std::map;
 using std::vector;
@@ -40,6 +41,7 @@ class Singleton
 		
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
+		Boss* boss;
 
 		Camera3* singletonCamera;
 
@@ -55,20 +57,16 @@ private:
 	{
 		//init stuff here
 		player = new Player();
-
-		/*program_state = PROGRAM_GAME2;
-		stateCheck = false;*/
-
+		boss = new Boss();
+		
 		mousex = 400;
 		mousey = 300;
 		
-		program_state = PROGRAM_GAME1;
+		program_state = PROGRAM_GAME4;
 		stateCheck = false;
 
 		singletonCamera = new Camera3();
 
-		program_state = PROGRAM_GAME2;
-		stateCheck = false;
 		gotKey = false;
 	}
 };

@@ -35,10 +35,10 @@ void Bullet::Update(double dt)
 	{
 		if (enemy->active)
 		{
-			if (enemy->HP >= 0)
+			if (enemy->GetHP() >= 0)
 			{
 				if (enemy->Hitbox.Collide(position)){
-					std::cout << enemy->HP << std::endl;
+					//std::cout << enemy->GetHP() << std::endl;
 					enemy->TakeDamage(1);
 					deleteBullet = true;
 				}
@@ -46,6 +46,18 @@ void Bullet::Update(double dt)
 					deleteBullet = true;
 				}
 			}
+		}
+	}
+	if (Singleton::getInstance()->boss->active)
+	{
+		if (Singleton::getInstance()->boss->Hitbox.Collide(position))
+		{
+			Singleton::getInstance()->boss->damage(1);
+			deleteBullet = true;
+		}
+		else if (distanceTravelled >= range)
+		{
+			deleteBullet = true;
 		}
 	}
 }

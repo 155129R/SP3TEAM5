@@ -48,6 +48,7 @@ void Enemy::Update(double dt)
 
 	if (HP <= 0)
 	{
+		HP = 0;
 		State = ENEMY_STATE::WEAKEN;
 	}
 	if (canCatch)
@@ -133,24 +134,14 @@ void Enemy::Update(double dt)
 			break;
 		}
 	}
-
-	
-
-}
-
-void Enemy::SetWaypoint()
-{
-	waypoint[0] = pos;
-	waypoint[1] = pos + (Math::RandFloatMinMax(-250, 250), 0, Math::RandFloatMinMax(-250, 250));
-	travel_to = 1;
 }
 
 void Enemy::Chase(double dt, Vector3 playerPos)
 {
 	//Move in to attack player
-	Vector3 dir = (Singleton::getInstance()->player->getPosition() - pos).Normalized();
+	Vector3 dir = (playerPos - pos).Normalized();
 	pos += dir * speed * dt;
-	if (Hitbox.Collide(Singleton::getInstance()->player->getPosition()))
+	if (Hitbox.Collide(playerPos))
 	{
 		//DEAL FEAR
 		Singleton::getInstance()->player->InflictFear(Attack);
@@ -166,4 +157,9 @@ int Enemy::DealDamage()
 void Enemy::TakeDamage(int Damage)
 {	
 	HP -= Damage;
+}
+
+int Enemy::GetHP()
+{
+	return HP;
 }

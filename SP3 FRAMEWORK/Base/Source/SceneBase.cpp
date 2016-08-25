@@ -393,7 +393,7 @@ void SceneBase::Init()
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
-	
+
 	//Minimap
 	m_Minimap = new Minimap();
 	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
@@ -404,6 +404,8 @@ void SceneBase::Init()
 	meshList[GEO_GREENBALL] = MeshBuilder::GenerateCircle("You on minimap", Color(0, 1, 0), 1.f);
 	meshList[GEO_REDBALL] = MeshBuilder::GenerateCircle("Enemy on minimap", Color(1, 0, 0), 1.f);
 	meshList[GEO_BLUEBALL] = MeshBuilder::GenerateCircle("Enemy(WEAKEN) on minimap", Color(0, 1, 1), 1.f);
+	meshList[GEO_BOSS_ICON] = MeshBuilder::GenerateQuad("Boss on minimap", Color(0, 0, 0), 1.f);
+	meshList[GEO_BOSS_ICON]->textureArray[0] = LoadTGA("Image//HUD//Boss_icon.tga");
 
 	//Loading screens
 	meshList[GEO_LOAD_1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
@@ -443,7 +445,7 @@ void SceneBase::Init()
 	//meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
 	//meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
-	//Sprite
+	//Enemy
 	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
 	meshList[GEO_GHOST1]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
 	meshList[GEO_GHOST2] = MeshBuilder::GenerateSpriteAnimation("Horsey", 4, 3);
@@ -451,6 +453,11 @@ void SceneBase::Init()
 	meshList[GEO_GHOST3] = MeshBuilder::GenerateSpriteAnimation("Horsey", 3, 6);
 	meshList[GEO_GHOST3]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
 	meshList[GEO_HITBOX] = MeshBuilder::GenerateCube("Hitbox", Color(1, 0, 0));
+
+	meshList[BOSS] = MeshBuilder::GenerateOBJ("Boss", "OBJ//Boss.obj");
+	meshList[BOSS]->textureArray[0] = LoadTGA("Image//Ghosts//Boss.tga");
+	meshList[WISP] = MeshBuilder::GenerateSpriteAnimation("Wisp bullet", 4, 4);
+	meshList[WISP]->textureArray[0] = LoadTGA("Image//Ghosts//Wisp.tga");
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
@@ -478,6 +485,13 @@ void SceneBase::Init()
 	{
 		G3->m_anim = new Animation();
 		G3->m_anim->Set(0, 17, 0, 2.0f, true);
+	}
+
+	Wisp = dynamic_cast<SpriteAnimation*>(meshList[WISP]);
+	if (Wisp)
+	{
+		Wisp->m_anim = new Animation();
+		Wisp->m_anim->Set(0, 15, 0, 0.8f, true);
 	}
 
 	characterHeight = 7.f;
@@ -554,6 +568,28 @@ void SceneBase::Update(double dt)
 	Singleton::getInstance()->player->setPosition(camera.position);
 
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
+
+	//Update sprites
+	if (G1)
+	{
+		G1->Update(dt);
+		G1->m_anim->animActive = true;
+	}
+	if (G2)
+	{
+		G2->Update(dt);
+		G2->m_anim->animActive = true;
+	}
+	if (G3)
+	{
+		G3->Update(dt);
+		G3->m_anim->animActive = true;
+	}
+	if (Wisp)
+	{
+		Wisp->Update(dt);
+		Wisp->m_anim->animActive = true;
+	}
 
 	/*if (Application::IsKeyPressed('I'))
 	{
@@ -677,21 +713,17 @@ void SceneBase::Update(double dt)
 		
 	}
 
-	
-
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
 
-
 	UpdateCapture(dt);
 
 	UpdateShoot(dt);
 
 	rotateKey += (float)(1 * dt);
-
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1112,6 +1144,13 @@ void SceneBase::UpdateEnemy(double dt)
 		}
 	}
 }
+void SceneBase::UpdateBoss(double dt)
+{
+	if (instance->boss->active)
+	{
+		instance->boss->Update(dt);
+	}
+}
 void SceneBase::UpdateWeaponType(double dt)
 {
 	switch (Singleton::getInstance()->player->GetWeaponType())
@@ -1204,7 +1243,24 @@ void SceneBase::UpdateHitboxes(double dt)
 		if (ghost->active)
 		{
 			ghost->pos.y = TERRAINSIZE.y *  ReadHeightMap(m_heightMap_3, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
-			ghost->Hitbox.Resize(ghost->scale);
+			ghost->Hitbox.Resize(ghost->scale - Vector3(5, 5, 5));
+		}
+	}
+
+	if (instance->boss->active)
+	{
+		instance->boss->Hitbox.Resize(instance->boss->scale + Vector3(200, 300, 200));
+	}
+	for (std::vector<AABBObject *>::iterator it = instance->boss->Boss_Bullet.begin(); it != instance->boss->Boss_Bullet.end(); ++it)
+	{
+		AABBObject *bullet = (AABBObject *)*it;
+		if (bullet->active)
+		{
+			if (bullet->Object == AABBObject::OBJECT_TYPE::WISP)
+			{
+				bullet->Hitbox.UpdateAABB(bullet->pos - Vector3(0,15,0));
+				bullet->Hitbox.Resize(Vector3(20, 40, 20));
+			}
 		}
 	}
 }
@@ -1394,6 +1450,72 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 		}
 	}
 }
+void SceneBase::RenderBoss(bool ShowHitbox)
+{
+	if (instance->boss->active)
+	{
+		float Yaw = Math::RadianToDegree(atan2(-(instance->boss->pos.z - instance->player->getPosition().z), instance->boss->pos.x - instance->player->getPosition().x));
+		Vector3 view = (instance->player->getPosition() - instance->boss->pos).Normalized();
+		float Pitch = Math::RadianToDegree(-atan2(view.y, sqrt(Math::Square(view.x) + Math::Square(view.z))));
+
+		if (ShowHitbox)
+		{
+			modelStack.PushMatrix();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			modelStack.Translate(instance->boss->Hitbox.pos.x, instance->boss->Hitbox.pos.y, instance->boss->Hitbox.pos.z);
+			modelStack.Scale(instance->boss->Hitbox.size.x, instance->boss->Hitbox.size.y, instance->boss->Hitbox.size.z);
+			RenderMesh(meshList[GEO_HITBOX], false);
+			if (!mode)
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
+			modelStack.PopMatrix();
+		}
+
+		modelStack.PushMatrix();
+		modelStack.Translate(instance->boss->pos.x, instance->boss->pos.y, instance->boss->pos.z);
+		modelStack.Rotate(Yaw - 90, 0, 1, 0);
+		modelStack.Rotate(Pitch, 1, 0, 0);
+		modelStack.Scale(instance->boss->scale.x, instance->boss->scale.y, instance->boss->scale.z);
+		RenderMeshOutlined(meshList[BOSS], true);
+		modelStack.PopMatrix();
+	}
+
+	for (std::vector<AABBObject *>::iterator it = instance->boss->Boss_Bullet.begin(); it != instance->boss->Boss_Bullet.end(); ++it)
+	{
+		AABBObject *bullet = (AABBObject *)*it;
+		if (bullet->active && 
+			bullet->Object == AABBObject::OBJECT_TYPE::WISP)
+		{
+			if (ShowHitbox)
+			{
+				modelStack.PushMatrix();
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				modelStack.Translate(bullet->Hitbox.pos.x, bullet->Hitbox.pos.y, bullet->Hitbox.pos.z);
+				modelStack.Scale(bullet->Hitbox.size.x, bullet->Hitbox.size.y, bullet->Hitbox.size.z);
+				RenderMesh(meshList[GEO_HITBOX], false);
+				if (!mode)
+				{
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
+				modelStack.PopMatrix();
+			}
+
+			float Yaw = Math::RadianToDegree(atan2(-(bullet->pos.z - instance->player->getPosition().z), bullet->pos.x - instance->player->getPosition().x));
+			Vector3 view = (instance->player->getPosition() - bullet->pos).Normalized();
+			float Pitch = Math::RadianToDegree(-atan2(view.y, sqrt(Math::Square(view.x) + Math::Square(view.z))));
+
+			modelStack.PushMatrix();
+			modelStack.Translate(bullet->pos.x, bullet->pos.y, bullet->pos.z);
+			modelStack.Rotate(Yaw - 90, 0, 1, 0);
+			modelStack.Rotate(Pitch, 1, 0, 0);
+			modelStack.Scale(bullet->scale.x, bullet->scale.y, bullet->scale.z);
+			RenderMeshOutlined(meshList[WISP], false);
+			modelStack.PopMatrix();
+		}
+	}
+
+}
 void SceneBase::RenderRadar()
 {
 	Mtx44 ortho;
@@ -1446,6 +1568,20 @@ void SceneBase::RenderRadar()
 			}
 			modelStack.PopMatrix();
 		}
+	}
+
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+	{
+		Vector3 view = (instance->player->getPosition() - instance->boss->pos).Normalized();
+		float Degree = Math::RadianToDegree(-atan2(view.x, view.z));
+		modelStack.PushMatrix();
+		modelStack.Translate(65, 45, 0);
+		modelStack.Rotate(radarAngle - 90, 0, 0, 1);
+		modelStack.Translate(-instance->boss->pos.x / 70 + camera.position.x / 70, -instance->boss->pos.z / 70 + camera.position.z / 70, 0);
+		modelStack.Rotate(Degree, 0, 0, 1);
+		modelStack.Scale(3, 3, 3);
+		RenderMesh(meshList[GEO_BOSS_ICON], false);
+		modelStack.PopMatrix();
 	}
 
 	modelStack.PushMatrix();
@@ -1506,7 +1642,6 @@ void SceneBase::RenderWeapons(bool light)
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
 		break;
 	case 3:
-		//RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
 		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
 		break;
 	}

@@ -155,6 +155,8 @@ void SceneLevel04::Update(double dt)
 
 	SceneBase::Update(dt);
 
+	UpdateBoss(dt);
+
 	UpdateParticle(dt);
 
 	UpdateHitboxes(dt);
@@ -557,11 +559,11 @@ void SceneLevel04::RenderEnvironment(bool Light)
 	//RenderTombstone(Light);
 	RenderFence(Light);
 
-	modelStack.PushMatrix();
-	modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)),0);
-	modelStack.Scale(60, 70, 60);
-	RenderMeshOutlined(meshList[DEADTREE], true);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)),0);
+	//modelStack.Scale(60, 70, 60);
+	//RenderMeshOutlined(meshList[DEADTREE], true);
+	//modelStack.PopMatrix();
 
 }
 
@@ -635,9 +637,6 @@ void SceneLevel04::RenderWorld()
 	RenderTerrain();
 	RenderEnvironment(true);
 	RenderBullets(false);
-	RenderWeapons(false);
-	RenderInventory();
-	//RenderSprite();
 }
 
 void SceneLevel04::RenderPassGPass()
@@ -721,6 +720,8 @@ void SceneLevel04::RenderPassMain()
 	}
 
 	SceneBase::Render();
+	RenderInventory();
+	RenderWeapons(false);
 
 	//Render objects
 	RenderLight();
@@ -739,6 +740,7 @@ void SceneLevel04::RenderPassMain()
 
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderWorld();
+	RenderBoss(ShowHitbox);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
 	if (!Singleton::getInstance()->stateCheck)
@@ -747,7 +749,6 @@ void SceneLevel04::RenderPassMain()
 	}
 
 	RenderObjects(true);
-	RenderEnemies(true);
 	//bLightEnabled = false;
 
 	//On screen text

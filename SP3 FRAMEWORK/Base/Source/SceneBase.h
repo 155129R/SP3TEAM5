@@ -151,8 +151,6 @@ public:
 		TERRAIN_LEVEL03,
 		TERRAIN_LEVEL04,
 
-		NIGHT_VISION,
-
 		CACTUS,
 
 		//weapons
@@ -180,12 +178,14 @@ public:
 
 		//PLAYER
 		GEO_STAMINA,
+		NIGHT_VISION,
 
 		//Minimap
 		GEO_VIEW,
 		GEO_GREENBALL,
 		GEO_REDBALL,
 		GEO_BLUEBALL,
+		GEO_BOSS_ICON,
 
 		//Screen
 		GEO_LOAD_1,
@@ -209,6 +209,8 @@ public:
 		GEO_GHOST2,
 		GEO_GHOST3,
 		GEO_HITBOX,
+		BOSS,
+		WISP,
 
 		//level 2
 		FOUNTAIN,
@@ -231,7 +233,6 @@ public:
 		BUTTON_INSTRUCTION,
 		BUTTON_EXIT,
 		GEO_KEY,
-
 
 		//level4
 		TOMBSTONE,
@@ -276,6 +277,7 @@ public:
 	void UpdatePlayer(double dt);
 	void UpdateFearEffect(double dt);
 	void UpdateEnemy(double dt);
+	void UpdateBoss(double dt);
 	void UpdateHitboxes(double dt);
 	void UpdateShoot(double dt);
 	void UpdateCapture(double dt);
@@ -283,6 +285,7 @@ public:
 
 	void RenderObjects(bool ShowHitbox = false);
 	void RenderEnemies(bool ShowHitbox = false);
+	void RenderBoss(bool ShowHitbox = false);
 	void RenderRadar(void);
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
@@ -369,6 +372,8 @@ protected:
 	SpriteAnimation* G1;
 	SpriteAnimation* G2;
 	SpriteAnimation* G3;
+
+	SpriteAnimation* Wisp;
 
 	std::map<char, Partition> partitioning;
 

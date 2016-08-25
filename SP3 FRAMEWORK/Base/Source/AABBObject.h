@@ -31,6 +31,9 @@ public:
 		TOMBSTONE,
 		DEADTREE,
 
+		//BOSS
+		WISP,
+
 		MAX_OBJECT_TYPE,
 	};
 
