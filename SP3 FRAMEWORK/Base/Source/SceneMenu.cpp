@@ -2,12 +2,9 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
 
 SceneMenu::SceneMenu()
 {
@@ -469,8 +466,6 @@ void SceneMenu::RenderFence(bool Light)
 
 void SceneMenu::RenderTombstone(bool Light)
 {
-	if (spatialPartitioning)
-	{
 		playerPartition = getPartition(camera.position);
 		for (auto pos : gravePos)
 		{
@@ -486,50 +481,6 @@ void SceneMenu::RenderTombstone(bool Light)
 			}
 		}
 
-		for (auto pos : pocongPos)
-		{
-			posPartition = getPartition(pos);
-
-			//if (renderCheck(playerPartition, posPartition) == true)
-			//{
-			//	modelStack.PushMatrix();
-			//	modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			//	modelStack.Scale(60, 60, 60);
-			//	modelStack.Rotate(180, 0, 0, 1);
-			//	RenderMeshOutlined(meshList[POCONG], true);
-			//	modelStack.PopMatrix();
-			//}
-
-		}
-	}
-	else
-	{
-		for (auto pos : gravePos)
-		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
-
-			modelStack.PushMatrix();
-			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
-			modelStack.Scale(10, 10, 10);
-			RenderMeshOutlined(meshList[TOMBSTONE], true);
-			modelStack.PopMatrix();
-
-		}
-		for (auto pos : pocongPos)
-		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
-
-			modelStack.PushMatrix();
-			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			modelStack.Scale(60, 60, 60);
-			modelStack.Rotate(180, 0, 0, 1);
-			RenderMeshOutlined(meshList[POCONG], true);
-			modelStack.PopMatrix();
-
-		}
-	}
 }
 
 void SceneMenu::RenderEnvironment(bool Light)

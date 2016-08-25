@@ -30,6 +30,8 @@ struct Enemy : public GameObject
 	~Enemy();
 
 	AABB Hitbox;
+	float rotate;
+
 	int HP;
 	bool captured = false;
 

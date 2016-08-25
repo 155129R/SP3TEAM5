@@ -62,7 +62,7 @@ private:
 		mousex = 400;
 		mousey = 300;
 		
-		program_state = PROGRAM_MENU;
+		program_state = PROGRAM_GAME2;
 		stateCheck = false;
 
 		singletonCamera = new Camera3();

@@ -32,6 +32,7 @@ public:
 		DEADTREE,
 		FENCE,
 
+		BOUNDARY,
 		MAX_OBJECT_TYPE,
 	};
 

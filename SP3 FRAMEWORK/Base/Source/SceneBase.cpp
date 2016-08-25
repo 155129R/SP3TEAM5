@@ -1110,7 +1110,12 @@ void SceneBase::UpdateHitboxes(double dt)
 				obj->Hitbox.Resize(Vector3(80, 150, 900));
 				break;
 			}
-
+			case AABBObject::OBJECT_TYPE::BOUNDARY:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(obj->scale.x * 10, obj->scale.y * 10, obj->scale.z * 10));
+				break;
+			}
 			default:
 			{
 				break;
@@ -1180,7 +1185,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.PushMatrix();
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[FOUNTAIN], true);
+						RenderMeshOutlined(meshList[FOUNTAIN], false);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -1189,7 +1194,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.PushMatrix();
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[HEDGE], true);
+						RenderMeshOutlined(meshList[HEDGE], false);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -1199,7 +1204,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[BENCHES], true);
+						RenderMeshOutlined(meshList[BENCHES], false);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -1208,7 +1213,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.PushMatrix();
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[POT], true);
+						RenderMeshOutlined(meshList[POT], false);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -1218,7 +1223,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[HOUSE1], true);
+						RenderMeshOutlined(meshList[HOUSE1], false);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -1228,7 +1233,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[HOUSE2], true);
+						RenderMeshOutlined(meshList[HOUSE2], false);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -1263,7 +1268,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Rotate(rotateKey * 20, 0, 1, 0);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[GEO_KEY], true);
+						RenderMeshOutlined(meshList[GEO_KEY], false);
 
 						modelStack.PopMatrix();
 						break;
@@ -1322,6 +1327,11 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				{
 					modelStack.PushMatrix();
 					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+					if (ghost->Enemy::ENEMY_STATE::CAPTURED)
+					{
+						modelStack.Rotate(ghost->rotate, 1, 0, 0);
+						modelStack.Rotate(ghost->rotate, 0, 0, 1);
+					}
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
 					RenderMesh(meshList[GEO_GHOST1], false);
@@ -1332,6 +1342,11 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				{
 					modelStack.PushMatrix();
 					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+					if (ghost->Enemy::ENEMY_STATE::CAPTURED)
+					{
+						modelStack.Rotate(ghost->rotate, 1, 0, 0);
+						modelStack.Rotate(ghost->rotate, 0, 0, 1);
+					}
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
 					RenderMesh(meshList[GEO_GHOST2], false);
@@ -1342,6 +1357,11 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 				{
 					modelStack.PushMatrix();
 					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
+					if (ghost->Enemy::ENEMY_STATE::CAPTURED)
+					{
+						modelStack.Rotate(ghost->rotate, 1, 0, 0);
+						modelStack.Rotate(ghost->rotate, 0, 0, 1);
+					}
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
 					RenderMesh(meshList[GEO_GHOST3], false);

@@ -2,12 +2,9 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
 
 SceneLevel02::SceneLevel02()
 {
@@ -17,7 +14,7 @@ SceneLevel02::~SceneLevel02()
 {
 }
 
-static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
+static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneLevel02::Init()
 {
@@ -99,6 +96,8 @@ void SceneLevel02::Init()
 	openGate = false;
 	rotateGate = 90;
 
+	spatialPartitioning = false;
+
 	item1pos = Vector3(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	item1 = new AABB(item1pos, Vector3(10, 20, 10));
 
@@ -119,6 +118,8 @@ void SceneLevel02::Init()
 
 	lights[0].position.Set(130, 150, 100);
 	lights[0].power = 2.f;
+
+	InitPartitioning();
 }
 
 void SceneLevel02::initSceneObjects()
@@ -245,6 +246,42 @@ void SceneLevel02::initSceneObjects()
 	Pot->scale.Set(20, 10, 20);
 	instance->Object_list.push_back(Pot);
 
+		//Brown building left
+		AABBObject* wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(995,20,-235);
+		wall->scale.Set(60, 20, 5);
+		instance->Object_list.push_back(wall);
+		//Brown building right
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(995, 20, 235);
+		wall->scale.Set(60, 20, 5);
+		instance->Object_list.push_back(wall);
+		//Brown building back
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(1255, 20, 0);
+		wall->scale.Set(5, 20, 60);
+		instance->Object_list.push_back(wall);
+		//Brown building front left
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(740, 20, -155);
+		wall->scale.Set(5, 20, 23);
+		instance->Object_list.push_back(wall);
+		//Brown building front right
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(740, 20, 155);
+		wall->scale.Set(5, 20, 23);
+		instance->Object_list.push_back(wall);
+		
 }
 
 void SceneLevel02::Update(double dt)
@@ -339,8 +376,14 @@ void SceneLevel02::Update(double dt)
 	UpdateParticle(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	
-
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->pos.y = TERRAINSIZE.y * ReadHeightMap(m_heightMap, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
+		}
+	}
 	if (Flashlight)
 	{
 		Vector3 view = (camera.target - camera.position).Normalized();
@@ -448,6 +491,7 @@ void SceneLevel02::UpdateParticle(double dt)
 		particleWater1->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
 		particleWater1->pos.Set(0, 80 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
 	}
+
 	for (auto it : particleList)
 	{
 		ParticleObject* particle = (ParticleObject*)it;
@@ -545,7 +589,7 @@ void SceneLevel02::RenderTerrain()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
-	RenderMesh(meshList[TERRAIN], true);
+	//RenderMesh(meshList[TERRAIN], true);
 	modelStack.PopMatrix();
 }
 
@@ -672,15 +716,20 @@ void SceneLevel02::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
+		posPartition = getPartition(particle->pos);
 	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		//insert billboard code
-		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
-		RenderMesh(meshList[FOUNTAIN_WATER1], false);
-		modelStack.PopMatrix();
+	{
+		if (renderCheck(playerPartition, posPartition))
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+			//insert billboard code
+			modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
+			RenderMesh(meshList[FOUNTAIN_WATER1], false);
+			modelStack.PopMatrix();
+		}
 		break;
-
+	}
 	default:
 		break;
 	}
@@ -880,6 +929,10 @@ void SceneLevel02::RenderPassMain()
 	ss.precision(5);
 	ss << "SHOW INVENTORY: " << showInventory;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 15);
+	ss.str("");
+	ss.precision(5);
+	ss << "POS: " << camera.position;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 20);
 }
 
 void SceneLevel02::Render()

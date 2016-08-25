@@ -2,13 +2,9 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
-#include "Bullet.h"
 
 SceneLevel01::SceneLevel01()
 {

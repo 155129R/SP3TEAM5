@@ -35,6 +35,8 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 	waypoint[0] = pos;
 	waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 	travel_to = 1;
+
+	rotate = 0.0f;
 }
 
 Enemy::~Enemy()
@@ -119,6 +121,7 @@ void Enemy::Update(double dt)
 				scale.z > 0.5)
 			{
 			scale -= Vector3(50, 50, 50) * dt;
+			rotate += 200 * dt;
 			}
 			else
 			{
