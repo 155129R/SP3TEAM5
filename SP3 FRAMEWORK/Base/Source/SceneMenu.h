@@ -51,6 +51,9 @@ private:
 
 	float cameraMove;
 	bool checkCameraMove;
+
+	int lightningRand;
+	bool lightning;
 };
 
 #endif

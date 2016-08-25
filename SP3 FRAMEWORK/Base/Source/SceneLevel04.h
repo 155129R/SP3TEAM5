@@ -50,6 +50,9 @@ private:
 	std::vector<Vector3> gravePos;
 	std::vector<Vector3> pocongPos;
 
+	int lightningRand;
+	bool lightning;
+
 };
 
 #endif

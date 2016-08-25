@@ -23,6 +23,16 @@ void SceneLevel04::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+
+	//Level 4 - Graveyard
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
@@ -59,6 +69,7 @@ void SceneLevel04::Init()
 
 	spatialPartitioning = true;
 	nightVision = false;
+	lightning = false;
 
 	lights[0].power = 0.8f;
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
@@ -94,6 +105,36 @@ void SceneLevel04::Update(double dt)
 		Vector3 view = (camera.target - camera.position).Normalized();
 		lights[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 		lights[1].spotDirection.Set(-view.x, -view.y, -view.z);
+	}
+	//if (Application::IsKeyPressed(VK_RETURN))
+	//	lightning = true;
+
+	{
+		lightningRand = Math::RandIntMinMax(1, 100);
+		if (lightningRand == 25)
+		{
+			lightning = true;
+		}
+	}
+	if (lightning)
+	{
+		lights[0].power = 2.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		Color fogColor(1.f, 1.f, 1.f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		lightning = false;
+	}
+	else
+	{
+		if (lights[0].power > 0.5f)
+			lights[0].power -= 2.f * dt;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		Color fogColor(0.2f, 0.2f, 0.2f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	}
 	if (Application::IsKeyPressed('6'))
 	{

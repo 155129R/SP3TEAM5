@@ -26,6 +26,42 @@ void SceneLevel01::Init()
 
 	SceneBase::Init();
 	
+	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
+	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
+
+	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
+	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
+
+	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Level01.obj");
+	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//uvmap.tga");
+
+	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
+	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+
+	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//chandelier.obj");
+	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//chandelier.tga");
+
+	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
+	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
+
+	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
+	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+
+	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
+	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
+
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
+	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
+
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
 	//Random my random randomly using srand
