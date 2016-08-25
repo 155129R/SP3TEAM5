@@ -38,7 +38,6 @@ void Bullet::Update(double dt)
 			if (enemy->GetHP() >= 0)
 			{
 				if (enemy->Hitbox.Collide(position)){
-					//std::cout << enemy->GetHP() << std::endl;
 					enemy->TakeDamage(1);
 					deleteBullet = true;
 				}

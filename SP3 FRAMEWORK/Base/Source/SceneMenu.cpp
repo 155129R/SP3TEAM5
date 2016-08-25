@@ -2,12 +2,9 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
 
 SceneMenu::SceneMenu()
 {
@@ -25,6 +22,15 @@ void SceneMenu::Init()
 	Application::ShowCursor();
 
 	SceneBase::Init();
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
@@ -92,6 +98,7 @@ void SceneMenu::Init()
 
 	spatialPartitioning = true;
 	nightVision = false;
+	lightning = false;
 
 	lights[0].power = 0.5f;
 	lights[0].color = (0.f, 0.2f, 0.4f);
@@ -217,6 +224,34 @@ void SceneMenu::Update(double dt)
 	}
 
 	rotateAngle += (float)(1 * dt);
+
+	{
+		lightningRand = Math::RandIntMinMax(1, 200);
+		if (lightningRand == 25)
+		{
+			lightning = true;
+		}
+	}
+	if (lightning)
+	{
+		lights[0].power = 2.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		Color fogColor(1.f, 1.f, 1.f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		lightning = false;
+	}
+	else
+	{
+		if (lights[0].power > 0.5f)
+			lights[0].power -= 2.f * dt;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		Color fogColor(0.2f, 0.2f, 0.2f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+	}
 
 	////////////////////////////////////////////////////////
 	//	for next time winning condition to go next scene  //
@@ -431,8 +466,6 @@ void SceneMenu::RenderFence(bool Light)
 
 void SceneMenu::RenderTombstone(bool Light)
 {
-	if (spatialPartitioning)
-	{
 		playerPartition = getPartition(camera.position);
 		for (auto pos : gravePos)
 		{
@@ -448,50 +481,6 @@ void SceneMenu::RenderTombstone(bool Light)
 			}
 		}
 
-		for (auto pos : pocongPos)
-		{
-			posPartition = getPartition(pos);
-
-			//if (renderCheck(playerPartition, posPartition) == true)
-			//{
-			//	modelStack.PushMatrix();
-			//	modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			//	modelStack.Scale(60, 60, 60);
-			//	modelStack.Rotate(180, 0, 0, 1);
-			//	RenderMeshOutlined(meshList[POCONG], true);
-			//	modelStack.PopMatrix();
-			//}
-
-		}
-	}
-	else
-	{
-		for (auto pos : gravePos)
-		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
-
-			modelStack.PushMatrix();
-			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)) - 20, pos.z);
-			modelStack.Scale(10, 10, 10);
-			RenderMeshOutlined(meshList[TOMBSTONE], true);
-			modelStack.PopMatrix();
-
-		}
-		for (auto pos : pocongPos)
-		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
-
-			modelStack.PushMatrix();
-			modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			modelStack.Scale(60, 60, 60);
-			modelStack.Rotate(180, 0, 0, 1);
-			RenderMeshOutlined(meshList[POCONG], true);
-			modelStack.PopMatrix();
-
-		}
-	}
 }
 
 void SceneMenu::RenderEnvironment(bool Light)

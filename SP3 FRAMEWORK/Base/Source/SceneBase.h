@@ -6,29 +6,22 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
-#include <vector>
 #include "Particle.h"
 #include "DepthFBO.h"
-#include <map>
 #include "LoadHmap.h"
 #include "LoadTGA.h"
 #include "LoadCSV.h"
+#include "MeshBuilder.h"
+#include "Minimap.h"
+#include "Bullet.h"
+#include "Capture.h"
+#include "Singleton.h"
 
 struct Partition
 {
 	Vector3 MINPOS;
 	Vector3 MAXPOS;
 };
-
-#include "MeshBuilder.h"
-
-#include "Player.h"
-#include "Enemy.h"
-#include "AABBObject.h"
-#include "Minimap.h"
-#include "Bullet.h"
-#include "Capture.h"
-#include "Singleton.h"
 
 class SceneBase : public Scene
 {
@@ -290,7 +283,6 @@ public:
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 	void RenderInventory();
-
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
@@ -362,6 +354,14 @@ protected:
 	int ghost_Amount[9];
 	float delay = 0;
 
+	//shooting 
+	float readyToShoot = 0.f;
+	int fireRate = 1;
+	int rotatePistol;
+	int rotateRifle;
+	bool gunUp;
+	bool gunDown;
+
 	//bullet
 	std::vector<Bullet*> bulletList;
 	//capture
@@ -386,10 +386,8 @@ protected:
 	//weapon
 	int weaponType;
 
-	int showInventory;
-
 	Singleton* instance;
-
+	bool cameraViewObject(Vector3 pos, float degree);
 };
 
 #endif

@@ -2,12 +2,9 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
 
 SceneLevel02::SceneLevel02()
 {
@@ -17,14 +14,56 @@ SceneLevel02::~SceneLevel02()
 {
 }
 
-static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
+static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneLevel02::Init()
 {
 	Application::HideCursor();
-
+	
 	SceneBase::Init();
 	lights[0].position.Set(0, 500, 0);
+
+	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
+	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
+
+	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
+	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
+
+	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
+	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+
+	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
+
+	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
+	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+
+	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
+	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
+
+	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
+
+	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
+	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
+
+	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
+	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
+
+	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//bench.obj");
+	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//bench.tga");
+
+	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
+	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
+
+	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
+	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
+
+	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
+
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
 	//Random my random randomly using srand
@@ -57,6 +96,8 @@ void SceneLevel02::Init()
 	openGate = false;
 	rotateGate = 90;
 
+	spatialPartitioning = false;
+
 	item1pos = Vector3(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	item1 = new AABB(item1pos, Vector3(10, 20, 10));
 
@@ -69,8 +110,20 @@ void SceneLevel02::Init()
 	sound.playSoundEffect3D("Sound/fountain.wav",
 		irrklang::vec3df(0, 0, 0), true);
 
-	showInventory = -1;
+	
 
+	initSceneObjects();
+
+	SpawnGhost();
+
+	lights[0].position.Set(130, 150, 100);
+	lights[0].power = 2.f;
+
+	InitPartitioning();
+}
+
+void SceneLevel02::initSceneObjects()
+{
 	AABBObject * key = new AABBObject();
 	key->Object = AABBObject::OBJECT_TYPE::KEY;
 	key->active = true;
@@ -193,15 +246,53 @@ void SceneLevel02::Init()
 	Pot->scale.Set(20, 10, 20);
 	instance->Object_list.push_back(Pot);
 
-	SpawnGhost();
+		//Brown building left
+		AABBObject* wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(995,20,-235);
+		wall->scale.Set(60, 20, 5);
+		instance->Object_list.push_back(wall);
+		//Brown building right
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(995, 20, 235);
+		wall->scale.Set(60, 20, 5);
+		instance->Object_list.push_back(wall);
+		//Brown building back
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(1255, 20, 0);
+		wall->scale.Set(5, 20, 60);
+		instance->Object_list.push_back(wall);
+		//Brown building front left
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(740, 20, -155);
+		wall->scale.Set(5, 20, 23);
+		instance->Object_list.push_back(wall);
+		//Brown building front right
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(740, 20, 155);
+		wall->scale.Set(5, 20, 23);
+		instance->Object_list.push_back(wall);
+		
 }
 
 void SceneLevel02::Update(double dt)
 {
-	camera.Update(dt);
+	std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+
+	if (Singleton::getInstance()->showInventory == false)
+		camera.Update(dt);
 
 	SceneBase::Update(dt);
-
+	
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 
@@ -213,6 +304,7 @@ void SceneLevel02::Update(double dt)
 	{
 		rotateGate--;
 	}
+
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
 	{
@@ -222,7 +314,7 @@ void SceneLevel02::Update(double dt)
 			
 			for (auto object : instance->Object_list)
 			{
-				if (object->active)
+				if (object->active && cameraViewObject(keyPtr->pos, 80) == true)
 				{
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95)
 					{
@@ -288,8 +380,14 @@ void SceneLevel02::Update(double dt)
 	UpdateParticle(dt);
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	
-
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->pos.y = TERRAINSIZE.y * ReadHeightMap(m_heightMap, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
+		}
+	}
 	if (Flashlight)
 	{
 		Vector3 view = (camera.target - camera.position).Normalized();
@@ -397,6 +495,7 @@ void SceneLevel02::UpdateParticle(double dt)
 		particleWater1->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
 		particleWater1->pos.Set(0, 80 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
 	}
+
 	for (auto it : particleList)
 	{
 		ParticleObject* particle = (ParticleObject*)it;
@@ -494,7 +593,7 @@ void SceneLevel02::RenderTerrain()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
-	RenderMesh(meshList[TERRAIN], true);
+	//RenderMesh(meshList[TERRAIN], true);
 	modelStack.PopMatrix();
 }
 
@@ -621,15 +720,20 @@ void SceneLevel02::RenderParticle(ParticleObject* particle)
 {
 	switch (particle->type)
 	{
+		posPartition = getPartition(particle->pos);
 	case PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1:
-		modelStack.PushMatrix();
-		modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
-		//insert billboard code
-		modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
-		RenderMesh(meshList[FOUNTAIN_WATER1], false);
-		modelStack.PopMatrix();
+	{
+		if (renderCheck(playerPartition, posPartition))
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(particle->pos.x, particle->pos.y, particle->pos.z);
+			//insert billboard code
+			modelStack.Scale(particle->scale.x, particle->scale.y, particle->scale.z);
+			RenderMesh(meshList[FOUNTAIN_WATER1], false);
+			modelStack.PopMatrix();
+		}
 		break;
-
+	}
 	default:
 		break;
 	}
@@ -683,9 +787,8 @@ void SceneLevel02::RenderWorld()
 	RenderObjects(ShowHitbox);
 	RenderEnvironment(false);
 	RenderOthers(false);
+	RenderEnemies(false);
 	RenderBullets(false);
-	RenderWeapons(false);
-	RenderInventory();
 	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
@@ -769,6 +872,8 @@ void SceneLevel02::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
+	RenderWeapons(false);
+	RenderInventory();
 	//Render objects
 	RenderLight();
 
@@ -782,8 +887,7 @@ void SceneLevel02::RenderPassMain()
 	//modelStack.PopMatrix();
 	//viewStack.PopMatrix();
 
-	// Render the crosshair
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
+	
 
 	RenderWorld();
 
@@ -800,6 +904,9 @@ void SceneLevel02::RenderPassMain()
 	{
 		RenderHUD();
 	}
+
+	// Render the crosshair
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	SceneBase::Render();
 
@@ -826,8 +933,9 @@ void SceneLevel02::RenderPassMain()
 
 	ss.str("");
 	ss.precision(5);
-	ss << "SHOW INVENTORY: " << showInventory;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 15);
+	ss << "POS: " << camera.position;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 20);
+
 }
 
 void SceneLevel02::Render()

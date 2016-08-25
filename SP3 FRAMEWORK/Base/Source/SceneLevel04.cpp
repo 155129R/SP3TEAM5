@@ -2,12 +2,9 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include <sstream>
-#include "LoadHmap.h"
 
 SceneLevel04::SceneLevel04()
 {
@@ -23,13 +20,23 @@ void SceneLevel04::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+
+	//Level 4 - Graveyard
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
 
-	camera.Init(Vector3(1, 200, 10), Vector3(0, 200, 1), Vector3(0, 1, 0));
-
+	camera.Init(Vector3(1, 80, 500), Vector3(0, 200, 1), Vector3(0, 1, 0));
+	camera.Reset();
 	//Random my random randomly using srand
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
@@ -57,88 +64,12 @@ void SceneLevel04::Init()
 	camera.position.Set(0, 200, 10);
 	camera.target.Set(0, 200, 1);
 
-	//////for (int i = 0; i < 5; ++i)
-	//////{
-	//////	int Random = Math::RandIntMinMax(1, 3);
-
-	//////	Enemy* Ghost = new Enemy(Enemy::ENEMY_TYPE::GHOST_1, Enemy::IDLE);
-	//////	switch (Random)
-	//////	{
-	//////	case 1:
-	//////	{
-	//////		Ghost->Type = Enemy::ENEMY_TYPE::GHOST_1;
-	//////		break;
-	//////	}
-	//////	case 2:
-	//////	{
-	//////		Ghost->Type = Enemy::ENEMY_TYPE::GHOST_2;
-	//////		break;
-	//////	}
-	//////	case 3:
-	//////	{
-	//////		Ghost->Type = Enemy::ENEMY_TYPE::GHOST_3;
-	//////		break;
-	//////	}
-	//////	}
-	//////	Ghost->active = true;
-	//////	Ghost->pos.Set(Math::RandFloatMinMax(-1800, 1800), 20, Math::RandFloatMinMax(-1100, 1800));
-	//////	Ghost->scale.Set(50, 50, 50);
-
-	//////	instance->Enemy_list.push_back(Ghost);
-	//////}
-	{
-		int yOffset = 80;
-		for (int i = 0; i < 30; i++)
-		{
-			AABBObject* Tombstone = new AABBObject();
-			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-			Tombstone->active = true;
-			Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
-			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
-			Tombstone->scale.Set(10, 10, 10);
-			instance->Object_list.push_back(Tombstone);
-		}
-		for (int i = 0; i < 30; i++)
-		{
-			AABBObject* Tombstone = new AABBObject();
-			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-			Tombstone->active = true;
-			Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
-			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
-			Tombstone->scale.Set(10, 10, 10);
-			instance->Object_list.push_back(Tombstone);
-		}
-		for (int i = 0; i < 30; i++)
-		{
-			AABBObject* Tombstone = new AABBObject();
-			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-			Tombstone->active = true;
-			Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
-			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
-			Tombstone->scale.Set(10, 10, 10);
-			instance->Object_list.push_back(Tombstone);
-		}
-		for (int i = 0; i < 30; i++)
-		{
-			AABBObject* Tombstone = new AABBObject();
-			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
-			Tombstone->active = true;
-			Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
-			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
-			Tombstone->scale.Set(10, 10, 10);
-			instance->Object_list.push_back(Tombstone);
-		}
-	}
+	initSceneObjects();
 	////////////
-	for (int i = 0; i < 5; i++)
-	{
-		Vector3 temp;
-		temp.Set(Math::RandFloatMinMax(-Terrainsize.x * 0.5f, Terrainsize.x * 0.5f), 0, Math::RandFloatMinMax(-Terrainsize.z * 0.5f, Terrainsize.z * 0.5f));
-		pocongPos.push_back(temp);
-	}
 
 	spatialPartitioning = true;
 	nightVision = false;
+	lightning = false;
 
 	lights[0].power = 0.8f;
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
@@ -147,11 +78,18 @@ void SceneLevel04::Init()
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	Color fogColor(0.2f, 0.2f, 0.2f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+
+	lightning = true;
 }
 
 void SceneLevel04::Update(double dt)
 {
+
+	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
+
+
 	camera.Update(dt);
+
 
 	SceneBase::Update(dt);
 
@@ -161,7 +99,6 @@ void SceneLevel04::Update(double dt)
 
 	UpdateHitboxes(dt);
 
-	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
 	
 
@@ -170,6 +107,36 @@ void SceneLevel04::Update(double dt)
 		Vector3 view = (camera.target - camera.position).Normalized();
 		lights[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
 		lights[1].spotDirection.Set(-view.x, -view.y, -view.z);
+	}
+	//if (Application::IsKeyPressed(VK_RETURN))
+	//	lightning = true;
+
+	{
+		lightningRand = Math::RandIntMinMax(1, 100);
+		if (lightningRand == 25)
+		{
+			lightning = true;
+		}
+	}
+	if (lightning)
+	{
+		lights[0].power = 2.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		Color fogColor(1.f, 1.f, 1.f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		lightning = false;
+	}
+	else
+	{
+		if (lights[0].power > 0.5f)
+			lights[0].power -= 2.f * dt;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		Color fogColor(0.2f, 0.2f, 0.2f);
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	}
 	if (Application::IsKeyPressed('6'))
 	{
@@ -345,6 +312,91 @@ ParticleObject* SceneLevel04::GetParticles(void)
 	return particle;
 }
 
+void SceneLevel04::initSceneObjects()
+{
+	AABBObject* Tree = new AABBObject();
+	Tree->Object = AABBObject::OBJECT_TYPE::DEADTREE;
+	Tree->active = true;
+	Tree->pos.SetZero();
+	Tree->pos.y = (ReadHeightMap(m_heightMap_4, Tree->pos.x / TERRAINSIZE.x, Tree->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y);
+	Tree->pos.y -= 50;
+	Tree->scale.Set(60, 70, 60);
+	instance->Object_list.push_back(Tree);
+	int numOfTombstones = 180;
+	{
+		int yOffset = 80;
+		for (int i = 0; i < numOfTombstones * 0.25f; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+		for (int i = 0; i < numOfTombstones * 0.25f; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(-Terrainsize.z + 400, 0));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+		for (int i = 0; i < numOfTombstones * 0.25f; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(-Terrainsize.x + 400, 0), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+		for (int i = 0; i < numOfTombstones * 0.25f; i++)
+		{
+			AABBObject* Tombstone = new AABBObject();
+			Tombstone->Object = AABBObject::OBJECT_TYPE::TOMBSTONE;
+			Tombstone->active = true;
+			Tombstone->pos.Set(Math::RandFloatMinMax(0, Terrainsize.x - 400), 0, Math::RandFloatMinMax(0, Terrainsize.z - 400));
+			Tombstone->pos.y = (ReadHeightMap(m_heightMap_4, Tombstone->pos.x / TERRAINSIZE.x, Tombstone->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Tombstone->scale.Set(10, 10, 10);
+			instance->Object_list.push_back(Tombstone);
+		}
+	}
+	{
+		int yOffset = 50;
+
+		for (int i = 0; i < 15; i++)
+		{
+			AABBObject* Fence = new AABBObject();
+			Fence->Object = AABBObject::OBJECT_TYPE::FENCE;
+			Fence->active = true;
+			Fence->pos.Set(Terrainsize.x - 400, 0, -Terrainsize.z + (600 * i));
+			Fence->pos.y = (ReadHeightMap(m_heightMap_4, Fence->pos.x / TERRAINSIZE.x, Fence->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Fence->scale.Set(0.6f, 0.6f, 0.6f);
+			Fence->angle = 90.f;
+			Fence->rotate.Set(0, 1, 0);
+			instance->Object_list.push_back(Fence);
+		}
+		for (int i = 0; i < 15; i++)
+		{
+			AABBObject* Fence = new AABBObject();
+			Fence->Object = AABBObject::OBJECT_TYPE::FENCE;
+			Fence->active = true;
+			Fence->pos.Set(-Terrainsize.x + 400, 0, -Terrainsize.z + (600 * i));
+			Fence->pos.y = (ReadHeightMap(m_heightMap_4, Fence->pos.x / TERRAINSIZE.x, Fence->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset;
+			Fence->angle = 90.f;
+			Fence->rotate.Set(0, 1, 0);
+			Fence->scale.Set(0.6f, 0.6f, 0.6f);
+			instance->Object_list.push_back(Fence);
+		}
+	}
+
+}
+
 void SceneLevel04::RenderGround()
 {
 	modelStack.PushMatrix();
@@ -385,93 +437,6 @@ void SceneLevel04::RenderTerrain()
 	modelStack.Scale(TERRAINSIZE.x, TERRAINSIZE.y, TERRAINSIZE.z);
 	RenderMesh(meshList[TERRAIN_LEVEL04], true);
 	modelStack.PopMatrix();
-}
-
-void SceneLevel04::RenderFence(bool Light)
-{
-	{
-		Vector3 fencePos;
-		fencePos.Set(Terrainsize.x - 400, 0, -Terrainsize.z + 600);
-		posPartition = getPartition(fencePos);
-		if (renderCheck(playerPartition, posPartition) == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMeshOutlined(meshList[FENCE], true);
-			modelStack.PopMatrix();
-		}
-	}
-
-	{
-		Vector3 fencePos;
-		fencePos.Set(Terrainsize.x - 400, 0, Terrainsize.z - 600);
-		posPartition = getPartition(fencePos);
-		if (renderCheck(playerPartition, posPartition) == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMeshOutlined(meshList[FENCE], true);
-			modelStack.PopMatrix();
-		}
-	}
-
-	{
-		Vector3 fencePos;
-		fencePos.Set(Terrainsize.x - 400, 0, 0);
-		posPartition = getPartition(fencePos);
-		if (renderCheck(playerPartition, posPartition) == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMeshOutlined(meshList[FENCE], true);
-			modelStack.PopMatrix();
-		}
-	}
-	////
-	{
-		Vector3 fencePos;
-		fencePos.Set(-Terrainsize.x + 400, 0, -Terrainsize.z + 600);
-		posPartition = getPartition(fencePos);
-		if (renderCheck(playerPartition, posPartition) == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMeshOutlined(meshList[FENCE], true);
-			modelStack.PopMatrix();
-		}
-	}
-
-	{
-		Vector3 fencePos;
-		fencePos.Set(-Terrainsize.x + 400, 0, Terrainsize.z - 600);
-		posPartition = getPartition(fencePos);
-		if (renderCheck(playerPartition, posPartition) == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMeshOutlined(meshList[FENCE], true);
-			modelStack.PopMatrix();
-		}
-	}
-
-	{
-		Vector3 fencePos;
-		fencePos.Set(-Terrainsize.x + 400, 0, 0);
-		posPartition = getPartition(fencePos);
-		if (renderCheck(playerPartition, posPartition) == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(fencePos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, fencePos.x / TERRAINSIZE.x, fencePos.z / TERRAINSIZE.z)), fencePos.z);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMeshOutlined(meshList[FENCE], true);
-			modelStack.PopMatrix();
-		}
-	}
 }
 
 void SceneLevel04::RenderTombstone(bool Light)
@@ -556,15 +521,8 @@ void SceneLevel04::RenderTombstone(bool Light)
 
 void SceneLevel04::RenderEnvironment(bool Light)
 {
-	//RenderTombstone(Light);
-	RenderFence(Light);
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, 0 / TERRAINSIZE.x, 0 / TERRAINSIZE.z)),0);
-	//modelStack.Scale(60, 70, 60);
-	//RenderMeshOutlined(meshList[DEADTREE], true);
-	//modelStack.PopMatrix();
-
+	RenderObjects(false);
+	RenderEnemies(false);
 }
 
 void SceneLevel04::RenderHUD()
@@ -721,8 +679,8 @@ void SceneLevel04::RenderPassMain()
 
 	SceneBase::Render();
 	RenderInventory();
-	RenderWeapons(false);
-
+	RenderWeapons(true);
+	RenderBullets(false);
 	//Render objects
 	RenderLight();
 	//Depth quad
@@ -748,7 +706,6 @@ void SceneLevel04::RenderPassMain()
 		RenderHUD();
 	}
 
-	RenderObjects(true);
 	//bLightEnabled = false;
 
 	//On screen text

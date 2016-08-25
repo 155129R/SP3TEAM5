@@ -253,6 +253,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera3::Update(double dt)
 {
+	willCollide = false;
 	if(Application::IsKeyPressed('W'))
 	{
 		Forward(dt);

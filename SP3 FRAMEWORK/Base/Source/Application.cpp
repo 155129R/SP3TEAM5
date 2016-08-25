@@ -97,7 +97,23 @@ bool Application::GetMouseUpdate()
 
     return false;
 }
+void Application::SetMousePosition(double x, double y)
+{
+	if (x == 0 && y == 0){
+		int sizeX = 0;
+		int sizeY = 0;
 
+		glfwGetWindowSize(m_window, &sizeX, &sizeY);
+
+		sizeX = (sizeX / 2) - x;
+		sizeY = (sizeY / 2) - y;
+
+		glfwSetCursorPos(m_window, sizeX, sizeY);
+	}
+	else{
+		glfwSetCursorPos(m_window, x, y);
+	}
+}
 Application::Application()
 {
 }
@@ -169,7 +185,7 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-	sceneManager->ChangeScene(4);
+	sceneManager->ChangeScene(2);
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -209,7 +225,8 @@ void Application::Run()
 		//First thread (Scene update)
 		if (m_dAccumlatedTime_ThreadOne > 0.016) //60 times every second
 		{
-			if (Singleton::getInstance()->program_state != Singleton::PROGRAM_MENU)
+			if (Singleton::getInstance()->program_state != Singleton::PROGRAM_MENU && 
+				Singleton::getInstance()->showInventory == false)
 				GetMouseUpdate();
 			sceneManager->Update(m_dElapsedTime);
 			m_dAccumlatedTime_ThreadOne = 0.0;

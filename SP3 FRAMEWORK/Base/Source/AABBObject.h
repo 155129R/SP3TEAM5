@@ -11,6 +11,12 @@ public:
 	{
 		//INDOOR
 		BARRICADE,
+		BED,
+		DOOR,
+		INDOORGATE,
+		CHAIR,
+		TOILETBOWL,
+		TABLE,
 
 		//OUTDOOR
 		FOUNTAIN,
@@ -30,10 +36,12 @@ public:
 		//GRAVEYARD
 		TOMBSTONE,
 		DEADTREE,
+		FENCE,
 
 		//BOSS
 		WISP,
 
+		BOUNDARY,
 		MAX_OBJECT_TYPE,
 	};
 

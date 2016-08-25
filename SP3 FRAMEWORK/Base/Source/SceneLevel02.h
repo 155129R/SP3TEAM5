@@ -3,7 +3,6 @@
 
 #include "SceneBase.h"
 #include "Sound.h"
-#include "AABB.h"
 
 class SceneLevel02 : public SceneBase
 {
@@ -15,6 +14,8 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+
+	void initSceneObjects();
 
 	void RenderGround();
 	void RenderSkyplane();
@@ -64,6 +65,7 @@ private:
 	Vector3 item3pos;
 
 	AABBObject* keyPtr;
+	AABBObject* gatePtr;
 };
 
 #endif
