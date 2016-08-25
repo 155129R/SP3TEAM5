@@ -1937,7 +1937,7 @@ bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
 		
 
 		float angleX = Math::RadianToDegree(acos(view.Dot(camera.view)));
-		std::cout << angleX << std::endl;
+		//std::cout << angleX << std::endl;
 
 
 		if (angleX <= degree)

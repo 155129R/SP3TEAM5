@@ -42,23 +42,24 @@ class Singleton
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
-
+		Inventory* item_key;
 		Camera3* singletonCamera;
 
-		map<AABB*, int> objectCount;
-
 		//Environment
-		std::vector<AABBObject *> Object_list;
+		vector<AABBObject *> Object_list;
 
 		//Enemy
-		std::vector<Enemy *> Enemy_list;
+		vector<Enemy *> Enemy_list;
+
+		//Inventory
+		vector<Inventory*> inventory;
 private:
 	Singleton()
 	{
 		//init stuff here
 		player = new Player();
 		boss = new Boss();
-		
+		item_key = new Inventory("key");
 		mousex = 400;
 		mousey = 300;
 

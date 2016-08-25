@@ -1,6 +1,5 @@
 #include "AABB.h"
 
-map<AABB*, int> AABB::objectMap;
 AABB::AABB(Vector3 pos, Vector3 size)
 {
 	this->pos = pos;
@@ -12,8 +11,6 @@ AABB::AABB(Vector3 pos, Vector3 size)
 	min.x = pos.x - size.x * 0.5;
 	min.y = pos.y - size.y * 0.5;
 	min.z = pos.z - size.z * 0.5;
-
-	AABB::objectMap[this]++;
 }
 
 AABB::~AABB()

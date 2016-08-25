@@ -8,7 +8,6 @@ class Player
 public:
 	Player();
 	~Player();
-
 	virtual void Init();
 	virtual void Update(double dt);
 

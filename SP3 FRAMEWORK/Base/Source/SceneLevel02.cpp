@@ -334,7 +334,7 @@ void SceneLevel02::initSceneObjects()
 
 void SceneLevel02::Update(double dt)
 {
-	std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 
 	if (Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
@@ -344,7 +344,7 @@ void SceneLevel02::Update(double dt)
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 
-	if (Application::IsKeyPressed('Q') && instance->objectCount[item1] > 0)
+	if (Application::IsKeyPressed('Q') && Singleton::getInstance()->gotKey == true)
 	{
 		openGate = true;
 		gatePtr->active = false;
@@ -368,7 +368,17 @@ void SceneLevel02::Update(double dt)
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95)
 					{
 						Singleton::getInstance()->gotKey = true;
-						Inventory::addObject(item1);
+						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
+
+						int sz = Singleton::getInstance()->inventory.size();
+
+						system("CLS");
+						for (int i = 0; i<sz; i++) 
+						{
+							cout << i << ": " << Singleton::getInstance()->inventory[i]->name << endl;
+						}
+
+
 						object->active = false;
 					}
 				}
@@ -387,7 +397,6 @@ void SceneLevel02::Update(double dt)
 		if (!spaceButtonState2)
 		{
 			spaceButtonState2 = true;
-			Inventory::addObject(item2);
 		}
 	}
 	else if (!Application::IsKeyPressed('Y'))
@@ -964,21 +973,6 @@ void SceneLevel02::RenderPassMain()
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "ITEM 1: " << std::to_string(instance->objectCount[item1]);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "ITEM 2: " << std::to_string(instance->objectCount[item2]);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 9);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "ITEM 3: " << std::to_string(instance->objectCount[item3]);
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 12);
 
 	ss.str("");
 	ss.precision(5);

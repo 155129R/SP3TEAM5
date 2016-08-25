@@ -1,36 +1,23 @@
-#pragma once
-#include "AABB.h"
-#include "Singleton.h"
+#ifndef INVENTORY_H
+#define INVENTORY_H
 
-class Inventory
-{
-public:
-	Inventory();
-	~Inventory();
-
-	static void addObject(AABB* object);
-
-private:
-
-};
-
-/*
-
+#include <string>
 #include <vector>
 
-#include "WeaponList.h"
-#include "ProjectileList.h"
+using std::string;
+using std::vector;
 
 class Inventory
 {
 public:
-	Inventory();
-	~Inventory();
+	string name;
 
-	std::vector<Weapon*> weapons;
-	std::vector<CProjectile*> bullets;
+	Inventory();
+	Inventory(string s);
+	~Inventory();
+	
 
 private:
 
 };
-*/
+#endif

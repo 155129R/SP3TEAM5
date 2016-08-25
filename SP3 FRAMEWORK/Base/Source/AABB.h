@@ -17,8 +17,6 @@ struct AABB
 
 	Vector3 max, min;
 	Vector3 pos, size;
-
-	static map<AABB*, int> objectMap;
 };
 
 #endif
