@@ -17,6 +17,8 @@ SceneMenu::~SceneMenu()
 static const Vector3 TERRAINSIZE(4000.0f, 800.0f, 4000.0f);
 void SceneMenu::Init()
 {
+	sound.playMusic("Sound/menu.mp3");
+
 	cameraMove = -922.831;
 	checkCameraMove = false;
 	Application::ShowCursor();
@@ -258,21 +260,25 @@ void SceneMenu::Update(double dt)
 	////////////////////////////////////////////////////////
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}
@@ -511,6 +517,7 @@ void SceneMenu::RenderHUD()
 		//MOUSE CLICK
 		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
 		{
+			sound.stopMusic();
 			Singleton::getInstance()->stateCheck = true;
 			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));

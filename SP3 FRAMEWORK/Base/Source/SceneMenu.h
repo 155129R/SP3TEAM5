@@ -54,6 +54,8 @@ private:
 
 	int lightningRand;
 	bool lightning;
+
+	Sound sound;
 };
 
 #endif
