@@ -26,6 +26,7 @@ void SceneLevel01::Init()
 
 	SceneBase::Init();
 	
+
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
 	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
@@ -50,6 +51,7 @@ void SceneLevel01::Init()
 
 	meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//bed.obj");
 	meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+
 
 	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
 	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");

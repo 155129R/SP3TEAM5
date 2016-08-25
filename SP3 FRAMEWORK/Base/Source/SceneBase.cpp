@@ -262,13 +262,6 @@ void SceneBase::Init()
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	meshList[TERRAIN]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
 
-	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
-	meshList[TERRAIN_LEVEL03]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
-	meshList[TERRAIN_LEVEL03]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
-
-	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
-	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
-
 	//weapon
 	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//rifle.obj");
 	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//rifle.tga");
@@ -279,49 +272,9 @@ void SceneBase::Init()
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
+
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
-
-	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
-	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
-
-	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
-	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
-
-	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
-	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
-
-	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
-	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
-
-	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
-	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
-
-	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
-	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
-
-	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
-	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
-
-	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
-	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
-
-	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
-	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
-
-	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//bench.obj");
-	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//bench.tga");
-
-	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
-	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
-
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
-
-	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
@@ -375,31 +328,6 @@ void SceneBase::Init()
 	meshList[GEO_LOAD_4] = MeshBuilder::GenerateQuad("Level 4 loading screen", Color(0, 0, 0), 1.f);
 	meshList[GEO_LOAD_4]->textureID = LoadTGA("Image//Screen//Load_Screen04.tga");
 
-	//Forest
-	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
-	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
-	meshList[GEO_TREE_2] = MeshBuilder::GenerateQuad("Fat Tree", Color(0, 0, 0), 1.f);
-	meshList[GEO_TREE_2]->textureArray[0] = LoadTGA("Image//Forest//Tree_2.tga");
-	meshList[GEO_TREE_3] = MeshBuilder::GenerateQuad("Dead Tree", Color(0, 0, 0), 1.f);
-	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
-	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
-	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
-	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
-	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
-	meshList[GEO_BRIDGE] = MeshBuilder::GenerateOBJ("Bridge", "OBJ//Forest//Bridge.obj");
-	meshList[GEO_BRIDGE]->textureArray[0] = LoadTGA("Image//Forest//Bridge.tga");
-	meshList[GEO_LOGS] = MeshBuilder::GenerateOBJ("Logs", "OBJ//Forest//Logs.obj");
-	meshList[GEO_LOGS]->textureArray[0] = LoadTGA("Image//Forest//Logs.tga");
-
-	//Level 4 - Graveyard
-	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
-	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
-	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
-	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
-	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
-	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 	//meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
 	//meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
@@ -452,10 +380,10 @@ void SceneBase::Init()
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			cout << ghost_Amount[Counter] << " , ";
+	//		cout << ghost_Amount[Counter] << " , ";
 			Counter++;
 		}
-		cout << endl;
+	//	cout << endl;
 	}
 
 	Singleton::getInstance()->player->Init();
@@ -865,6 +793,7 @@ void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale, floa
 
 void SceneBase::RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate)
 {
+
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
 	projectionStack.PushMatrix();
@@ -908,6 +837,7 @@ void SceneBase::RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate
 	modelStack.PopMatrix();
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
+
 }
 
 void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
@@ -1059,7 +989,7 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
-	bLightEnabled = false;
+	
 	if (Singleton::getInstance()->stateCheck)
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
@@ -1083,7 +1013,6 @@ void SceneBase::Render()
 			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 		}
 	}
-	bLightEnabled = true;
 
 }
 
@@ -1275,6 +1204,13 @@ void SceneBase::UpdateHitboxes(double dt)
 				break;
 			}
 
+			case AABBObject::OBJECT_TYPE::FENCE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(80, 150, 900));
+				break;
+			}
+
 			default:
 			{
 				break;
@@ -1295,102 +1231,108 @@ void SceneBase::UpdateHitboxes(double dt)
 
 void SceneBase::RenderObjects(bool ShowHitbox)
 {
+	playerPartition = getPartition(camera.position);
+
 	for (std::vector<AABBObject *>::iterator it = instance->Object_list.begin(); it != instance->Object_list.end(); ++it)
 	{
 		AABBObject *obj = (AABBObject *)*it;
 		if (obj->active)
 		{
-			if (ShowHitbox)
+			posPartition = getPartition(obj->pos);
+			if (renderCheck(playerPartition, posPartition))
 			{
-				modelStack.PushMatrix();
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				modelStack.Translate(obj->Hitbox.pos.x, obj->Hitbox.pos.y + 100, obj->Hitbox.pos.z);
-				modelStack.Scale(obj->Hitbox.size.x, obj->Hitbox.size.y, obj->Hitbox.size.z);
-				RenderMesh(meshList[GEO_HITBOX], false);
-				if (!mode)
-				{
-					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				}
-				modelStack.PopMatrix();
-			}
-			switch (obj->Object)
-			{
-				case AABBObject::OBJECT_TYPE::LOGS:
+				if (ShowHitbox)
 				{
 					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Rotate(90, 0, 1, 0);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[GEO_LOGS], true);
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+					modelStack.Translate(obj->Hitbox.pos.x, obj->Hitbox.pos.y + 100, obj->Hitbox.pos.z);
+					modelStack.Scale(obj->Hitbox.size.x, obj->Hitbox.size.y, obj->Hitbox.size.z);
+					RenderMesh(meshList[GEO_HITBOX], false);
+					if (!mode)
+					{
+						glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					}
 					modelStack.PopMatrix();
-					break;
 				}
-				case AABBObject::OBJECT_TYPE::BRIDGE:
+				switch (obj->Object)
 				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::FOUNTAIN:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[FOUNTAIN], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::HEDGE:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[HEDGE], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::BENCH:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[BENCHES], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::POT:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[POT], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::HOUSE1:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[HOUSE1], false);
-					modelStack.PopMatrix();
-					break;
-				}
-				case AABBObject::OBJECT_TYPE::HOUSE2:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[HOUSE2], false);
-					modelStack.PopMatrix();
-					break;
-				}
+					case AABBObject::OBJECT_TYPE::LOGS:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(90, 0, 1, 0);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[GEO_LOGS], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::BRIDGE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::FOUNTAIN:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[FOUNTAIN], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::HEDGE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[HEDGE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::BENCH:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[BENCHES], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::POT:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[POT], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::HOUSE1:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[HOUSE1], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::HOUSE2:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[HOUSE2], true);
+						modelStack.PopMatrix();
+						break;
+					}
+
 
 				case AABBObject::OBJECT_TYPE::TOMBSTONE:
 				{
@@ -1458,8 +1400,18 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 					modelStack.Rotate(rotateKey * 20, 0, 1, 0);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[GEO_KEY], false);
+					RenderMeshOutlined(meshList[GEO_KEY], true);
 
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::FENCE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[FENCE], true);
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1468,6 +1420,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					break;
 				}
 			
+				
 			}
 		}
 	}

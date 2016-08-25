@@ -36,6 +36,7 @@ public:
 		//GRAVEYARD
 		TOMBSTONE,
 		DEADTREE,
+		FENCE,
 
 		MAX_OBJECT_TYPE,
 	};

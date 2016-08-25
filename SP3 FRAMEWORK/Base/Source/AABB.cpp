@@ -18,6 +18,7 @@ AABB::AABB(Vector3 pos, Vector3 size)
 
 AABB::~AABB()
 {
+
 }
 
 void AABB::UpdateAABB(Vector3 pos)
