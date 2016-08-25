@@ -14,6 +14,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	void initSceneObjects();
+
 	void RenderGround();
 	void RenderSkyplane();
 	void RenderTerrain();
@@ -22,7 +24,6 @@ public:
 	void RenderHUD();
 	void RenderLight();
 	void RenderTombstone(bool Light);
-	void RenderFence(bool Light);
 	void UpdateParticle(double dt);
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
