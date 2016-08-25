@@ -11,6 +11,12 @@ public:
 	{
 		//INDOOR
 		BARRICADE,
+		BED,
+		DOOR,
+		INDOORGATE,
+		CHAIR,
+		TOILETBOWL,
+		TABLE,
 
 		//OUTDOOR
 		FOUNTAIN,

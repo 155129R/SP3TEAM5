@@ -63,9 +63,6 @@ private:
 
 	int weapon_value = 0;
 
-	int fireRate = 1;
-
-
 	//fear
 	enum FEAR_LEVEL
 	{

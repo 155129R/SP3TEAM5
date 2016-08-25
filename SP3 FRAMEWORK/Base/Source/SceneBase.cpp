@@ -279,46 +279,6 @@ void SceneBase::Init()
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
-	//level 1 terrain
-	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
-
-	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
-	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
-
-	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
-	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
-
-	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Level01.obj");
-	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//uvmap.tga");
-
-	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
-	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
-
-	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//chandelier.obj");
-	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//chandelier.tga");
-
-	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
-	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
-
-	//meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Bed.obj");
-	//meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
-
-	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
-	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
-
-	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
-	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
-
-	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
-	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
-
-	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
-
-	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
-	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
-
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
@@ -502,6 +462,12 @@ void SceneBase::Init()
 
 	delay = 0;
 
+	rotatePistol = 5;
+	rotateRifle = 4;
+
+	gunUp = false;
+	gunDown = false;
+
 }
 
 void SceneBase::SpawnGhost()
@@ -658,19 +624,12 @@ void SceneBase::Update(double dt)
 		ShowHitbox = false;
 	}
 
-	if (Application::IsKeyPressed(VK_SPACE))
+	if (weaponType == 1)
 	{
-		if (weaponType == 3)
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate))
 		{
-			captureList.push_back(new Capture(
-				Vector3(camera.position.x, camera.position.y, camera.position.z),
-				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				300,
-				1000
-				));
-		}
-		else if (weaponType == 1 || weaponType == 2)
-		{
+			gunDown = true;
+			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
@@ -679,9 +638,79 @@ void SceneBase::Update(double dt)
 				10
 				));
 		}
+		else if (readyToShoot < (float)(1.f / fireRate)){
+			readyToShoot += (float)(dt);
+		}
+		if (gunDown == true)
+		{
+			rotatePistol += (float)(500 * dt);
+			if (rotatePistol >= 20)
+			{
+				gunDown = false;
+				gunUp = true;
+			}
+		}
 
+		if (gunUp == true)
+		{
+			rotatePistol -= (float)(100 * dt);
+			if (rotatePistol <= 5)
+			{
+				gunUp = false;
+				gunDown = false;
+			}
+		}
 	}
+	else if (weaponType == 2)
+	{
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate))
+		{
+			gunDown = true;
+			readyToShoot = 0.f;
+			bulletList.push_back(new Bullet(
+				Vector3(camera.position.x, camera.position.y, camera.position.z),
+				Vector3(camera.view.x, camera.view.y, camera.view.z),
+				300,
+				1000,
+				10
+				));
+		}
+		else if (readyToShoot < (float)(1.f / fireRate)){
+			readyToShoot += (float)(dt);
+		}
 
+		if (gunDown == true)
+		{
+			rotateRifle += (float)(100 * dt);
+			if (rotateRifle >= 10)
+			{
+				gunDown = false;
+				gunUp = true;
+			}
+		}
+
+		if (gunUp == true)
+		{
+			rotateRifle -= (float)(50 * dt);
+			if (rotateRifle <= 4)
+			{
+				gunUp = false;
+				gunDown = false;
+			}
+		}
+	}
+	else if (weaponType == 3)
+	{
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(1.f / fireRate))
+		{
+			captureList.push_back(new Capture(
+				Vector3(camera.position.x, camera.position.y, camera.position.z),
+				Vector3(camera.view.x, camera.view.y, camera.view.z),
+				300,
+				1000
+				));
+		}
+	}
 
 
 	Vector3 View = (camera.target - camera.position).Normalized();
@@ -753,6 +782,7 @@ void SceneBase::RenderText(Mesh* mesh, std::string text, Color color)
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	glEnable(GL_DEPTH_TEST);
 }
+
 void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0)
@@ -792,6 +822,7 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	projectionStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
+
 void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale, float x, float y, bool rotate_Mini, float rotate)
 {
 	modelStack.PushMatrix();
@@ -831,6 +862,7 @@ void SceneBase::RenderMeshIn2D(Mesh *mesh, bool enableLight, Vector3 Scale, floa
 
 	modelStack.PopMatrix();
 }
+
 void SceneBase::RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate, Vector3 Rotate)
 {
 	Mtx44 ortho;
@@ -877,6 +909,7 @@ void SceneBase::RenderImageOnScreen(Mesh* mesh, Vector3 Scale, Vector3 Translate
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 }
+
 void SceneBase::RenderMeshOutlined(Mesh* mesh, bool enableLight)
 {
 	RenderMesh(mesh, enableLight);
@@ -1203,7 +1236,37 @@ void SceneBase::UpdateHitboxes(double dt)
 			}
 
 			case AABBObject::OBJECT_TYPE::BARRICADE:
+			{
 				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::BED:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 100, 0));
+				obj->Hitbox.Resize(Vector3(100, 30, 60));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::DOOR:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 55, 0));
+				obj->Hitbox.Resize(Vector3(50, 90, 10));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::CHAIR:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(25, 45, 25));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::TABLE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(75, 40, 55));
+				break;
+			}
 
 			case AABBObject::OBJECT_TYPE::KEY:
 			{
@@ -1346,8 +1409,49 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 					RenderMeshOutlined(meshList[DEADTREE], true);
+					modelStack.PopMatrix();
+					break;
 				}
-
+				case AABBObject::OBJECT_TYPE::BED:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[BED], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::DOOR:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[DOOR], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::CHAIR:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[CHAIR], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::TABLE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[TABLE], false);
+					modelStack.PopMatrix();
+					break;
+				}
 				case AABBObject::OBJECT_TYPE::KEY:
 				{
 					modelStack.PushMatrix();
@@ -1524,7 +1628,8 @@ void SceneBase::RenderBullets(bool light)
 		RenderMesh(meshList[GEO_LIGHTBALL], true);
 		modelStack.PopMatrix();
 	}
-	for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end(); ++it)
+	//testing capture projectile
+	/*for (vector<Capture*>::iterator it = captureList.begin(); it != captureList.end(); ++it)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(
@@ -1535,7 +1640,7 @@ void SceneBase::RenderBullets(bool light)
 		modelStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_LIGHTBALL], true);
 		modelStack.PopMatrix();
-	}
+	}*/
 }
 
 void SceneBase::RenderWeapons(bool light)
@@ -1543,10 +1648,10 @@ void SceneBase::RenderWeapons(bool light)
 	switch (weaponType)
 	{
 	case 1:
-		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, 5, light);
+		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, rotatePistol, light);
 		break;
 	case 2:
-		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, 4, -170, 0, light);
+		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, rotateRifle, -170, 0, light);
 		break;
 	case 3:
 		//RenderOBJOnScreen(meshList[VACUUM], 1, 70, 5, 0, 10, -168, 0, light);
