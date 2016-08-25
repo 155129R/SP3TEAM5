@@ -1256,82 +1256,82 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 				}
 				switch (obj->Object)
 				{
-					case AABBObject::OBJECT_TYPE::LOGS:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Rotate(90, 0, 1, 0);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[GEO_LOGS], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::BRIDGE:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::FOUNTAIN:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[FOUNTAIN], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::HEDGE:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[HEDGE], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::BENCH:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[BENCHES], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::POT:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[POT], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::HOUSE1:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[HOUSE1], true);
-						modelStack.PopMatrix();
-						break;
-					}
-					case AABBObject::OBJECT_TYPE::HOUSE2:
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-						RenderMeshOutlined(meshList[HOUSE2], true);
-						modelStack.PopMatrix();
-						break;
-					}
+				case AABBObject::OBJECT_TYPE::LOGS:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(90, 0, 1, 0);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_LOGS], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::BRIDGE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[GEO_BRIDGE], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::FOUNTAIN:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[FOUNTAIN], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::HEDGE:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[HEDGE], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::BENCH:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[BENCHES], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::POT:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[POT], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::HOUSE1:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[HOUSE1], true);
+					modelStack.PopMatrix();
+					break;
+				}
+				case AABBObject::OBJECT_TYPE::HOUSE2:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+					RenderMeshOutlined(meshList[HOUSE2], true);
+					modelStack.PopMatrix();
+					break;
+				}
 
 
 				case AABBObject::OBJECT_TYPE::TOMBSTONE:
@@ -1419,8 +1419,7 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 				{
 					break;
 				}
-			
-				
+				}
 			}
 		}
 	}
