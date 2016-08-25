@@ -122,7 +122,7 @@ void SceneLevel04::Update(double dt)
 		lights[0].color = (0.0f, 0.8f, 0.5f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-		Color fogColor(1.f, 1.f, 1.f);
+		Color fogColor(0.7f, 0.7f, 0.7f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		lightning = false;
 	}

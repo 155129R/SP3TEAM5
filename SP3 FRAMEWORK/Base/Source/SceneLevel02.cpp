@@ -281,7 +281,55 @@ void SceneLevel02::initSceneObjects()
 		wall->pos.Set(740, 20, 155);
 		wall->scale.Set(5, 20, 23);
 		instance->Object_list.push_back(wall);
+
+		//back fence
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(1305, 20, -15);
+		wall->scale.Set(5, 20, 220);
+		instance->Object_list.push_back(wall);
+
+		//Front fence >> Left
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(-1195, 20, 785);
+		wall->scale.Set(5, 20, 50);
+		instance->Object_list.push_back(wall);
+
+		//Front fence >> Right
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(-1195, 20, -480);
+		wall->scale.Set(5, 20, 120);
+		instance->Object_list.push_back(wall);
+
+		//left fence
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(55, 20, 1015);
+		wall->scale.Set(250, 20, 5);
+		instance->Object_list.push_back(wall);
 		
+		//right fence
+		wall = new AABBObject();
+		wall->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		wall->active = true;
+		wall->pos.Set(55, 20, -1015);
+		wall->scale.Set(250, 20, 5);
+		instance->Object_list.push_back(wall);
+
+		//Gate
+		gatePtr = new AABBObject();
+		gatePtr->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+		gatePtr->active = true;
+		gatePtr->pos.Set(-1190, 20, 335);
+		gatePtr->scale.Set(5, 20, 120);
+		instance->Object_list.push_back(gatePtr);
+
 }
 
 void SceneLevel02::Update(double dt)
@@ -299,6 +347,7 @@ void SceneLevel02::Update(double dt)
 	if (Application::IsKeyPressed('Q') && instance->objectCount[item1] > 0)
 	{
 		openGate = true;
+		gatePtr->active = false;
 	}
 	if (openGate && rotateGate > 0)
 	{

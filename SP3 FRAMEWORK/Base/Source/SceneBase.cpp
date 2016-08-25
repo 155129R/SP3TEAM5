@@ -20,7 +20,8 @@ void SceneBase::Init()
 {
 	instance = Singleton::getInstance();
 	Math::InitRNG();
-
+	instance->Object_list.clear();
+	instance->Enemy_list.clear();
 	// Black background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	// Enable depth test
@@ -1411,6 +1412,16 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 						RenderMeshOutlined(meshList[FENCE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::KEY:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[GEO_KEY], true);
 						modelStack.PopMatrix();
 						break;
 					}
