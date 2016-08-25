@@ -22,7 +22,7 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 void SceneLevel02::Init()
 {
 	Application::HideCursor();
-
+	
 	SceneBase::Init();
 	lights[0].position.Set(0, 500, 0);
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
@@ -69,7 +69,7 @@ void SceneLevel02::Init()
 	sound.playSoundEffect3D("Sound/fountain.wav",
 		irrklang::vec3df(0, 0, 0), true);
 
-	showInventory = -1;
+	
 
 	AABBObject * key = new AABBObject();
 	key->Object = AABBObject::OBJECT_TYPE::KEY;
@@ -198,10 +198,13 @@ void SceneLevel02::Init()
 
 void SceneLevel02::Update(double dt)
 {
-	camera.Update(dt);
+	std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+
+	if (Singleton::getInstance()->showInventory == false)
+		camera.Update(dt);
 
 	SceneBase::Update(dt);
-
+	
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 
@@ -213,6 +216,7 @@ void SceneLevel02::Update(double dt)
 	{
 		rotateGate--;
 	}
+
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
 	{
@@ -222,7 +226,7 @@ void SceneLevel02::Update(double dt)
 			
 			for (auto object : instance->Object_list)
 			{
-				if (object->active)
+				if (object->active && cameraViewObject(keyPtr->pos, 80) == true)
 				{
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95)
 					{
@@ -782,8 +786,7 @@ void SceneLevel02::RenderPassMain()
 	//modelStack.PopMatrix();
 	//viewStack.PopMatrix();
 
-	// Render the crosshair
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
+	
 
 	RenderWorld();
 
@@ -800,6 +803,9 @@ void SceneLevel02::RenderPassMain()
 	{
 		RenderHUD();
 	}
+
+	// Render the crosshair
+	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	SceneBase::Render();
 
@@ -823,11 +829,6 @@ void SceneLevel02::RenderPassMain()
 	ss.precision(5);
 	ss << "ITEM 3: " << std::to_string(instance->objectCount[item3]);
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 12);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "SHOW INVENTORY: " << showInventory;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 15);
 }
 
 void SceneLevel02::Render()

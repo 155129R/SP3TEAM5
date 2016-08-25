@@ -280,7 +280,6 @@ public:
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 	void RenderInventory();
-
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
@@ -374,10 +373,8 @@ protected:
 	//weapon
 	int weaponType;
 
-	int showInventory;
-
 	Singleton* instance;
-
+	bool cameraViewObject(Vector3 pos, float degree);
 };
 
 #endif

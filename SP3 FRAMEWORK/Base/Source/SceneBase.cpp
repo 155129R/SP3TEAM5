@@ -341,8 +341,8 @@ void SceneBase::Init()
 	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
 
 	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
-	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_FENCE]->textureArray[1] = LoadTGA("Image//rust.tga");
+	//meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//rust.tga");
 
 	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
 	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
@@ -557,7 +557,6 @@ void SceneBase::Update(double dt)
 	instance->singletonCamera = &camera;
 	UpdatePlayer(dt);
 	Singleton::getInstance()->player->setPosition(camera.position);
-
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
 	/*if (Application::IsKeyPressed('I'))
@@ -591,7 +590,18 @@ void SceneBase::Update(double dt)
 		if (!inventoryButtonState)
 		{
 			inventoryButtonState = true;
-			showInventory *= -1;
+			if (Singleton::getInstance()->showInventory == false)
+			{
+				Application::SetMousePosition(0, 0);
+				Application::ShowCursor();
+				Singleton::getInstance()->showInventory = true;
+			}	
+			else
+			{
+				Application::SetMousePosition(0, 0);
+				Application::HideCursor();
+				Singleton::getInstance()->showInventory = false;
+			}
 		}
 	}
 	else if (!Application::IsKeyPressed('I'))
@@ -1556,7 +1566,7 @@ void SceneBase::RenderWeapons(bool light)
 }
 void SceneBase::RenderInventory()
 {
-	if (showInventory > 0)
+	if (Singleton::getInstance()->showInventory == true)
 	{
 		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 		if (Singleton::getInstance()->gotKey == true)
@@ -1746,7 +1756,29 @@ bool SceneBase::renderCheck(char partition1, char partition2)
 		return true;
 	else return false;
 }
+bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
+{
+	if (pos != camera.position)
+	{
+		Vector3 view = (pos - camera.position).Normalized();
 
+		
+
+		float angleX = Math::RadianToDegree(acos(view.Dot(camera.view)));
+		std::cout << angleX << std::endl;
+
+
+		if (angleX <= degree)
+		{
+			return true;
+		}
+		if (angleX > degree)
+		{
+			return false;
+		}
+
+	}
+}
 void SceneBase::Exit()
 {
 	// Cleanup VBO
