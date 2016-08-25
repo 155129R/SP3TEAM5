@@ -61,8 +61,6 @@ void SceneLevel04::Init()
 
 	FogEffect = false;
 	Switch = false;
-	camera.position.Set(0, 200, 10);
-	camera.target.Set(0, 200, 1);
 
 	initSceneObjects();
 	////////////
