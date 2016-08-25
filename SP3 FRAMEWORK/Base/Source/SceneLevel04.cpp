@@ -76,7 +76,7 @@ void SceneLevel04::Init()
 	Color fogColor(0.2f, 0.2f, 0.2f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 
-
+	lightning = true;
 }
 
 void SceneLevel04::Update(double dt)

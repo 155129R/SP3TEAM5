@@ -933,10 +933,6 @@ void SceneLevel02::RenderPassMain()
 
 	ss.str("");
 	ss.precision(5);
-	ss << "SHOW INVENTORY: " << showInventory;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 15);
-	ss.str("");
-	ss.precision(5);
 	ss << "POS: " << camera.position;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 20);
 

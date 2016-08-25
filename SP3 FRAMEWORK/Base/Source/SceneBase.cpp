@@ -272,50 +272,8 @@ void SceneBase::Init()
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
-
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
-
-	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
-	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
-
-	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
-	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
-
-	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
-	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
-
-	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
-	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
-
-	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
-	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
-
-	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
-	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
-
-	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
-	//meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//rust.tga");
-
-	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
-	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
-
-	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
-	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
-
-	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//bench.obj");
-	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//bench.tga");
-
-	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
-	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
-
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
-
-	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
@@ -1389,18 +1347,36 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.PopMatrix();
 						break;
 					}
-
-
-				case AABBObject::OBJECT_TYPE::FENCE:
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
-					modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
-					modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
-					RenderMeshOutlined(meshList[FENCE], true);
-					modelStack.PopMatrix();
-					break;
-				}
+					case AABBObject::OBJECT_TYPE::FENCE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[FENCE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::TOMBSTONE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[TOMBSTONE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::DEADTREE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[DEADTREE], true);
+						modelStack.PopMatrix();
+						break;
+					}
 				default:
 				{
 					break;
