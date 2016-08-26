@@ -39,10 +39,13 @@ class Singleton
 		double mousey;
 		bool gotKey;
 		bool showInventory;
+		bool openDoor;
+		bool gotHammer;
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
 		Inventory* item_key;
+		Inventory* item_hammer;
 		Camera3* singletonCamera;
 
 		//Environment
@@ -60,6 +63,7 @@ class Singleton
 		player = new Player();
 		boss = new Boss();
 		item_key = new Inventory("key");
+		item_hammer = new Inventory("hammer");
 		mousex = 400;
 		mousey = 300;
 
@@ -74,7 +78,10 @@ class Singleton
 
 		showInventory = false;
 
+		openDoor = false;
+
 		gotKey = false;
+		gotHammer = false;
 	}
 	~Singleton()
 	{

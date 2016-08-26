@@ -52,6 +52,7 @@ private:
 
 	int lightningRand;
 	bool lightning;
+	Color fogColor;
 
 };
 

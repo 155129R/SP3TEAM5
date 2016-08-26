@@ -65,6 +65,7 @@ void SceneLevel02::Init()
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
+	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -337,6 +338,8 @@ void SceneLevel02::Update(double dt)
 
 	if (Application::IsKeyPressed('Q') && Singleton::getInstance()->gotKey == true)
 	{
+		sound.playSoundEffect3D("Sound/gateOpen.wav",
+			irrklang::vec3df(-1190, 20, 335), false);
 		openGate = true;
 		gatePtr->active = false;
 	}
@@ -354,9 +357,9 @@ void SceneLevel02::Update(double dt)
 			
 			for (auto object : instance->Object_list)
 			{
-				if (object->active && cameraViewObject(keyPtr->pos, 80) == true)
+				if (object->active)
 				{
-					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95)
+					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95 && cameraViewObject(keyPtr->pos, 80) == true)
 					{
 						Singleton::getInstance()->gotKey = true;
 						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);

@@ -12,6 +12,7 @@ Class to define Boss
 
 #include "GameObject.h"
 #include "AABB.h"
+#include "Sound.h"
 using std::vector;
 
 /******************************************************************************/
@@ -62,6 +63,8 @@ private:
 	float fire_mode_timer;
 
 	Vector3 origin;
+
+	Sound sound;
 };
 
 #endif

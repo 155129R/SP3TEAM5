@@ -223,6 +223,7 @@ void Boss::Shoot(double dt, Vector3 playerpos)
 	//Fires bullet according to firerate
 	if (fire_mode_timer >= fire_rate)
 	{
+		sound.playSoundEffect2D("Sound/Boss_Shoot.wav");
 		fire_mode_timer = 0;
 		AABBObject* Wisp = new AABBObject();
 		Wisp->Object = AABBObject::OBJECT_TYPE::WISP;
@@ -286,4 +287,5 @@ void Boss::despawn(double dt)
 		active = false;
 		Boss_Bullet.clear();
 	}
+	sound.playSoundEffect2D("Sound/Boss_Hurt.mp3");
 }
