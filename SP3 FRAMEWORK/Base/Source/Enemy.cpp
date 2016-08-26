@@ -73,7 +73,6 @@ void Enemy::Update(double dt)
 		case ENEMY_STATE::PATROL:
 		{
 			float distance = (waypoint[travel_to] - pos).Length();
-			dir = (waypoint[travel_to] - pos).Normalized();
 			if (distance <= 200)
 			{
 				switch (travel_to)
@@ -92,6 +91,7 @@ void Enemy::Update(double dt)
 			}
 			else
 			{	
+				dir = (waypoint[travel_to] - pos).Normalized();
 				pos.x += dir.x * 50 * dt;
 				pos.z += dir.z * 50 * dt;
 			}
