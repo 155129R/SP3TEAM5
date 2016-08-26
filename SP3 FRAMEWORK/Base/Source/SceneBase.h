@@ -388,6 +388,8 @@ protected:
 
 	Singleton* instance;
 	bool cameraViewObject(Vector3 pos, float degree);
+
+	Sound sound;
 };
 
 #endif

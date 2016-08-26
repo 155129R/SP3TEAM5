@@ -743,6 +743,7 @@ void SceneLevel01::RenderWorld()
 	RenderWeapons(false);
 	RenderInventory();
 	//RenderSprite();
+	RenderEnemies(false);
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 

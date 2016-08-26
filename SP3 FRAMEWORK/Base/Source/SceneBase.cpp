@@ -602,6 +602,8 @@ void SceneBase::Update(double dt)
 	{
 		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate))
 		{
+			sound.playSoundEffect2D("Sound/shoot.wav");
+
 			gunDown = true;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
@@ -639,6 +641,8 @@ void SceneBase::Update(double dt)
 	{
 		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate))
 		{
+			//sound.playSoundEffect2D("Sound/spray.wav");
+			sound.playSoundEffect2D("Sound/shoot.mp3");
 			gunDown = true;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
@@ -675,14 +679,19 @@ void SceneBase::Update(double dt)
 	}
 	else if (weaponType == 3)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(1.f / fireRate))
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate))
 		{
+			readyToShoot = 0.f;
+			sound.playSoundEffect2D("Sound/vacuum.wav");
 			captureList.push_back(new Capture(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
 				300,
 				1000
 				));
+		}
+		else if (readyToShoot < (float)(1.f / fireRate)){
+			readyToShoot += (float)(dt);
 		}
 	}
 

@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "AABB.h"
+#include "Sound.h"
 using std::vector;
 
 class Boss : public GameObject
@@ -44,6 +45,8 @@ private:
 	float fire_mode_timer;
 
 	Vector3 origin;
+
+	Sound sound;
 };
 
 #endif
