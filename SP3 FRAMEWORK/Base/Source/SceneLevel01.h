@@ -45,6 +45,31 @@ private:
 	//Toggle Fog
 	bool FogEffect;
 	bool Switch;
+
+	float timer;
+	bool timerstart;
+
+	bool d1;
+	bool d2;
+	bool d3;
+	bool d4;
+	bool d5;
+	bool d6;
+	bool d7;
+	bool d8;
+
+	AABBObject* door1;
+	AABBObject* door2;
+	AABBObject* door3;
+	AABBObject* door4;
+	AABBObject* door5;
+	AABBObject* door6;
+	AABBObject* door7;
+	AABBObject* door8;
+
+	AABBObject* exitPtr;
+
+	AABBObject* hammerPtr;
 };
 
 #endif

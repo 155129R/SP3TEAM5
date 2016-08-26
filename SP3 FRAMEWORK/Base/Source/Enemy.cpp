@@ -29,11 +29,20 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 	}
 	active = true;
 	HP = MAX_HP;
-	pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+	{
+		pos.Set(Math::RandFloatMinMax(-800, 800), 0, Math::RandFloatMinMax(-800, 800));
+		waypoint[1].Set(Math::RandFloatMinMax(-1000, 1000), 0, Math::RandFloatMinMax(-1000, 1000));
+	}
+	else
+	{
+		pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+		waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+	}
 	scale.Set(50, 50, 50);
 
 	waypoint[0] = pos;
-	waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
+	//waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 	travel_to = 1;
 
 	rotate = 0.0f;

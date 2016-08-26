@@ -22,6 +22,19 @@ void SceneLevel01::Init()
 
 	SceneBase::Init();
 	
+	lights[0].position.Set(0, -100, 0);
+
+	timerstart = false;
+	timer = 0.f;
+
+	d1 = false;
+	d2 = false;
+	d3 = false;
+	d4 = false;
+	d5 = false;
+	d6 = false;
+	d7 = false;
+	d8 = false;
 
 	//level 1 terrain
 	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
@@ -45,9 +58,11 @@ void SceneLevel01::Init()
 	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
 	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
 
+	meshList[ROOMCEILING] = MeshBuilder::GenerateQuad2("ROOMCEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(10, 10));
+	meshList[ROOMCEILING]->textureArray[0] = LoadTGA("Image//ceilingRoom.tga");
+
 	meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//bed.obj");
 	meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
-
 
 	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
 	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
@@ -64,6 +79,8 @@ void SceneLevel01::Init()
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
+	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//hammer.obj");
+	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//hammer.tga");
 
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
@@ -101,6 +118,14 @@ void SceneLevel01::Init()
 	key->pos.Set(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	key->scale.Set(10, 10, 10);
 	instance->Object_list.push_back(key);*/
+
+	/*modelStack.PushMatrix();
+	modelStack.Translate(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
+	modelStack.Scale(4, 3.5, 4);
+	modelStack.Rotate(-75, 0, 1, 0);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();*/
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//[Left] first room 
 	//(front doors)
@@ -109,6 +134,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
 	door->scale.Set(4, 4, 4);
+	door1 = door;
 	instance->Object_list.push_back(door);
 	
 	door = new AABBObject();
@@ -116,7 +142,18 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
 	door->scale.Set(4, 4, 4);
+	door2 = door;
 	instance->Object_list.push_back(door);
+
+	//rotated door (doesnt work now)
+	/*door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->angle = -75;
+	door->rotate.Set(0, 1, 0);
+	door->pos.Set(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
+	door->scale.Set(4, 3.5, 4);
+	instance->Object_list.push_back(door);*/
 
 	//(chairs)
 	AABBObject* chair = new AABBObject();
@@ -150,6 +187,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
 	door->scale.Set(4, 4, 4);
+	door3 = door;
 	instance->Object_list.push_back(door);
 
 	door = new AABBObject();
@@ -157,6 +195,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
 	door->scale.Set(4, 4, 4);
+	door4 = door;
 	instance->Object_list.push_back(door);
 	
 	//(chairs)
@@ -190,6 +229,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
 	door->scale.Set(4, 4, 4);
+	door5 = door;
 	instance->Object_list.push_back(door);
 
 	door = new AABBObject();
@@ -197,6 +237,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
 	door->scale.Set(4, 4, 4);
+	door6 = door;
 	instance->Object_list.push_back(door);
 
 	//(chairs)
@@ -230,6 +271,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
 	door->scale.Set(4, 4, 4);
+	door7 = door;
 	instance->Object_list.push_back(door);
 
 	door = new AABBObject();
@@ -237,6 +279,7 @@ void SceneLevel01::Init()
 	door->active = true;
 	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
 	door->scale.Set(4, 4, 4);
+	door8 = door;
 	instance->Object_list.push_back(door);
 
 	//(chairs)
@@ -264,7 +307,23 @@ void SceneLevel01::Init()
 	table->scale.Set(1, 1, 1);
 	instance->Object_list.push_back(table);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
+	AABBObject* hammer = new AABBObject();
+	hammer->Object = AABBObject::OBJECT_TYPE::HAMMER;
+	hammer->active = true;
+	hammer->pos.Set(1525, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 925);
+	hammer->scale.Set(10, 10, 10);
+	hammerPtr = hammer;
+	instance->Object_list.push_back(hammer);
+
+	AABBObject* indoorGate = new AABBObject();
+	indoorGate->Object = AABBObject::OBJECT_TYPE::INDOORGATE;
+	indoorGate->active = true;
+	indoorGate->pos.Set(-400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	indoorGate->scale.Set(1, 1.2, 1);
+	exitPtr = indoorGate;
+	instance->Object_list.push_back(indoorGate);
+
 	AABBObject* bed = new AABBObject();
 	bed->Object = AABBObject::OBJECT_TYPE::BED;
 	bed->active = true;
@@ -282,11 +341,14 @@ void SceneLevel01::Init()
 	bed->pos.Set(1530, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
 	bed->scale.Set(25, 25, 25);
 	instance->Object_list.push_back(bed);
+
+	InitPartitioning();
 }
 
 void SceneLevel01::Update(double dt)
 {
-	camera.Update(dt);
+	if (instance->openDoor == false)
+		camera.Update(dt);
 
 	SceneBase::Update(dt);
 
@@ -296,7 +358,249 @@ void SceneLevel01::Update(double dt)
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	
+	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
+	{
+		Enemy *ghost = (Enemy *)*it;
+		if (ghost->active)
+		{
+			ghost->pos.y = TERRAINSIZE.y * ReadHeightMap(m_heightMap, ghost->pos.x / TERRAINSIZE.x, ghost->pos.z / TERRAINSIZE.z);
+		}
+	}
 
+	static bool eButtonState = false;
+	
+	if (timerstart)
+	{
+		timer += dt;
+		instance->openDoor = true;
+	}
+
+	if (timer > 3.f)
+	{
+		//left first front
+		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		{
+			if (instance->singletonCamera->position.z > -200 && instance->singletonCamera->position.z < -100)
+			{
+				d1 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+		//left first inside
+		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		{
+			if (instance->singletonCamera->position.z > -270 && instance->singletonCamera->position.z < -170)
+			{
+				d2 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+
+		//left second front
+		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		{
+			if (instance->singletonCamera->position.z > -200 && instance->singletonCamera->position.z < -100)
+			{
+				d3 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+		//left second inside
+		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		{
+			if (instance->singletonCamera->position.z > -270 && instance->singletonCamera->position.z < -170)
+			{
+				d4 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+
+		//right first front
+		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		{
+			if (instance->singletonCamera->position.z > 300 && instance->singletonCamera->position.z < 400)
+			{
+				d5 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+		//right first inside
+		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		{
+			if (instance->singletonCamera->position.z > 420 && instance->singletonCamera->position.z < 520)
+			{
+				d6 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+
+		//right second front
+		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		{
+			if (instance->singletonCamera->position.z > 300 && instance->singletonCamera->position.z < 400)
+			{
+				d7 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+		//right second inside
+		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		{
+			if (instance->singletonCamera->position.z > 420 && instance->singletonCamera->position.z < 520)
+			{
+				d8 = true;
+				timer = 0.f;
+				timerstart = false;
+				instance->openDoor = false;
+			}
+		}
+	}
+
+	if (d1)
+	{
+		instance->singletonCamera->position.z = -250;
+		instance->singletonCamera->target.z = -260;
+		d1 = false;
+	}
+
+	if (d2)
+	{
+		instance->singletonCamera->position.z = -180;
+		instance->singletonCamera->target.z = -170;
+		d2 = false;
+	}
+
+	if (d3)
+	{
+		instance->singletonCamera->position.z = -250;
+		instance->singletonCamera->target.z = -260;
+		d3 = false;
+	}
+
+	if (d4)
+	{
+		instance->singletonCamera->position.z = -180;
+		instance->singletonCamera->target.z = -170;
+		d4 = false;
+	}
+
+	if (d5)
+	{
+		instance->singletonCamera->position.z = 420;
+		instance->singletonCamera->target.z = 430;
+		d5 = false;
+	}
+
+	if (d6)
+	{
+		instance->singletonCamera->position.z = 380;
+		instance->singletonCamera->target.z = 370;
+		d6 = false;
+	}
+
+	if (d7)
+	{
+		instance->singletonCamera->position.z = 420;
+		instance->singletonCamera->target.z = 430;
+		d7 = false;
+	}
+
+	if (d8)
+	{
+		instance->singletonCamera->position.z = 380;
+		instance->singletonCamera->target.z = 370;
+		d8 = false;
+	}
+
+	if (Application::IsKeyPressed('E'))
+	{
+		if (!eButtonState)
+		{
+			eButtonState = true;
+			for (auto object : instance->Object_list)
+			{
+				if (object->Object == AABBObject::OBJECT_TYPE::INDOORGATE && (exitPtr->pos - camera.position).Length() < 95 && cameraViewObject(exitPtr->pos, 80) == true)
+				{
+					if (instance->gotHammer)
+					{
+						Singleton::getInstance()->stateCheck = true;
+						Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+					}
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door1->pos - camera.position).Length() < 95 && cameraViewObject(door1->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door2->pos - camera.position).Length() < 95 && cameraViewObject(door2->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door3->pos - camera.position).Length() < 95 && cameraViewObject(door3->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door4->pos - camera.position).Length() < 95 && cameraViewObject(door4->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door5->pos - camera.position).Length() < 95 && cameraViewObject(door5->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door6->pos - camera.position).Length() < 95 && cameraViewObject(door6->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door7->pos - camera.position).Length() < 95 && cameraViewObject(door7->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+
+				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door8->pos - camera.position).Length() < 95 && cameraViewObject(door8->pos, 80) == true)
+				{
+					timerstart = true;
+				}
+				if (object->active && cameraViewObject(hammerPtr->pos, 80) == true)
+				{
+					if (object->Object == AABBObject::OBJECT_TYPE::HAMMER && (hammerPtr->pos - camera.position).Length() < 95)
+					{
+						Singleton::getInstance()->gotHammer = true;
+						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_hammer);
+
+						object->active = false;
+					}
+				}
+			}
+
+			
+		}
+	}
+	else if (!Application::IsKeyPressed('E'))
+	{
+		if (eButtonState)
+			eButtonState = false;
+	}
 
 	if (Flashlight)
 	{
@@ -521,11 +825,7 @@ void SceneLevel01::RenderLevel(bool Light)
 	RenderMeshOutlined(meshList[STAIRS], Light);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
-	modelStack.Scale(1, 1.2, 1);
-	RenderMeshOutlined(meshList[INDOORGATE], Light);
-	modelStack.PopMatrix();
+	
 
 	modelStack.PushMatrix();
 	modelStack.Translate(400, 20 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
@@ -549,7 +849,7 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(20, 20, 20);
-	RenderMeshOutlined(meshList[LEVEL01], Light);
+	RenderMesh(meshList[LEVEL01], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -564,11 +864,12 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 {
 	//AABB cannot rotate by itself
 	//[Left] first room
+	
 	modelStack.PushMatrix();
-	modelStack.Translate(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
-	modelStack.Scale(4, 3.5, 4);
-	modelStack.Rotate(-75, 0, 1, 0);
-	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.Translate(398, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -505);
+	modelStack.Scale(300, 1, 300);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[ROOMCEILING], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -577,7 +878,6 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Rotate(105, 0, 1, 0);
 	RenderMeshOutlined(meshList[DOOR], Light);
 	modelStack.PopMatrix();
-
 
 	modelStack.PushMatrix();
 	modelStack.Translate(120, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -420);
@@ -593,6 +893,14 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.PopMatrix();
 
 	//[Left] Second room
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1295, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -505);
+	modelStack.Scale(300, 1, 300);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[ROOMCEILING], Light);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(1195, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -659);
 	modelStack.Scale(4, 3.5, 4);
@@ -622,6 +930,14 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.PopMatrix();
 
 	//[Right] first room
+
+	modelStack.PushMatrix();
+	modelStack.Translate(398, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
+	modelStack.Scale(300, 1, 300);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[ROOMCEILING], Light);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(410, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 720);
 	modelStack.Scale(4, 3.5, 4);
@@ -637,6 +953,14 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.PopMatrix();
 
 	//[Right] second room
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1295, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
+	modelStack.Scale(300, 1, 300);
+	modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[ROOMCEILING], Light);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(1190, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 830);
 	modelStack.Scale(4, 3.5, 4);
@@ -664,12 +988,12 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Scale(1.2, 1, 1);
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
-	//weapon
-	modelStack.PushMatrix();
-	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	modelStack.Scale(1, 1, 1);
-	RenderMesh(meshList[BED], Light);
-	modelStack.PopMatrix();
+	//test obj
+	//modelStack.PushMatrix();
+	//modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	//modelStack.Scale(1, 1, 1);
+	//RenderMesh(meshList[HAMMER], Light);
+	//modelStack.PopMatrix();
 
 }
 
@@ -737,13 +1061,14 @@ void SceneLevel01::RenderWorld()
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderSkyplane();
 	RenderTerrain();
-	RenderLevel(false);
-	RenderRoomObjects(false);
-	RenderBullets(false);
-	RenderWeapons(false);
+	RenderLevel(true);
+	RenderRoomObjects(true);
+	RenderBullets(true);
+	RenderWeapons(true);
 	RenderInventory();
 	//RenderSprite();
 	RenderEnemies(false);
+
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 
@@ -847,12 +1172,19 @@ void SceneLevel01::RenderPassMain()
 
 	RenderObjects(ShowHitbox);
 
+	
+
 	if (!Singleton::getInstance()->stateCheck)
 	{
 		RenderHUD();
 	}
 
 	SceneBase::Render();
+
+	if (timerstart && timer < 3.f)
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+	}
 
 	//On screen text
 	std::ostringstream ss;
@@ -861,14 +1193,37 @@ void SceneLevel01::RenderPassMain()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
 	ss.str("");
+	ss << "pistol mag: " << pistolMag;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
+
+	ss.str("");
+	ss << "pistol ammo: " << pistolAmmo;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
+
+	ss.str("");
+	ss << "rifle mag: " << rifleMag;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
+
+	ss.str("");
 	ss.precision(5);
-	ss << "Position z: " << camera.position.z;
+	ss << "rifle ammo: " << rifleAmmo;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 
 	ss.str("");
 	ss.precision(5);
-	ss << "Position x: " << camera.position.x;
+	ss << "Position z: " << camera.position.z;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
+
+	ss.str("");
+	ss.precision(5);
+	ss << "Position x: " << camera.position.x;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+
+	if (reloading){
+		std::ostringstream ss;
+		ss << "Reloading";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+	}
 
 }
 
