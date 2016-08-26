@@ -139,6 +139,7 @@ void Boss::Update(double dt)
 		}
 		case BOSS_STATE::DEAD:
 		{
+			sound.playSoundEffect2D("Sound/Boss_Hurt.mp3");
 			pos.y -= speed/2 * dt;
 			if (pos.y <= -200)
 			{
@@ -156,6 +157,9 @@ void Boss::Shoot(double dt, Vector3 playerpos, float timer)
 {
 	if (fire_mode_timer >= fire_rate)
 	{
+		//temp use 2d sound first, 3d cant seems to work on boss.cpp
+		sound.playSoundEffect2D("Sound/Boss_Shoot.wav");
+		//sound.playSoundEffect3D("Sound/Boss_Shoot.wav",irrklang::vec3df(pos.x, pos.y, pos.z), false);
 		//std::cout << "Pew" << std::endl;
 		fire_mode_timer = 0;
 		AABBObject* Wisp = new AABBObject();

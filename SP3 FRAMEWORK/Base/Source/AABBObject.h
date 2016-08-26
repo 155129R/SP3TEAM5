@@ -17,6 +17,7 @@ public:
 		CHAIR,
 		TOILETBOWL,
 		TABLE,
+		HAMMER,
 
 		//OUTDOOR
 		FOUNTAIN,

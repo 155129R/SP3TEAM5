@@ -49,8 +49,6 @@ private:
 	bool FogEffect;
 	bool Switch;
 
-	Sound sound;
-
 	float soundTimer;
 
 	bool openGate;

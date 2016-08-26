@@ -39,10 +39,13 @@ class Singleton
 		double mousey;
 		bool gotKey;
 		bool showInventory;
+		bool openDoor;
+		bool gotHammer;
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
 		Inventory* item_key;
+		Inventory* item_hammer;
 		Camera3* singletonCamera;
 
 		//Environment
@@ -60,13 +63,14 @@ private:
 		player = new Player();
 		boss = new Boss();
 		item_key = new Inventory("key");
+		item_hammer = new Inventory("hammer");
 		mousex = 400;
 		mousey = 300;
 
 
-		program_state = PROGRAM_MENU;
+		//program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
-		//program_state = PROGRAM_GAME2;
+		program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
 
@@ -75,7 +79,10 @@ private:
 		singletonCamera = new Camera3();
 		showInventory = false;
 
+		openDoor = false;
+
 		gotKey = false;
+		gotHammer = false;
 	}
 };
 
