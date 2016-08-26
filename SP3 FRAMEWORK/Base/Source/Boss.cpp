@@ -1,5 +1,20 @@
+/******************************************************************************/
+/*!
+\file	Boss.cpp
+\author Chuan Guang Zhe
+\par	email: 152104G@mymail.nyp.edu.sg
+\brief
+Class to define Boss
+*/
+/******************************************************************************/
 #include "Singleton.h"
 
+/******************************************************************************/
+/*!
+\brief
+Boss default constructor, it also sets the spawn point of the boss.
+*/
+/******************************************************************************/
 Boss::Boss()
 {
 	boss_state = BOSS_STATE::TRACK;
@@ -20,43 +35,50 @@ Boss::Boss()
 	origin = pos;
 }
 
+/******************************************************************************/
+/*!
+\brief
+Boss default deconstructor
+*/
+/******************************************************************************/
 Boss::~Boss()
 {
 }
 
+/******************************************************************************/
+/*!
+\brief
+Boss Updates
+
+\param dt
+Delta time for updating
+*/
+/******************************************************************************/
 void Boss::Update(double dt)
 {
 	//AABB hit box will always be on the boss
 	Hitbox.UpdateAABB(this->pos - Vector3(0, 100, 0));
 
-	for (std::vector<AABBObject *>::iterator it = Boss_Bullet.begin(); it != Boss_Bullet.end(); ++it)
-	{
-		AABBObject *bullet = (AABBObject *)*it;
-		if (bullet->active)
-		{
-			bullet->pos += bullet->dir * bullet->speed * dt;
-			float distance = (bullet->pos - pos).Length();
-			if (distance >= 4000 || bullet->pos.y <= Singleton::getInstance()->player->getPosition().y - 10)
-			{
-				bullet->active = false;
-			}
-		}
-	}
+	//Updates
+	UpdateBullet(dt);
 
-	std::cout << HP << std::endl;
-
+	//Randomness to determine attacks
 	int rng = Math::RandIntMinMax(0, 10);
 
+	//Sets the boss state to dead when hp reaches 0
 	if (HP <= 0)
 	{
 		HP = 0;
 		boss_state = BOSS_STATE::DEAD;
 	}
 
+	//Boss state machine
 	switch (boss_state)
 	{
+		//Tracking state, boss will track the player for 5 seconds
 		case BOSS_STATE::TRACK:
 		{
+			//Teleport instead if HP <= 50%
 			if (HP <= MAX_HP * 0.5)
 			{
 				boss_state = BOSS_STATE::TELEPORT;
@@ -64,8 +86,10 @@ void Boss::Update(double dt)
 			if (mode_timer >= 5)
 			{
 				mode_timer = 0.0f;
+				//Decides between 2 different type of attack if HP <= 75%
 				if (HP <= MAX_HP * 0.75)
 				{
+					//20% chance to use turret mode
 					if (rng <= 2)
 					{
 						boss_state = BOSS_STATE::TURRET;
@@ -82,6 +106,7 @@ void Boss::Update(double dt)
 			}
 			else
 			{
+				//Locates the player and move towards the player
 				Vector3 dir = (Singleton::getInstance()->player->getPosition() - pos).Normalized();
 				pos.x += dir.x * speed * dt;
 				pos.z += dir.z * speed * dt;
@@ -91,7 +116,7 @@ void Boss::Update(double dt)
 		}
 		case BOSS_STATE::ATTACK:
 		{
-			float distance_to_player = (Singleton::getInstance()->player->getPosition() - pos).Length();
+			//Reverts back to tracking mode after 8 seconds in attack mode
 			if (mode_timer >= 8)
 			{
 				mode_timer = 0.0f;
@@ -99,33 +124,37 @@ void Boss::Update(double dt)
 			}
 			else
 			{
+				//Fires at the player meanwhile
 				float timer = 0.0f;
 				fire_rate = 0.8f;
-				Shoot(dt, Singleton::getInstance()->player->getPosition(), timer);
+				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
 			}
 			break;
 		}
 		case BOSS_STATE::TURRET:
 		{
+			//Teleports back to the origin position
 			pos = origin;
-			float distance_to_player = (Singleton::getInstance()->player->getPosition() - pos).Length();
-			if (mode_timer >= 8)
+			//Reverts back to tracking mode after 6 seconds in turret mode
+			if (mode_timer >= 6)
 			{
 				mode_timer = 0.0f;
 				boss_state = BOSS_STATE::TRACK;
 			}
 			else
 			{
+				//Fires at the player meanwhile
 				float timer = 0.0f;
 				fire_rate = 0.2f;
-				Shoot(dt, Singleton::getInstance()->player->getPosition(), timer);
+				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
 			}
 			break;
 		}
 		case BOSS_STATE::TELEPORT:
 		{
+			//Teleports to within 1000 units near the player 
 			pos = Singleton::getInstance()->player->getPosition() + Vector3(Math::RandFloatMinMax(-500, 500), 0, Math::RandFloatMinMax(-500, 500)) + origin;
 			if (rng <= 2)
 			{
@@ -139,11 +168,9 @@ void Boss::Update(double dt)
 		}
 		case BOSS_STATE::DEAD:
 		{
-			pos.y -= speed/2 * dt;
-			if (pos.y <= -200)
-			{
-				active = false;
-			}
+			//Despawns when dead
+			despawn(dt);
+			break;
 		}
 		default:
 		{
@@ -152,16 +179,56 @@ void Boss::Update(double dt)
 	}
 }
 
-void Boss::Shoot(double dt, Vector3 playerpos, float timer)
+/******************************************************************************/
+/*!
+\brief
+Boss's bullet Updates
+
+\param dt
+Delta time for updating
+*/
+/******************************************************************************/
+void Boss::UpdateBullet(double dt)
 {
+	for (std::vector<AABBObject *>::iterator it = Boss_Bullet.begin(); it != Boss_Bullet.end(); ++it)
+	{
+		AABBObject *bullet = (AABBObject *)*it;
+		if (bullet->active)
+		{
+			bullet->pos += bullet->dir * bullet->speed * dt;
+			//Despawns when bullet travels 4000 units or goes underground
+			float distance = (bullet->pos - pos).Length();
+			if (distance >= 4000 || bullet->pos.y <= Singleton::getInstance()->player->getPosition().y - 10)
+			{
+				bullet->active = false;
+			}
+		}
+	}
+}
+
+/******************************************************************************/
+/*!
+\brief
+Boss's bullet spawn
+
+\param dt
+Delta time for updating
+
+\param playerpos
+Position of the player
+*/
+/******************************************************************************/
+void Boss::Shoot(double dt, Vector3 playerpos)
+{
+	//Fires bullet according to firerate
 	if (fire_mode_timer >= fire_rate)
 	{
-		//std::cout << "Pew" << std::endl;
 		fire_mode_timer = 0;
 		AABBObject* Wisp = new AABBObject();
 		Wisp->Object = AABBObject::OBJECT_TYPE::WISP;
 		Wisp->active = true;
 		Wisp->pos = pos;
+		//1.5 bullet speed when HP <= 25%
 		if (HP >= MAX_HP * 0.25)
 		{
 			Wisp->speed = 800;
@@ -180,11 +247,27 @@ void Boss::Shoot(double dt, Vector3 playerpos, float timer)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+returns Boss hp
+*/
+/******************************************************************************/
 int Boss::getHP()
 {
 	return HP;
 }
 
+/******************************************************************************/
+/*!
+\brief
+Reduces Boss HP
+
+\param damage
+Amount of damage to be taken by the Boss
+*/
+/******************************************************************************/
 void Boss::damage(int damage)
 {
 	HP -= damage;
@@ -193,4 +276,14 @@ void Boss::damage(int damage)
 int Boss::getAttack()
 {
 	return Attack;
+}
+
+void Boss::despawn(double dt)
+{
+	pos.y -= speed / 2 * dt;
+	if (pos.y <= -200)
+	{
+		active = false;
+		Boss_Bullet.clear();
+	}
 }

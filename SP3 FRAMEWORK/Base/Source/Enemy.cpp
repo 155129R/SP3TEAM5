@@ -31,6 +31,7 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 	HP = MAX_HP;
 	pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 	scale.Set(50, 50, 50);
+	dir.SetZero();
 
 	waypoint[0] = pos;
 	waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
@@ -63,6 +64,7 @@ void Enemy::Update(double dt)
 		case ENEMY_STATE::PATROL:
 		{
 			float distance = (waypoint[travel_to] - pos).Length();
+			dir = (waypoint[travel_to] - pos).Normalized();
 			if (distance <= 200)
 			{
 				switch (travel_to)
@@ -80,10 +82,9 @@ void Enemy::Update(double dt)
 				}
 			}
 			else
-			{
-				Vector3 dir = (waypoint[travel_to] - pos).Normalized();
-				pos.x += dir.x * 80 * dt;
-				pos.z += dir.z * 80 * dt;
+			{	
+				pos.x += dir.x * 50 * dt;
+				pos.z += dir.z * 50 * dt;
 			}
 
 			float distance_to_player = (Singleton::getInstance()->player->getPosition() - pos).Length();
@@ -165,4 +166,9 @@ void Enemy::TakeDamage(int Damage)
 int Enemy::GetHP()
 {
 	return HP;
+}
+
+int Enemy::GetMaxHP()
+{
+	return MAX_HP;
 }

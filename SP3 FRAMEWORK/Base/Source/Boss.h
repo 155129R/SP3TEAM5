@@ -1,3 +1,12 @@
+/******************************************************************************/
+/*!
+\file	Boss.h
+\author Chuan Guang Zhe
+\par	email: 152104G@mymail.nyp.edu.sg
+\brief
+Class to define Boss
+*/
+/******************************************************************************/
 #ifndef BOSS_H
 #define BOSS_H
 
@@ -5,6 +14,13 @@
 #include "AABB.h"
 using std::vector;
 
+/******************************************************************************/
+/*!
+Class Boss:
+\brief
+Defines the Boss and its methods
+*/
+/******************************************************************************/
 class Boss : public GameObject
 {
 public:
@@ -29,10 +45,12 @@ public:
 	vector<AABBObject *> Boss_Bullet;
 
 	void Update(double dt);
-	void Shoot(double dt, Vector3 playerpos , float timer);
+	void UpdateBullet(double dt);
+	void Shoot(double dt, Vector3 playerpos);
 	int getHP();
 	void damage(int damage);
 	int getAttack();
+	void despawn(double dt);
 
 private:
 	int MAX_HP;

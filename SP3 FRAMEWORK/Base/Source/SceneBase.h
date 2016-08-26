@@ -17,7 +17,7 @@
 #include "Capture.h"
 #include "Singleton.h"
 
-struct Partition
+struct Partition 
 {
 	Vector3 MINPOS;
 	Vector3 MAXPOS;
@@ -198,12 +198,21 @@ public:
 		WATER_SURFACE,
 
 		//SPRITE / ENEMY
-		GEO_GHOST1,
-		GEO_GHOST2,
-		GEO_GHOST3,
+		GEO_GHOST1_ATTACK,
+		GEO_GHOST1_LEFT,
+		GEO_GHOST1_RIGHT,
+		GEO_GHOST2_ATTACK,
+		GEO_GHOST2_LEFT,
+		GEO_GHOST2_RIGHT,
+		GEO_GHOST3_ATTACK,
+		GEO_GHOST3_LEFT,
+		GEO_GHOST3_RIGHT,
 		GEO_HITBOX,
 		BOSS,
 		WISP,
+		GEO_HP,
+		GEO_HAND_LEFT,
+		GEO_HAND_RIGHT,
 
 		//level 2
 		FOUNTAIN,
@@ -369,9 +378,15 @@ protected:
 	Capture* cap;
 
 	//Sprite Pointers
-	SpriteAnimation* G1;
-	SpriteAnimation* G2;
-	SpriteAnimation* G3;
+	SpriteAnimation* G1_A;
+	SpriteAnimation* G1_L;
+	SpriteAnimation* G1_R;
+	SpriteAnimation* G2_A;
+	SpriteAnimation* G2_L;
+	SpriteAnimation* G2_R;
+	SpriteAnimation* G3_A;
+	SpriteAnimation* G3_L;
+	SpriteAnimation* G3_R;
 
 	SpriteAnimation* Wisp;
 

@@ -43,6 +43,7 @@ struct Enemy : public GameObject
 	void TakeDamage(int Damage);
 
 	int GetHP();
+	int GetMaxHP();
 
 private:
 	//Stats

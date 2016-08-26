@@ -76,21 +76,21 @@ void SceneShadow::Update(double dt)
 	UpdatePlayer(dt);
 
 	//Update sprites
-	if (G1)
-	{
-		G1->Update(dt);
-		G1->m_anim->animActive = true;
-	}
-	if (G2)
-	{
-		G2->Update(dt);
-		G2->m_anim->animActive = true;
-	}
-	if (G3)
-	{
-		G3->Update(dt);
-		G3->m_anim->animActive = true;
-	}
+	//f (G1)
+	//
+	//	G1->Update(dt);
+	//	G1->m_anim->animActive = true;
+	//
+	//f (G2)
+	//
+	//	G2->Update(dt);
+	//	G2->m_anim->animActive = true;
+	//
+	//f (G3)
+	//
+	//	G3->Update(dt);
+	//	G3->m_anim->animActive = true;
+	//
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
@@ -476,23 +476,6 @@ void SceneShadow::RenderHUD()
 
 void SceneShadow::RenderSprite()
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(150, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST1], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(100, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST2], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(50, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST3], false);
-	modelStack.PopMatrix();
 }
 
 void SceneShadow::RenderParticle(ParticleObject* particle)

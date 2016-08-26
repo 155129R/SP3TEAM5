@@ -983,5 +983,6 @@ void SceneLevel02::Render()
 
 void SceneLevel02::Exit()
 {
+	delete level2_Heights;
 	SceneBase::Exit();
 }

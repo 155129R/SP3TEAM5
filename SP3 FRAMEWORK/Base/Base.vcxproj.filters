@@ -55,6 +55,12 @@
     <Filter Include="Source Files\HUD">
       <UniqueIdentifier>{d6b2e240-051d-4573-bf6f-c3aec691e5f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{849b2b31-7d60-474e-9d11-3b45c1d328c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{8f9ab3f4-4a28-4ca9-b5f4-389e41562a44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -86,9 +92,6 @@
     </ClCompile>
     <ClCompile Include="Source\LoadOBJ.cpp">
       <Filter>Source Files\Load</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneShadow.cpp">
-      <Filter>Source Files\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneBase.cpp">
       <Filter>Source Files\Scene</Filter>
@@ -126,9 +129,6 @@
     <ClCompile Include="Source\SceneLevel04.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AABB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneLevel03.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -155,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Source\Boss.cpp">
       <Filter>Source Files\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AABB.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +215,6 @@
     <ClInclude Include="Source\Scene.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneShadow.h">
-      <Filter>Header Files\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneBase.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
@@ -236,14 +236,8 @@
     <ClInclude Include="Source\SceneLevel04.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneLevel03.h">
       <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AABBObject.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Header Files</Filter>
@@ -271,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="Source\Boss.h">
       <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AABBObject.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AABB.h">
+      <Filter>Header Files\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

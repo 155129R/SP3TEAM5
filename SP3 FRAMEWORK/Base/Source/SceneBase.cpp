@@ -334,12 +334,24 @@ void SceneBase::Init()
 	//meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
 
 	//Enemy
-	meshList[GEO_GHOST1] = MeshBuilder::GenerateSpriteAnimation("TumbleWeed", 4, 3);
-	meshList[GEO_GHOST1]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
-	meshList[GEO_GHOST2] = MeshBuilder::GenerateSpriteAnimation("Horsey", 4, 3);
-	meshList[GEO_GHOST2]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
-	meshList[GEO_GHOST3] = MeshBuilder::GenerateSpriteAnimation("Horsey", 3, 6);
-	meshList[GEO_GHOST3]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
+	meshList[GEO_GHOST1_ATTACK] = MeshBuilder::GenerateSpriteAnimation("Ghost1 front", 4, 3);
+	meshList[GEO_GHOST1_ATTACK]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
+	meshList[GEO_GHOST1_LEFT] = MeshBuilder::GenerateSpriteAnimation("Ghost1 left", 4, 3);
+	meshList[GEO_GHOST1_LEFT]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
+	meshList[GEO_GHOST1_RIGHT] = MeshBuilder::GenerateSpriteAnimation("Ghost1 right", 4, 3);
+	meshList[GEO_GHOST1_RIGHT]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_1.tga");
+	meshList[GEO_GHOST2_ATTACK] = MeshBuilder::GenerateSpriteAnimation("Ghost2 front", 4, 3);
+	meshList[GEO_GHOST2_ATTACK]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
+	meshList[GEO_GHOST2_LEFT] = MeshBuilder::GenerateSpriteAnimation("Ghost2 left", 4, 3);
+	meshList[GEO_GHOST2_LEFT]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
+	meshList[GEO_GHOST2_RIGHT] = MeshBuilder::GenerateSpriteAnimation("Ghost2 right", 4, 3);
+	meshList[GEO_GHOST2_RIGHT]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_2.tga");
+	meshList[GEO_GHOST3_ATTACK] = MeshBuilder::GenerateSpriteAnimation("Ghost3 front", 3, 6);
+	meshList[GEO_GHOST3_ATTACK]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
+	meshList[GEO_GHOST3_LEFT] = MeshBuilder::GenerateSpriteAnimation("Ghost3 left", 3, 6);
+	meshList[GEO_GHOST3_LEFT]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
+	meshList[GEO_GHOST3_RIGHT] = MeshBuilder::GenerateSpriteAnimation("Ghost3 right", 3, 6);
+	meshList[GEO_GHOST3_RIGHT]->textureArray[0] = LoadTGA("Image//Ghosts//Ghost_3.tga");
 	meshList[GEO_HITBOX] = MeshBuilder::GenerateCube("Hitbox", Color(1, 0, 0));
 
 	meshList[BOSS] = MeshBuilder::GenerateOBJ("Boss", "OBJ//Boss.obj");
@@ -347,32 +359,74 @@ void SceneBase::Init()
 	meshList[WISP] = MeshBuilder::GenerateSpriteAnimation("Wisp bullet", 4, 4);
 	meshList[WISP]->textureArray[0] = LoadTGA("Image//Ghosts//Wisp.tga");
 
+	meshList[GEO_HP] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
+	meshList[GEO_HP]->textureArray[0] = LoadTGA("Image//HUD//HP.tga");
+	meshList[GEO_HP]->textureID = LoadTGA("Image//HUD//HP.tga");
+	meshList[GEO_HAND_LEFT] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
+	meshList[GEO_HAND_LEFT]->textureID = LoadTGA("Image//HUD//Hands_Left.tga");
+	meshList[GEO_HAND_RIGHT] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
+	meshList[GEO_HAND_RIGHT]->textureID = LoadTGA("Image//HUD//Hands_Right.tga");
+
 	//Shadow stuff
-	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test", 1, 1);
+	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test",  1, 1);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
 	weaponType = 1;
 
-	G1 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1]);
-	G2 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2]);
-	G3 = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3]);
+	G1_A = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1_ATTACK]);
+	G1_L = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1_LEFT]);
+	G1_R = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST1_RIGHT]);
+	G2_A = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2_ATTACK]);
+	G2_L = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2_LEFT]);
+	G2_R = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST2_RIGHT]);
+	G3_A = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3_ATTACK]);
+	G3_L = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3_LEFT]);
+	G3_R = dynamic_cast<SpriteAnimation*>(meshList[GEO_GHOST3_RIGHT]);
 
-	if (G1)
+	if (G1_A)
 	{
-		G1->m_anim = new Animation();
-		G1->m_anim->Set(0, 11, 0, 2.0f, true);
+		G1_A->m_anim = new Animation();
+		G1_A->m_anim->Set(0, 2, 0, 2.0f, true);
 	}
-
-	if (G2)
+	if (G1_L)
 	{
-		G2->m_anim = new Animation();
-		G2->m_anim->Set(0, 11, 0, 2.0f, true);
+		G1_L->m_anim = new Animation();
+		G1_L->m_anim->Set(6, 8, 0, 2.0f, true);
 	}
-
-	if (G3)
+	if (G1_R)
 	{
-		G3->m_anim = new Animation();
-		G3->m_anim->Set(0, 17, 0, 2.0f, true);
+		G1_R->m_anim = new Animation();
+		G1_R->m_anim->Set(9, 11, 0, 2.0f, true);
+	}
+	if (G2_A)
+	{
+		G2_A->m_anim = new Animation();
+		G2_A->m_anim->Set(0, 2, 0, 2.0f, true);
+	}
+	if (G2_L)
+	{
+		G2_L->m_anim = new Animation();
+		G2_L->m_anim->Set(3, 5, 0, 2.0f, true);
+	}
+	if (G2_R)
+	{
+		G2_R->m_anim = new Animation();
+		G2_R->m_anim->Set(6, 8, 0, 2.0f, true);
+	}
+	if (G3_A)
+	{
+		G3_A->m_anim = new Animation();
+		G3_A->m_anim->Set(0, 3, 0, 2.0f, true);
+	}
+	if (G3_L)
+	{
+		G3_L->m_anim = new Animation();
+		G3_L->m_anim->Set(6, 11, 0, 2.0f, true);
+	}
+	if (G3_R)
+	{
+		G3_R->m_anim = new Animation();
+		G3_R->m_anim->Set(12, 17, 0, 2.0f, true);
 	}
 
 	Wisp = dynamic_cast<SpriteAnimation*>(meshList[WISP]);
@@ -468,20 +522,50 @@ void SceneBase::Update(double dt)
 	Application::GetCursorPos(&Singleton::getInstance()->mousex, &Singleton::getInstance()->mousey);
 
 	//Update sprites
-	if (G1)
+	if (G1_A)
 	{
-		G1->Update(dt);
-		G1->m_anim->animActive = true;
+		G1_A->Update(dt);
+		G1_A->m_anim->animActive = true;
 	}
-	if (G2)
+	if (G1_L)
 	{
-		G2->Update(dt);
-		G2->m_anim->animActive = true;
+		G1_L->Update(dt);
+		G1_L->m_anim->animActive = true;
 	}
-	if (G3)
+	if (G1_R)
 	{
-		G3->Update(dt);
-		G3->m_anim->animActive = true;
+		G1_R->Update(dt);
+		G1_R->m_anim->animActive = true;
+	}
+	if (G2_A)
+	{
+		G2_A->Update(dt);
+		G2_A->m_anim->animActive = true;
+	}
+	if (G2_L)
+	{
+		G2_L->Update(dt);
+		G2_L->m_anim->animActive = true;
+	}
+	if (G2_R)
+	{
+		G2_R->Update(dt);
+		G2_R->m_anim->animActive = true;
+	}
+	if (G3_A)
+	{
+		G3_A->Update(dt);
+		G3_A->m_anim->animActive = true;
+	}
+	if (G3_L)
+	{
+		G3_L->Update(dt);
+		G3_L->m_anim->animActive = true;
+	}
+	if (G3_R)
+	{
+		G3_R->Update(dt);
+		G3_R->m_anim->animActive = true;
 	}
 	if (Wisp)
 	{
@@ -1483,20 +1567,58 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 					modelStack.PopMatrix();
 				}
 
+				if (ghost->GetHP() != 0)
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(ghost->pos.x, ghost->pos.y + 30, ghost->pos.z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(ghost->GetHP() * 6, ghost->scale.y, ghost->scale.z);
+					RenderMesh(meshList[GEO_HP], false);
+					modelStack.PopMatrix();
+				}
+
 				switch (ghost->Type)
 				{
 				case Enemy::ENEMY_TYPE::GHOST_1:
 				{
 					modelStack.PushMatrix();
 					modelStack.Translate(ghost->pos.x, ghost->pos.y, ghost->pos.z);
-					if (ghost->Enemy::ENEMY_STATE::CAPTURED)
+					if (ghost->State == Enemy::ENEMY_STATE::CAPTURED)
 					{
 						modelStack.Rotate(ghost->rotate, 1, 0, 0);
 						modelStack.Rotate(ghost->rotate, 0, 0, 1);
 					}
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
-					RenderMesh(meshList[GEO_GHOST1], false);
+					if (ghost->State == Enemy::ENEMY_STATE::ATTACK)
+					{
+						RenderMesh(meshList[GEO_GHOST1_ATTACK], false);
+					}
+					else
+					{
+						if (ghost->dir.x > 0)
+						{
+							if (Degree < 0)
+							{
+								RenderMesh(meshList[GEO_GHOST1_LEFT], false);
+							}
+							else
+							{
+								RenderMesh(meshList[GEO_GHOST1_RIGHT], false);
+							}
+						}
+						else if (ghost->dir.x < 0)
+						{
+							if (Degree < 0)
+							{
+								RenderMesh(meshList[GEO_GHOST1_RIGHT], false);
+							}
+							else
+							{
+								RenderMesh(meshList[GEO_GHOST1_LEFT], false);
+							}
+						}
+					}
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1511,7 +1633,35 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 					}
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
-					RenderMesh(meshList[GEO_GHOST2], false);
+					if (ghost->State == Enemy::ENEMY_STATE::ATTACK)
+					{
+						RenderMesh(meshList[GEO_GHOST2_ATTACK], false);
+					}
+					else
+					{
+						if (ghost->dir.x > 0)
+						{
+							if (Degree < 0)
+							{
+								RenderMesh(meshList[GEO_GHOST2_LEFT], false);
+							}
+							else
+							{
+								RenderMesh(meshList[GEO_GHOST2_RIGHT], false);
+							}
+						}
+						else if (ghost->dir.x < 0)
+						{
+							if (Degree < 0)
+							{
+								RenderMesh(meshList[GEO_GHOST2_RIGHT], false);
+							}
+							else
+							{
+								RenderMesh(meshList[GEO_GHOST2_LEFT], false);
+							}
+						}
+					}
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1526,7 +1676,35 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 					}
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(ghost->scale.x, ghost->scale.y, ghost->scale.z);
-					RenderMesh(meshList[GEO_GHOST3], false);
+					if (ghost->State == Enemy::ENEMY_STATE::ATTACK)
+					{
+						RenderMesh(meshList[GEO_GHOST3_ATTACK], false);
+					}
+					else
+					{
+						if (ghost->dir.x > 0)
+						{
+							if (Degree < 0)
+							{
+								RenderMesh(meshList[GEO_GHOST3_LEFT], false);
+							}
+							else
+							{
+								RenderMesh(meshList[GEO_GHOST3_RIGHT], false);
+							}
+						}
+						else if (ghost->dir.x < 0)
+						{
+							if (Degree < 0)
+							{
+								RenderMesh(meshList[GEO_GHOST3_RIGHT], false);
+							}
+							else
+							{
+								RenderMesh(meshList[GEO_GHOST3_LEFT], false);
+							}
+						}
+					}
 					modelStack.PopMatrix();
 					break;
 				}
@@ -1968,6 +2146,7 @@ void SceneBase::Exit()
 	}
 	instance->Object_list.clear();
 	instance->Enemy_list.clear();
+
 	glDeleteProgram(m_programID);
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);

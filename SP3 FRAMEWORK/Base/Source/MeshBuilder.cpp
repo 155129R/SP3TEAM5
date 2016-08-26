@@ -732,6 +732,7 @@ Mesh* MeshBuilder::GenerateTerrain(const std::string &meshName, const std::strin
 			heights[i] = new float[terrainSize];
 		}
 	}
+
 	for (unsigned z = 0; z < terrainSize; ++z)
 	{
 		for (unsigned x = 0; x < terrainSize; ++x)

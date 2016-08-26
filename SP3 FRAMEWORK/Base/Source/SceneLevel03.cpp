@@ -463,23 +463,6 @@ void SceneLevel03::RenderHUD()
 
 void SceneLevel03::RenderSprite()
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(150, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST1], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(100, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST2], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(50, 0, 0);
-	modelStack.Scale(25, 25, 25);
-	RenderMesh(meshList[GEO_GHOST3], false);
-	modelStack.PopMatrix();
 }
 
 void SceneLevel03::RenderParticle(ParticleObject* particle)
@@ -728,5 +711,6 @@ void SceneLevel03::Render()
 
 void SceneLevel03::Exit()
 {
-	SceneBase::Exit();
+	delete level3_Heights;
+	this->SceneBase::Exit();
 }

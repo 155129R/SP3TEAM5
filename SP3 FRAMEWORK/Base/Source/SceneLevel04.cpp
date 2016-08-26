@@ -529,8 +529,10 @@ void SceneLevel04::RenderHUD()
 
 	if (nightVision == true)
 	{
-		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
+
+	RenderImageOnScreen(meshList[GEO_HP], Vector3(50, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
 }
 
 void SceneLevel04::RenderSprite()
@@ -739,5 +741,6 @@ void SceneLevel04::Render()
 
 void SceneLevel04::Exit()
 {
+	delete level4_Heights;
 	SceneBase::Exit();
 }
