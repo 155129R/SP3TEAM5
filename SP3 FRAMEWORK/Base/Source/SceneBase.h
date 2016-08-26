@@ -167,7 +167,8 @@ public:
 		CHANDELIER,
 		CEILING,
 		TOILETBOWL,
-		ELEVATORDOOR,
+		HAMMER,
+		ROOMCEILING,
 
 		//PLAYER
 		GEO_STAMINA,
@@ -362,11 +363,22 @@ protected:
 	bool gunUp;
 	bool gunDown;
 
+	int maxPistolAmmo = 20;
+	int pistolMag = 2;
+	int pistolAmmo = maxPistolAmmo;
+
+	int maxRifleAmmo = 10;
+	int rifleMag = 1;
+	int rifleAmmo = maxRifleAmmo;
+
+
+	bool reloading = false;
+	float reloadTime;
+
 	//bullet
 	std::vector<Bullet*> bulletList;
 	//capture
 	std::vector<Capture*> captureList;
-	Capture* cap;
 
 	//Sprite Pointers
 	SpriteAnimation* G1;

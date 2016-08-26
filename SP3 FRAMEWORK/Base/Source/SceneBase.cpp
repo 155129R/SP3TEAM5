@@ -597,12 +597,53 @@ void SceneBase::Update(double dt)
 	{
 		ShowHitbox = false;
 	}
+	//reloading
+	if (reloading == false)
+		reloadTime = 1.f;
 
+	if (Application::IsKeyPressed('R'))
+	{
+		if (weaponType == 1 && pistolMag > 0 && pistolAmmo < maxPistolAmmo)
+			reloading = true;
+		if (weaponType == 2 && rifleMag > 0 && rifleAmmo < maxRifleAmmo)
+			reloading = true;
+	}
+
+	if (reloading)
+	{
+		if (weaponType == 1 && pistolMag > 0)
+		{
+			reloadTime -= dt * 5;
+			pistolAmmo = 10;
+
+			if (reloadTime <= 0)
+			{
+				reloading = false;
+				pistolMag--;
+			}
+		}
+
+		if (weaponType == 2 && rifleMag > 0)
+		{
+			reloadTime -= dt * 5;
+			rifleAmmo = 30;
+
+			if (reloadTime <= 0)
+			{
+				reloading = false;
+				rifleMag--;
+			}
+		}
+
+	}
+
+	//weapon shooting with cooldowns
 	if (weaponType == 1)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate))
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate) && reloading == false && pistolAmmo > 0)
 		{
 			gunDown = true;
+			pistolAmmo--;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -637,9 +678,10 @@ void SceneBase::Update(double dt)
 	}
 	else if (weaponType == 2)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate))
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate) && reloading == false && rifleAmmo > 0)
 		{
 			gunDown = true;
+			rifleAmmo--;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -683,6 +725,9 @@ void SceneBase::Update(double dt)
 				300,
 				1000
 				));
+		}
+		else if (readyToShoot < (float)(1.f / fireRate)){
+			readyToShoot += (float)(dt);
 		}
 	}
 
@@ -1266,6 +1311,12 @@ void SceneBase::UpdateHitboxes(double dt)
 				obj->Hitbox.Resize(Vector3(obj->scale.x * 10, obj->scale.y * 10, obj->scale.z * 10));
 				break;
 			}
+			case AABBObject::OBJECT_TYPE::INDOORGATE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(15, 180, 200));
+				break;
+			}
 			default:
 			{
 				break;
@@ -1442,6 +1493,66 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 						RenderMeshOutlined(meshList[DEADTREE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::DOOR:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[DOOR], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::TABLE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[TABLE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::CHAIR:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[CHAIR], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::BED:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[BED], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::INDOORGATE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[INDOORGATE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::HAMMER:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[HAMMER], true);
 						modelStack.PopMatrix();
 						break;
 					}
