@@ -74,7 +74,7 @@ void SceneLevel04::Init()
 	lights[0].color = (0.0f, 0.2f, 0.4f);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-	Color fogColor(0.2f, 0.2f, 0.2f);
+	fogColor.Set(0.2f, 0.2f, 0.2f);
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 
 	lightning = true;
@@ -122,18 +122,18 @@ void SceneLevel04::Update(double dt)
 		lights[0].color = (0.0f, 0.8f, 0.5f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-		Color fogColor(0.7f, 0.7f, 0.7f);
+		fogColor.Set(1.f, 1.f, 1.f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		lightning = false;
 	}
 	else
 	{
 		if (lights[0].power > 0.5f)
-			lights[0].power -= 2.f * dt;
+			lights[0].power -= 2.f * (float)dt;
 		lights[0].color = (0.f, 0.2f, 0.4f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-		Color fogColor(0.2f, 0.2f, 0.2f);
+		fogColor.Set(0.2f, 0.2f, 0.2f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	}
 	if (Application::IsKeyPressed('6'))
@@ -167,7 +167,7 @@ void SceneLevel04::Update(double dt)
 	}
 	else
 	{
-		Axis_Wait += dt;
+		Axis_Wait += (float)dt;
 	}
 
 	if (Application::IsKeyPressed('F') && Flashlight_Wait >= 0.5f)
@@ -188,7 +188,7 @@ void SceneLevel04::Update(double dt)
 	}
 	else
 	{
-		Flashlight_Wait += dt;
+		Flashlight_Wait += (float)dt;
 	}
 
 	//TOGGLE FogEffect
@@ -202,7 +202,7 @@ void SceneLevel04::Update(double dt)
 		{
 			if (FogAmount > 1500)
 			{
-				FogAmount -= 3000 * dt;
+				FogAmount -= 3000 * (float)dt;
 				glUniform1f(m_parameters[U_FOG_END], FogAmount);
 			}
 			else
@@ -215,7 +215,7 @@ void SceneLevel04::Update(double dt)
 		{
 			if (FogAmount < 6000)
 			{
-				FogAmount += 3000 * dt;
+				FogAmount += 3000 * (float)dt;
 				glUniform1f(m_parameters[U_FOG_END], FogAmount);
 			}
 			else
@@ -257,7 +257,7 @@ void SceneLevel04::Update(double dt)
 
 void SceneLevel04::UpdateParticle(double dt)
 {
-	if (m_particlesCount < MAX_PARTICLE)
+	if (m_particlesCount < (int)MAX_PARTICLE)
 	{
 		ParticleObject* particle = GetParticles();
 		particle->type = PARTICLEOBJECT_TYPE::P_WATER;
@@ -539,12 +539,12 @@ void SceneLevel04::RenderSprite()
 
 void SceneLevel04::RenderParticle(ParticleObject* particle)
 {
-	switch (particle->type)
-	{
+	//switch (particle->type)
+	//{
 
-	default:
-		break;
-	}
+	//default:
+	//	break;
+	//}
 }
 
 void SceneLevel04::RenderLight()
