@@ -79,9 +79,6 @@ void SceneLevel01::Init()
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
 
-	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//hammer.obj");
-	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//hammer.tga");
-
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
 	//Random my random randomly using srand

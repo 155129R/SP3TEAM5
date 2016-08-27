@@ -279,6 +279,21 @@ void SceneBase::Init()
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
 
+	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//hammer.obj");
+	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//hammer.tga");
+
+	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
+	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
+
+	meshList[INV_GHOST1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[INV_GHOST1]->textureID = LoadTGA("Image//HUD//Ghost_1_icon.tga");
+
+	meshList[INV_GHOST2] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[INV_GHOST2]->textureID = LoadTGA("Image//HUD//Ghost_2_icon.tga");
+
+	meshList[INV_GHOST3] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[INV_GHOST3]->textureID = LoadTGA("Image//HUD//Ghost_3_icon.tga");
+
 	meshList[GAME_TITLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[GAME_TITLE]->textureID = LoadTGA("Image//title.tga");
 
@@ -2036,8 +2051,29 @@ void SceneBase::RenderInventory()
 	if (Singleton::getInstance()->showInventory == true)
 	{
 		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
-		if (Singleton::getInstance()->gotKey == true)
-			RenderOBJOnScreen(meshList[GEO_KEY], 1, 20, 38, 10, 0, rotateKey * 20, 0, false);
+
+		int sz = Singleton::getInstance()->inventory.size();
+
+		system("CLS");
+		for (int i = 1; i <= sz; i++)
+		{
+			cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
+
+			if (Singleton::getInstance()->inventory[i - 1]->name == "key")
+				RenderOBJOnScreen(meshList[GEO_KEY], 1, i * 7.6 + 12.4, 38, 10, 0, rotateKey * 20, 0, false);
+
+			if (Singleton::getInstance()->inventory[i - 1]->name == "hammer")
+				RenderOBJOnScreen(meshList[HAMMER], 1.5, i * 7.6 + 12.4, 39, 10, 0, rotateKey * 20, 0, false);
+
+			if (Singleton::getInstance()->inventory[i - 1]->name == "ghost1")
+				RenderImageOnScreen(meshList[INV_GHOST1], Vector3(6, 6, 1), Vector3(i * 7.6 + 12.4, 39.5, 1), Vector3(0, 0, 0));
+
+			if (Singleton::getInstance()->inventory[i - 1]->name == "ghost2")
+				RenderImageOnScreen(meshList[INV_GHOST2], Vector3(6, 6, 1), Vector3(i * 7.6 + 12.4, 39.5, 1), Vector3(0, 0, 0));
+
+			if (Singleton::getInstance()->inventory[i - 1]->name == "ghost3")
+				RenderImageOnScreen(meshList[INV_GHOST3], Vector3(6, 6, 1), Vector3(i * 7.6 + 12.4, 39.5, 1), Vector3(0, 0, 0));
+		}
 	}
 	else
 	{

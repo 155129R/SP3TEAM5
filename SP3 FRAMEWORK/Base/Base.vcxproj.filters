@@ -147,9 +147,6 @@
     <ClCompile Include="Source\Minimap.cpp">
       <Filter>Source Files\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Inventory.cpp">
-      <Filter>Source Files\HUD</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Source Files\Enemy</Filter>
     </ClCompile>
@@ -158,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Source\AABB.cpp">
       <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Item.cpp">
+      <Filter>Source Files\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,9 +257,6 @@
     <ClInclude Include="Source\Enemy.h">
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Inventory.h">
-      <Filter>Header Files\HUD</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Minimap.h">
       <Filter>Header Files\HUD</Filter>
     </ClInclude>
@@ -271,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Source\AABB.h">
       <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Item.h">
+      <Filter>Header Files\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
-#ifndef INVENTORY_H
-#define INVENTORY_H
+#ifndef ITEM_H
+#define ITEM_H
 
 #include <string>
 #include <vector>
@@ -7,14 +7,14 @@
 using std::string;
 using std::vector;
 
-class Inventory
+class Item
 {
 public:
 	string name;
 
-	Inventory();
-	Inventory(string s);
-	~Inventory();
+	Item();
+	Item(string s);
+	~Item();
 	
 
 private:

@@ -83,7 +83,7 @@ private:
 	float recharge;
 
 	//Weapon* equipped;
-	//Inventory
+	//Item
 
 	Vector3 position;
 };

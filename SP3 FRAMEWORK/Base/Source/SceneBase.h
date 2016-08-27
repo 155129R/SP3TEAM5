@@ -243,6 +243,11 @@ public:
 		DEADTREE,
 		POCONG,
 
+		//ghost inventory
+		INV_GHOST1,
+		INV_GHOST2,
+		INV_GHOST3,
+
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
 

@@ -58,9 +58,6 @@ void SceneLevel02::Init()
 	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
 	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
 
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
-
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
 
@@ -364,15 +361,6 @@ void SceneLevel02::Update(double dt)
 						Singleton::getInstance()->gotKey = true;
 						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
 
-						int sz = Singleton::getInstance()->inventory.size();
-
-						system("CLS");
-						for (int i = 0; i<sz; i++) 
-						{
-							cout << i << ": " << Singleton::getInstance()->inventory[i]->name << endl;
-						}
-
-
 						object->active = false;
 					}
 				}
@@ -385,12 +373,24 @@ void SceneLevel02::Update(double dt)
 			eButtonState = false;
 	}
 
+
+
+	/////////////////
+	// for testing //
+	/////////////////
+
+	//add key to inventory
 	static bool spaceButtonState2 = false;
 	if (Application::IsKeyPressed('Y'))
 	{
 		if (!spaceButtonState2)
 		{
 			spaceButtonState2 = true;
+
+			Singleton::getInstance()->gotKey = true;
+
+			if (Singleton::getInstance()->inventory.size() < 6)
+				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
 		}
 	}
 	else if (!Application::IsKeyPressed('Y'))
@@ -399,7 +399,41 @@ void SceneLevel02::Update(double dt)
 			spaceButtonState2 = false;
 	}
 
-	
+	//add ghost1 to inventory
+	static bool spaceButtonState3 = false;
+	if (Application::IsKeyPressed('U'))
+	{
+		if (!spaceButtonState3)
+		{
+			spaceButtonState3 = true;
+
+			Singleton::getInstance()->gotKey = true;
+			if (Singleton::getInstance()->inventory.size() < 6)
+				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost1);
+		}
+	}
+	else if (!Application::IsKeyPressed('U'))
+	{
+		if (spaceButtonState3)
+			spaceButtonState3 = false;
+	}
+
+	//remove inventory slot 1
+	static bool spaceButtonState4 = false;
+	if (Application::IsKeyPressed('T'))
+	{
+		if (!spaceButtonState4)
+		{
+			spaceButtonState4 = true;
+			if (Singleton::getInstance()->inventory.size() > 0)
+				Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin());
+		}
+	}
+	else if (!Application::IsKeyPressed('T'))
+	{
+		if (spaceButtonState4)
+			spaceButtonState4 = false;
+	}
 
 	////////////////////////////////////////////////////////
 	//	for next time winning condition to go next scene  //

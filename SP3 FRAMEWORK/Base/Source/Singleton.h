@@ -1,6 +1,6 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
-#include "Inventory.h"
+#include "Item.h"
 #include <map>
 #include <vector>
 #include "AABBObject.h"
@@ -44,8 +44,11 @@ class Singleton
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
-		Inventory* item_key;
-		Inventory* item_hammer;
+		Item* item_key;
+		Item* item_hammer;
+		Item* item_ghost1;
+		Item* item_ghost2;
+		Item* item_ghost3;
 		Camera3* singletonCamera;
 
 		//Environment
@@ -54,16 +57,19 @@ class Singleton
 		//Enemy
 		vector<Enemy *> Enemy_list;
 
-		//Inventory
-		vector<Inventory*> inventory;
+		//Item
+		vector<Item*> inventory;
 
 	Singleton()
 	{
 		//init stuff here
 		player = new Player();
 		boss = new Boss();
-		item_key = new Inventory("key");
-		item_hammer = new Inventory("hammer");
+		item_key = new Item("key");
+		item_hammer = new Item("hammer");
+		item_ghost1 = new Item("ghost1");
+		item_ghost2 = new Item("ghost2");
+		item_ghost3 = new Item("ghost3");
 		mousex = 400;
 		mousey = 300;
 
