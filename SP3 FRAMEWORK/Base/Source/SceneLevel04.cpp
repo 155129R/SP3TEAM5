@@ -534,7 +534,10 @@ void SceneLevel04::RenderHUD()
 		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
 
-	RenderImageOnScreen(meshList[GEO_HP], Vector3(50, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
+	if (Singleton::getInstance()->boss->getHP() > 0)
+	{
+		RenderImageOnScreen(meshList[GEO_HP], Vector3(Singleton::getInstance()->boss->getHP() / 4, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
+	}
 }
 
 void SceneLevel04::RenderSprite()
