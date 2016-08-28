@@ -2056,7 +2056,7 @@ void SceneBase::RenderInventory()
 		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 
 		int sz = Singleton::getInstance()->inventory.size();
-
+		static bool bLButtonState = false;
 		std::ostringstream ss;
 		//cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
 		system("CLS");
@@ -2084,13 +2084,19 @@ void SceneBase::RenderInventory()
 			if ((230 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 165 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 0)
 			{
-				//MOUSE CLICK
-				if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+				//MOUSE CLICK	
+				if (!bLButtonState && Application::IsMousePressed(0))
 				{
-
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory.size() > 0)
+						Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin());
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
 				}
 				//MOUSE HOVER
-				else
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(19.7, 39.5, 1), Vector3(0, 0, 0));
 
@@ -2129,12 +2135,18 @@ void SceneBase::RenderInventory()
 				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1  == 1)
 			{
 				//MOUSE CLICK
-				if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+				if (!bLButtonState && Application::IsMousePressed(0))
 				{
-
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory.size() > 0)
+						Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 1);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
 				}
 				//MOUSE HOVER
-				else
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(27.5, 39.5, 1), Vector3(0, 0, 0));
 
@@ -2173,12 +2185,18 @@ void SceneBase::RenderInventory()
 				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 2)
 			{
 				//MOUSE CLICK
-				if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+				if (!bLButtonState && Application::IsMousePressed(0))
 				{
-
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory.size() > 0)
+						Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 2);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
 				}
 				//MOUSE HOVER
-				else
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(35.3, 39.5, 1), Vector3(0, 0, 0));
 
@@ -2217,12 +2235,18 @@ void SceneBase::RenderInventory()
 				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 3)
 			{
 				//MOUSE CLICK
-				if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+				if (!bLButtonState && Application::IsMousePressed(0))
 				{
-
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory.size() > 0)
+						Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 3);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
 				}
 				//MOUSE HOVER
-				else
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(43.1, 39.5, 1), Vector3(0, 0, 0));
 
@@ -2261,12 +2285,18 @@ void SceneBase::RenderInventory()
 				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 4)
 			{
 				//MOUSE CLICK
-				if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+				if (!bLButtonState && Application::IsMousePressed(0))
 				{
-
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory.size() > 0)
+						Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 4);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
 				}
 				//MOUSE HOVER
-				else
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(50.9, 39.5, 1), Vector3(0, 0, 0));
 
@@ -2305,12 +2335,18 @@ void SceneBase::RenderInventory()
 				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 5)
 			{
 				//MOUSE CLICK
-				if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+				if (!bLButtonState && Application::IsMousePressed(0))
 				{
-
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory.size() > 0)
+						Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 5);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
 				}
 				//MOUSE HOVER
-				else
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(58.7, 39.5, 1), Vector3(0, 0, 0));
 

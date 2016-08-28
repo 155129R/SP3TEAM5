@@ -19,6 +19,7 @@ public:
 	void Run();
 	void Exit();
 	static bool IsKeyPressed(unsigned short key);
+	static bool IsMousePressed(unsigned short key);
 	bool GetMouseUpdate();
 	static void ShowCursor();
 	static void HideCursor();
