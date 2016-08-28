@@ -1005,7 +1005,7 @@ void SceneLevel02::RenderPassMain()
 	ss.str("");
 	ss.precision(5);
 	ss << "POS: " << camera.position;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 20);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
 
 }
 
