@@ -94,6 +94,9 @@ void SceneLevel02::Init()
 	openGate = false;
 	rotateGate = 90;
 
+	questToNextScene = false;
+	distanceLeft = 0;
+
 	spatialPartitioning = false;
 
 	sound.playSoundEffect3D("Sound/fountain.mp3",
@@ -325,6 +328,19 @@ void SceneLevel02::Update(double dt)
 {
 	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 
+	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
+
+	if (questToNextScene)
+	{
+		if (distanceLeft < 400)
+		{
+			sound.stopSoundEffect3D();
+			Singleton::getInstance()->stateCheck = true;
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+		}
+	}
+		
+
 	if (Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
 
@@ -332,18 +348,6 @@ void SceneLevel02::Update(double dt)
 	
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
-
-	if (Application::IsKeyPressed('Q') && Singleton::getInstance()->gotKey == true)
-	{
-		sound.playSoundEffect3D("Sound/gateOpen.wav",
-			irrklang::vec3df(-1190, 20, 335), false);
-		openGate = true;
-		gatePtr->active = false;
-	}
-	if (openGate && rotateGate > 0)
-	{
-		rotateGate--;
-	}
 
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
@@ -358,12 +362,21 @@ void SceneLevel02::Update(double dt)
 				{
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95 && cameraViewObject(keyPtr->pos, 80) == true)
 					{
+						questToNextScene = true;
 						Singleton::getInstance()->gotKey = true;
 						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
 
 						object->active = false;
 					}
 				}
+			}
+
+			if ((gatePtr->pos - camera.position).Length() < 95 && cameraViewObject(gatePtr->pos, 80) == true && Singleton::getInstance()->gotKey == true && openGate == false)
+			{
+				sound.playSoundEffect3D("Sound/gateOpen.wav",
+					irrklang::vec3df(-1190, 20, 335), false);
+				openGate = true;
+				gatePtr->active = false;
 			}
 		}
 	}
@@ -373,7 +386,10 @@ void SceneLevel02::Update(double dt)
 			eButtonState = false;
 	}
 
-
+	if (openGate && rotateGate > 0)
+	{
+		rotateGate--;
+	}
 
 	/////////////////
 	// for testing //
@@ -994,8 +1010,6 @@ void SceneLevel02::RenderPassMain()
 	// Render the crosshair
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
-	SceneBase::Render();
-
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -1006,6 +1020,21 @@ void SceneLevel02::RenderPassMain()
 	ss.precision(5);
 	ss << "POS: " << camera.position;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+
+	if (questToNextScene)
+	{
+		ss.str("");
+		ss.precision(5);
+		ss << "Get away from here!!";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.5f, 10, 30);
+
+		ss.str("");
+		ss.precision(5);
+		ss << "Distance left: " << distanceLeft;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.f, 15, 25);
+	}
+
+	SceneBase::Render();
 
 }
 

@@ -54,6 +54,9 @@ private:
 	bool openGate;
 	int rotateGate;
 
+	bool questToNextScene;
+	int distanceLeft;
+
 	AABBObject* keyPtr;
 	AABBObject* gatePtr;
 };

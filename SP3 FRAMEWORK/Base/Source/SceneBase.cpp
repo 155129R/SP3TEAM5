@@ -2082,7 +2082,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 1
 			if ((230 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 165 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 0)
+				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 1)
 			{
 				//MOUSE CLICK	
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2132,7 +2132,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 2
 			if ((305 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 240 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1  == 1)
+				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 2)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2182,7 +2182,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 3
 			if ((380 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 315 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 2)
+				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 3)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2232,7 +2232,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 4
 			if ((455 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 390 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 3)
+				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 4)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2282,7 +2282,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 5
 			if ((530 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 465 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 4)
+				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 5)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2332,7 +2332,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 6
 			if ((605 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 540 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i - 1 == 5)
+				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 6)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))

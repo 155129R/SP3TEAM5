@@ -74,10 +74,10 @@ class Singleton
 		mousey = 300;
 
 
-		//program_state = PROGRAM_MENU;
+		program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
 		//program_state = PROGRAM_GAME2;
-		program_state = PROGRAM_GAME3;
+		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
 
 		stateCheck = false;
