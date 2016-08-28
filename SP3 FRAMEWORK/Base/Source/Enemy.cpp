@@ -136,6 +136,28 @@ void Enemy::Update(double dt)
 			}
 			else
 			{
+				switch (Type)
+				{
+					case ENEMY_TYPE::GHOST_1:
+					{
+						if (Singleton::getInstance()->inventory.size() < 6)
+							Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost1);
+						break;
+					}
+					case ENEMY_TYPE::GHOST_2:
+					{
+						if (Singleton::getInstance()->inventory.size() < 6)
+							Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost2);
+						break;
+					}
+					case ENEMY_TYPE::GHOST_3:
+					{
+						if (Singleton::getInstance()->inventory.size() < 6)
+							Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost3);
+						break;
+					}
+				}
+				
 				active = false;
 				canCatch = false;
 				break;
