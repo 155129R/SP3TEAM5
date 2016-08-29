@@ -240,7 +240,7 @@ void SceneBase::Init()
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	//meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//font.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(0, 0, 0), 18, 36, 1.f);
@@ -927,7 +927,7 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.5f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
