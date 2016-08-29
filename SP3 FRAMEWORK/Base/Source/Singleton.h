@@ -59,6 +59,7 @@ class Singleton
 
 		//Item
 		vector<Item*> inventory;
+		vector<Item*> inventory2ndRow;
 
 	Singleton()
 	{

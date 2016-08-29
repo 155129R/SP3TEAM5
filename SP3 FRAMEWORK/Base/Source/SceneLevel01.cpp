@@ -585,7 +585,7 @@ void SceneLevel01::Update(double dt)
 					if (object->Object == AABBObject::OBJECT_TYPE::HAMMER && (hammerPtr->pos - camera.position).Length() < 95)
 					{
 						Singleton::getInstance()->gotHammer = true;
-						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_hammer);
+						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_hammer);
 
 						object->active = false;
 					}

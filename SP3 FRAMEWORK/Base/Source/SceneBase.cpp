@@ -2054,20 +2054,17 @@ void SceneBase::RenderInventory()
 	{
 		RenderImageOnScreen(meshList[INVENTORY_UI], Vector3(50, 40, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 
+		//////////////////////
+		//  inventory row 1 //
+		//////////////////////
 		int sz = Singleton::getInstance()->inventory.size();
 		static bool bLButtonState = false;
 		std::ostringstream ss;
 		//cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
-		system("CLS");
+		//system("CLS");
 		for (int i = 1; i <= sz; i++)
 		{
-			cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
-
-			if (Singleton::getInstance()->inventory[i - 1]->name == "key")
-				RenderOBJOnScreen(meshList[GEO_KEY], 1, i * 7.6 + 12.4, 38, 10, 0, rotateKey * 20, 0, false);
-
-			if (Singleton::getInstance()->inventory[i - 1]->name == "hammer")
-				RenderOBJOnScreen(meshList[HAMMER], 1.5, i * 7.6 + 12.4, 39, 10, 0, rotateKey * 20, 0, false);
+			//cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
 
 			if (Singleton::getInstance()->inventory[i - 1]->name == "ghost1")
 				RenderImageOnScreen(meshList[INV_GHOST1], Vector3(6, 6, 1), Vector3(i * 7.6 + 12.4, 39.5, 1), Vector3(0, 0, 0));
@@ -2099,18 +2096,6 @@ void SceneBase::RenderInventory()
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(19.7, 39.5, 1), Vector3(0, 0, 0));
 
-		
-					if (Singleton::getInstance()->inventory[0]->name == "key")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a key ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
-
-					if (Singleton::getInstance()->inventory[0]->name == "hammer")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a hammer ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
 					if (Singleton::getInstance()->inventory[0]->name == "ghost1")
 					{
 						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
@@ -2131,7 +2116,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 2
 			if ((305 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 240 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 2)
+				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 2)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2149,18 +2134,6 @@ void SceneBase::RenderInventory()
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(27.5, 39.5, 1), Vector3(0, 0, 0));
 
-
-					if (Singleton::getInstance()->inventory[1]->name == "key")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a key ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
-
-					if (Singleton::getInstance()->inventory[1]->name == "hammer")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a hammer ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
 					if (Singleton::getInstance()->inventory[1]->name == "ghost1")
 					{
 						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
@@ -2181,7 +2154,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 3
 			if ((380 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 315 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 3)
+				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 3)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2199,18 +2172,6 @@ void SceneBase::RenderInventory()
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(35.3, 39.5, 1), Vector3(0, 0, 0));
 
-
-					if (Singleton::getInstance()->inventory[2]->name == "key")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a key ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
-
-					if (Singleton::getInstance()->inventory[2]->name == "hammer")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a hammer ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
 					if (Singleton::getInstance()->inventory[2]->name == "ghost1")
 					{
 						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
@@ -2231,7 +2192,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 4
 			if ((455 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 390 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 4)
+				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 4)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2249,18 +2210,6 @@ void SceneBase::RenderInventory()
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(43.1, 39.5, 1), Vector3(0, 0, 0));
 
-
-					if (Singleton::getInstance()->inventory[3]->name == "key")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a key ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
-
-					if (Singleton::getInstance()->inventory[3]->name == "hammer")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a hammer ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
 					if (Singleton::getInstance()->inventory[3]->name == "ghost1")
 					{
 						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
@@ -2281,7 +2230,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 5
 			if ((530 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 465 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 5)
+				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 5)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2299,18 +2248,6 @@ void SceneBase::RenderInventory()
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(50.9, 39.5, 1), Vector3(0, 0, 0));
 
-
-					if (Singleton::getInstance()->inventory[4]->name == "key")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a key ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
-
-					if (Singleton::getInstance()->inventory[4]->name == "hammer")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a hammer ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
 					if (Singleton::getInstance()->inventory[4]->name == "ghost1")
 					{
 						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
@@ -2331,7 +2268,7 @@ void SceneBase::RenderInventory()
 
 			//SLOT 6
 			if ((605 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 540 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
-				(250 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 185 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 6)
+				(235 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 170 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 6)
 			{
 				//MOUSE CLICK
 				if (!bLButtonState && Application::IsMousePressed(0))
@@ -2349,18 +2286,6 @@ void SceneBase::RenderInventory()
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(58.7, 39.5, 1), Vector3(0, 0, 0));
 
-
-					if (Singleton::getInstance()->inventory[5]->name == "key")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a key ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
-
-					if (Singleton::getInstance()->inventory[5]->name == "hammer")
-					{
-						ss.str(""); ss.precision(5); ss << "This is a hammer ";
-						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
-					}
 					if (Singleton::getInstance()->inventory[5]->name == "ghost1")
 					{
 						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
@@ -2377,7 +2302,236 @@ void SceneBase::RenderInventory()
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
-			} 
+			}
+		}
+
+		//////////////////////
+		//  inventory row 2 //
+		//////////////////////
+		int sz2 = Singleton::getInstance()->inventory2ndRow.size();
+		//static bool bLButtonState = false;
+		cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
+		//system("CLS");
+
+		for (int i = 1; i <= sz2; i++)
+		{
+			//cout << i << ": " << Singleton::getInstance()->inventory2ndRow[i-1]->name << endl;
+
+			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "key")
+				RenderOBJOnScreen(meshList[GEO_KEY], 1, i * 7.6 + 12.4, 29.5, 10, 0, rotateKey * 20, 0, false);
+
+			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "hammer")
+				RenderOBJOnScreen(meshList[HAMMER], 1.5, i * 7.6 + 12.4, 30.5, 10, 0, rotateKey * 20, 0, false);
+
+			//SLOT 1
+			if ((230 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 165 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 1)
+			{
+				//MOUSE CLICK	
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
+						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin());
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+				//MOUSE HOVER
+				{
+					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(19.7, 31.5, 1), Vector3(0, 0, 0));
+
+
+					if (Singleton::getInstance()->inventory2ndRow[0]->name == "key")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a key ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+
+					if (Singleton::getInstance()->inventory2ndRow[0]->name == "hammer")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a hammer ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+				}
+			}
+
+			//SLOT 2
+			if ((305 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 240 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 2)
+			{
+				//MOUSE CLICK
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
+						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 1);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+				//MOUSE HOVER
+				{
+					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(27.5, 31.5, 1), Vector3(0, 0, 0));
+
+
+					if (Singleton::getInstance()->inventory2ndRow[1]->name == "key")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a key ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+
+					if (Singleton::getInstance()->inventory2ndRow[1]->name == "hammer")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a hammer ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+				}
+			}
+
+			//SLOT 3
+			if ((380 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 315 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 3)
+			{
+				//MOUSE CLICK
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
+						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 2);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+				//MOUSE HOVER
+				{
+					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(35.3, 31.5, 1), Vector3(0, 0, 0));
+
+
+					if (Singleton::getInstance()->inventory2ndRow[2]->name == "key")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a key ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+
+					if (Singleton::getInstance()->inventory2ndRow[2]->name == "hammer")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a hammer ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+				}
+			}
+
+			//SLOT 4
+			if ((455 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 390 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 4)
+			{
+				//MOUSE CLICK
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
+						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 3);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+				//MOUSE HOVER
+				{
+					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(43.1, 31.5, 1), Vector3(0, 0, 0));
+
+
+					if (Singleton::getInstance()->inventory2ndRow[3]->name == "key")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a key ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+
+					if (Singleton::getInstance()->inventory2ndRow[3]->name == "hammer")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a hammer ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+				}
+			}
+
+			//SLOT 5
+			if ((530 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 465 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 5)
+			{
+				//MOUSE CLICK
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
+						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 4);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+				//MOUSE HOVER
+				{
+					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(50.9, 31.5, 1), Vector3(0, 0, 0));
+
+
+					if (Singleton::getInstance()->inventory2ndRow[4]->name == "key")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a key ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+
+					if (Singleton::getInstance()->inventory2ndRow[4]->name == "hammer")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a hammer ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+				}
+			}
+
+			//SLOT 6
+			if ((605 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 540 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 6)
+			{
+				//MOUSE CLICK
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
+						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 5);
+					break;
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+				//MOUSE HOVER
+				{
+					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(58.7, 31.5, 1), Vector3(0, 0, 0));
+
+
+					if (Singleton::getInstance()->inventory2ndRow[5]->name == "key")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a key ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+
+					if (Singleton::getInstance()->inventory2ndRow[5]->name == "hammer")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a hammer ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
+				}
+			}
 		}
 	}
 	else

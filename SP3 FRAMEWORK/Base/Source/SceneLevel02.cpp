@@ -61,8 +61,6 @@ void SceneLevel02::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
 
-
-
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
@@ -366,7 +364,7 @@ void SceneLevel02::Update(double dt)
 					{
 						questToNextScene = true;
 						Singleton::getInstance()->gotKey = true;
-						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
+						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 
 						object->active = false;
 					}
@@ -407,8 +405,8 @@ void SceneLevel02::Update(double dt)
 
 			Singleton::getInstance()->gotKey = true;
 
-			if (Singleton::getInstance()->inventory.size() < 6)
-				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
+			if (Singleton::getInstance()->inventory2ndRow.size() < 6)
+				Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 		}
 	}
 	else if (!Application::IsKeyPressed('Y'))
