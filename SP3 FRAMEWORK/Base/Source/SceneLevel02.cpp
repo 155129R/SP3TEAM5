@@ -61,8 +61,7 @@ void SceneLevel02::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
 
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//Outdoor//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//Outdoor//key.tga");
+
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));

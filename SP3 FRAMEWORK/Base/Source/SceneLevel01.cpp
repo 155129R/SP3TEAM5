@@ -79,8 +79,7 @@ void SceneLevel01::Init()
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//Indoor//chair.tga");
 
-	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//Indoor//hammer.obj");
-	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//Indoor//hammer.tga");
+
 
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 

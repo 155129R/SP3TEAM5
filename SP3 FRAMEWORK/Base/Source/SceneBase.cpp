@@ -290,13 +290,12 @@ void SceneBase::Init()
 
 	meshList[UI_BOX] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[UI_BOX]->textureID = LoadTGA("Image//HUD//boxUI.tga");
+	
+	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//Outdoor//key.obj");
+	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//Outdoor//key.tga");
 
-	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//hammer.obj");
-	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//hammer.tga");
-
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
-
+	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//Indoor//hammer.obj");
+	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//Indoor//hammer.tga");
 
 	meshList[INV_HOVER] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
 	meshList[INV_HOVER]->textureID = LoadTGA("Image//HUD//Inventory_Hover.tga");
