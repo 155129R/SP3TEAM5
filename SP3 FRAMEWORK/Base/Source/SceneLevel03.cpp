@@ -16,6 +16,8 @@ SceneLevel03::~SceneLevel03()
 
 void SceneLevel03::Init()
 {
+	sound.playMusic("Sound/level3bgm.mp3");
+
 	Application::HideCursor();
 
 	SceneBase::Init();
@@ -253,26 +255,31 @@ void SceneLevel03::Update(double dt)
 	float distance = (Change->pos - Singleton::getInstance()->player->getPosition()).Length();
 	if (Application::IsKeyPressed('E') && distance <= 200)
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}

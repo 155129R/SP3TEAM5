@@ -18,6 +18,8 @@ static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneLevel02::Init()
 {
+	sound.playMusic("Sound/level2bgm.mp3");
+
 	Application::HideCursor();
 	
 	SceneBase::Init();
@@ -334,6 +336,7 @@ void SceneLevel02::Update(double dt)
 	{
 		if (distanceLeft < 50)
 		{
+			sound.stopMusic();
 			sound.stopSoundEffect3D();
 			Singleton::getInstance()->stateCheck = true;
 			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
@@ -456,24 +459,28 @@ void SceneLevel02::Update(double dt)
 	////////////////////////////////////////////////////////
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
