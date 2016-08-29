@@ -23,43 +23,43 @@ void SceneLevel02::Init()
 	SceneBase::Init();
 	lights[0].position.Set(0, 500, 0);
 
-	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//fountain.obj");
-	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//fountain.tga");
+	meshList[FOUNTAIN] = MeshBuilder::GenerateOBJ("fountain", "OBJ//Outdoor//fountain.obj");
+	meshList[FOUNTAIN]->textureArray[0] = LoadTGA("Image//Outdoor//fountain.tga");
 
 	meshList[FOUNTAIN_WATER1] = MeshBuilder::GenerateSphere("sphere", Color(0.2f, 0.7f, 1), 18, 36, 1.f);
-	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//water.tga");
+	meshList[FOUNTAIN_WATER1]->textureArray[0] = LoadTGA("Image//Outdoor//water.tga");
 
 	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
-	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//Outdoor//floor.tga");
 
-	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
-	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//houseTex.tga");
+	meshList[HOUSE1] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//house.obj");
+	meshList[HOUSE1]->textureArray[0] = LoadTGA("Image//Outdoor//houseTex.tga");
 
-	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//house.obj");
-	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//houseTex2.tga");
+	meshList[HOUSE2] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//house.obj");
+	meshList[HOUSE2]->textureArray[0] = LoadTGA("Image//Outdoor//houseTex2.tga");
 
-	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//house2.obj");
-	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//house3.tga");
+	meshList[HOUSE3] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//house2.obj");
+	meshList[HOUSE3]->textureArray[0] = LoadTGA("Image//Outdoor//house3.tga");
 
-	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//metalFence.obj");
+	meshList[METAL_FENCE] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//metalFence.obj");
 	//meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//rust.tga");
+	meshList[METAL_FENCE]->textureArray[0] = LoadTGA("Image//Outdoor//rust.tga");
 
-	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//gate.obj");
+	meshList[METAL_GATE] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//gate.obj");
 	//meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//metalFence.tga");
-	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//rust.tga");
+	meshList[METAL_GATE]->textureArray[0] = LoadTGA("Image//Outdoor//rust.tga");
 
-	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//hedge.obj");
-	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//hedge.tga");
+	meshList[HEDGE] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//hedge.obj");
+	meshList[HEDGE]->textureArray[0] = LoadTGA("Image//Outdoor//hedge.tga");
 
-	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//bench.obj");
-	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//bench.tga");
+	meshList[BENCHES] = MeshBuilder::GenerateOBJ("house", "OBJ//Outdoor//bench.obj");
+	meshList[BENCHES]->textureArray[0] = LoadTGA("Image//Outdoor//bench.tga");
 
 	meshList[POT] = MeshBuilder::GenerateOBJ("pot", "OBJ//pot.obj");
-	meshList[POT]->textureArray[0] = LoadTGA("Image//pot.tga");
+	meshList[POT]->textureArray[0] = LoadTGA("Image//Outdoor//pot.tga");
 
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//coconutTree.tga");
+	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));

@@ -259,31 +259,31 @@ void SceneBase::Init()
 	/*meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Default.raw", m_heightMap, level1_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");*/
 
-	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
+	meshList[TERRAIN] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
 	meshList[TERRAIN]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	meshList[TERRAIN]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
 
 	//weapon
-	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//rifle.obj");
-	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//rifle.tga");
+	meshList[RIFLE] = MeshBuilder::GenerateOBJ("Rifle", "OBJ//Weapon//rifle.obj");
+	meshList[RIFLE]->textureArray[0] = LoadTGA("Image//Weapon//rifle.tga");
 
-	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
-	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
+	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//Weapon//pistol.obj");
+	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//Weapon//pistol.tga");
 
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
-	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
+	meshList[VACUUM]->textureID = LoadTGA("Image//Weapon//vacuum.tga");
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
+	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//HUD//inventory.tga");
 
-	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//hammer.obj");
-	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//hammer.tga");
+	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//Indoor//hammer.obj");
+	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//Indoor//hammer.tga");
 
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//key.tga");
+	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//Outdoor//key.obj");
+	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//Outdoor//key.tga");
 
 	meshList[INV_HOVER] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
 	meshList[INV_HOVER]->textureID = LoadTGA("Image//HUD//Inventory_Hover.tga");
@@ -298,25 +298,25 @@ void SceneBase::Init()
 	meshList[INV_GHOST3]->textureID = LoadTGA("Image//HUD//Ghost_3_icon.tga");
 
 	meshList[GAME_TITLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[GAME_TITLE]->textureID = LoadTGA("Image//title.tga");
+	meshList[GAME_TITLE]->textureID = LoadTGA("Image//Screen//title.tga");
 
 	meshList[BUTTON_PLAY] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_PLAY]->textureID = LoadTGA("Image//play.tga");
+	meshList[BUTTON_PLAY]->textureID = LoadTGA("Image//Screen//play.tga");
 
 	meshList[BUTTON_CREDITS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_CREDITS]->textureID = LoadTGA("Image//credits.tga");
+	meshList[BUTTON_CREDITS]->textureID = LoadTGA("Image//Screen//credits.tga");
 
 	meshList[BUTTON_INSTRUCTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_INSTRUCTION]->textureID = LoadTGA("Image//instruction.tga");
+	meshList[BUTTON_INSTRUCTION]->textureID = LoadTGA("Image//Screen//instruction.tga");
 
 	meshList[BUTTON_OPTIONS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_OPTIONS]->textureID = LoadTGA("Image//options.tga");
+	meshList[BUTTON_OPTIONS]->textureID = LoadTGA("Image//Screen//options.tga");
 
 	meshList[BUTTON_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_EXIT]->textureID = LoadTGA("Image//exit.tga");
+	meshList[BUTTON_EXIT]->textureID = LoadTGA("Image//Screen//exit.tga");
 
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
-	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//nightVision.tga");
+	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision.tga");
 
 	//Particles
 	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);

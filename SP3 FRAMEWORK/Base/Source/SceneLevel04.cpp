@@ -20,15 +20,15 @@ void SceneLevel04::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
-	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
-	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//Graveyard//level4_ground.tga");
 
 	//Level 4 - Graveyard
-	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Graveyard//Tombstone.obj");
 	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
-	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
-	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
-	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//Graveyard//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//Graveyard//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//Graveyard//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 
 	terrainHeight = TERRAINSIZE.y;
