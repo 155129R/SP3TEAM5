@@ -375,6 +375,7 @@ protected:
 	float rotateAngle = 0;
 	float rotateKey = 0;
 	Minimap* m_Minimap;
+	float HealthpackCD;
 	Color Black;
 
 	//Enemy 
