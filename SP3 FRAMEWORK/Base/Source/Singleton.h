@@ -23,6 +23,7 @@ class Singleton
 		enum PROGRAM_STATE
 		{
 			PROGRAM_MENU,
+			PROGRAM_HUB,
 			PROGRAM_GAME1,
 			PROGRAM_GAME2,
 			PROGRAM_GAME3,
@@ -59,6 +60,7 @@ class Singleton
 
 		//Item
 		vector<Item*> inventory;
+		vector<Item*> inventory2ndRow;
 
 	Singleton()
 	{
@@ -74,11 +76,12 @@ class Singleton
 		mousey = 300;
 
 
-		program_state = PROGRAM_MENU;
+		//program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
 		//program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
+		program_state = PROGRAM_HUB;
 
 		stateCheck = false;
 

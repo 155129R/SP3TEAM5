@@ -19,8 +19,9 @@ void SceneLevel03::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+	camera.position += Vector3(0, 0, 1800);
 
-	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
+	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
 	meshList[TERRAIN_LEVEL03]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	meshList[TERRAIN_LEVEL03]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
 
@@ -34,9 +35,9 @@ void SceneLevel03::Init()
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
+	meshList[WATER]->textureArray[0] = LoadTGA("Image//Forest//sea.tga");
 	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
-	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
+	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//Forest//sea2.tga");
 	meshList[GEO_BRIDGE] = MeshBuilder::GenerateOBJ("Bridge", "OBJ//Forest//Bridge.obj");
 	meshList[GEO_BRIDGE]->textureArray[0] = LoadTGA("Image//Forest//Bridge.tga");
 	meshList[GEO_LOGS] = MeshBuilder::GenerateOBJ("Logs", "OBJ//Forest//Logs.obj");
@@ -105,7 +106,40 @@ void SceneLevel03::Init()
 	Bridge->scale.Set(5, 5, 5);
 	instance->Object_list.push_back(Bridge);
 
-	InitPartitioning();
+	AABBObject * Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-2000, 100, 0);
+	Boundary->scale.Set(5, 10, 500);
+	instance->Object_list.push_back(Boundary);
+
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(2000, 100, 0);
+	Boundary->scale.Set(5, 10, 500);
+	instance->Object_list.push_back(Boundary);
+
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-1100, 100, -1100);
+	Boundary->scale.Set(200, 10, 5);
+	instance->Object_list.push_back(Boundary);
+
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(1100, 100, -1100);
+	Boundary->scale.Set(200, 10, 5);;
+	instance->Object_list.push_back(Boundary);
+
+	Change = new AABBObject();
+	Change->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Change->active = true;
+	Change->pos.Set(0, 100, -1200);
+	Change->scale.Set(20, 25, 10);;
+	instance->Object_list.push_back(Change);
 }
 
 void SceneLevel03::Update(double dt)
@@ -216,6 +250,12 @@ void SceneLevel03::Update(double dt)
 	////////////////////////////////////////////////////////
 	//	for next time winning condition to go next scene  //
 	////////////////////////////////////////////////////////
+	float distance = (Change->pos - Singleton::getInstance()->player->getPosition()).Length();
+	if (Application::IsKeyPressed('E') && distance <= 200)
+	{
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
 	if (Application::IsKeyPressed('V'))
 	{
 		Singleton::getInstance()->stateCheck = true;
@@ -673,18 +713,18 @@ void SceneLevel03::RenderPassMain()
 		RenderHUD();
 	}
 
-	SceneBase::Render();
+	
 	RenderWeapons(false);
 	RenderBullets(false);
 	RenderInventory();
 
 	//On screen text
-	{
+	
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-	}
+	
 	{
 		std::ostringstream ss;
 		ss.precision(5);
@@ -698,6 +738,25 @@ void SceneLevel03::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 	}
 
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
+	SceneBase::Render();
 }
 
 void SceneLevel03::Render()

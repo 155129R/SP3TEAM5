@@ -20,15 +20,15 @@ void SceneLevel04::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
-	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
-	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//Graveyard//level4_ground.tga");
 
 	//Level 4 - Graveyard
-	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Graveyard//Tombstone.obj");
 	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
-	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
-	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
-	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//Graveyard//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//Graveyard//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//Graveyard//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 
 	terrainHeight = TERRAINSIZE.y;
@@ -83,7 +83,7 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
-
+	std::cout << instance->player->GetFear() << endl;
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
@@ -124,8 +124,11 @@ void SceneLevel04::Update(double dt)
 		lights[0].color = (0.0f, 0.8f, 0.5f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-		fogColor.Set(1.f, 1.f, 1.f);
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		if (instance->player->GetFear() == 1)
+		{
+			fogColor.Set(1.f, 1.f, 1.f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		}
 		lightning = false;
 	}
 	else
@@ -135,8 +138,11 @@ void SceneLevel04::Update(double dt)
 		lights[0].color = (0.f, 0.2f, 0.4f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-		fogColor.Set(0.2f, 0.2f, 0.2f);
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		if (instance->player->GetFear() == 1)
+		{
+			fogColor.Set(0.2f, 0.2f, 0.2f);
+			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		}
 	}
 	if (Application::IsKeyPressed('6'))
 	{
@@ -682,7 +688,7 @@ void SceneLevel04::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
-	SceneBase::Render();
+	
 	RenderInventory();
 	RenderWeapons(true);
 	RenderBullets(false);
@@ -714,12 +720,12 @@ void SceneLevel04::RenderPassMain()
 	//bLightEnabled = false;
 
 	//On screen text
-	{
+
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-	}
+
 	{
 		std::ostringstream ss;
 		ss.precision(5);
@@ -733,6 +739,25 @@ void SceneLevel04::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 	}
 
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
+	SceneBase::Render();
 }
 
 void SceneLevel04::Render()

@@ -27,25 +27,13 @@ public:
 	void UpdateWeapon(double dt);
 	int GetWeaponType();
 
-	Vector3 getPosition()
-	{
-		return position;
-	}
+	Vector3 getPosition();
+	void setPosition(Vector3 pos);
+	bool getRun();
+	void setRun(bool run);
 
-	void setPosition(Vector3 pos)
-	{
-		position = pos;
-	}
-
-	bool getRun()
-	{
-		return Run;
-	}
-
-	void setRun(bool run)
-	{
-		Run = run;
-	}
+	void AddHealthpack(int Amount);
+	void UseHealthpack();
 
 private:
 	//weapon
@@ -82,10 +70,8 @@ private:
 	float stamina;
 	float recharge;
 
-	//Weapon* equipped;
-	//Item
-
 	Vector3 position;
+	int Healthpacks;
 };
 
 #endif

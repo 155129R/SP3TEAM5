@@ -37,47 +37,49 @@ void SceneLevel01::Init()
 	d8 = false;
 
 	//level 1 terrain
-	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
+	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain//Terrain_Level01.raw", m_heightMap, level1_Heights);
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Indoor//indoorFloor.tga");
 
 	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
-	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
+	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//Indoor//walltex.tga");
 
-	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
-	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
+	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Indoor//Stairs.obj");
+	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//Indoor//stairs.tga");
 
-	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Level01.obj");
-	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//uvmap.tga");
+	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Indoor//Level01.obj");
+	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
 
-	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
-	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//Indoor//door.obj");
+	meshList[DOOR]->textureArray[0] = LoadTGA("Image//Indoor//door.tga");
 
-	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//chandelier.obj");
-	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//chandelier.tga");
+	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//Indoor//chandelier.obj");
+	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//Indoor//chandelier.tga");
 
 	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
-	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
+	meshList[CEILING]->textureArray[0] = LoadTGA("Image//Indoor//indoorCeiling.tga");
 
 	meshList[ROOMCEILING] = MeshBuilder::GenerateQuad2("ROOMCEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(10, 10));
-	meshList[ROOMCEILING]->textureArray[0] = LoadTGA("Image//ceilingRoom.tga");
+	meshList[ROOMCEILING]->textureArray[0] = LoadTGA("Image//Indoor//ceilingRoom.tga");
 
-	meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//bed.obj");
-	meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+	meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Indoor//bed.obj");
+	meshList[BED]->textureArray[0] = LoadTGA("Image//Indoor//bed.tga");
 
-	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
-	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
+	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//Indoor//toilet.obj");
+	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//Indoor//toilet.tga");
 
-	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
-	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//Indoor//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//Indoor//indoorGate.tga");
 
-	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
-	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//Indoor//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Indoor//Table.tga");
 
-	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//table.obj");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Indoor//Table.tga");
 
-	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
-	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//Indoor//chair.tga");
+
+
 
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
@@ -583,7 +585,7 @@ void SceneLevel01::Update(double dt)
 					if (object->Object == AABBObject::OBJECT_TYPE::HAMMER && (hammerPtr->pos - camera.position).Length() < 95)
 					{
 						Singleton::getInstance()->gotHammer = true;
-						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_hammer);
+						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_hammer);
 
 						object->active = false;
 					}
@@ -629,7 +631,7 @@ void SceneLevel01::Update(double dt)
 		Flashlight_Wait = 0.0f;
 		if (Flashlight == false)
 		{
-			lights[1].power = 8.0f;
+			lights[1].power = 15.0f;
 			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
 			Flashlight = true;
 		}
@@ -846,7 +848,7 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(20, 20, 20);
-	RenderMesh(meshList[LEVEL01], Light);
+	RenderMesh(meshList[LEVEL01], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -955,7 +957,7 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Translate(1295, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
 	modelStack.Scale(300, 1, 300);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[ROOMCEILING], Light);
+	RenderMesh(meshList[ROOMCEILING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1177,7 +1179,7 @@ void SceneLevel01::RenderPassMain()
 		RenderHUD();
 	}
 
-	SceneBase::Render();
+	
 
 	if (timerstart && timer < 3.f)
 	{
@@ -1223,6 +1225,25 @@ void SceneLevel01::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
 	}
 
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
+	SceneBase::Render();
 }
 
 void SceneLevel01::Render()

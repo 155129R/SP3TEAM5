@@ -320,10 +320,10 @@ void Camera3::Update(double dt)
 	Yaw(dt);
 	Pitch(dt);
 
-	if(Application::IsKeyPressed('R'))
-	{
-		Reset();
-	}
+	//if(Application::IsKeyPressed('R'))
+	//{
+	//	Reset();
+	//}
 }
 
 void Camera3::Reset()
