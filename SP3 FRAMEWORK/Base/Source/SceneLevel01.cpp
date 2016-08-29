@@ -37,47 +37,50 @@ void SceneLevel01::Init()
 	d8 = false;
 
 	//level 1 terrain
-	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain_Level01.raw", m_heightMap, level1_Heights);
-	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//indoorFloor.tga");
+	meshList[LEVEL01_TERRAIN] = MeshBuilder::GenerateTerrain("level01 terrain", "Image//Terrain//Terrain_Level01.raw", m_heightMap, level1_Heights);
+	meshList[LEVEL01_TERRAIN]->textureArray[0] = LoadTGA("Image//Indoor//indoorFloor.tga");
 
 	meshList[LEVEL01_WALLS] = MeshBuilder::GenerateQuad("walls", Color(0, 0, 0), 1.f);
-	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//walltex.tga");
+	meshList[LEVEL01_WALLS]->textureArray[0] = LoadTGA("Image//Indoor//walltex.tga");
 
-	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Stairs.obj");
-	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//stairs.tga");
+	meshList[STAIRS] = MeshBuilder::GenerateOBJ("stairs", "OBJ//Indoor//Stairs.obj");
+	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//Indoor//stairs.tga");
 
-	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Level01.obj");
-	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//uvmap.tga");
+	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Indoor//Level01.obj");
+	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
 
-	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//door.obj");
-	meshList[DOOR]->textureArray[0] = LoadTGA("Image//door.tga");
+	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//Indoor//door.obj");
+	meshList[DOOR]->textureArray[0] = LoadTGA("Image//Indoor//door.tga");
 
-	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//chandelier.obj");
-	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//chandelier.tga");
+	meshList[CHANDELIER] = MeshBuilder::GenerateOBJ("CHANDELIER", "OBJ//Indoor//chandelier.obj");
+	meshList[CHANDELIER]->textureArray[0] = LoadTGA("Image//Indoor//chandelier.tga");
 
 	meshList[CEILING] = MeshBuilder::GenerateQuad2("CEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(18, 6));
-	meshList[CEILING]->textureArray[0] = LoadTGA("Image//indoorCeiling.tga");
+	meshList[CEILING]->textureArray[0] = LoadTGA("Image//Indoor//indoorCeiling.tga");
 
 	meshList[ROOMCEILING] = MeshBuilder::GenerateQuad2("ROOMCEILING", Color(0, 0, 0), 1.f, 1.f, TexCoord(10, 10));
-	meshList[ROOMCEILING]->textureArray[0] = LoadTGA("Image//ceilingRoom.tga");
+	meshList[ROOMCEILING]->textureArray[0] = LoadTGA("Image//Indoor//ceilingRoom.tga");
 
-	meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//bed.obj");
-	meshList[BED]->textureArray[0] = LoadTGA("Image//bed.tga");
+	meshList[BED] = MeshBuilder::GenerateOBJ("Bed", "OBJ//Indoor//bed.obj");
+	meshList[BED]->textureArray[0] = LoadTGA("Image//Indoor//bed.tga");
 
-	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//toilet.obj");
-	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//toilet.tga");
+	meshList[TOILETBOWL] = MeshBuilder::GenerateOBJ("TOILETBOWL", "OBJ//Indoor//toilet.obj");
+	meshList[TOILETBOWL]->textureArray[0] = LoadTGA("Image//Indoor//toilet.tga");
 
-	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//indoorGate.obj");
-	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//indoorGate.tga");
+	meshList[INDOORGATE] = MeshBuilder::GenerateOBJ("INDOORGATE", "OBJ//Indoor//indoorGate.obj");
+	meshList[INDOORGATE]->textureArray[0] = LoadTGA("Image//Indoor//indoorGate.tga");
 
-	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//barricade.obj");
-	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Table.tga");
+	meshList[BLOCKAGE] = MeshBuilder::GenerateOBJ("barricade", "OBJ//Indoor//barricade.obj");
+	meshList[BLOCKAGE]->textureArray[0] = LoadTGA("Image//Indoor//Table.tga");
 
-	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//table.obj");
-	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Table.tga");
+	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//table.obj");
+	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Indoor//Table.tga");
 
-	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//chair.obj");
-	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//chair.tga");
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//chair.obj");
+	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//Indoor//chair.tga");
+
+	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//Indoor//hammer.obj");
+	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//Indoor//hammer.tga");
 
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 

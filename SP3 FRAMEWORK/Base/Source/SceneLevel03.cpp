@@ -19,8 +19,9 @@ void SceneLevel03::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+	camera.position += Vector3(0, 0, 1800);
 
-	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
+	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
 	meshList[TERRAIN_LEVEL03]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");
 	meshList[TERRAIN_LEVEL03]->textureArray[1] = LoadTGA("Image//Forest//Dead_Leaves.tga");
 
@@ -34,9 +35,9 @@ void SceneLevel03::Init()
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
 	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[WATER]->textureArray[0] = LoadTGA("Image//sea.tga");
+	meshList[WATER]->textureArray[0] = LoadTGA("Image//Forest//sea.tga");
 	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
-	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//sea2.tga");
+	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//Forest//sea2.tga");
 	meshList[GEO_BRIDGE] = MeshBuilder::GenerateOBJ("Bridge", "OBJ//Forest//Bridge.obj");
 	meshList[GEO_BRIDGE]->textureArray[0] = LoadTGA("Image//Forest//Bridge.tga");
 	meshList[GEO_LOGS] = MeshBuilder::GenerateOBJ("Logs", "OBJ//Forest//Logs.obj");
