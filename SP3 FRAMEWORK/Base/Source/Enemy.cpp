@@ -21,7 +21,7 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 		}
 		case ENEMY_TYPE::GHOST_3:
 		{
-			MAX_HP = 3;
+			MAX_HP = 1;
 			speed = 150;
 			Attack = 10;
 			break;

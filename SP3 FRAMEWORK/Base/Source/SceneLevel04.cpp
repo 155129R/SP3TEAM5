@@ -20,15 +20,15 @@ void SceneLevel04::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
-	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
-	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//level4_ground.tga");
+	meshList[TERRAIN_LEVEL04] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level04.raw", m_heightMap_4, level4_Heights);
+	meshList[TERRAIN_LEVEL04]->textureArray[0] = LoadTGA("Image//Graveyard//level4_ground.tga");
 
 	//Level 4 - Graveyard
-	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Tombstone.obj");
+	meshList[TOMBSTONE] = MeshBuilder::GenerateOBJ("Tombstone", "OBJ//Graveyard//Tombstone.obj");
 	meshList[TOMBSTONE]->textureArray[0] = LoadTGA("Image//Graveyard//Tombstone.tga");
-	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//wooden_fence.obj");
-	meshList[FENCE]->textureArray[0] = LoadTGA("Image//wood_1.tga");
-	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//tree.obj");
+	meshList[FENCE] = MeshBuilder::GenerateOBJ("Fence", "OBJ//Graveyard//wooden_fence.obj");
+	meshList[FENCE]->textureArray[0] = LoadTGA("Image//Graveyard//wood_1.tga");
+	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//Graveyard//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
 
 	terrainHeight = TERRAINSIZE.y;
@@ -684,7 +684,7 @@ void SceneLevel04::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
-	SceneBase::Render();
+	
 	RenderInventory();
 	RenderWeapons(true);
 	RenderBullets(false);
@@ -716,12 +716,12 @@ void SceneLevel04::RenderPassMain()
 	//bLightEnabled = false;
 
 	//On screen text
-	{
+
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-	}
+
 	{
 		std::ostringstream ss;
 		ss.precision(5);
@@ -735,6 +735,25 @@ void SceneLevel04::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 	}
 
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
+	SceneBase::Render();
 }
 
 void SceneLevel04::Render()
