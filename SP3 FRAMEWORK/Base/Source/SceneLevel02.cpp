@@ -1033,6 +1033,25 @@ void SceneLevel02::RenderPassMain()
 		ss << "Distance left: " << distanceLeft;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.f, 15, 25);
 	}
+	
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
 
 	SceneBase::Render();
 

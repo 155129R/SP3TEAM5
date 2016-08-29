@@ -673,18 +673,18 @@ void SceneLevel03::RenderPassMain()
 		RenderHUD();
 	}
 
-	SceneBase::Render();
+	
 	RenderWeapons(false);
 	RenderBullets(false);
 	RenderInventory();
 
 	//On screen text
-	{
+	
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-	}
+	
 	{
 		std::ostringstream ss;
 		ss.precision(5);
@@ -698,6 +698,25 @@ void SceneLevel03::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 	}
 
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
+	SceneBase::Render();
 }
 
 void SceneLevel03::Render()

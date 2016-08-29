@@ -1176,7 +1176,7 @@ void SceneLevel01::RenderPassMain()
 		RenderHUD();
 	}
 
-	SceneBase::Render();
+	
 
 	if (timerstart && timer < 3.f)
 	{
@@ -1222,6 +1222,25 @@ void SceneLevel01::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
 	}
 
+	switch (weaponType)
+	{
+	case 1:
+		ss.str("");
+		ss.precision(5);
+		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 2:
+		ss.str("");
+		ss.precision(5);
+		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		break;
+	case 3:
+
+		break;
+	}
+	SceneBase::Render();
 }
 
 void SceneLevel01::Render()

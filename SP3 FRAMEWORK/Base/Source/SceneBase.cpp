@@ -279,6 +279,18 @@ void SceneBase::Init()
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//inventory.tga");
 
+	meshList[UI_RIFLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_RIFLE]->textureID = LoadTGA("Image//HUD//rifleUI.tga");
+
+	meshList[UI_PISTOL] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_PISTOL]->textureID = LoadTGA("Image//HUD//pistolUI.tga");
+
+	meshList[UI_VACUUM] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_VACUUM]->textureID = LoadTGA("Image//HUD//vacuumUI.tga");
+
+	meshList[UI_BOX] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_BOX]->textureID = LoadTGA("Image//HUD//boxUI.tga");
+
 	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//hammer.obj");
 	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//hammer.tga");
 
@@ -2036,16 +2048,21 @@ void SceneBase::RenderBullets(bool light)
 
 void SceneBase::RenderWeapons(bool light)
 {
+	RenderImageOnScreen(meshList[UI_BOX], Vector3(18, 9, 1), Vector3(70, 5, 80), Vector3(0, 0, 0));
+
 	switch (weaponType)
 	{
 	case 1:
 		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, rotatePistol, light);
+		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(70, 4, 100), Vector3(0, 0, 0));
 		break;
 	case 2:
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, rotateRifle, -170, 0, light);
+		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(70, 4, 100), Vector3(0, 0, 0));
 		break;
 	case 3:
 		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[UI_VACUUM], Vector3(8, 3.5, 1), Vector3(70, 4, 100), Vector3(0, 0, 0));
 		break;
 	}
 }
