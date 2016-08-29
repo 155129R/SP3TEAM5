@@ -37,7 +37,7 @@ void Bullet::Update(double dt)
 		{
 			if (enemy->GetHP() >= 0)
 			{
-				if (enemy->Hitbox.Collide(position)){
+				if (enemy->Hitbox.Collide(position, true)){
 					enemy->TakeDamage(1);
 					deleteBullet = true;
 				}
@@ -49,7 +49,7 @@ void Bullet::Update(double dt)
 	}
 	if (Singleton::getInstance()->boss->active)
 	{
-		if (Singleton::getInstance()->boss->Hitbox.Collide(position))
+		if (Singleton::getInstance()->boss->Hitbox.Collide(position, true))
 		{
 			Singleton::getInstance()->boss->damage(1);
 			deleteBullet = true;

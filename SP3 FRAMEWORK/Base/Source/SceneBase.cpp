@@ -636,22 +636,20 @@ void SceneBase::Update(double dt)
 			inventoryButtonState = false;
 	}
 
-	if (Application::IsKeyPressed('1'))
-		//glEnable(GL_CULL_FACE);
-		weaponType = 1;
-	if (Application::IsKeyPressed('2'))
-		//glDisable(GL_CULL_FACE);
-		weaponType = 2;
-	if (Application::IsKeyPressed('3'))
-		//mode = false;
-		weaponType = 3;
-	if (Application::IsKeyPressed('4'))
-		//mode = true;
+	if (Application::IsKeyPressed('4') && HealthpackCD <= 0.0f)
+	{
+		instance->player->UseHealthpack();
+		HealthpackCD = 5.0f;
+	}
+	else
+	{
+		HealthpackCD -= dt;
+	}
 
-		if (Application::IsKeyPressed('G'))
-		{
-			mode = false;
-		}
+	if (Application::IsKeyPressed('G'))
+	{
+		mode = false;
+	}
 
 	if (Application::IsKeyPressed('H'))
 	{
@@ -835,7 +833,7 @@ void SceneBase::Update(double dt)
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
-
+	if (instance->openDoor == false)
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
 
@@ -1184,23 +1182,23 @@ void SceneBase::Render()
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 	}
 
@@ -2036,15 +2034,15 @@ void SceneBase::RenderWeapons(bool light)
 	{
 	case 1:
 		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, rotatePistol, light);
-		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(70, 4, 100), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(70, 4, 90), Vector3(0, 0, 0));
 		break;
 	case 2:
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, rotateRifle, -170, 0, light);
-		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(70, 4, 100), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(70, 4, 90), Vector3(0, 0, 0));
 		break;
 	case 3:
 		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
-		RenderImageOnScreen(meshList[UI_VACUUM], Vector3(8, 3.5, 1), Vector3(70, 4, 100), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[UI_VACUUM], Vector3(8, 3.5, 1), Vector3(70, 4, 90), Vector3(0, 0, 0));
 		break;
 	}
 }

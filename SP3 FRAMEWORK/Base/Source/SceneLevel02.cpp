@@ -328,11 +328,11 @@ void SceneLevel02::Update(double dt)
 {
 	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 
-	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
+	distanceLeft = (Vector3(-1300, 20, 335) - camera.position).Length();
 
 	if (questToNextScene)
 	{
-		if (distanceLeft < 400)
+		if (distanceLeft < 50)
 		{
 			sound.stopSoundEffect3D();
 			Singleton::getInstance()->stateCheck = true;

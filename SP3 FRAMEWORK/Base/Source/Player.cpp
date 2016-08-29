@@ -18,7 +18,7 @@ void Player::Init()
 	fear_value = 0;
 
 	stamina = 500.0f;
-	recharge = 5.0f;
+	recharge = 3.0f;
 
 	Run = false;
 	position.Set(0, 0, 0);
@@ -64,7 +64,7 @@ void Player::UpdateStamina(double dt)
 {
 	if (Run && stamina > 0.0f)
 	{
-		recharge = 5.0f;
+		recharge = 3.0f;
 		DepleteStamina(dt);
 	}
 	else
@@ -170,5 +170,40 @@ int Player::GetWeaponType()
 		}
 		default:
 			return 0;
+	}
+}
+
+Vector3 Player::getPosition()
+{
+	return position;
+}
+
+void Player::setPosition(Vector3 pos)
+{
+	position = pos;
+}
+
+bool Player::getRun()
+{
+	return Run;
+}
+
+void Player::setRun(bool run)
+{
+	Run = run;
+}
+
+void Player::AddHealthpack(int Amount)
+{
+	Healthpacks += Amount;
+}
+
+void Player::UseHealthpack()
+{
+	std::cout << "TEsty" << std::endl;
+	if (Healthpacks > 0)
+	{
+		Healthpacks -= 1;
+		fear_value -= 20;
 	}
 }
