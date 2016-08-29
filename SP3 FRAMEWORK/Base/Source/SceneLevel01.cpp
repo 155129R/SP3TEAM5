@@ -985,12 +985,13 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Scale(1.2, 1, 1);
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
+
 	//test obj
-	//modelStack.PushMatrix();
-	//modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	//modelStack.Scale(1, 1, 1);
-	//RenderMesh(meshList[HAMMER], Light);
-	//modelStack.PopMatrix();
+	/*modelStack.PushMatrix();
+	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[PISTOLBULLET], Light);
+	modelStack.PopMatrix();*/
 
 }
 
@@ -1064,7 +1065,7 @@ void SceneLevel01::RenderWorld()
 	RenderWeapons(true);
 	RenderInventory();
 	//RenderSprite();
-	RenderEnemies(false);
+	//RenderEnemies(false);
 
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }

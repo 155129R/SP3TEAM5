@@ -270,6 +270,9 @@ void SceneBase::Init()
 	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//pistol.obj");
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//pistol.tga");
 
+	meshList[PISTOLBULLET] = MeshBuilder::GenerateOBJ("PISTOLBULLET", "OBJ//pistolbullet.obj");
+	meshList[PISTOLBULLET]->textureArray[0] = LoadTGA("Image//pistolbullet.tga");
+
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//vacuum.tga");
 
@@ -2015,8 +2018,19 @@ void SceneBase::RenderBullets(bool light)
 			(*it)->position.y,
 			(*it)->position.z
 			);
+		
+	
+
+		Vector3 view = (instance->player->getPosition() - (*it)->position).Normalized();
+		float Pitch = Math::RadianToDegree(-atan2(view.y, sqrt(Math::Square(view.x) + Math::Square(view.z))));
+		modelStack.Rotate(Pitch, 0, 0, 1);
+		
+		float angle = Math::RadianToDegree(-atan2((*it)->position.z - instance->player->getPosition().z, (*it)->position.x - instance->player->getPosition().x));
+		modelStack.Rotate(angle - 180, 0, 1, 0);
+
 		modelStack.Scale(1, 1, 1);
-		RenderMesh(meshList[GEO_LIGHTBALL], true);
+
+		RenderMesh(meshList[PISTOLBULLET], true);
 		modelStack.PopMatrix();
 	}
 	//testing capture projectile

@@ -150,6 +150,7 @@ public:
 		PISTOL,
 		RIFLE,
 		VACUUM,
+		PISTOLBULLET,
 
 		//level 01
 		LEVEL01_TERRAIN,
