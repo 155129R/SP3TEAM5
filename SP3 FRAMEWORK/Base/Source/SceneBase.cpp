@@ -841,7 +841,7 @@ void SceneBase::Update(double dt)
 
 	Vector3 View = (camera.target - camera.position).Normalized();
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
-
+	if (instance->openDoor == false)
 	UpdateEnemy(dt);
 	UpdateHitboxes(dt);
 
@@ -1190,23 +1190,23 @@ void SceneBase::Render()
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 9), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 9), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_2], Vector3(80, 60, 1), Vector3(40, 30, 9), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_3], Vector3(80, 60, 1), Vector3(40, 30, 9), Vector3(0, 0, 0));
 		}
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
 		{
-			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 9), Vector3(0, 0, 0));
 		}
 	}
 
@@ -1229,7 +1229,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 
-	//UpdateFearEffect(dt);
+	UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {

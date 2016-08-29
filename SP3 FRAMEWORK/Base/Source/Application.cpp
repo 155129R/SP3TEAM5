@@ -194,6 +194,7 @@ void Application::Run()
 	//sceneManager->ChangeScene(2);
 	//sceneManager->ChangeScene(3);
 	//sceneManager->ChangeScene(4);
+	//sceneManager->ChangeScene(5);
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -220,6 +221,10 @@ void Application::Run()
 			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
 			{
 				sceneManager->ChangeScene(4);
+			}
+			if (Singleton::getInstance()->program_state == Singleton::PROGRAM_HUB)
+			{
+				sceneManager->ChangeScene(5);
 			}
 		}
 

@@ -4,6 +4,7 @@
 #include "SceneLevel02.h"
 #include "SceneLevel03.h"
 #include "SceneLevel04.h"
+#include "SceneHub.h"
 #include "SceneMenu.h"
 
 SceneManager::SceneManager() : m_scene(0)
@@ -33,7 +34,8 @@ void SceneManager::ChangeScene(short scene)
 		break;
 	case 4: m_scene = new SceneLevel04();
 		break;
-
+	case 5: m_scene = new SceneHub();
+		break;
 	default:
 		break;
 	}

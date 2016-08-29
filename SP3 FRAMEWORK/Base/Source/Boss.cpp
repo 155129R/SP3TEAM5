@@ -86,6 +86,7 @@ void Boss::Update(double dt)
 			if (mode_timer >= 5)
 			{
 				mode_timer = 0.0f;
+
 				//Decides between 2 different type of attack if HP <= 75%
 				if (HP <= MAX_HP * 0.75)
 				{
@@ -200,6 +201,11 @@ void Boss::UpdateBullet(double dt)
 			float distance = (bullet->pos - pos).Length();
 			if (distance >= 4000 || bullet->pos.y <= Singleton::getInstance()->player->getPosition().y - 10)
 			{
+				bullet->active = false;
+			}
+			if (bullet->Hitbox.Collide(Singleton::getInstance()->player->getPosition()))
+			{
+				Singleton::getInstance()->player->InflictFear(20);
 				bullet->active = false;
 			}
 		}

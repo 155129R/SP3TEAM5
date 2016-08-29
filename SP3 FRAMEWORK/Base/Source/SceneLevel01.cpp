@@ -629,7 +629,7 @@ void SceneLevel01::Update(double dt)
 		Flashlight_Wait = 0.0f;
 		if (Flashlight == false)
 		{
-			lights[1].power = 8.0f;
+			lights[1].power = 15.0f;
 			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
 			Flashlight = true;
 		}
@@ -846,7 +846,7 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(20, 20, 20);
-	RenderMesh(meshList[LEVEL01], Light);
+	RenderMesh(meshList[LEVEL01], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -955,7 +955,7 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Translate(1295, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
 	modelStack.Scale(300, 1, 300);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[ROOMCEILING], Light);
+	RenderMesh(meshList[ROOMCEILING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();

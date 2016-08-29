@@ -83,7 +83,7 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
-
+	std::cout << instance->boss->getHP() << endl;
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
@@ -124,6 +124,7 @@ void SceneLevel04::Update(double dt)
 		lights[0].color = (0.0f, 0.8f, 0.5f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		if (instance->player->GetFear() <= 1)    
 		fogColor.Set(1.f, 1.f, 1.f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		lightning = false;
@@ -135,6 +136,7 @@ void SceneLevel04::Update(double dt)
 		lights[0].color = (0.f, 0.2f, 0.4f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		if (instance->player->GetFear() <= 1)
 		fogColor.Set(0.2f, 0.2f, 0.2f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	}

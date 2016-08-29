@@ -159,6 +159,9 @@
     <ClCompile Include="Source\Item.cpp">
       <Filter>Source Files\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneHub.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -271,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="Source\Item.h">
       <Filter>Header Files\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneHub.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
