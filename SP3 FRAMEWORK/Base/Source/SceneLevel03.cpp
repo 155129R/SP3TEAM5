@@ -19,6 +19,7 @@ void SceneLevel03::Init()
 	Application::HideCursor();
 
 	SceneBase::Init();
+	camera.position += Vector3(0, 0, 1800);
 
 	meshList[TERRAIN_LEVEL03] = MeshBuilder::GenerateTerrain("Terrain", "Image//Terrain//Terrain_Level03.raw", m_heightMap_3, level3_Heights);
 	meshList[TERRAIN_LEVEL03]->textureArray[0] = LoadTGA("Image//Forest//Grass.tga");

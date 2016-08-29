@@ -279,12 +279,6 @@ void SceneBase::Init()
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//HUD//inventory.tga");
 
-	meshList[HAMMER] = MeshBuilder::GenerateOBJ("hammer", "OBJ//Indoor//hammer.obj");
-	meshList[HAMMER]->textureArray[0] = LoadTGA("Image//Indoor//hammer.tga");
-
-	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//Outdoor//key.obj");
-	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//Outdoor//key.tga");
-
 	meshList[INV_HOVER] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
 	meshList[INV_HOVER]->textureID = LoadTGA("Image//HUD//Inventory_Hover.tga");
 
@@ -296,24 +290,6 @@ void SceneBase::Init()
 
 	meshList[INV_GHOST3] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
 	meshList[INV_GHOST3]->textureID = LoadTGA("Image//HUD//Ghost_3_icon.tga");
-
-	meshList[GAME_TITLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[GAME_TITLE]->textureID = LoadTGA("Image//Screen//title.tga");
-
-	meshList[BUTTON_PLAY] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_PLAY]->textureID = LoadTGA("Image//Screen//play.tga");
-
-	meshList[BUTTON_CREDITS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_CREDITS]->textureID = LoadTGA("Image//Screen//credits.tga");
-
-	meshList[BUTTON_INSTRUCTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_INSTRUCTION]->textureID = LoadTGA("Image//Screen//instruction.tga");
-
-	meshList[BUTTON_OPTIONS] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_OPTIONS]->textureID = LoadTGA("Image//Screen//options.tga");
-
-	meshList[BUTTON_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[BUTTON_EXIT]->textureID = LoadTGA("Image//Screen//exit.tga");
 
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision.tga");
@@ -1229,7 +1205,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 
-	//UpdateFearEffect(dt);
+	UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
