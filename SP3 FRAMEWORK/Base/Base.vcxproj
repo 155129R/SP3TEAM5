@@ -32,6 +32,7 @@
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
+    <ClCompile Include="Source\SceneHub.cpp" />
     <ClCompile Include="Source\SceneLevel02.cpp" />
     <ClCompile Include="Source\SceneLevel01.cpp" />
     <ClCompile Include="Source\SceneLevel03.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
+    <ClInclude Include="Source\SceneHub.h" />
     <ClInclude Include="Source\SceneLevel02.h" />
     <ClInclude Include="Source\SceneLevel01.h" />
     <ClInclude Include="Source\SceneLevel03.h" />

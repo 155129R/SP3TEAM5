@@ -18,6 +18,8 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 
 void SceneLevel01::Init()
 {
+	sound.playMusic("Sound/level1bgm.mp3");
+
 	Application::HideCursor();
 
 	SceneBase::Init();
@@ -536,6 +538,7 @@ void SceneLevel01::Update(double dt)
 				{
 					if (instance->gotHammer)
 					{
+						sound.stopMusic();
 						Singleton::getInstance()->stateCheck = true;
 						Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 					}
@@ -585,7 +588,7 @@ void SceneLevel01::Update(double dt)
 					if (object->Object == AABBObject::OBJECT_TYPE::HAMMER && (hammerPtr->pos - camera.position).Length() < 95)
 					{
 						Singleton::getInstance()->gotHammer = true;
-						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_hammer);
+						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_hammer);
 
 						object->active = false;
 					}
@@ -631,7 +634,7 @@ void SceneLevel01::Update(double dt)
 		Flashlight_Wait = 0.0f;
 		if (Flashlight == false)
 		{
-			lights[1].power = 8.0f;
+			lights[1].power = 15.0f;
 			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
 			Flashlight = true;
 		}
@@ -690,21 +693,25 @@ void SceneLevel01::Update(double dt)
 	////////////////////////////////////////////////////////
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}
@@ -848,7 +855,7 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(20, 20, 20);
-	RenderMesh(meshList[LEVEL01], Light);
+	RenderMesh(meshList[LEVEL01], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -957,7 +964,7 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Translate(1295, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
 	modelStack.Scale(300, 1, 300);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[ROOMCEILING], Light);
+	RenderMesh(meshList[ROOMCEILING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -987,12 +994,13 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Scale(1.2, 1, 1);
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
+
 	//test obj
-	//modelStack.PushMatrix();
-	//modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	//modelStack.Scale(1, 1, 1);
-	//RenderMesh(meshList[HAMMER], Light);
-	//modelStack.PopMatrix();
+	/*modelStack.PushMatrix();
+	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[PISTOLBULLET], Light);
+	modelStack.PopMatrix();*/
 
 }
 
@@ -1066,7 +1074,7 @@ void SceneLevel01::RenderWorld()
 	RenderWeapons(true);
 	RenderInventory();
 	//RenderSprite();
-	RenderEnemies(false);
+	//RenderEnemies(false);
 
 	//glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }

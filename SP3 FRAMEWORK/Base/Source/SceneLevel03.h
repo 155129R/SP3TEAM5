@@ -52,6 +52,8 @@ private:
 	Vector3 Bush[400];
 
 	float Degree;
+
+	AABBObject* Change;
 };
 
 #endif

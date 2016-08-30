@@ -16,6 +16,8 @@ SceneLevel03::~SceneLevel03()
 
 void SceneLevel03::Init()
 {
+	sound.playMusic("Sound/level3bgm.mp3");
+
 	Application::HideCursor();
 
 	SceneBase::Init();
@@ -106,7 +108,40 @@ void SceneLevel03::Init()
 	Bridge->scale.Set(5, 5, 5);
 	instance->Object_list.push_back(Bridge);
 
-	InitPartitioning();
+	AABBObject * Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-2000, 100, 0);
+	Boundary->scale.Set(5, 10, 500);
+	instance->Object_list.push_back(Boundary);
+
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(2000, 100, 0);
+	Boundary->scale.Set(5, 10, 500);
+	instance->Object_list.push_back(Boundary);
+
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-1100, 100, -1100);
+	Boundary->scale.Set(200, 10, 5);
+	instance->Object_list.push_back(Boundary);
+
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(1100, 100, -1100);
+	Boundary->scale.Set(200, 10, 5);;
+	instance->Object_list.push_back(Boundary);
+
+	Change = new AABBObject();
+	Change->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Change->active = true;
+	Change->pos.Set(0, 100, -1200);
+	Change->scale.Set(20, 25, 10);;
+	instance->Object_list.push_back(Change);
 }
 
 void SceneLevel03::Update(double dt)
@@ -217,23 +252,34 @@ void SceneLevel03::Update(double dt)
 	////////////////////////////////////////////////////////
 	//	for next time winning condition to go next scene  //
 	////////////////////////////////////////////////////////
+	float distance = (Change->pos - Singleton::getInstance()->player->getPosition()).Length();
+	if (Application::IsKeyPressed('E') && distance <= 200)
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}

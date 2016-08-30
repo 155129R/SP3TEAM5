@@ -18,6 +18,8 @@ static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneLevel02::Init()
 {
+	sound.playMusic("Sound/level2bgm.mp3");
+
 	Application::HideCursor();
 	
 	SceneBase::Init();
@@ -60,8 +62,6 @@ void SceneLevel02::Init()
 
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
-
-
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
@@ -330,12 +330,13 @@ void SceneLevel02::Update(double dt)
 {
 	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 
-	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
+	distanceLeft = (Vector3(-1300, 20, 335) - camera.position).Length();
 
 	if (questToNextScene)
 	{
-		if (distanceLeft < 400)
+		if (distanceLeft < 50)
 		{
+			sound.stopMusic();
 			sound.stopSoundEffect3D();
 			Singleton::getInstance()->stateCheck = true;
 			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
@@ -366,7 +367,7 @@ void SceneLevel02::Update(double dt)
 					{
 						questToNextScene = true;
 						Singleton::getInstance()->gotKey = true;
-						Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
+						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 
 						object->active = false;
 					}
@@ -407,8 +408,8 @@ void SceneLevel02::Update(double dt)
 
 			Singleton::getInstance()->gotKey = true;
 
-			if (Singleton::getInstance()->inventory.size() < 6)
-				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_key);
+			if (Singleton::getInstance()->inventory2ndRow.size() < 6)
+				Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 		}
 	}
 	else if (!Application::IsKeyPressed('Y'))
@@ -458,24 +459,28 @@ void SceneLevel02::Update(double dt)
 	////////////////////////////////////////////////////////
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;

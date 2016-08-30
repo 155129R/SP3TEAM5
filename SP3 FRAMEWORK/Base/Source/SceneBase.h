@@ -150,6 +150,7 @@ public:
 		PISTOL,
 		RIFLE,
 		VACUUM,
+		PISTOLBULLET,
 
 		//level 01
 		LEVEL01_TERRAIN,
@@ -249,11 +250,16 @@ public:
 		INV_GHOST3,
 		INV_HOVER,
 
+		//HUB
+		GEO_HUB,
+		GEO_SHOPKEEPER,
+
 		//UI
 		UI_VACUUM,
 		UI_PISTOL,
 		UI_RIFLE,
 		UI_BOX,
+
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -370,6 +376,7 @@ protected:
 	float rotateAngle = 0;
 	float rotateKey = 0;
 	Minimap* m_Minimap;
+	float HealthpackCD;
 	Color Black;
 
 	//Enemy 

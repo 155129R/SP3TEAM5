@@ -622,7 +622,7 @@ void SceneMenu::RenderHUD()
 	//{
 	//	RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
 	//}
-	if (!Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1)
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
 	{
 		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(50, 10, 50), Vector3(30, 50, 0), Vector3(0, 0, 0));
 
