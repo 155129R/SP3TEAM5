@@ -18,7 +18,7 @@ static const Vector3 TERRAINSIZE(4000.0f, 200.0f, 4000.0f);
 
 void SceneLevel01::Init()
 {
-	//sound.playMusic("Sound/level1bgm.mp3");
+	sound.playMusic("Sound/level1bgm.mp3");
 
 	Application::HideCursor();
 
@@ -80,8 +80,6 @@ void SceneLevel01::Init()
 
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//Indoor//chair.tga");
-
-
 
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
@@ -378,7 +376,7 @@ void SceneLevel01::initSceneObjects()
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	walls->active = true;
-	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, -95 / TERRAINSIZE.x, -15 / TERRAINSIZE.z), -100);
+	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
 	walls->scale.Set(61, 25, 22);
 	instance->Object_list.push_back(walls);
 
@@ -386,7 +384,7 @@ void SceneLevel01::initSceneObjects()
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	walls->active = true;
-	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, -95 / TERRAINSIZE.x, -15 / TERRAINSIZE.z), 305);
+	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 305);
 	walls->scale.Set(61, 25, 22);
 	instance->Object_list.push_back(walls);
 
@@ -414,11 +412,74 @@ void SceneLevel01::initSceneObjects()
 	walls->scale.Set(29, 25, 5);
 	instance->Object_list.push_back(walls);
 	
+	//Back wall [Main corridoor]
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1455, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 90);
+	walls->scale.Set(5, 25, 60);
+	instance->Object_list.push_back(walls);
+
+	//First left door, Barricaded room
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(210, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -330);
+	walls->scale.Set(22, 20, 20);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, right wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(485, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
+	walls->scale.Set(5, 25, 20);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(625, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
+	walls->scale.Set(17, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, left wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
+	walls->scale.Set(3, 25, 20);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -210);
+	walls->scale.Set(25, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//TOILET
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
+	walls->scale.Set(5, 10, 5);
+	instance->Object_list.push_back(walls);
+
+	//First left door, left most wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(90, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -490);
+	walls->scale.Set(3, 25, 90);
+	instance->Object_list.push_back(walls);
 }
 
 void SceneLevel01::Update(double dt)
 {
-	bLightEnabled = false;
+	//bLightEnabled = false;
 
 	if (instance->openDoor == false)
 		camera.Update(dt);
@@ -552,7 +613,7 @@ void SceneLevel01::Update(double dt)
 
 	if (d2)
 	{
-		instance->singletonCamera->position.z = -180;
+		instance->singletonCamera->position.z = -145;
 		instance->singletonCamera->target.z = -170;
 		d2 = false;
 	}
@@ -566,7 +627,7 @@ void SceneLevel01::Update(double dt)
 
 	if (d4)
 	{
-		instance->singletonCamera->position.z = -180;
+		instance->singletonCamera->position.z = -160;
 		instance->singletonCamera->target.z = -170;
 		d4 = false;
 	}
@@ -594,7 +655,7 @@ void SceneLevel01::Update(double dt)
 
 	if (d8)
 	{
-		instance->singletonCamera->position.z = 380;
+		instance->singletonCamera->position.z = 330;
 		instance->singletonCamera->target.z = 370;
 		d8 = false;
 	}
@@ -927,7 +988,7 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.PushMatrix();
 	modelStack.Translate(-150, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(20, 20, 20);
-	RenderMesh(meshList[LEVEL01], true);
+	RenderMesh(meshList[LEVEL01], Light);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
