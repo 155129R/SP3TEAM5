@@ -220,7 +220,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], lights[3].exponent);*/
 
 	//FOG
-	Color fogColor(0.8f, 0.8f, 0.8f);
+	fogColor.Set(0.8f, 0.8f, 0.8f);
 	FogAmount = 1500.0f;
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	glUniform1f(m_parameters[U_FOG_START], 10);
@@ -275,6 +275,7 @@ void SceneBase::Init()
 
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//Weapon//vacuum.tga");
+	meshList[VACUUM]->textureArray[0] = LoadTGA("Image//Weapon//vacuum.tga");
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
@@ -377,10 +378,6 @@ void SceneBase::Init()
 	meshList[GEO_HP] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
 	meshList[GEO_HP]->textureArray[0] = LoadTGA("Image//HUD//HP.tga");
 	meshList[GEO_HP]->textureID = LoadTGA("Image//HUD//HP.tga");
-	meshList[GEO_HAND_LEFT] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
-	meshList[GEO_HAND_LEFT]->textureID = LoadTGA("Image//HUD//Hands_Left.tga");
-	meshList[GEO_HAND_RIGHT] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
-	meshList[GEO_HAND_RIGHT]->textureID = LoadTGA("Image//HUD//Hands_Right.tga");
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test",  1, 1);
@@ -457,17 +454,6 @@ void SceneBase::Init()
 
 	//Loading text file
 	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
-
-	int Counter = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-	//		cout << ghost_Amount[Counter] << " , ";
-			Counter++;
-		}
-	//	cout << endl;
-	}
 
 	Singleton::getInstance()->player->Init();
 
@@ -612,6 +598,13 @@ void SceneBase::Update(double dt)
 	{
 	lights[0].position.y += (float)50 * dt;
 	}*/
+
+	if (Application::IsKeyPressed('1'))
+		weaponType = 1;
+	if (Application::IsKeyPressed('2'))
+		weaponType = 2;
+	if (Application::IsKeyPressed('3'))
+		weaponType = 3;
 
 	static bool inventoryButtonState = false;
 	if (Application::IsKeyPressed('I') && Singleton::getInstance()->showShop == false)
@@ -1265,7 +1258,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 
-	UpdateFearEffect(dt);
+	//UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
@@ -1349,7 +1342,7 @@ void SceneBase::UpdateHitboxes(double dt)
 			case AABBObject::OBJECT_TYPE::LOGS:
 			{
 				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
-				obj->Hitbox.Resize(Vector3(180, 100, 400));
+				obj->Hitbox.Resize(Vector3(400, 100, 100));
 				break;
 			}
 			case AABBObject::OBJECT_TYPE::BRIDGE:
@@ -1747,6 +1740,16 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 					RenderMesh(meshList[GEO_HP], false);
 					modelStack.PopMatrix();
 				}
+				else
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(ghost->pos.x, ghost->pos.y + 30, ghost->pos.z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Rotate(90, 0, 0, 1);
+					modelStack.Scale(ghost->scale.x / 2, ghost->scale.y / 2, ghost->scale.z / 2);
+					RenderMesh(meshList[VACUUM], false);
+					modelStack.PopMatrix();
+				}
 
 				switch (ghost->Type)
 				{
@@ -2008,7 +2011,7 @@ void SceneBase::RenderRadar()
 		}
 	}
 
-	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4 && instance->boss->getHP() > 0)
 	{
 		Vector3 view = (instance->player->getPosition() - instance->boss->pos).Normalized();
 		float Degree = Math::RadianToDegree(-atan2(view.x, view.z));
@@ -2025,7 +2028,7 @@ void SceneBase::RenderRadar()
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 45, 0);
 	modelStack.Rotate(radarAngle - 90, 0, 0, 1);
-	modelStack.Translate(camera.position.x / 70, camera.position.z / 70, 0);
+	modelStack.Translate(-camera.position.x / 70, -camera.position.z / 70, 0);
 	modelStack.Scale(100, 100, 100);
 	RenderMesh(m_Minimap->GetBackground(), false);
 	modelStack.PopMatrix();
