@@ -307,6 +307,9 @@ public:
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 	void RenderInventory();
+	void FootStep1();
+	void FootStep2();
+	void FootStep3();
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
 

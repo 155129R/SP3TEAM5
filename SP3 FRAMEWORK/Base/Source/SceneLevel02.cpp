@@ -368,6 +368,7 @@ void SceneLevel02::Update(double dt)
 				{
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95 && cameraViewObject(keyPtr->pos, 80) == true)
 					{
+						sound.playSoundEffect2D("Sound/pickUp.mp3");
 						questToNextScene = true;
 						Singleton::getInstance()->gotKey = true;
 						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
