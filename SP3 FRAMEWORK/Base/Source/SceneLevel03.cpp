@@ -684,7 +684,7 @@ void SceneLevel03::RenderPassMain()
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 	
 	{
 		std::ostringstream ss;

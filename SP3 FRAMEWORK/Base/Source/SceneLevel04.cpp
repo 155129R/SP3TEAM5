@@ -703,7 +703,7 @@ void SceneLevel04::RenderPassMain()
 
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderWorld();
-	RenderBoss(ShowHitbox);
+	RenderBoss(false);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
 	if (!Singleton::getInstance()->stateCheck)
@@ -718,19 +718,19 @@ void SceneLevel04::RenderPassMain()
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
 	{
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "Partition: " << getPartition(camera.position);
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
 	}
 	{
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "Position: " << camera.position;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 	}
 
 	switch (weaponType)
