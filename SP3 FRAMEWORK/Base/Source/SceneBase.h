@@ -253,6 +253,9 @@ public:
 
 		//shop
 		SHOP_UI,
+		UI_BUY,
+		UI_SELL,
+		UI_HOVER,
 
 		//HUB
 		GEO_HUB,
