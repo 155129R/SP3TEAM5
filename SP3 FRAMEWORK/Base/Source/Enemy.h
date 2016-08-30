@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "AABB.h"
+#include "Sound.h"
 
 struct Enemy : public GameObject
 {
@@ -54,6 +55,8 @@ private:
 	//Patrol waypoints
 	Vector3 waypoint[2];
 	int travel_to;
+
+	Sound sound;
 };
 
 #endif

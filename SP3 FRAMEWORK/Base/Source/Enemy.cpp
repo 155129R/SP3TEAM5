@@ -2,6 +2,8 @@
 
 Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 {
+	sound.Init();
+
 	canCatch = false;
 	switch (Type)
 	{
@@ -58,6 +60,9 @@ void Enemy::Update(double dt)
 	//AABB hit box will always be on the Enemy
 	Hitbox.UpdateAABB(this->pos);
 
+	sound.Update(irrklang::vec3df(Singleton::getInstance()->singletonCamera->position.x, Singleton::getInstance()->singletonCamera->position.y, Singleton::getInstance()->singletonCamera->position.z),
+		irrklang::vec3df(-Singleton::getInstance()->singletonCamera->view.x, Singleton::getInstance()->singletonCamera->view.y, -Singleton::getInstance()->singletonCamera->view.z));
+
 	if (HP <= 0)
 	{
 		HP = 0;
@@ -100,6 +105,28 @@ void Enemy::Update(double dt)
 			if (distance_to_player <= 250)
 			{
 				State = ENEMY_STATE::ATTACK;
+
+				switch (Type)
+				{
+				case ENEMY_TYPE::GHOST_1:
+				{
+					sound.playSoundEffect2D("Sound/ghost1.mp3");
+					//sound.playSoundEffect3D("Sound/ghost1.mp3", irrklang::vec3df(pos.x, pos.y, pos.z), false);
+					break;
+				}
+				case ENEMY_TYPE::GHOST_2:
+				{
+					sound.playSoundEffect2D("Sound/ghost2.mp3");
+					//sound.playSoundEffect3D("Sound/ghost2.mp3", irrklang::vec3df(pos.x, pos.y, pos.z), false);
+					break;
+				}
+				case ENEMY_TYPE::GHOST_3:
+				{
+					sound.playSoundEffect2D("Sound/ghost3.mp3");
+					//sound.playSoundEffect3D("Sound/ghost3.mp3", irrklang::vec3df(pos.x, pos.y, pos.z), false);
+					break;
+				}
+				}
 			}
 
 			break;
