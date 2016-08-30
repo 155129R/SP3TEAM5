@@ -270,8 +270,8 @@ void SceneBase::Init()
 	meshList[PISTOL] = MeshBuilder::GenerateOBJ("Pistol", "OBJ//Weapon//pistol.obj");
 	meshList[PISTOL]->textureArray[0] = LoadTGA("Image//Weapon//pistol.tga");
 
-	meshList[PISTOLBULLET] = MeshBuilder::GenerateOBJ("PISTOLBULLET", "OBJ//pistolbullet.obj");
-	meshList[PISTOLBULLET]->textureArray[0] = LoadTGA("Image//pistolbullet.tga");
+	meshList[PISTOLBULLET] = MeshBuilder::GenerateOBJ("PISTOLBULLET", "OBJ//Weapon//pistolbullet.obj");
+	meshList[PISTOLBULLET]->textureArray[0] = LoadTGA("Image//Weapon//pistolbullet.tga");
 
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//Weapon//vacuum.tga");
@@ -1420,6 +1420,35 @@ void SceneBase::UpdateHitboxes(double dt)
 				obj->Hitbox.Resize(Vector3(15, 180, 200));
 				break;
 			}
+
+			case AABBObject::OBJECT_TYPE::SOFA:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(100, 40, 50));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::TOILETBOWL:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(45, 60, 45));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::BEDSIDE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(50, 30, 50));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::SHELF:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 50, 0));
+				obj->Hitbox.Resize(Vector3(60, 90, 30));
+				break;
+			}
+
 			default:
 			{
 				break;
@@ -1656,6 +1685,46 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 						RenderMeshOutlined(meshList[HAMMER], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::SOFA:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[SOFA], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::TOILETBOWL:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[TOILETBOWL], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::BEDSIDE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[BEDSIDE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::SHELF:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[SHELF], true);
 						modelStack.PopMatrix();
 						break;
 					}
@@ -2010,8 +2079,6 @@ void SceneBase::RenderBullets(bool light)
 			(*it)->position.y,
 			(*it)->position.z
 			);
-		
-	
 
 		Vector3 view = (instance->player->getPosition() - (*it)->position).Normalized();
 		float Pitch = Math::RadianToDegree(-atan2(view.y, sqrt(Math::Square(view.x) + Math::Square(view.z))));
