@@ -295,3 +295,23 @@ void Boss::despawn(double dt)
 	}
 	sound.playSoundEffect2D("Sound/Boss_Hurt.mp3");
 }
+
+void Boss::reset()
+{
+	boss_state = BOSS_STATE::TRACK;
+
+	MAX_HP = 200;
+	speed = 300;
+	Attack = 0;
+	fire_rate = 0.0f;
+
+	mode_timer = 0.0f;
+	fire_mode_timer = 0.0f;
+
+	active = true;
+	HP = MAX_HP;
+	pos.Set(0, 500, 0);
+	scale.Set(80, 80, 80);
+
+	origin = pos;
+}

@@ -36,14 +36,13 @@ void SceneLevel03::Init()
 	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
-	meshList[WATER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
-	meshList[WATER]->textureArray[0] = LoadTGA("Image//Forest//sea.tga");
-	meshList[WATER_SURFACE] = MeshBuilder::GenerateQuad("Water Surace", Color(0, 0, 0), 1.f);
-	meshList[WATER_SURFACE]->textureArray[0] = LoadTGA("Image//Forest//sea2.tga");
 	meshList[GEO_BRIDGE] = MeshBuilder::GenerateOBJ("Bridge", "OBJ//Forest//Bridge.obj");
 	meshList[GEO_BRIDGE]->textureArray[0] = LoadTGA("Image//Forest//Bridge.tga");
 	meshList[GEO_LOGS] = MeshBuilder::GenerateOBJ("Logs", "OBJ//Forest//Logs.obj");
 	meshList[GEO_LOGS]->textureArray[0] = LoadTGA("Image//Forest//Logs.tga");
+
+	meshList[WATER_FLOW] = MeshBuilder::GenerateSpriteAnimation("Water", 4, 4);
+	meshList[WATER_FLOW]->textureArray[0] = LoadTGA("Image//Forest//Water_flow.tga");
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -75,14 +74,24 @@ void SceneLevel03::Init()
 	FogEffect = false;
 	Switch = false;
 
+	fogColor.Set(0.2f, 0.2f, 0.2f);
+	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+
+	Water = dynamic_cast<SpriteAnimation*>(meshList[WATER_FLOW]);
+	if (Water)
+	{
+		Water->m_anim = new Animation();
+		Water->m_anim->Set(0, 15, 0, 2.0f, true);
+	}
+
 	for (int i = 0; i < 400; ++i)
 	{
-		Tree[i].Set(Math::RandIntMinMax(-1800, 1800), 0, Math::RandIntMinMax(-1100, 1800));
+		Tree[i].Set(Math::RandIntMinMax(-1800, 1800), 0, Math::RandIntMinMax(-1000, 1800));
 		Tree_Type[i] = Math::RandIntMinMax(1, 3);
 	}
 	for (int i = 0; i < 400; ++i)
 	{
-		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1100, 1800));
+		Bush[i].Set(Math::RandIntMinMax(-2000, 2000), 0, Math::RandIntMinMax(-1000, 1800));
 	}
 
 	SpawnGhost();
@@ -90,16 +99,44 @@ void SceneLevel03::Init()
 	AABBObject * Logs = new AABBObject();
 	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
 	Logs->active = true;
-	Logs->pos.Set(1900, 0, -1400);
+	Logs->pos.Set(-1150, 100, -1100);
 	Logs->scale.Set(4, 5, 5);
 	instance->Object_list.push_back(Logs);
 
-	AABBObject * Logs2 = new AABBObject();
-	Logs2->Object = AABBObject::OBJECT_TYPE::LOGS;
-	Logs2->active = true;
-	Logs2->pos.Set(-1900, 0, -1400);
-	Logs2->scale.Set(4, 5, 5);
-	instance->Object_list.push_back(Logs2);
+	Logs = new AABBObject();
+	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs->active = true;
+	Logs->pos.Set(-1700, 100, -1100);
+	Logs->scale.Set(4, 5, 5);
+	instance->Object_list.push_back(Logs);
+
+	Logs = new AABBObject();
+	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs->active = true;
+	Logs->pos.Set(-600, 100, -1100);
+	Logs->scale.Set(4, 5, 5);
+	instance->Object_list.push_back(Logs);
+
+	Logs = new AABBObject();
+	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs->active = true;
+	Logs->pos.Set(1150, 100, -1100);
+	Logs->scale.Set(4, 5, 5);
+	instance->Object_list.push_back(Logs);
+
+	Logs = new AABBObject();
+	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs->active = true;
+	Logs->pos.Set(1700, 100, -1100);
+	Logs->scale.Set(4, 5, 5);
+	instance->Object_list.push_back(Logs);
+
+	Logs = new AABBObject();
+	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
+	Logs->active = true;
+	Logs->pos.Set(600, 100, -1100);
+	Logs->scale.Set(4, 5, 5);
+	instance->Object_list.push_back(Logs);
 
 	AABBObject * Bridge = new AABBObject();
 	Bridge->Object = AABBObject::OBJECT_TYPE::BRIDGE;
@@ -108,39 +145,52 @@ void SceneLevel03::Init()
 	Bridge->scale.Set(5, 5, 5);
 	instance->Object_list.push_back(Bridge);
 
+	//Left
 	AABBObject * Boundary = new AABBObject();
 	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	Boundary->active = true;
-	Boundary->pos.Set(-2000, 100, 0);
-	Boundary->scale.Set(5, 10, 500);
+	Boundary->pos.Set(-1900, 100, 0);
+	Boundary->scale.Set(5, 10, 380);
 	instance->Object_list.push_back(Boundary);
-
+	
+	//Right
 	Boundary = new AABBObject();
 	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	Boundary->active = true;
-	Boundary->pos.Set(2000, 100, 0);
-	Boundary->scale.Set(5, 10, 500);
+	Boundary->pos.Set(1900, 100, 0);
+	Boundary->scale.Set(5, 10, 380);
 	instance->Object_list.push_back(Boundary);
 
+	//Back
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(0, 100, 1900);
+	Boundary->scale.Set(380, 10, 5);
+	instance->Object_list.push_back(Boundary);
+
+	//Front
 	Boundary = new AABBObject();
 	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	Boundary->active = true;
 	Boundary->pos.Set(-1100, 100, -1100);
-	Boundary->scale.Set(200, 10, 5);
+	Boundary->scale.Set(210, 10, 5);
 	instance->Object_list.push_back(Boundary);
 
+	//Front
 	Boundary = new AABBObject();
 	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	Boundary->active = true;
 	Boundary->pos.Set(1100, 100, -1100);
-	Boundary->scale.Set(200, 10, 5);;
+	Boundary->scale.Set(210, 10, 5);;
 	instance->Object_list.push_back(Boundary);
 
+	//To level 4
 	Change = new AABBObject();
 	Change->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	Change->active = true;
 	Change->pos.Set(0, 100, -1200);
-	Change->scale.Set(20, 25, 10);;
+	Change->scale.Set(20, 25, 15);;
 	instance->Object_list.push_back(Change);
 }
 
@@ -152,19 +202,16 @@ void SceneLevel03::Update(double dt)
 
 	UpdateParticle(dt);
 
-	if (delay >= 2)
+	if (Water)
 	{
-		UpdateEnemy(dt);
+		Water->Update(dt);
+		Water->m_anim->animActive = true;
 	}
-	else
-	{
-		delay += dt;
-	}
+
+	UpdateEnemy(dt);
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
-
-	
 
 	if (Flashlight)
 	{
@@ -289,57 +336,6 @@ void SceneLevel03::Update(double dt)
 
 void SceneLevel03::UpdateParticle(double dt)
 {
-	if (m_particlesCount < MAX_PARTICLE)
-	{
-		ParticleObject* particle = GetParticles();
-		particle->type = PARTICLEOBJECT_TYPE::P_WATER;
-		particle->pos.Set(Math::RandFloatMinMax(-1700.0f, 1700.0f), 1200.0f, Math::RandFloatMinMax(-1700.0f, 1700.0f));
-		particle->vel.Set(0, -10, 0);
-		particle->scale.Set(10, 10, 10);
-		particle->rotateSpeed = Math::RandFloatMinMax(20.0f, 40.0f);
-
-		ParticleObject* particleSmoke = GetParticles();
-		particleSmoke->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
-		//particleSmoke->scale.Set(5, 5, 5);
-		float range = 2;
-		particleSmoke->vel.Set(Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range));
-		particleSmoke->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
-		particleSmoke->pos.Set(0, 20 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
-	}
-	for (auto it : particleList)
-	{
-		ParticleObject* particle = (ParticleObject*)it;
-		if (particle->active)
-		{
-			if (particle->type == PARTICLEOBJECT_TYPE::P_WATER)
-			{
-				particle->vel += m_gravity *(float)dt * 10.0f;
-				particle->pos += particle->vel *(float)dt * 10.0f;
-
-				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
-				{
-					particle->active = false;
-					m_particlesCount--;
-				}
-			}
-
-			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
-			{
-				particle->vel += m_gravity * (float)dt;
-				particle->pos += particle->vel * (float)dt * 10.f;
-
-				//if particle reaches the terrain, it should not be inacitve
-				if (particle->pos.y < (ReadHeightMap(m_heightMap, particle->pos.x / TERRAINSIZE.x, particle->pos.z / TERRAINSIZE.z)  * TERRAINSIZE.y) - 50)
-				{
-					//particle->vel.y = particle->pos.y;
-					particle->active = false;
-					m_particlesCount--;
-				}
-			}
-		}
-	}
 }
 
 ParticleObject* SceneLevel03::GetParticles(void)
@@ -449,7 +445,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 				case 3:
 				{
 					modelStack.PushMatrix();
-					modelStack.Translate(Tree[i].x, 150 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
+					modelStack.Translate(Tree[i].x, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, Tree[i].x / TERRAINSIZE.x, Tree[i].z / TERRAINSIZE.z), Tree[i].z);
 					modelStack.Rotate(Degree - 90, 0, 1, 0);
 					modelStack.Scale(150, 400, 150);
 					RenderMeshOutlined(meshList[GEO_TREE_3], false);
@@ -474,19 +470,126 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 				modelStack.PopMatrix();
 			}
 		}
-
-		//modelStack.PushMatrix();
-		//modelStack.Translate(-1900, 0, -1400);
-		//modelStack.Rotate(90, 0, 1, 0);
-		//modelStack.Scale(4, 5, 5);
-		//RenderMeshOutlined(meshList[GEO_LOGS], true);
-		//modelStack.PopMatrix();
-
-		//modelStack.PushMatrix();
-		//modelStack.Translate(0, 60, -1420);
-		//modelStack.Scale(5, 5, 5);
-		//RenderMeshOutlined(meshList[GEO_BRIDGE], true);
-		//modelStack.PopMatrix();
+		for (int i = 0; i < 60; ++i)
+		{
+			if (renderCheck(playerPartition, posPartition))
+			{
+				Degree = Math::RadianToDegree(atan2(-((1950 - 50 * i) - instance->player->getPosition().z), -1900 - instance->player->getPosition().x));
+				switch (Tree_Type[i])
+				{
+					case 1:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(-1900, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, -1950 / TERRAINSIZE.x, (1950 - 20 * i) / TERRAINSIZE.z), 1950 - 50 * i);
+						modelStack.Rotate(Degree -90, 0, 1, 0);
+						modelStack.Scale(250, 400, 250);
+						RenderMeshOutlined(meshList[GEO_TREE_1], false);
+						modelStack.PopMatrix();
+						break;
+					}
+					case 2:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(-1900, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, -1950 / TERRAINSIZE.x, (1950 - 20 * i) / TERRAINSIZE.z), 1950 - 50 * i);
+						modelStack.Rotate(Degree - 90, 0, 1, 0);
+						modelStack.Scale(400, 400, 400);
+						RenderMeshOutlined(meshList[GEO_TREE_2], false);
+						modelStack.PopMatrix();
+						break;
+					}
+					case 3:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(-1900, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, -1950 / TERRAINSIZE.x, (1950 - 20 * i) / TERRAINSIZE.z), 1950 - 50 * i);
+						modelStack.Rotate(Degree - 90, 0, 1, 0);
+						modelStack.Scale(150, 400, 150);
+						RenderMeshOutlined(meshList[GEO_TREE_3], false);
+						modelStack.PopMatrix();
+						break;
+					}
+				}
+			}	
+		}
+		for (int i = 0; i < 60; ++i)
+		{
+			if (renderCheck(playerPartition, posPartition))
+			{
+				Degree = Math::RadianToDegree(atan2(-((1950 - 50 * i) - instance->player->getPosition().z), 1900 - instance->player->getPosition().x));
+				switch (Tree_Type[i])
+				{
+				case 1:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(1900, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, -1950 / TERRAINSIZE.x, (1950 - 20 * i) / TERRAINSIZE.z), 1950 - 50 * i);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(250, 400, 250);
+					RenderMeshOutlined(meshList[GEO_TREE_1], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case 2:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(1900, 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, -1950 / TERRAINSIZE.x, (1950 - 20 * i) / TERRAINSIZE.z), 1950 - 50 * i);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(400, 400, 400);
+					RenderMeshOutlined(meshList[GEO_TREE_2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case 3:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(1900, 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, -1950 / TERRAINSIZE.x, (1950 - 20 * i) / TERRAINSIZE.z), 1950 - 50 * i);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(150, 400, 150);
+					RenderMeshOutlined(meshList[GEO_TREE_3], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				}
+			}
+		}
+		for (int i = 0; i < 78; ++i)
+		{
+			if (renderCheck(playerPartition, posPartition))
+			{
+				Degree = Math::RadianToDegree(atan2(-(1900 -instance->player->getPosition().z), (1950 - 50 * i) - instance->player->getPosition().x));
+				switch (Tree_Type[i])
+				{
+				case 1:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate((1950 - 50 * i), 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, (1950 - 50 * i) / TERRAINSIZE.x, 1900 / TERRAINSIZE.z), 1900);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(250, 400, 250);
+					RenderMeshOutlined(meshList[GEO_TREE_1], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case 2:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate((1950 - 50 * i), 100 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, (1950 - 50 * i) / TERRAINSIZE.x, 1900 / TERRAINSIZE.z), 1900);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(400, 400, 400);
+					RenderMeshOutlined(meshList[GEO_TREE_2], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				case 3:
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate((1950 - 50 * i), 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_3, (1950 - 50 * i) / TERRAINSIZE.x, 1900 / TERRAINSIZE.z), 1900);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Scale(150, 400, 150);
+					RenderMeshOutlined(meshList[GEO_TREE_3], false);
+					modelStack.PopMatrix();
+					break;
+				}
+				}
+			}
+		}
 	}
 
 
@@ -582,12 +685,37 @@ void SceneLevel03::RenderReflection()
 	glStencilMask(0xFF); // Write to stencil buffer
 	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
 
+
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 100, -1440);
+	modelStack.Translate(1500, 100, -1440);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(800, 4000, 1);
-	RenderMesh(meshList[WATER], false);
+	modelStack.Scale(800,1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1500, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(500, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-500, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
 	modelStack.PopMatrix();
 
 	// Reflection
@@ -602,11 +730,35 @@ void SceneLevel03::RenderReflection()
 	glEnable(GL_CULL_FACE);
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 100, -1440);
+	modelStack.Translate(1500, 100, -1440);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(800, 4000, 1);
-	RenderMesh(meshList[WATER], false);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1500, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(500, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-500, 100, -1440);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Scale(800, 1000, 1);
+	RenderMesh(meshList[WATER_FLOW], false);
 	modelStack.PopMatrix();
 }
 

@@ -63,6 +63,11 @@ void SceneLevel02::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
 
+	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
+	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
+
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	sound.Init();
@@ -103,8 +108,6 @@ void SceneLevel02::Init()
 
 	sound.playSoundEffect3D("Sound/fountain.mp3",
 		irrklang::vec3df(0, 0, 0), true);
-
-	
 
 	initSceneObjects();
 
@@ -815,6 +818,30 @@ void SceneLevel02::RenderOthers(bool Light)
 	modelStack.Scale(140, 140, 140);
 	RenderMeshOutlined(meshList[FLOOR], Light);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1300, treePos1.y + 120, 600);
+	modelStack.Rotate(Math::RadianToDegree(atan2(-(600 - instance->player->getPosition().z), -1300 - instance->player->getPosition().x) - 90), 0, 1, 0);
+	modelStack.Scale(250, 400, 250);
+	RenderMeshOutlined(meshList[GEO_TREE_1], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1300, treePos1.y + 120, 130);
+	modelStack.Rotate(Math::RadianToDegree(atan2(-(130 - instance->player->getPosition().z), -1300 - instance->player->getPosition().x) - 90), 0, 1, 0);
+	modelStack.Scale(250, 400, 250);
+	RenderMeshOutlined(meshList[GEO_TREE_1], Light);
+	modelStack.PopMatrix();
+
+	for (int i = 1; i < 5; ++i)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(-1400, -40, (600 - 94 * i));
+		modelStack.Rotate(Math::RadianToDegree(atan2(-((600 - 94 * i) - instance->player->getPosition().z), -1400 - instance->player->getPosition().x) - 90), 0, 1, 0);
+		modelStack.Scale(100, 100, 100);
+		RenderMeshOutlined(meshList[GEO_BUSH], Light);
+		modelStack.PopMatrix();
+	}
 }
 void SceneLevel02::RenderHUD()
 {
@@ -996,8 +1023,6 @@ void SceneLevel02::RenderPassMain()
 	//modelStack.PopMatrix();
 	//viewStack.PopMatrix();
 
-	
-
 	RenderWorld();
 
 	for (std::vector<ParticleObject*>::iterator it = particleList.begin(); it != particleList.end(); ++it)
@@ -1026,7 +1051,7 @@ void SceneLevel02::RenderPassMain()
 	ss.str("");
 	ss.precision(5);
 	ss << "POS: " << camera.position;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
 
 	if (questToNextScene)
 	{

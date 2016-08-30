@@ -52,8 +52,10 @@ private:
 
 	int lightningRand;
 	bool lightning;
-	Color fogColor;
 
+	int random[128];
+	float randompos_x[128];
+	float randompos_z[128];
 };
 
 #endif

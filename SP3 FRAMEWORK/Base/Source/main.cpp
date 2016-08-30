@@ -13,6 +13,5 @@ int main( void )
 	app.Run();
 	app.Exit();
 
-	
 	//_CrtDumpMemoryLeaks();
 }

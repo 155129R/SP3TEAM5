@@ -52,6 +52,7 @@ public:
 	void damage(int damage);
 	int getAttack();
 	void despawn(double dt);
+	void reset();
 
 private:
 	int MAX_HP;
