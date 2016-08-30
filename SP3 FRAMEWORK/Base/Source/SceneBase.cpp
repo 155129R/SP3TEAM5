@@ -453,7 +453,7 @@ void SceneBase::Init()
 	Singleton::getInstance()->player->Init();
 
 	//Loading text file
-	//ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
+	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
 
 	Singleton::getInstance()->player->Init();
 
