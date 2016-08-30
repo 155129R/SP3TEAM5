@@ -875,6 +875,47 @@ void SceneBase::Update(double dt)
 	UpdateShoot(dt);
 
 	rotateKey += (float)(1 * dt);
+
+	if (Singleton::getInstance()->footstepDelay < 2)	Singleton::getInstance()->footstepDelay += 1.f * dt;
+	if (Application::IsKeyPressed('W') || Application::IsKeyPressed('A') || Application::IsKeyPressed('S') || Application::IsKeyPressed('D'))
+	{
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1 ||
+			Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+		{
+			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
+			{
+				FootStep1();
+			}
+			if (Singleton::getInstance()->footstepDelay > 0.25 && Singleton::getInstance()->player->getRun() == 1)
+			{
+				FootStep1();
+			}
+		}
+
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
+		{
+			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
+			{
+				FootStep2();
+			}
+			if (Singleton::getInstance()->footstepDelay > 0.25 && Singleton::getInstance()->player->getRun() == 1)
+			{
+				FootStep2();
+			}
+		}
+
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+		{
+			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
+			{
+				FootStep3();
+			}
+			if (Singleton::getInstance()->footstepDelay > 0.25 && Singleton::getInstance()->player->getRun() == 1)
+			{
+				FootStep3();
+			}
+		}
+	}
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -2785,6 +2826,46 @@ bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
 		}
 
 	}
+}
+void SceneBase::FootStep1()
+{
+	if (rand() % 4)
+		sound.playSoundEffect2D("Sound//Footsteps//floor4.ogg");
+	if (rand() % 3)
+		sound.playSoundEffect2D("Sound//Footsteps//floor3.ogg");
+	if (rand() % 2)
+		sound.playSoundEffect2D("Sound//Footsteps//floor2.ogg");
+	else
+		sound.playSoundEffect2D("Sound//Footsteps//floor1.ogg");
+	Singleton::getInstance()->footstepDelay = 0;
+}
+void SceneBase::FootStep2()
+{
+	if (rand() % 6)
+		sound.playSoundEffect2D("Sound//Footsteps//grass6.ogg");
+	if (rand() % 5)
+		sound.playSoundEffect2D("Sound//Footsteps//grass5.ogg");
+	if (rand() % 4)
+		sound.playSoundEffect2D("Sound//Footsteps//grass4.ogg");
+	if (rand() % 3)
+		sound.playSoundEffect2D("Sound//Footsteps//grass3.ogg");
+	if (rand() % 2)
+		sound.playSoundEffect2D("Sound//Footsteps//grass2.ogg");
+	else
+		sound.playSoundEffect2D("Sound//Footsteps//grass1.ogg");
+	Singleton::getInstance()->footstepDelay = 0;
+}
+void SceneBase::FootStep3()
+{
+	if (rand() % 4)
+		sound.playSoundEffect2D("Sound//Footsteps//cloth4.ogg");
+	if (rand() % 3)
+		sound.playSoundEffect2D("Sound//Footsteps//cloth3.ogg");
+	if (rand() % 2)
+		sound.playSoundEffect2D("Sound//Footsteps//cloth2.ogg");
+	else
+		sound.playSoundEffect2D("Sound//Footsteps//cloth1.ogg");
+	Singleton::getInstance()->footstepDelay = 0;
 }
 void SceneBase::Exit()
 {

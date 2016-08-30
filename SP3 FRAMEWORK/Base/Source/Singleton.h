@@ -42,6 +42,7 @@ class Singleton
 		bool showInventory;
 		bool openDoor;
 		bool gotHammer;
+		float footstepDelay;
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
@@ -74,7 +75,7 @@ class Singleton
 		item_ghost3 = new Item("ghost3");
 		mousex = 400;
 		mousey = 300;
-
+		footstepDelay = 0;
 
 		//program_state = PROGRAM_MENU;
 		program_state = PROGRAM_GAME1;
