@@ -268,7 +268,6 @@ void SceneLevel01::Update(double dt)
 
 	 if (d2)
 	{
-<<<<<<< HEAD
 		instance->singletonCamera->position.x = 400;
 		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
@@ -287,7 +286,6 @@ void SceneLevel01::Update(double dt)
 
 	 if (d4)
 	{
-<<<<<<< HEAD
 		instance->singletonCamera->position.x = 1300;
 		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
@@ -324,7 +322,6 @@ void SceneLevel01::Update(double dt)
 
 	if (d8)
 	{
-<<<<<<< HEAD
 		instance->singletonCamera->position.x = 1300;
 		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
