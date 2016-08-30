@@ -250,6 +250,9 @@ public:
 		INV_GHOST3,
 		INV_HOVER,
 
+		//shop
+		SHOP_UI,
+
 		//HUB
 		GEO_HUB,
 		GEO_SHOPKEEPER,

@@ -18,6 +18,9 @@ static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneHub::Init()
 {
+	showBuy = true;
+	showSell = false;
+
 	Application::HideCursor();
 
 	SceneBase::Init();
@@ -32,6 +35,9 @@ void SceneHub::Init()
 	meshList[GEO_HUB] = MeshBuilder::GenerateOBJ("HUB", "OBJ//Hub//Hub.obj");
 	meshList[GEO_HUB]->textureArray[0] = LoadTGA("Image//Hub//hub.tga");
 	meshList[GEO_HUB]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
+
+	meshList[SHOP_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[SHOP_UI]->textureID = LoadTGA("Image//Hub//shopUI.tga");
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 120), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
@@ -95,32 +101,43 @@ void SceneHub::Update(double dt)
 
 	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
 
-	if (Singleton::getInstance()->showInventory == false)
+	if (Singleton::getInstance()->showShop == false && Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
 
 	SceneBase::Update(dt);
 
 	//sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
 	//	irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
-
+	//cout << (Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() << endl;
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
 	{
 		if (!eButtonState)
 		{
 			eButtonState = true;
-
+			
+			if ((Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() < 150)
+			{
+				cout <<"open shop" << endl;
+				if (Singleton::getInstance()->showShop == false)
+				{
+					Application::SetMousePosition(0, 0);
+					Application::ShowCursor();
+					Singleton::getInstance()->showShop = true;
+				}
+				else
+				{
+					Application::SetMousePosition(0, 0);
+					Application::HideCursor();
+					Singleton::getInstance()->showShop = false;
+				}
+			}
 		}
 	}
 	else if (!Application::IsKeyPressed('E'))
 	{
 		if (eButtonState)
 			eButtonState = false;
-	}
-
-	if (openGate && rotateGate > 0)
-	{
-		rotateGate--;
 	}
 
 	/////////////////
@@ -453,7 +470,27 @@ void SceneHub::RenderHUD()
 {
 	RenderRadar();
 }
+void SceneHub::RenderShop()
+{
+	if (Singleton::getInstance()->showShop == true)
+	{
+		RenderImageOnScreen(meshList[SHOP_UI], Vector3(70, 50, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 
+		if (showBuy)
+		{
+
+		}
+		if (showSell)
+		{
+
+		}
+	}
+	else
+	{
+
+	}
+
+}
 void SceneHub::RenderSprite()
 {
 }
@@ -608,12 +645,14 @@ void SceneHub::RenderPassMain()
 		RenderMesh(meshList[GEO_AXES], false);
 		modelStack.PopMatrix();
 	}
-
-	RenderWeapons(false);
-	RenderInventory();
+	if (Singleton::getInstance()->showShop == false)
+	{
+		RenderWeapons(false);
+		RenderInventory();
+	}
 	//Render objects
 	RenderLight();
-
+	RenderShop();
 	//Depth quad
 	//viewStack.PushMatrix();
 	//viewStack.LoadIdentity();
@@ -639,6 +678,7 @@ void SceneHub::RenderPassMain()
 
 	if (!Singleton::getInstance()->stateCheck)
 	{
+		if (Singleton::getInstance()->showShop == false)
 		RenderHUD();
 	}
 

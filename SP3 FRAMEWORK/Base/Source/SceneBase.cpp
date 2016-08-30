@@ -614,7 +614,7 @@ void SceneBase::Update(double dt)
 	}*/
 
 	static bool inventoryButtonState = false;
-	if (Application::IsKeyPressed('I'))
+	if (Application::IsKeyPressed('I') && Singleton::getInstance()->showShop == false)
 	{
 		if (!inventoryButtonState)
 		{
