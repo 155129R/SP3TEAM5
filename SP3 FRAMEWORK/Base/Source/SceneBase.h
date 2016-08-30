@@ -319,6 +319,7 @@ public:
 	bool renderCheck(char playerPartition, char posPartition);
 
 protected:
+
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
 	unsigned m_programID;

@@ -31,6 +31,8 @@ public:
 	void RenderPassMain();
 	void RenderWorld();
 
+	void initSceneObjects();
+
 private:
 	float rotateAngle;
 

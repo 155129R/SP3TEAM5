@@ -62,6 +62,8 @@ void Camera3::Forward(double dt)
 		target.y -= position.y - Terrain;
 	}
 	position.y = Terrain;
+	if (willCollide)
+		std::cout << "COLLLIDE" << std::endl;
 }
 
 void Camera3::Backward(double dt)

@@ -316,8 +316,8 @@ void SceneBase::Init()
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision.tga");
 
 	//Particles
-	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
-	meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);
+	//meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
+	//meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
@@ -456,7 +456,7 @@ void SceneBase::Init()
 	Singleton::getInstance()->player->Init();
 
 	//Loading text file
-	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
+	//ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
 
 	int Counter = 0;
 	for (int i = 0; i < 3; i++)
@@ -627,7 +627,7 @@ void SceneBase::Update(double dt)
 			}	
 			else
 			{
-				Application::SetMousePosition(0, 0);
+				Application::SetMousePosition(0,0);
 				Application::HideCursor();
 				Singleton::getInstance()->showInventory = false;
 			}
@@ -638,7 +638,6 @@ void SceneBase::Update(double dt)
 		if (inventoryButtonState)
 			inventoryButtonState = false;
 	}
-
 	if (Application::IsKeyPressed('4') && HealthpackCD <= 0.0f)
 	{
 		instance->player->UseHealthpack();
@@ -693,6 +692,36 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed(VK_F2))
 	{
 		ShowHitbox = false;
+	}
+
+	if (Application::IsKeyPressed('6'))
+	{
+		nightVision = true;
+		lights[0].power = 4.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
+	if (Application::IsKeyPressed('7'))
+	{
+		nightVision = false;
+		lights[0].power = 0.5f;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
+
+	if (Application::IsKeyPressed('1'))
+	{
+		weaponType = 1;
+	}
+	if (Application::IsKeyPressed('2'))
+	{
+		weaponType = 2;
+	}
+	if (Application::IsKeyPressed('3'))
+	{
+		weaponType = 3;
 	}
 	//reloading
 	if (reloading == false)
@@ -838,6 +867,7 @@ void SceneBase::Update(double dt)
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 	if (instance->openDoor == false)
 	UpdateEnemy(dt);
+
 	UpdateHitboxes(dt);
 
 	UpdateCapture(dt);
@@ -1180,7 +1210,10 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
-	
+	if (nightVision == true)
+	{
+		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+	}
 	if (Singleton::getInstance()->stateCheck)
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)

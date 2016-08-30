@@ -85,7 +85,7 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
-	std::cout << instance->player->GetFear() << endl;
+	//std::cout << instance->player->GetFear() << endl;
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
 		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
@@ -146,22 +146,7 @@ void SceneLevel04::Update(double dt)
 			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		}
 	}
-	if (Application::IsKeyPressed('6'))
-	{
-		nightVision = true;
-		lights[0].power = 4.f;
-		lights[0].color = (0.0f, 0.8f, 0.5f);
-		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
-		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-	}
-	if (Application::IsKeyPressed('7'))
-	{
-		nightVision = false;
-		lights[0].power = 0.5f;
-		lights[0].color = (0.f, 0.2f, 0.4f);
-		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
-		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-	}
+
 	//TOGGLE AXIS
 	if (Application::IsKeyPressed('X') && Axis_Wait >= 0.5f)
 	{
@@ -540,11 +525,6 @@ void SceneLevel04::RenderEnvironment(bool Light)
 void SceneLevel04::RenderHUD()
 {
 	RenderRadar();
-
-	if (nightVision == true)
-	{
-		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
-	}
 
 	if (Singleton::getInstance()->boss->getHP() > 0)
 	{
