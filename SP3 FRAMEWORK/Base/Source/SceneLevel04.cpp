@@ -32,6 +32,12 @@ void SceneLevel04::Init()
 	meshList[FENCE]->textureArray[0] = LoadTGA("Image//Graveyard//wood_1.tga");
 	meshList[DEADTREE] = MeshBuilder::GenerateOBJ("DEADTREE", "OBJ//Graveyard//tree.obj");
 	meshList[DEADTREE]->textureArray[0] = LoadTGA("Image//Graveyard//deadtree.tga");
+	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
+	meshList[GEO_TREE_2] = MeshBuilder::GenerateQuad("Fat Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_2]->textureArray[0] = LoadTGA("Image//Forest//Tree_2.tga");
+	meshList[GEO_TREE_3] = MeshBuilder::GenerateQuad("Dead Tree", Color(0, 0, 0), 1.f);
+	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
 
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
@@ -81,6 +87,21 @@ void SceneLevel04::Init()
 
 	lightning = true;
 	sound.Init();
+
+	for (int i = 0; i < 128; ++i)
+	{
+		random[i] = Math::RandIntMinMax(1, 3);
+	}
+	for (int i = 0; i < 128; ++i)
+	{
+		randompos_x[i] = Math::RandFloatMinMax(-1600, 1600);
+	}
+	for (int i = 0; i < 128; ++i)
+	{
+		randompos_z[i] = Math::RandFloatMinMax(-1600, -2000);
+	}
+
+	Singleton::getInstance()->boss->reset();
 }
 
 void SceneLevel04::Update(double dt)
@@ -92,7 +113,6 @@ void SceneLevel04::Update(double dt)
 
 	camera.Update(dt);
 
-
 	SceneBase::Update(dt);
 
 	UpdateBoss(dt);
@@ -103,7 +123,6 @@ void SceneLevel04::Update(double dt)
 
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
 	
-
 	if (Flashlight)
 	{
 		Vector3 view = (camera.target - camera.position).Normalized();
@@ -251,6 +270,17 @@ void SceneLevel04::Update(double dt)
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}
 
+	if (Singleton::getInstance()->boss->getHP() <= 0)
+	{
+		lights[0].power = 1.0f;
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+		lights[0].color = (1.0f,1.0f,1.0f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+
+		FogAmount = 6000;
+		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+	}
+
 	fps = (float)(1.f / dt);
 }
 
@@ -391,7 +421,19 @@ void SceneLevel04::initSceneObjects()
 			instance->Object_list.push_back(Fence);
 		}
 	}
+	AABBObject* Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(0, 0, 2000);
+	Boundary->scale.Set(350, 40, 15);
+	instance->Object_list.push_back(Boundary);
 
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(0, 0, -2000);
+	Boundary->scale.Set(350, 40, 15);
+	instance->Object_list.push_back(Boundary);
 }
 
 void SceneLevel04::RenderGround()
@@ -518,8 +560,70 @@ void SceneLevel04::RenderTombstone(bool Light)
 
 void SceneLevel04::RenderEnvironment(bool Light)
 {
-	RenderObjects(false);
-	RenderEnemies(false);
+	RenderObjects(ShowHitbox);
+	RenderEnemies(ShowHitbox);
+	int yOffset = 50;
+	modelStack.PushMatrix();
+	modelStack.Translate(1100, (ReadHeightMap(m_heightMap_4, 1100 / TERRAINSIZE.x, 1970 / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset, 1970);
+	modelStack.Scale(0.6f, 0.6f, 0.6f);
+	RenderMeshOutlined(meshList[FENCE], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(230, (ReadHeightMap(m_heightMap_4, 250 / TERRAINSIZE.x, 1970 / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset, 1970);
+	modelStack.Scale(0.6f, 0.6f, 0.6f);
+	RenderMeshOutlined(meshList[FENCE], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-640, (ReadHeightMap(m_heightMap_4, -640 / TERRAINSIZE.x, 1970 / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset, 1970);
+	modelStack.Scale(0.6f, 0.6f, 0.6f);
+	RenderMeshOutlined(meshList[FENCE], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-1510, (ReadHeightMap(m_heightMap_4, -640 / TERRAINSIZE.x, 1970 / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset, 1970);
+	modelStack.Scale(0.6f, 0.6f, 0.6f);
+	RenderMeshOutlined(meshList[FENCE], true);
+	modelStack.PopMatrix();
+
+	for (int i = 0; i < 128; ++i)
+	{
+		float Degree = Math::RadianToDegree(atan2(-(randompos_z[i] - instance->player->getPosition().z), randompos_x[i] - instance->player->getPosition().x));
+		switch (random[i])
+		{
+		case 1:
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(randompos_x[i], 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, randompos_x[i] / TERRAINSIZE.x, randompos_z[i] / TERRAINSIZE.z), randompos_z[i]);
+			modelStack.Rotate(Degree - 90, 0, 1, 0);
+			modelStack.Scale(250, 400, 250);
+			RenderMeshOutlined(meshList[GEO_TREE_1], false);
+			modelStack.PopMatrix();
+			break;
+		}
+		case 2:
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(randompos_x[i], 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, randompos_x[i] / TERRAINSIZE.x, randompos_z[i] / TERRAINSIZE.z), randompos_z[i]);
+			modelStack.Rotate(Degree - 90, 0, 1, 0);
+			modelStack.Scale(400, 400, 400);
+			RenderMeshOutlined(meshList[GEO_TREE_2], false);
+			modelStack.PopMatrix();
+			break;
+		}
+		case 3:
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(randompos_x[i], 120 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, randompos_x[i] / TERRAINSIZE.x, randompos_z[i] / TERRAINSIZE.z), randompos_z[i]);
+			modelStack.Rotate(Degree - 90, 0, 1, 0);
+			modelStack.Scale(150, 400, 150);
+			RenderMeshOutlined(meshList[GEO_TREE_3], false);
+			modelStack.PopMatrix();
+			break;
+		}
+		}
+	}
 }
 
 void SceneLevel04::RenderHUD()
@@ -695,7 +799,7 @@ void SceneLevel04::RenderPassMain()
 
 	glUniform1f(m_parameters[U_FOG_ENABLE], 1);
 	RenderWorld();
-	RenderBoss(ShowHitbox);
+	RenderBoss(false);
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 
 	if (!Singleton::getInstance()->stateCheck)
@@ -710,13 +814,13 @@ void SceneLevel04::RenderPassMain()
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "FPS: " << fps;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
 	{
 		std::ostringstream ss;
 		ss.precision(5);
 		ss << "Partition: " << getPartition(camera.position);
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
 	}
 	{
 		std::ostringstream ss;

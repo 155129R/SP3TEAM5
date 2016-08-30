@@ -40,6 +40,7 @@ class Singleton
 		double mousey;
 		bool gotKey;
 		bool showInventory;
+		bool showShop;
 		bool openDoor;
 		bool gotHammer;
 		float footstepDelay;
@@ -79,6 +80,7 @@ class Singleton
 
 		//program_state = PROGRAM_MENU;
 		program_state = PROGRAM_GAME1;
+
 		//program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
@@ -87,7 +89,7 @@ class Singleton
 		stateCheck = false;
 
 		showInventory = false;
-
+		showShop = false;
 		openDoor = false;
 
 		gotKey = false;

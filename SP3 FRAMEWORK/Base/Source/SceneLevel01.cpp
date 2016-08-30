@@ -720,6 +720,7 @@ void SceneLevel01::Update(double dt)
 				{
 					if (object->Object == AABBObject::OBJECT_TYPE::HAMMER && (hammerPtr->pos - camera.position).Length() < 95)
 					{
+						sound.playSoundEffect2D("Sound/pickUp.mp3");
 						Singleton::getInstance()->gotHammer = true;
 						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_hammer);
 
@@ -1331,7 +1332,7 @@ void SceneLevel01::RenderPassMain()
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
 	ss.str("");
 	ss << "pistol mag: " << pistolMag;
@@ -1339,31 +1340,31 @@ void SceneLevel01::RenderPassMain()
 
 	ss.str("");
 	ss << "pistol ammo: " << pistolAmmo;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
+//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
 
 	ss.str("");
 	ss << "rifle mag: " << rifleMag;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
 
 	ss.str("");
 	ss.precision(5);
 	ss << "rifle ammo: " << rifleAmmo;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 
 	ss.str("");
 	ss.precision(5);
 	ss << "Position z: " << camera.position.z;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
 
 	ss.str("");
 	ss.precision(5);
 	ss << "Position x: " << camera.position.x;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
 
 	if (reloading){
 		std::ostringstream ss;
 		ss << "Reloading";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
 	}
 
 	switch (weaponType)

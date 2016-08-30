@@ -196,8 +196,7 @@ public:
 		GEO_BUSH,
 		GEO_BRIDGE,
 		GEO_LOGS,
-		WATER,
-		WATER_SURFACE,
+		WATER_FLOW,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1_ATTACK,
@@ -213,8 +212,6 @@ public:
 		BOSS,
 		WISP,
 		GEO_HP,
-		GEO_HAND_LEFT,
-		GEO_HAND_RIGHT,
 
 		//level 2
 		FOUNTAIN,
@@ -250,6 +247,9 @@ public:
 		INV_GHOST3,
 		INV_HOVER,
 
+		//shop
+		SHOP_UI,
+
 		//HUB
 		GEO_HUB,
 		GEO_SHOPKEEPER,
@@ -259,7 +259,6 @@ public:
 		UI_PISTOL,
 		UI_RIFLE,
 		UI_BOX,
-
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -440,6 +439,8 @@ protected:
 	bool cameraViewObject(Vector3 pos, float degree);
 
 	Sound sound;
+
+	Color fogColor;
 };
 
 #endif
