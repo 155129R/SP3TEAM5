@@ -200,8 +200,7 @@ public:
 		GEO_BUSH,
 		GEO_BRIDGE,
 		GEO_LOGS,
-		WATER,
-		WATER_SURFACE,
+		WATER_FLOW,
 
 		//SPRITE / ENEMY
 		GEO_GHOST1_ATTACK,
@@ -217,8 +216,6 @@ public:
 		BOSS,
 		WISP,
 		GEO_HP,
-		GEO_HAND_LEFT,
-		GEO_HAND_RIGHT,
 
 		//level 2
 		FOUNTAIN,
@@ -254,6 +251,9 @@ public:
 		INV_GHOST3,
 		INV_HOVER,
 
+		//shop
+		SHOP_UI,
+
 		//HUB
 		GEO_HUB,
 		GEO_SHOPKEEPER,
@@ -263,7 +263,6 @@ public:
 		UI_PISTOL,
 		UI_RIFLE,
 		UI_BOX,
-
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -315,6 +314,9 @@ public:
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 	void RenderInventory();
+	void FootStep1();
+	void FootStep2();
+	void FootStep3();
 	float getBaryCentricInterpolation(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 pos);
 	float getHeightofTerrain(float terrainscale, float ** heights);
 
@@ -323,6 +325,7 @@ public:
 	bool renderCheck(char playerPartition, char posPartition);
 
 protected:
+
 	unsigned m_vertexArrayID;
 	Mesh* meshList[NUM_GEOMETRY];
 	unsigned m_programID;
@@ -440,6 +443,8 @@ protected:
 	bool cameraViewObject(Vector3 pos, float degree);
 
 	Sound sound;
+
+	Color fogColor;
 };
 
 #endif

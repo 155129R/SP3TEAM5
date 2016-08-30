@@ -54,6 +54,7 @@ private:
 	float Degree;
 
 	AABBObject* Change;
+	SpriteAnimation* Water;
 };
 
 #endif

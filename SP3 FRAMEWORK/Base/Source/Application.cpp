@@ -189,12 +189,12 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-	sceneManager->ChangeScene(0);
-	//sceneManager->ChangeScene(1);
+	//sceneManager->ChangeScene(0);
+	sceneManager->ChangeScene(1);
 	//sceneManager->ChangeScene(2);
 	//sceneManager->ChangeScene(3);
 	//sceneManager->ChangeScene(4);
-	//sceneManager->ChangeScene(5);
+	sceneManager->ChangeScene(5);
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
@@ -239,7 +239,8 @@ void Application::Run()
 		if (m_dAccumlatedTime_ThreadOne > 0.016) //60 times every second
 		{
 			if (Singleton::getInstance()->program_state != Singleton::PROGRAM_MENU && 
-				Singleton::getInstance()->showInventory == false)
+				Singleton::getInstance()->showInventory == false &&
+				Singleton::getInstance()->showShop == false)
 				GetMouseUpdate();
 			sceneManager->Update(m_dElapsedTime);
 			m_dAccumlatedTime_ThreadOne = 0.0;

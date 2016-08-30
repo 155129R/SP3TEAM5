@@ -2,6 +2,8 @@
 
 Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 {
+	sound.Init();
+
 	canCatch = false;
 	switch (Type)
 	{
@@ -34,6 +36,11 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 		pos.Set(Math::RandFloatMinMax(-800, 800), 0, Math::RandFloatMinMax(-800, 800));
 		waypoint[1].Set(Math::RandFloatMinMax(-1000, 1000), 0, Math::RandFloatMinMax(-1000, 1000));
 	}
+	else if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+	{
+		pos.Set(Math::RandFloatMinMax(-800, 800), 0, Math::RandFloatMinMax(-800, 800));
+		waypoint[1].Set(Math::RandFloatMinMax(-1000, 1000), 0, Math::RandFloatMinMax(-1000, 1000));
+	}
 	else
 	{
 		pos.Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
@@ -43,10 +50,10 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 	dir.SetZero();
 
 	waypoint[0] = pos;
-	//waypoint[1].Set(Math::RandFloatMinMax(-1800, 1800), 0, Math::RandFloatMinMax(-1100, 1800));
 	travel_to = 1;
 
 	rotate = 0.0f;
+	cooldown = 0.8f;
 }
 
 Enemy::~Enemy()
@@ -57,6 +64,9 @@ void Enemy::Update(double dt)
 {
 	//AABB hit box will always be on the Enemy
 	Hitbox.UpdateAABB(this->pos);
+
+	sound.Update(irrklang::vec3df(Singleton::getInstance()->singletonCamera->position.x, Singleton::getInstance()->singletonCamera->position.y, Singleton::getInstance()->singletonCamera->position.z),
+		irrklang::vec3df(-Singleton::getInstance()->singletonCamera->view.x, Singleton::getInstance()->singletonCamera->view.y, -Singleton::getInstance()->singletonCamera->view.z));
 
 	if (HP <= 0)
 	{
@@ -100,6 +110,28 @@ void Enemy::Update(double dt)
 			if (distance_to_player <= 250)
 			{
 				State = ENEMY_STATE::ATTACK;
+
+				switch (Type)
+				{
+				case ENEMY_TYPE::GHOST_1:
+				{
+					sound.playSoundEffect2D("Sound/ghost1.mp3");
+					//sound.playSoundEffect3D("Sound/ghost1.mp3", irrklang::vec3df(pos.x, pos.y, pos.z), false);
+					break;
+				}
+				case ENEMY_TYPE::GHOST_2:
+				{
+					sound.playSoundEffect2D("Sound/ghost2.mp3");
+					//sound.playSoundEffect3D("Sound/ghost2.mp3", irrklang::vec3df(pos.x, pos.y, pos.z), false);
+					break;
+				}
+				case ENEMY_TYPE::GHOST_3:
+				{
+					sound.playSoundEffect2D("Sound/ghost3.mp3");
+					//sound.playSoundEffect3D("Sound/ghost3.mp3", irrklang::vec3df(pos.x, pos.y, pos.z), false);
+					break;
+				}
+				}
 			}
 
 			break;
@@ -179,7 +211,15 @@ void Enemy::Chase(double dt, Vector3 playerPos)
 	if (Hitbox.Collide(playerPos))
 	{
 		//DEAL FEAR
-		Singleton::getInstance()->player->InflictFear(Attack);
+		if (cooldown >= 0.8f)
+		{
+			cooldown = 0.0f;
+			Singleton::getInstance()->player->InflictFear(Attack);
+		}
+		else
+		{
+			cooldown += dt;
+		}
 		State = ENEMY_STATE::PATROL;
 	}
 }

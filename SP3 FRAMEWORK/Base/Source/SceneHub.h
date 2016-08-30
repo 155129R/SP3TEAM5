@@ -25,6 +25,7 @@ public:
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
+	void RenderShop();
 
 	void UpdateParticle(double dt);
 	ParticleObject* GetParticles(void);
@@ -56,6 +57,9 @@ private:
 
 	bool questToNextScene;
 	int distanceLeft;
+
+	bool showBuy;
+	bool showSell;
 };
 
 #endif

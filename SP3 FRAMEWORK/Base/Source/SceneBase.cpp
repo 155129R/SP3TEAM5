@@ -220,7 +220,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], lights[3].exponent);*/
 
 	//FOG
-	Color fogColor(0.8f, 0.8f, 0.8f);
+	fogColor.Set(0.8f, 0.8f, 0.8f);
 	FogAmount = 1500.0f;
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 	glUniform1f(m_parameters[U_FOG_START], 10);
@@ -275,6 +275,7 @@ void SceneBase::Init()
 
 	meshList[VACUUM] = MeshBuilder::GenerateQuad("VACUUM", Color(0, 0, 0), 1.f);
 	meshList[VACUUM]->textureID = LoadTGA("Image//Weapon//vacuum.tga");
+	meshList[VACUUM]->textureArray[0] = LoadTGA("Image//Weapon//vacuum.tga");
 
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
@@ -316,8 +317,8 @@ void SceneBase::Init()
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision.tga");
 
 	//Particles
-	meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
-	meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);
+	//meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
+	//meshList[GEO_PARTICLE_SAND] = MeshBuilder::GenerateSphere("Sand particle", Color(0.8f, 0.7f, 0.5f), 18, 36, 1.f);
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
@@ -377,10 +378,6 @@ void SceneBase::Init()
 	meshList[GEO_HP] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
 	meshList[GEO_HP]->textureArray[0] = LoadTGA("Image//HUD//HP.tga");
 	meshList[GEO_HP]->textureID = LoadTGA("Image//HUD//HP.tga");
-	meshList[GEO_HAND_LEFT] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
-	meshList[GEO_HAND_LEFT]->textureID = LoadTGA("Image//HUD//Hands_Left.tga");
-	meshList[GEO_HAND_RIGHT] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
-	meshList[GEO_HAND_RIGHT]->textureID = LoadTGA("Image//HUD//Hands_Right.tga");
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test",  1, 1);
@@ -457,17 +454,6 @@ void SceneBase::Init()
 
 	//Loading text file
 	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
-
-	int Counter = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-	//		cout << ghost_Amount[Counter] << " , ";
-			Counter++;
-		}
-	//	cout << endl;
-	}
 
 	Singleton::getInstance()->player->Init();
 
@@ -613,8 +599,15 @@ void SceneBase::Update(double dt)
 	lights[0].position.y += (float)50 * dt;
 	}*/
 
+	if (Application::IsKeyPressed('1'))
+		weaponType = 1;
+	if (Application::IsKeyPressed('2'))
+		weaponType = 2;
+	if (Application::IsKeyPressed('3'))
+		weaponType = 3;
+
 	static bool inventoryButtonState = false;
-	if (Application::IsKeyPressed('I'))
+	if (Application::IsKeyPressed('I') && Singleton::getInstance()->showShop == false)
 	{
 		if (!inventoryButtonState)
 		{
@@ -627,7 +620,7 @@ void SceneBase::Update(double dt)
 			}	
 			else
 			{
-				Application::SetMousePosition(0, 0);
+				Application::SetMousePosition(0,0);
 				Application::HideCursor();
 				Singleton::getInstance()->showInventory = false;
 			}
@@ -638,7 +631,6 @@ void SceneBase::Update(double dt)
 		if (inventoryButtonState)
 			inventoryButtonState = false;
 	}
-
 	if (Application::IsKeyPressed('4') && HealthpackCD <= 0.0f)
 	{
 		instance->player->UseHealthpack();
@@ -693,6 +685,36 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed(VK_F2))
 	{
 		ShowHitbox = false;
+	}
+
+	if (Application::IsKeyPressed('6'))
+	{
+		nightVision = true;
+		lights[0].power = 4.f;
+		lights[0].color = (0.0f, 0.8f, 0.5f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
+	if (Application::IsKeyPressed('7'))
+	{
+		nightVision = false;
+		lights[0].power = 0.5f;
+		lights[0].color = (0.f, 0.2f, 0.4f);
+		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+	}
+
+	if (Application::IsKeyPressed('1'))
+	{
+		weaponType = 1;
+	}
+	if (Application::IsKeyPressed('2'))
+	{
+		weaponType = 2;
+	}
+	if (Application::IsKeyPressed('3'))
+	{
+		weaponType = 3;
 	}
 	//reloading
 	if (reloading == false)
@@ -838,6 +860,7 @@ void SceneBase::Update(double dt)
 	radarAngle = Math::RadianToDegree(atan2(-View.z, View.x));
 	if (instance->openDoor == false)
 	UpdateEnemy(dt);
+
 	UpdateHitboxes(dt);
 
 	UpdateCapture(dt);
@@ -845,6 +868,47 @@ void SceneBase::Update(double dt)
 	UpdateShoot(dt);
 
 	rotateKey += (float)(1 * dt);
+
+	if (Singleton::getInstance()->footstepDelay < 2)	Singleton::getInstance()->footstepDelay += 1.f * dt;
+	if (Application::IsKeyPressed('W') || Application::IsKeyPressed('A') || Application::IsKeyPressed('S') || Application::IsKeyPressed('D'))
+	{
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1 ||
+			Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+		{
+			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
+			{
+				FootStep1();
+			}
+			if (Singleton::getInstance()->footstepDelay > 0.25 && Singleton::getInstance()->player->getRun() == 1)
+			{
+				FootStep1();
+			}
+		}
+
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME3)
+		{
+			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
+			{
+				FootStep2();
+			}
+			if (Singleton::getInstance()->footstepDelay > 0.25 && Singleton::getInstance()->player->getRun() == 1)
+			{
+				FootStep2();
+			}
+		}
+
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+		{
+			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
+			{
+				FootStep3();
+			}
+			if (Singleton::getInstance()->footstepDelay > 0.25 && Singleton::getInstance()->player->getRun() == 1)
+			{
+				FootStep3();
+			}
+		}
+	}
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1180,7 +1244,10 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
-	
+	if (nightVision == true)
+	{
+		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+	}
 	if (Singleton::getInstance()->stateCheck)
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
@@ -1224,7 +1291,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 
-	UpdateFearEffect(dt);
+	//UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
@@ -1308,7 +1375,7 @@ void SceneBase::UpdateHitboxes(double dt)
 			case AABBObject::OBJECT_TYPE::LOGS:
 			{
 				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 40, 0));
-				obj->Hitbox.Resize(Vector3(180, 100, 400));
+				obj->Hitbox.Resize(Vector3(400, 100, 100));
 				break;
 			}
 			case AABBObject::OBJECT_TYPE::BRIDGE:
@@ -1775,6 +1842,16 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 					RenderMesh(meshList[GEO_HP], false);
 					modelStack.PopMatrix();
 				}
+				else
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(ghost->pos.x, ghost->pos.y + 30, ghost->pos.z);
+					modelStack.Rotate(Degree - 90, 0, 1, 0);
+					modelStack.Rotate(90, 0, 0, 1);
+					modelStack.Scale(ghost->scale.x / 2, ghost->scale.y / 2, ghost->scale.z / 2);
+					RenderMesh(meshList[VACUUM], false);
+					modelStack.PopMatrix();
+				}
 
 				switch (ghost->Type)
 				{
@@ -2036,7 +2113,7 @@ void SceneBase::RenderRadar()
 		}
 	}
 
-	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4)
+	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME4 && instance->boss->getHP() > 0)
 	{
 		Vector3 view = (instance->player->getPosition() - instance->boss->pos).Normalized();
 		float Degree = Math::RadianToDegree(-atan2(view.x, view.z));
@@ -2053,7 +2130,7 @@ void SceneBase::RenderRadar()
 	modelStack.PushMatrix();
 	modelStack.Translate(65, 45, 0);
 	modelStack.Rotate(radarAngle - 90, 0, 0, 1);
-	modelStack.Translate(camera.position.x / 70, camera.position.z / 70, 0);
+	modelStack.Translate(-camera.position.x / 70, -camera.position.z / 70, 0);
 	modelStack.Scale(100, 100, 100);
 	RenderMesh(m_Minimap->GetBackground(), false);
 	modelStack.PopMatrix();
@@ -2819,6 +2896,46 @@ bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
 		}
 
 	}
+}
+void SceneBase::FootStep1()
+{
+	if (rand() % 4)
+		sound.playSoundEffect2D("Sound//Footsteps//floor4.ogg");
+	if (rand() % 3)
+		sound.playSoundEffect2D("Sound//Footsteps//floor3.ogg");
+	if (rand() % 2)
+		sound.playSoundEffect2D("Sound//Footsteps//floor2.ogg");
+	else
+		sound.playSoundEffect2D("Sound//Footsteps//floor1.ogg");
+	Singleton::getInstance()->footstepDelay = 0;
+}
+void SceneBase::FootStep2()
+{
+	if (rand() % 6)
+		sound.playSoundEffect2D("Sound//Footsteps//grass6.ogg");
+	if (rand() % 5)
+		sound.playSoundEffect2D("Sound//Footsteps//grass5.ogg");
+	if (rand() % 4)
+		sound.playSoundEffect2D("Sound//Footsteps//grass4.ogg");
+	if (rand() % 3)
+		sound.playSoundEffect2D("Sound//Footsteps//grass3.ogg");
+	if (rand() % 2)
+		sound.playSoundEffect2D("Sound//Footsteps//grass2.ogg");
+	else
+		sound.playSoundEffect2D("Sound//Footsteps//grass1.ogg");
+	Singleton::getInstance()->footstepDelay = 0;
+}
+void SceneBase::FootStep3()
+{
+	if (rand() % 4)
+		sound.playSoundEffect2D("Sound//Footsteps//cloth4.ogg");
+	if (rand() % 3)
+		sound.playSoundEffect2D("Sound//Footsteps//cloth3.ogg");
+	if (rand() % 2)
+		sound.playSoundEffect2D("Sound//Footsteps//cloth2.ogg");
+	else
+		sound.playSoundEffect2D("Sound//Footsteps//cloth1.ogg");
+	Singleton::getInstance()->footstepDelay = 0;
 }
 void SceneBase::Exit()
 {
