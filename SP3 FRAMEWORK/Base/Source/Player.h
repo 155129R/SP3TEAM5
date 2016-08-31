@@ -33,6 +33,7 @@ public:
 	void setRun(bool run);
 
 	void AddHealthpack(int Amount);
+	int getHealthPack();
 	void UseHealthpack();
 
 private:

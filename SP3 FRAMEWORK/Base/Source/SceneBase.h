@@ -256,6 +256,10 @@ public:
 		UI_BUY,
 		UI_SELL,
 		UI_HOVER,
+		UI_MONEY,
+		UI_AMMO_PISTOL,
+		UI_AMMO_RIFLE,
+		UI_POTION,
 
 		//HUB
 		GEO_HUB,
