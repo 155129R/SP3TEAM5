@@ -478,91 +478,11 @@ void SceneLevel04::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel04::RenderTombstone(bool Light)
-{
-	if (spatialPartitioning)
-	{
-		playerPartition = getPartition(camera.position);
-		for (auto Object : instance->Object_list)
-		{
-			if (Object->active)
-			{
-				if (Object->Object == AABBObject::OBJECT_TYPE::TOMBSTONE)
-				{
-					posPartition = getPartition(Object->pos);
-
-					if (renderCheck(playerPartition, posPartition) == true)
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(Object->pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, Object->pos.x / TERRAINSIZE.x, Object->pos.z / TERRAINSIZE.z)) - 20, Object->pos.z);
-						modelStack.Scale(10, 10, 10);
-						RenderMeshOutlined(meshList[TOMBSTONE], true);
-						modelStack.PopMatrix();
-					}
-				}
-			}
-		}
-
-		for (auto pos : pocongPos)
-		{
-			//posPartition = getPartition(pos);
-
-			//if (renderCheck(playerPartition, posPartition) == true)
-			//{
-			//	modelStack.PushMatrix();
-			//	modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			//	modelStack.Scale(60, 60, 60);
-			//	modelStack.Rotate(180, 0, 0, 1);
-			//	RenderMeshOutlined(meshList[POCONG], true);
-			//	modelStack.PopMatrix();
-			//}
-
-		}
-	}
-	else
-	{
-		playerPartition = getPartition(camera.position);
-		for (auto Object : instance->Object_list)
-		{
-			if (Object->active)
-			{
-				if (Object->Object == AABBObject::OBJECT_TYPE::TOMBSTONE)
-				{
-					posPartition = getPartition(Object->pos);
-
-					if (renderCheck(playerPartition, posPartition) == true)
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(Object->pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, Object->pos.x / TERRAINSIZE.x, Object->pos.z / TERRAINSIZE.z)) - 20, Object->pos.z);
-						modelStack.Scale(10, 10, 10);
-						RenderMeshOutlined(meshList[TOMBSTONE], true);
-						modelStack.PopMatrix();
-					}
-				}
-			}
-		}
-
-		for (auto pos : pocongPos)
-		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
-
-			//modelStack.PushMatrix();
-			//modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			//modelStack.Scale(60, 60, 60);
-			//modelStack.Rotate(180, 0, 0, 1);
-			//RenderMeshOutlined(meshList[POCONG], true);
-			//modelStack.PopMatrix();
-
-		}
-	}
-}
-
 void SceneLevel04::RenderEnvironment(bool Light)
 {
 	RenderObjects(ShowHitbox);
 	RenderEnemies(ShowHitbox);
-	int yOffset = 50;
+	yOffset = 50;
 	modelStack.PushMatrix();
 	modelStack.Translate(1100, (ReadHeightMap(m_heightMap_4, 1100 / TERRAINSIZE.x, 1970 / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset, 1970);
 	modelStack.Scale(0.6f, 0.6f, 0.6f);
@@ -589,7 +509,7 @@ void SceneLevel04::RenderEnvironment(bool Light)
 
 	for (int i = 0; i < 128; ++i)
 	{
-		float Degree = Math::RadianToDegree(atan2(-(randompos_z[i] - instance->player->getPosition().z), randompos_x[i] - instance->player->getPosition().x));
+		Degree = Math::RadianToDegree(atan2(-(randompos_z[i] - instance->player->getPosition().z), randompos_x[i] - instance->player->getPosition().x));
 		switch (random[i])
 		{
 		case 1:
@@ -632,7 +552,7 @@ void SceneLevel04::RenderHUD()
 
 	if (Singleton::getInstance()->boss->getHP() > 0)
 	{
-		RenderImageOnScreen(meshList[GEO_HP], Vector3(Singleton::getInstance()->boss->getHP() / 4, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[GEO_HP], Vector3(Singleton::getInstance()->boss->getHP() / 4.f, 20.f, 1.f), Vector3(40.f, 55.f, 0.f), Vector3(0.f, 0.f, 0.f));
 	}
 }
 

@@ -638,7 +638,7 @@ void SceneBase::Update(double dt)
 	}
 	else
 	{
-		HealthpackCD -= dt;
+		HealthpackCD -= (float)dt;
 	}
 
 	if (Application::IsKeyPressed('G'))
@@ -732,7 +732,7 @@ void SceneBase::Update(double dt)
 	{
 		if (weaponType == 1 && pistolMag > 0)
 		{
-			reloadTime -= dt * 5;
+			reloadTime -= (float)dt * 5;
 			pistolAmmo = 10;
 
 			if (reloadTime <= 0)
@@ -744,7 +744,7 @@ void SceneBase::Update(double dt)
 
 		if (weaponType == 2 && rifleMag > 0)
 		{
-			reloadTime -= dt * 5;
+			reloadTime -= (float)dt * 5;
 			rifleAmmo = 30;
 
 			if (reloadTime <= 0)
@@ -869,7 +869,7 @@ void SceneBase::Update(double dt)
 
 	rotateKey += (float)(1 * dt);
 
-	if (Singleton::getInstance()->footstepDelay < 2)	Singleton::getInstance()->footstepDelay += 1.f * dt;
+	if (Singleton::getInstance()->footstepDelay < 2)	Singleton::getInstance()->footstepDelay += 1.f * (float)dt;
 	if (Application::IsKeyPressed('W') || Application::IsKeyPressed('A') || Application::IsKeyPressed('S') || Application::IsKeyPressed('D'))
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1 ||
@@ -1291,7 +1291,7 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 
-	//UpdateFearEffect(dt);
+	UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
@@ -1748,7 +1748,7 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 			posPartition = getPartition(ghost->pos);
 			if (renderCheck(playerPartition, posPartition))
 			{
-				float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
+				Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
 
 				if (ShowHitbox)
 				{
@@ -2793,6 +2793,7 @@ char SceneBase::getPartition(Vector3 pos)
 			return partition.first;
 		}
 	}
+	return NULL;
 }
 
 bool SceneBase::renderCheck(char partition1, char partition2)
@@ -2829,6 +2830,7 @@ bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
 		}
 
 	}
+	return NULL;
 }
 void SceneBase::FootStep1()
 {

@@ -78,8 +78,8 @@ class Singleton
 		mousey = 300;
 		footstepDelay = 0;
 
-		//program_state = PROGRAM_MENU;
-		program_state = PROGRAM_GAME1;
+		program_state = PROGRAM_MENU;
+		//program_state = PROGRAM_GAME1;
 
 		//program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;

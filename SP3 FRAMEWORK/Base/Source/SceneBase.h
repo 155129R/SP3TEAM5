@@ -372,7 +372,7 @@ protected:
 
 	float FogAmount;
 	float fps;
-	bool ShowHitbox = true;
+	bool ShowHitbox = false;
 
 	//Player
 	float radarAngle = 0;
@@ -402,6 +402,7 @@ protected:
 	int rifleMag = 1;
 	int rifleAmmo = maxRifleAmmo;
 
+	float Degree;
 
 	bool reloading = false;
 	float reloadTime;

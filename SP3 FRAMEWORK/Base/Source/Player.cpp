@@ -200,7 +200,7 @@ void Player::AddHealthpack(int Amount)
 
 void Player::UseHealthpack()
 {
-	std::cout << "TEsty" << std::endl;
+	//std::cout << "TEsty" << std::endl;
 	if (Healthpacks > 0)
 	{
 		Healthpacks -= 1;
