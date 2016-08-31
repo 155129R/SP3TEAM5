@@ -70,11 +70,11 @@ class Singleton
 		//init stuff here
 		player = new Player();
 		boss = new Boss();
-		item_key = new Item("key");
-		item_hammer = new Item("hammer");
-		item_ghost1 = new Item("ghost1");
-		item_ghost2 = new Item("ghost2");
-		item_ghost3 = new Item("ghost3");
+		item_key = new Item("key", 0);
+		item_hammer = new Item("hammer", 0);
+		item_ghost1 = new Item("ghost1", 10);
+		item_ghost2 = new Item("ghost2", 20);
+		item_ghost3 = new Item("ghost3", 30);
 		mousex = 400;
 		mousey = 300;
 		footstepDelay = 0;
