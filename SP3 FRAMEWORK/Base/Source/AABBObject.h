@@ -21,6 +21,10 @@ public:
 		SOFA,
 		BEDSIDE,
 		SHELF,
+		ELEVATOR,
+		ELEVATORCOVER,
+		SINK,
+		CRATE,
 
 		//OUTDOOR
 		FOUNTAIN,

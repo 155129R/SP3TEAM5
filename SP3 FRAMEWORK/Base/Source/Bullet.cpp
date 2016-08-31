@@ -38,7 +38,7 @@ void Bullet::Update(double dt)
 			if (enemy->GetHP() >= 0)
 			{
 				if (enemy->Hitbox.Collide(position, true)){
-					enemy->TakeDamage(1);
+					enemy->TakeDamage(damage);
 					deleteBullet = true;
 				}
 				else if (distanceTravelled >= range){

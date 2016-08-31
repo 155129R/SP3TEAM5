@@ -733,7 +733,7 @@ void SceneBase::Update(double dt)
 		if (weaponType == 1 && pistolMag > 0)
 		{
 			reloadTime -= dt * 5;
-			pistolAmmo = 10;
+			pistolAmmo = 20;
 
 			if (reloadTime <= 0)
 			{
@@ -745,7 +745,7 @@ void SceneBase::Update(double dt)
 		if (weaponType == 2 && rifleMag > 0)
 		{
 			reloadTime -= dt * 5;
-			rifleAmmo = 30;
+			rifleAmmo = 10;
 
 			if (reloadTime <= 0)
 			{
@@ -769,9 +769,9 @@ void SceneBase::Update(double dt)
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				300,
+				500,
 				1000,
-				10
+				1
 				));
 		}
 		else if (readyToShoot < (float)(1.f / fireRate)){
@@ -809,9 +809,9 @@ void SceneBase::Update(double dt)
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				300,
+				500,
 				1000,
-				10
+				2
 				));
 		}
 		else if (readyToShoot < (float)(1.f / fireRate)){
@@ -1431,6 +1431,8 @@ void SceneBase::UpdateHitboxes(double dt)
 
 			case AABBObject::OBJECT_TYPE::BARRICADE:
 			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 60, 0));
+				obj->Hitbox.Resize(Vector3(20, 50, 20));
 				break;
 			}
 
@@ -1516,6 +1518,26 @@ void SceneBase::UpdateHitboxes(double dt)
 				break;
 			}
 
+			case AABBObject::OBJECT_TYPE::ELEVATOR:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 50, 0));
+				obj->Hitbox.Resize(Vector3(80, 100, 30));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::SINK:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(30, 40, 30));
+				break;
+			}
+
+			case AABBObject::OBJECT_TYPE::CRATE:
+			{
+				obj->Hitbox.UpdateAABB(obj->pos - Vector3(0, 80, 0));
+				obj->Hitbox.Resize(Vector3(50, 50, 50));
+				break;
+			}
 			default:
 			{
 				break;
@@ -1792,6 +1814,57 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 						RenderMeshOutlined(meshList[SHELF], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::ELEVATOR:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[ELEVATOR], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::ELEVATORCOVER:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[ELEVATORCOVER], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::SINK:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[SINK], true);
+						modelStack.PopMatrix();
+						break;
+					}
+					case AABBObject::OBJECT_TYPE::BARRICADE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[BLOCKAGE], true);
+						modelStack.PopMatrix();
+						break;
+					}
+
+					case AABBObject::OBJECT_TYPE::CRATE:
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
+						modelStack.Rotate(obj->angle, obj->rotate.x, obj->rotate.y, obj->rotate.z);
+						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
+						RenderMeshOutlined(meshList[CRATE], true);
 						modelStack.PopMatrix();
 						break;
 					}
