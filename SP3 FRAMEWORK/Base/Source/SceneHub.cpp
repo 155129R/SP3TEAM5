@@ -20,7 +20,7 @@ void SceneHub::Init()
 {
 	showBuy = false;
 	showSell = false;
-
+	showDefault = true;
 	Application::HideCursor();
 
 	SceneBase::Init();
@@ -47,6 +47,18 @@ void SceneHub::Init()
 
 	meshList[UI_HOVER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[UI_HOVER]->textureID = LoadTGA("Image//Hub//hubHover.tga");
+
+	meshList[UI_MONEY] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[UI_MONEY]->textureID = LoadTGA("Image//Hub//money.tga");
+
+	meshList[UI_AMMO_RIFLE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_AMMO_RIFLE]->textureID = LoadTGA("Image//Hub//ammoRifleUI.tga");
+
+	meshList[UI_AMMO_PISTOL] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_AMMO_PISTOL]->textureID = LoadTGA("Image//Hub//ammoPistolUI.tga");
+
+	meshList[UI_POTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_POTION]->textureID = LoadTGA("Image//Hub//potionUI.tga");
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 120), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
@@ -92,7 +104,7 @@ void SceneHub::Init()
 	//sound.playSoundEffect3D("Sound/fountain.mp3",
 	//	irrklang::vec3df(0, 0, 0), true);
 
-
+	timeb4disappear = 0;
 
 	initSceneObjects();
 
@@ -110,7 +122,7 @@ void SceneHub::initSceneObjects()
 void SceneHub::Update(double dt)
 {
 	std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
-
+	timeb4disappear += dt;
 	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
 
 	if (Singleton::getInstance()->showShop == false && Singleton::getInstance()->showInventory == false)
@@ -493,12 +505,13 @@ void SceneHub::RenderHUD()
 }
 void SceneHub::RenderShop()
 {
+	std::ostringstream ss;
+	static bool bLButtonState = false;
+
 	if (Singleton::getInstance()->showShop == true)
 	{
-		std::ostringstream ss;
-		ss.str(""); ss.precision(5); ss << Singleton::getInstance()->money;
-		
 		RenderImageOnScreen(meshList[SHOP_UI], Vector3(70, 50, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		ss.str(""); ss.precision(5); ss << Singleton::getInstance()->money;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 65, 51.2);
 
 		/////////////////
@@ -512,6 +525,7 @@ void SceneHub::RenderShop()
 			{
 				showSell = true;
 				showBuy = false;
+				showDefault = false;
 				buySize = 5;
 				sellSize = 15;
 				RenderImageOnScreen(meshList[UI_SELL], Vector3(sellSize, sellSize, 1), Vector3(65, 45, 1), Vector3(0, 0, 0));
@@ -539,6 +553,7 @@ void SceneHub::RenderShop()
 			{
 				showSell = false;
 				showBuy = true;
+				showDefault = false;
 				buySize = 15;
 				sellSize = 5;
 				RenderImageOnScreen(meshList[UI_BUY], Vector3(buySize, buySize, 1), Vector3(50, 45, 1), Vector3(0, 0, 0));
@@ -555,16 +570,179 @@ void SceneHub::RenderShop()
 			RenderImageOnScreen(meshList[UI_BUY], Vector3(buySize, buySize, 1), Vector3(50, 45, 1), Vector3(0, 0, 0));
 		}
 
+		/////////////////
+		// EXIT BUTTON //
+		/////////////////
+		if ((272 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 65 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+			(91 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 57 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+		{
+			//MOUSE CLICK
+			if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+			{
+				Application::SetMousePosition(0, 0);
+				Application::HideCursor();
+				Singleton::getInstance()->showShop = false;
+			}
+		}
 
+
+		if (showDefault)
+		{
+			ss.str(""); ss.precision(5); ss << "How can I";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 40);
+			ss.str(""); ss.precision(5); ss << "help you?";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 37);
+		}
 		if (showBuy)
 		{
+			ss.str(""); ss.precision(5); ss << "What would you";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 40);
+			ss.str(""); ss.precision(5); ss << "like to buy?";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 37);
+
+			if (timeb4disappear < 0.5)
+			{
+				ss.str(""); ss.precision(5); ss << "NOT ENOUGH MATERIAL!";
+				RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 45, 20);
+			}
+			
+			ss.str(""); ss.precision(5); ss << "------------------------";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 42.5, 18);
+
+			ss.str(""); ss.precision(5); ss << "INVENTORY";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 52, 16);
+
+			RenderImageOnScreen(meshList[UI_AMMO_PISTOL], Vector3(5, 4, 1), Vector3(48, 13, 1), Vector3(0, 0, 0));
+			ss.str(""); ss.precision(5); ss << pistolMag;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 48, 8);
+
+			RenderImageOnScreen(meshList[UI_AMMO_RIFLE], Vector3(9, 4, 1), Vector3(58, 13, 1), Vector3(0, 0, 0));
+			ss.str(""); ss.precision(5); ss << rifleMag;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 58, 8);
+
+			RenderImageOnScreen(meshList[UI_POTION], Vector3(4, 4, 1), Vector3(68, 13, 1), Vector3(0, 0, 0));
+			ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 68, 8);
+
+			//row 1
+			RenderImageOnScreen(meshList[UI_MONEY], Vector3(4, 4, 1), Vector3(47, 36, 1), Vector3(0, 0, 0));
+			ss.str(""); ss.precision(5); ss << "5";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 50, 35);
+			ss.str(""); ss.precision(5); ss << "----->";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 35);
+			RenderImageOnScreen(meshList[UI_AMMO_PISTOL], Vector3(5, 4, 1), Vector3(65, 36, 1), Vector3(0, 0, 0));
+
+			//row 2
+			RenderImageOnScreen(meshList[UI_MONEY], Vector3(4, 4, 1), Vector3(47, 31, 1), Vector3(0, 0, 0));
+			ss.str(""); ss.precision(5); ss << "10";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 50, 30);
+			ss.str(""); ss.precision(5); ss << "----->";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 30);
+			RenderImageOnScreen(meshList[UI_AMMO_RIFLE], Vector3(9, 4, 1), Vector3(65, 31, 1), Vector3(0, 0, 0));
+			
+			//row 3
+			RenderImageOnScreen(meshList[UI_MONEY], Vector3(4, 4, 1), Vector3(47, 26, 1), Vector3(0, 0, 0));
+			ss.str(""); ss.precision(5); ss << "15";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 50, 25);
+			ss.str(""); ss.precision(5); ss << "----->";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 25);
+			RenderImageOnScreen(meshList[UI_POTION], Vector3(4, 4, 1), Vector3(65, 26, 1), Vector3(0, 0, 0));
+
+			//SLOT 1
+			if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+				(264 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 217 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey))
+			{
+				//MOUSE CLICK	
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+
+					if (Singleton::getInstance()->money >= 5)
+					{
+						Singleton::getInstance()->money -= 5;
+						pistolMag++;
+					}
+					else
+					{
+						timeb4disappear = 0;
+					}
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+
+				//MOUSE HOVER
+				RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 36, 1), Vector3(0, 0, 0));
+			}
+
+			//SLOT 2
+			if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+				(313 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 266 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey))
+			{
+				//MOUSE CLICK	
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+
+					if (Singleton::getInstance()->money >= 10)
+					{
+						Singleton::getInstance()->money -= 10;
+						rifleMag++;
+					}
+					else
+					{
+						timeb4disappear = 0;
+					}
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+
+				//MOUSE HOVER
+				RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 31, 1), Vector3(0, 0, 0));
+			}
+
+			//SLOT 3
+			if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+				(362 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 315 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey))
+			{
+				//MOUSE CLICK	
+				if (!bLButtonState && Application::IsMousePressed(0))
+				{
+					bLButtonState = true;
+
+					if (Singleton::getInstance()->money >= 15)
+					{
+						Singleton::getInstance()->money -= 15;
+						instance->player->AddHealthpack(1);
+					}
+					else
+					{
+						timeb4disappear = 0;
+					}
+				}
+				else if (bLButtonState && !Application::IsMousePressed(0))
+				{
+					bLButtonState = false;
+				}
+
+				//MOUSE HOVER
+				RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 26, 1), Vector3(0, 0, 0));
+			}
+
 			
 		}
 		if (showSell)
 		{
 			int sz = Singleton::getInstance()->inventory.size();
-			static bool bLButtonState = false;
 			
+			ss.str(""); ss.precision(5); ss << "What would you";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0,0,0), 2.3f, 19, 40);
+			ss.str(""); ss.precision(5); ss << "like to sell?";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 37);
+
 			for (int i = 1; i <= sz; i++)
 			{
 				//cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
@@ -572,23 +750,26 @@ void SceneHub::RenderShop()
 				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost1")
 				{
 					RenderImageOnScreen(meshList[INV_GHOST1], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
+					RenderImageOnScreen(meshList[UI_MONEY], Vector3(4, 4, 1), Vector3(65, 41 - i * 5, 1), Vector3(0, 0, 0));
 
-					ss.str(""); ss.precision(5); ss << "----->      10";
+					ss.str(""); ss.precision(5); ss << "----->      " << Singleton::getInstance()->inventory[i - 1]->howMuchItWorth;
 					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 40 - i * 5);
 				}
 
 				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost2")
 				{
 					RenderImageOnScreen(meshList[INV_GHOST2], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
+					RenderImageOnScreen(meshList[UI_MONEY], Vector3(4, 4, 1), Vector3(65, 41 - i * 5, 1), Vector3(0, 0, 0));
 
-					ss.str(""); ss.precision(5); ss << "----->      20";
+					ss.str(""); ss.precision(5); ss << "----->      " << Singleton::getInstance()->inventory[i - 1]->howMuchItWorth;
 					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 40 - i * 5);
 				}
 				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost3")
 				{
 					RenderImageOnScreen(meshList[INV_GHOST3], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
+					RenderImageOnScreen(meshList[UI_MONEY], Vector3(4, 4, 1), Vector3(65, 41 - i * 5, 1), Vector3(0, 0, 0));
 
-					ss.str(""); ss.precision(5); ss << "----->      30";
+					ss.str(""); ss.precision(5); ss << "----->      " << Singleton::getInstance()->inventory[i - 1]->howMuchItWorth;
 					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 40 - i * 5);
 				}
 
@@ -758,6 +939,7 @@ void SceneHub::RenderShop()
 		sellSize = 10;
 		showBuy = false;
 		showSell = false;
+		showDefault = true;
 	}
 
 }

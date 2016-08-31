@@ -49,6 +49,7 @@ public:
 	void UpdateBullet(double dt);
 	void Shoot(double dt, Vector3 playerpos);
 	int getHP();
+	int getMAX();
 	void damage(int damage);
 	int getAttack();
 	void despawn(double dt);

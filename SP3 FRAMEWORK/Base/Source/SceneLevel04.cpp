@@ -117,6 +117,15 @@ void SceneLevel04::Update(double dt)
 
 	UpdateBoss(dt);
 
+	if (instance->boss->getHP() > instance->boss->getMAX() * 0.5)
+	{
+		boss_hp_ratio = (instance->boss->getHP() - (instance->boss->getMAX() * 0.5)) / (instance->boss->getMAX() * 0.5);
+	}
+	else
+	{
+		boss_hp_ratio = (instance->boss->getHP() / (instance->boss->getMAX() * 0.5));
+	}
+
 	UpdateParticle(dt);
 
 	UpdateHitboxes(dt);
@@ -550,9 +559,14 @@ void SceneLevel04::RenderHUD()
 {
 	RenderRadar();
 
-	if (Singleton::getInstance()->boss->getHP() > 0)
+	if (instance->boss->getHP() > instance->boss->getMAX() * 0.5)
 	{
-		RenderImageOnScreen(meshList[GEO_HP], Vector3(Singleton::getInstance()->boss->getHP() / 4.f, 20.f, 1.f), Vector3(40.f, 55.f, 0.f), Vector3(0.f, 0.f, 0.f));
+		RenderImageOnScreen(meshList[GEO_BOSS_HP], Vector3(boss_hp_ratio * 50, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[GEO_HP], Vector3((float)instance->boss->getMAX() / 4, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
+	}
+	else
+	{
+		RenderImageOnScreen(meshList[GEO_HP], Vector3(boss_hp_ratio * 50, 20, 1), Vector3(40, 55, 0), Vector3(0, 0, 0));
 	}
 }
 

@@ -54,6 +54,8 @@ private:
 	int random[128];
 	float randompos_x[128];
 	float randompos_z[128];
+
+	float boss_hp_ratio = 0.0f;
 };
 
 #endif
