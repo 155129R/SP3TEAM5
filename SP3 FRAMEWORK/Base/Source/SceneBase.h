@@ -216,6 +216,7 @@ public:
 		BOSS,
 		WISP,
 		GEO_HP,
+		GEO_BOSS_HP,
 
 		//level 2
 		FOUNTAIN,

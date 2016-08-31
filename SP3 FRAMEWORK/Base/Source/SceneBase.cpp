@@ -379,6 +379,10 @@ void SceneBase::Init()
 	meshList[GEO_HP]->textureArray[0] = LoadTGA("Image//HUD//HP.tga");
 	meshList[GEO_HP]->textureID = LoadTGA("Image//HUD//HP.tga");
 
+	meshList[GEO_BOSS_HP] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
+	meshList[GEO_BOSS_HP]->textureArray[0] = LoadTGA("Image//HUD//Boss_HP.tga");
+	meshList[GEO_BOSS_HP]->textureID = LoadTGA("Image//HUD//Boss_HP.tga");
+
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test",  1, 1);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
