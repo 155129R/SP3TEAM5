@@ -1,20 +1,5 @@
-/******************************************************************************/
-/*!
-\file	Boss.cpp
-\author Chuan Guang Zhe
-\par	email: 152104G@mymail.nyp.edu.sg
-\brief
-Class to define Boss
-*/
-/******************************************************************************/
 #include "Singleton.h"
 
-/******************************************************************************/
-/*!
-\brief
-Boss default constructor, it also sets the spawn point of the boss.
-*/
-/******************************************************************************/
 Boss::Boss()
 {
 	boss_state = BOSS_STATE::TRACK;
@@ -35,25 +20,10 @@ Boss::Boss()
 	origin = pos;
 }
 
-/******************************************************************************/
-/*!
-\brief
-Boss default deconstructor
-*/
-/******************************************************************************/
 Boss::~Boss()
 {
 }
 
-/******************************************************************************/
-/*!
-\brief
-Boss Updates
-
-\param dt
-Delta time for updating
-*/
-/******************************************************************************/
 void Boss::Update(double dt)
 {
 	//AABB hit box will always be on the boss
@@ -112,6 +82,10 @@ void Boss::Update(double dt)
 				pos.x += dir.x * speed * dt;
 				pos.z += dir.z * speed * dt;
 				mode_timer += dt;
+				if ((Singleton::getInstance()->player->getPosition() - pos).Length() <= 450)
+				{
+					mode_timer = 5.0f;
+				}
 			}
 			break;
 		}
@@ -126,7 +100,6 @@ void Boss::Update(double dt)
 			else
 			{
 				//Fires at the player meanwhile
-				float timer = 0.0f;
 				fire_rate = 0.8f;
 				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
@@ -146,7 +119,6 @@ void Boss::Update(double dt)
 			else
 			{
 				//Fires at the player meanwhile
-				float timer = 0.0f;
 				fire_rate = 0.2f;
 				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
@@ -180,15 +152,6 @@ void Boss::Update(double dt)
 	}
 }
 
-/******************************************************************************/
-/*!
-\brief
-Boss's bullet Updates
-
-\param dt
-Delta time for updating
-*/
-/******************************************************************************/
 void Boss::UpdateBullet(double dt)
 {
 	for (std::vector<AABBObject *>::iterator it = Boss_Bullet.begin(); it != Boss_Bullet.end(); ++it)
@@ -212,18 +175,6 @@ void Boss::UpdateBullet(double dt)
 	}
 }
 
-/******************************************************************************/
-/*!
-\brief
-Boss's bullet spawn
-
-\param dt
-Delta time for updating
-
-\param playerpos
-Position of the player
-*/
-/******************************************************************************/
 void Boss::Shoot(double dt, Vector3 playerpos)
 {
 	//Fires bullet according to firerate
@@ -254,27 +205,16 @@ void Boss::Shoot(double dt, Vector3 playerpos)
 	}
 }
 
+int Boss::getMAX()
+{
+	return MAX_HP;
+}
 
-/******************************************************************************/
-/*!
-\brief
-returns Boss hp
-*/
-/******************************************************************************/
 int Boss::getHP()
 {
 	return HP;
 }
 
-/******************************************************************************/
-/*!
-\brief
-Reduces Boss HP
-
-\param damage
-Amount of damage to be taken by the Boss
-*/
-/******************************************************************************/
 void Boss::damage(int damage)
 {
 	HP -= damage;

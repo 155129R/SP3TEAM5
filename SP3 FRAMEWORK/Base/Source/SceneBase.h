@@ -216,6 +216,7 @@ public:
 		BOSS,
 		WISP,
 		GEO_HP,
+		GEO_BOSS_HP,
 
 		//level 2
 		FOUNTAIN,
@@ -418,6 +419,7 @@ protected:
 	double rifleMag = 1;
 	double rifleAmmo = maxRifleAmmo;
 	float fearValueBar;
+	float Degree;
 
 	bool reloading = false;
 	float reloadTime;
@@ -457,6 +459,8 @@ protected:
 	Sound sound;
 
 	Color fogColor;
+
+	bool showText = true;
 };
 
 #endif
