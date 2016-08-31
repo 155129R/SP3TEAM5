@@ -335,6 +335,9 @@ void SceneBase::Init()
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
 
+	meshList[UI_POTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_POTION]->textureID = LoadTGA("Image//Hub//potionUI.tga");
+
 	//Minimap
 	m_Minimap = new Minimap();
 	m_Minimap->SetBackground(MeshBuilder::GenerateMinimap("Minimap", Color(1, 1, 1), 1.f));
