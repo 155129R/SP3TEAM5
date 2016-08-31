@@ -13,11 +13,11 @@ void Player::Init()
 {
 	weaponType = WEAPON_TYPE::W_PISTOL;
 	weapon_value = 1;
-
+	Healthpacks = 0;
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
 
-	stamina = 500.0f;
+	stamina = 100.0f;
 	recharge = 3.0f;
 
 	Run = false;
@@ -197,10 +197,13 @@ void Player::AddHealthpack(int Amount)
 {
 	Healthpacks += Amount;
 }
-
+int Player::getHealthPack()
+{
+	return Healthpacks;
+}
 void Player::UseHealthpack()
 {
-	std::cout << "TEsty" << std::endl;
+	//std::cout << "TEsty" << std::endl;
 	if (Healthpacks > 0)
 	{
 		Healthpacks -= 1;

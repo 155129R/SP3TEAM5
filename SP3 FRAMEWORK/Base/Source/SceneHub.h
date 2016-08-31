@@ -60,9 +60,10 @@ private:
 
 	bool showBuy;
 	bool showSell;
-
+	bool showDefault;
 	int buySize;
 	int sellSize;
+	float timeb4disappear;
 
 };
 

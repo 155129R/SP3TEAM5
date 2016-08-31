@@ -294,6 +294,18 @@ void SceneBase::Init()
 
 	meshList[UI_BOX] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[UI_BOX]->textureID = LoadTGA("Image//HUD//boxUI.tga");
+
+	meshList[UI_BOX2] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_BOX2]->textureID = LoadTGA("Image//HUD//boxUI2.tga");
+
+	meshList[UI_STAMINA_BAR] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_STAMINA_BAR]->textureID = LoadTGA("Image//HUD//staminaBar.tga");
+
+	meshList[UI_FEAR_BAR] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_FEAR_BAR]->textureID = LoadTGA("Image//HUD//fearBar.tga");
+
+	meshList[UI_BLACK_BAR] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_BLACK_BAR]->textureID = LoadTGA("Image//HUD//blackBar.tga");
 	
 	meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("pot", "OBJ//Outdoor//key.obj");
 	meshList[GEO_KEY]->textureArray[0] = LoadTGA("Image//Outdoor//key.tga");
@@ -322,6 +334,9 @@ void SceneBase::Init()
 
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
+
+	meshList[UI_POTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_POTION]->textureID = LoadTGA("Image//Hub//potionUI.tga");
 
 	//Minimap
 	m_Minimap = new Minimap();
@@ -378,6 +393,10 @@ void SceneBase::Init()
 	meshList[GEO_HP] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
 	meshList[GEO_HP]->textureArray[0] = LoadTGA("Image//HUD//HP.tga");
 	meshList[GEO_HP]->textureID = LoadTGA("Image//HUD//HP.tga");
+
+	meshList[GEO_BOSS_HP] = MeshBuilder::GenerateQuad("HP bar", Color(0, 0, 0), 1.f);
+	meshList[GEO_BOSS_HP]->textureArray[0] = LoadTGA("Image//HUD//Boss_HP.tga");
+	meshList[GEO_BOSS_HP]->textureID = LoadTGA("Image//HUD//Boss_HP.tga");
 
 	//Shadow stuff
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("Shadow Test",  1, 1);
@@ -461,7 +480,7 @@ void SceneBase::Init()
 
 	rotatePistol = 5;
 	rotateRifle = 4;
-
+	fearValueBar = 0;
 	gunUp = false;
 	gunDown = false;
 
@@ -638,7 +657,7 @@ void SceneBase::Update(double dt)
 	}
 	else
 	{
-		HealthpackCD -= dt;
+		HealthpackCD -= (float)dt;
 	}
 
 	if (Application::IsKeyPressed('G'))
@@ -681,10 +700,12 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed(VK_F1))
 	{
 		ShowHitbox = true;
+		showText = true;
 	}
 	if (Application::IsKeyPressed(VK_F2))
 	{
 		ShowHitbox = false;
+		showText = false;
 	}
 
 	if (Application::IsKeyPressed('6'))
@@ -734,7 +755,7 @@ void SceneBase::Update(double dt)
 		{
 			reloadTime -= dt * 5;
 			pistolAmmo = 20;
-
+			
 			if (reloadTime <= 0)
 			{
 				reloading = false;
@@ -869,7 +890,7 @@ void SceneBase::Update(double dt)
 
 	rotateKey += (float)(1 * dt);
 
-	if (Singleton::getInstance()->footstepDelay < 2)	Singleton::getInstance()->footstepDelay += 1.f * dt;
+	if (Singleton::getInstance()->footstepDelay < 2)	Singleton::getInstance()->footstepDelay += 1.f * (float)dt;
 	if (Application::IsKeyPressed('W') || Application::IsKeyPressed('A') || Application::IsKeyPressed('S') || Application::IsKeyPressed('D'))
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1 ||
@@ -1291,16 +1312,67 @@ void SceneBase::UpdatePlayer(double dt)
 		camera.Tired = false;
 	}
 
-	//UpdateFearEffect(dt);
+	UpdateFearEffect(dt);
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
+	std::cout << Singleton::getInstance()->player->GetFear() << std::endl;
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
-		break;
+		fearValueBar = 100.f;
+		FogAmount = 1500.0f;
+		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+		switch (instance->stateCheck)
+		{
+			case Singleton::PROGRAM_GAME1:
+			{
+				if (FogAmount > 1500)
+				{
+					FogAmount -= 3000 * (float)dt;
+					glUniform1f(m_parameters[U_FOG_END], FogAmount);
+				}
+			}
+			case Singleton::PROGRAM_GAME2:
+			{
+				fogColor.Set(0.8f, 0.8f, 0.8f);
+				FogAmount = 1500.0f;
+				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+				glUniform1f(m_parameters[U_FOG_END], FogAmount);
+
+			}
+			case Singleton::PROGRAM_GAME3:
+			{
+				fogColor.Set(0.8f, 0.8f, 0.8f);
+				FogAmount = 1500.0f;
+				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+				glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			}
+			case Singleton::PROGRAM_GAME4:
+			{
+				fogColor.Set(0.2f, 0.2f, 0.2f);
+				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+			}
+			case Singleton::PROGRAM_HUB:
+			{
+				lights[0].color.Set(1, 1, 1);
+				lights[0].power = 1.0f;
+				glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+				glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+				if (FogAmount > 1500)
+				{
+					fogColor.Set(0.8f, 0.8f, 0.8f);
+					FogAmount -= 3000 * (float)dt;
+					glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+					glUniform1f(m_parameters[U_FOG_END], FogAmount);
+				}
+			}
+
+		}
 
 	case 2:
+		fearValueBar = 75.f;
 		FogAmount = 1000.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1308,6 +1380,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 3:
+		fearValueBar = 50.f;
 		FogAmount = 700.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1315,6 +1388,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 4:
+		fearValueBar = 25.f;
 		FogAmount = 500.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1322,6 +1396,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 5:
+		fearValueBar = 0.f;
 		FogAmount = 100.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1890,7 +1965,7 @@ void SceneBase::RenderEnemies(bool ShowHitbox)
 			posPartition = getPartition(ghost->pos);
 			if (renderCheck(playerPartition, posPartition))
 			{
-				float Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
+				Degree = Math::RadianToDegree(atan2(-(ghost->pos.z - Singleton::getInstance()->player->getPosition().z), ghost->pos.x - Singleton::getInstance()->player->getPosition().x));
 
 				if (ShowHitbox)
 				{
@@ -2259,21 +2334,53 @@ void SceneBase::RenderBullets(bool light)
 
 void SceneBase::RenderWeapons(bool light)
 {
-	RenderImageOnScreen(meshList[UI_BOX], Vector3(18, 9, 1), Vector3(70, 5, 80), Vector3(0, 0, 0));
-
 	switch (weaponType)
 	{
 	case 1:
 		RenderOBJOnScreen(meshList[PISTOL], 1.2, 70, 5, -80, 0, 110, rotatePistol, light);
-		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(70, 4, 90), Vector3(0, 0, 0));
 		break;
 	case 2:
 		RenderOBJOnScreen(meshList[RIFLE], 3, 68, -33, 10, rotateRifle, -170, 0, light);
-		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(70, 4, 90), Vector3(0, 0, 0));
 		break;
 	case 3:
 		RenderImageOnScreen(meshList[VACUUM], Vector3(50, 50, 1), Vector3(70, 5, 0), Vector3(0, 0, 0));
-		RenderImageOnScreen(meshList[UI_VACUUM], Vector3(8, 3.5, 1), Vector3(70, 4, 90), Vector3(0, 0, 0));
+		break;
+	}
+}
+void SceneBase::RenderGUI()
+{
+	//cout << instance->player->GetStamina() << endl;
+	RenderImageOnScreen(meshList[UI_BOX], Vector3(18, 9, 1), Vector3(10, 5, 80), Vector3(0, 0, 0));
+	RenderImageOnScreen(meshList[UI_STAMINA_BAR],
+		Vector3(((instance->player->GetStamina() / 100) * 40), 2, 1),
+		Vector3(((instance->player->GetStamina() / 100) * 40 * 0.5) + 20, 2, 85), Vector3(0, 0, 0));
+	RenderImageOnScreen(meshList[UI_BLACK_BAR], Vector3(40, 2, 1), Vector3(40, 2, 84), Vector3(0, 0, 0));
+
+	RenderImageOnScreen(meshList[UI_FEAR_BAR],
+		Vector3(((fearValueBar / 100)* 40), 2, 1),
+		Vector3(((fearValueBar / 100) * 40 * 0.5) + 20, 6, 85), Vector3(0, 0, 0));
+	RenderImageOnScreen(meshList[UI_BLACK_BAR], Vector3(40, 2, 1), Vector3(40, 6, 84), Vector3(0, 0, 0));
+
+	RenderImageOnScreen(meshList[UI_POTION], Vector3(4, 4, 1), Vector3(5, 13, 1), Vector3(0, 0, 0));
+
+	switch (weaponType)
+	{
+	case 1:
+		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[UI_BOX2],
+			Vector3(((pistolAmmo / maxPistolAmmo) * 18), 6, 1),
+			Vector3(((pistolAmmo / maxPistolAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
+
+		break;
+	case 2:
+		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[UI_BOX2],
+			Vector3(((rifleAmmo / maxRifleAmmo) * 18), 6, 1),
+			Vector3(((rifleAmmo / maxRifleAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
+
+		break;
+	case 3:
+		RenderImageOnScreen(meshList[UI_VACUUM], Vector3(8, 3.5, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
 		break;
 	}
 }
@@ -2539,7 +2646,7 @@ void SceneBase::RenderInventory()
 		//////////////////////
 		int sz2 = Singleton::getInstance()->inventory2ndRow.size();
 		//static bool bLButtonState = false;
-		cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
+		//cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
 		//system("CLS");
 
 		for (int i = 1; i <= sz2; i++)
@@ -2933,6 +3040,7 @@ char SceneBase::getPartition(Vector3 pos)
 			return partition.first;
 		}
 	}
+	return NULL;
 }
 
 bool SceneBase::renderCheck(char partition1, char partition2)
@@ -2969,6 +3077,7 @@ bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
 		}
 
 	}
+	return NULL;
 }
 void SceneBase::FootStep1()
 {

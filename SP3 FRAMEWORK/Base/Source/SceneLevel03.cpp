@@ -876,40 +876,43 @@ void SceneLevel03::RenderPassMain()
 	RenderWeapons(false);
 	RenderBullets(false);
 	RenderInventory();
-
+	RenderGUI();
 	//On screen text
 	
 		std::ostringstream ss;
-		ss.precision(5);
-		ss << "FPS: " << fps;
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-	
-	{
-		std::ostringstream ss;
-		ss.precision(5);
-		ss << "Partition: " << getPartition(camera.position);
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
-	}
-	{
-		std::ostringstream ss;
-		ss.precision(5);
-		ss << "Position: " << camera.position;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
-	}
 
+		if (showText)
+		{
+			ss.precision(5);
+			ss << "FPS: " << fps;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+
+			{
+				std::ostringstream ss;
+				ss.precision(5);
+				ss << "Partition: " << getPartition(camera.position);
+				RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+			}
+			{
+				std::ostringstream ss;
+				ss.precision(5);
+				ss << "Position: " << camera.position;
+				RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+			}
+		}
 	switch (weaponType)
 	{
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:
 
