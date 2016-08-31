@@ -18,7 +18,7 @@ static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneHub::Init()
 {
-	showBuy = true;
+	showBuy = false;
 	showSell = false;
 
 	Application::HideCursor();
@@ -38,6 +38,15 @@ void SceneHub::Init()
 
 	meshList[SHOP_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[SHOP_UI]->textureID = LoadTGA("Image//Hub//shopUI.tga");
+
+	meshList[UI_BUY] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_BUY]->textureID = LoadTGA("Image//Hub//buy.tga");
+
+	meshList[UI_SELL] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_SELL]->textureID = LoadTGA("Image//Hub//sell.tga");
+
+	meshList[UI_HOVER] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_HOVER]->textureID = LoadTGA("Image//Hub//hubHover.tga");
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 120), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
@@ -77,6 +86,9 @@ void SceneHub::Init()
 
 	spatialPartitioning = false;
 
+	buySize = 10;
+	sellSize = 10;
+
 	//sound.playSoundEffect3D("Sound/fountain.mp3",
 	//	irrklang::vec3df(0, 0, 0), true);
 
@@ -97,7 +109,7 @@ void SceneHub::initSceneObjects()
 
 void SceneHub::Update(double dt)
 {
-	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+	std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 
 	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
 
@@ -152,6 +164,9 @@ void SceneHub::Update(double dt)
 		{
 			spaceButtonState2 = true;
 
+			if (Singleton::getInstance()->inventory.size() < 6)
+				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost2);
+
 		}
 	}
 	else if (!Application::IsKeyPressed('Y'))
@@ -167,6 +182,9 @@ void SceneHub::Update(double dt)
 		if (!spaceButtonState3)
 		{
 			spaceButtonState3 = true;
+
+			if (Singleton::getInstance()->inventory.size() < 6)
+				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost1);
 		}
 	}
 	else if (!Application::IsKeyPressed('U'))
@@ -181,7 +199,10 @@ void SceneHub::Update(double dt)
 	{
 		if (!spaceButtonState4)
 		{
+			spaceButtonState4 = true;
 
+			if (Singleton::getInstance()->inventory.size() < 6)
+				Singleton::getInstance()->inventory.push_back(Singleton::getInstance()->item_ghost3);
 		}
 	}
 	else if (!Application::IsKeyPressed('T'))
@@ -474,20 +495,269 @@ void SceneHub::RenderShop()
 {
 	if (Singleton::getInstance()->showShop == true)
 	{
+		std::ostringstream ss;
+		ss.str(""); ss.precision(5); ss << Singleton::getInstance()->money;
+		
 		RenderImageOnScreen(meshList[SHOP_UI], Vector3(70, 50, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 65, 51.2);
+
+		/////////////////
+		// SELL BUTTON //
+		/////////////////
+		if ((725 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 585 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+			(182 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 117 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+		{
+			//MOUSE CLICK
+			if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+			{
+				showSell = true;
+				showBuy = false;
+				buySize = 5;
+				sellSize = 15;
+				RenderImageOnScreen(meshList[UI_SELL], Vector3(sellSize, sellSize, 1), Vector3(65, 45, 1), Vector3(0, 0, 0));
+			}
+			//MOUSE HOVER
+			else
+			{
+				RenderImageOnScreen(meshList[UI_SELL], Vector3(sellSize, sellSize, 1), Vector3(65, 45, 1), Vector3(0, 0, 0));
+			}
+		}
+		//DEFAULT
+		else
+		{
+			RenderImageOnScreen(meshList[UI_SELL], Vector3(sellSize, sellSize, 1), Vector3(65, 45, 1), Vector3(0, 0, 0));
+		}
+
+		////////////////
+		// BUY BUTTON //
+		////////////////
+		if ((565 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+			(182 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 117 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+		{
+			//MOUSE CLICK
+			if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+			{
+				showSell = false;
+				showBuy = true;
+				buySize = 15;
+				sellSize = 5;
+				RenderImageOnScreen(meshList[UI_BUY], Vector3(buySize, buySize, 1), Vector3(50, 45, 1), Vector3(0, 0, 0));
+			}
+			//MOUSE HOVER
+			else
+			{
+				RenderImageOnScreen(meshList[UI_BUY], Vector3(buySize, buySize, 1), Vector3(50, 45, 1), Vector3(0, 0, 0));
+			}
+		}
+		//DEFAULT
+		else
+		{
+			RenderImageOnScreen(meshList[UI_BUY], Vector3(buySize, buySize, 1), Vector3(50, 45, 1), Vector3(0, 0, 0));
+		}
+
 
 		if (showBuy)
 		{
-
+			
 		}
 		if (showSell)
 		{
+			int sz = Singleton::getInstance()->inventory.size();
+			static bool bLButtonState = false;
+			
+			for (int i = 1; i <= sz; i++)
+			{
+				//cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
 
+				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost1")
+				{
+					RenderImageOnScreen(meshList[INV_GHOST1], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
+
+					ss.str(""); ss.precision(5); ss << "----->      10";
+					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 40 - i * 5);
+				}
+
+				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost2")
+				{
+					RenderImageOnScreen(meshList[INV_GHOST2], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
+
+					ss.str(""); ss.precision(5); ss << "----->      20";
+					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 40 - i * 5);
+				}
+				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost3")
+				{
+					RenderImageOnScreen(meshList[INV_GHOST3], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
+
+					ss.str(""); ss.precision(5); ss << "----->      30";
+					RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 53, 40 - i * 5);
+				}
+
+				//SLOT 1
+				if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+					(264 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 217 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey) && i == 1)
+				{
+					//MOUSE CLICK	
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+
+						if (Singleton::getInstance()->inventory[0]->name == "ghost1") Singleton::getInstance()->money += 10;
+						if (Singleton::getInstance()->inventory[0]->name == "ghost2") Singleton::getInstance()->money += 20;
+						if (Singleton::getInstance()->inventory[0]->name == "ghost3") Singleton::getInstance()->money += 30;
+
+						if (Singleton::getInstance()->inventory.size() > 0)
+							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin());
+						break;
+					}
+					else if (bLButtonState && !Application::IsMousePressed(0))
+					{
+						bLButtonState = false;
+					}
+
+					//MOUSE HOVER
+					RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 36, 1), Vector3(0, 0, 0));
+				}
+
+				//SLOT 2
+				if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+					(313 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 266 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey) && i == 2)
+				{
+					//MOUSE CLICK	
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+
+						if (Singleton::getInstance()->inventory[1]->name == "ghost1") Singleton::getInstance()->money += 10;
+						if (Singleton::getInstance()->inventory[1]->name == "ghost2") Singleton::getInstance()->money += 20;
+						if (Singleton::getInstance()->inventory[1]->name == "ghost3") Singleton::getInstance()->money += 30;
+
+						if (Singleton::getInstance()->inventory.size() > 0)
+							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 1);
+						break;
+					}
+					else if (bLButtonState && !Application::IsMousePressed(0))
+					{
+						bLButtonState = false;
+					}
+
+					//MOUSE HOVER
+					RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 31, 1), Vector3(0, 0, 0));
+				}
+
+				//SLOT 3
+				if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+					(362 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 315 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey) && i == 3)
+				{
+					//MOUSE CLICK	
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+
+						if (Singleton::getInstance()->inventory[2]->name == "ghost1") Singleton::getInstance()->money += 10;
+						if (Singleton::getInstance()->inventory[2]->name == "ghost2") Singleton::getInstance()->money += 20;
+						if (Singleton::getInstance()->inventory[2]->name == "ghost3") Singleton::getInstance()->money += 30;
+
+						if (Singleton::getInstance()->inventory.size() > 0)
+							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 2);
+						break;
+					}
+					else if (bLButtonState && !Application::IsMousePressed(0))
+					{
+						bLButtonState = false;
+					}
+
+					//MOUSE HOVER
+					RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 26, 1), Vector3(0, 0, 0));
+				}
+
+				//SLOT 4
+				if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+					(411 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 364 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey) && i == 4)
+				{
+					//MOUSE CLICK	
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+
+						if (Singleton::getInstance()->inventory[3]->name == "ghost1") Singleton::getInstance()->money += 10;
+						if (Singleton::getInstance()->inventory[3]->name == "ghost2") Singleton::getInstance()->money += 20;
+						if (Singleton::getInstance()->inventory[3]->name == "ghost3") Singleton::getInstance()->money += 30;
+
+						if (Singleton::getInstance()->inventory.size() > 0)
+							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 3);
+						break;
+					}
+					else if (bLButtonState && !Application::IsMousePressed(0))
+					{
+						bLButtonState = false;
+					}
+
+					//MOUSE HOVER
+					RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 21, 1), Vector3(0, 0, 0));
+				}
+
+				//SLOT 5
+				if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+					(460 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 413 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey) && i == 5)
+				{
+					//MOUSE CLICK	
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+
+						if (Singleton::getInstance()->inventory[4]->name == "ghost1") Singleton::getInstance()->money += 10;
+						if (Singleton::getInstance()->inventory[4]->name == "ghost2") Singleton::getInstance()->money += 20;
+						if (Singleton::getInstance()->inventory[4]->name == "ghost3") Singleton::getInstance()->money += 30;
+
+						if (Singleton::getInstance()->inventory.size() > 0)
+							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 4);
+						break;
+					}
+					else if (bLButtonState && !Application::IsMousePressed(0))
+					{
+						bLButtonState = false;
+					}
+
+					//MOUSE HOVER
+					RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 16, 1), Vector3(0, 0, 0));
+				}
+
+				//SLOT 6
+				if ((725 * Application::GetWindowWidth() / 800 > Singleton::getInstance()->mousex && 425 * Application::GetWindowWidth() / 800 < Singleton::getInstance()->mousex) &&
+					(509 * Application::GetWindowHeight() / 600 > Singleton::getInstance()->mousey && 462 * Application::GetWindowHeight() / 600 < Singleton::getInstance()->mousey) && i == 6)
+				{
+					//MOUSE CLICK	
+					if (!bLButtonState && Application::IsMousePressed(0))
+					{
+						bLButtonState = true;
+
+						if (Singleton::getInstance()->inventory[5]->name == "ghost1") Singleton::getInstance()->money += 10;
+						if (Singleton::getInstance()->inventory[5]->name == "ghost2") Singleton::getInstance()->money += 20;
+						if (Singleton::getInstance()->inventory[5]->name == "ghost3") Singleton::getInstance()->money += 30;
+
+						if (Singleton::getInstance()->inventory.size() > 0)
+							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 5);
+						break;
+					}
+					else if (bLButtonState && !Application::IsMousePressed(0))
+					{
+						bLButtonState = false;
+					}
+
+					//MOUSE HOVER
+					RenderImageOnScreen(meshList[UI_HOVER], Vector3(30, 6.5, 1), Vector3(57.5, 11, 1), Vector3(0, 0, 0));
+				}
+
+
+			}
 		}
 	}
 	else
 	{
-
+		buySize = 10;
+		sellSize = 10;
+		showBuy = false;
+		showSell = false;
 	}
 
 }

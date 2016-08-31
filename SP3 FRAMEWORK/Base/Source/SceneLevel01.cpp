@@ -78,8 +78,23 @@ void SceneLevel01::Init()
 	meshList[TABLE] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//table.obj");
 	meshList[TABLE]->textureArray[0] = LoadTGA("Image//Indoor//Table.tga");
 
-	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Table", "OBJ//Indoor//chair.obj");
+	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Chair", "OBJ//Indoor//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//Indoor//chair.tga");
+
+
+	meshList[SOFA] = MeshBuilder::GenerateOBJ("SOFA", "OBJ//Indoor//sofa.obj");
+	meshList[SOFA]->textureArray[0] = LoadTGA("Image//Indoor//sofa.tga");
+
+	meshList[SHELF] = MeshBuilder::GenerateOBJ("SHELF", "OBJ//Indoor//shelf.obj");
+	meshList[SHELF]->textureArray[0] = LoadTGA("Image//Indoor//shelf.tga");
+
+	meshList[BEDSIDE] = MeshBuilder::GenerateOBJ("BEDSIDE", "OBJ//Indoor//bedside.obj");
+	meshList[BEDSIDE]->textureArray[0] = LoadTGA("Image//Indoor//bedside.tga");
+
+	meshList[PAINTING] = MeshBuilder::GenerateQuad("PAINTING", Color(0, 0, 0), 1.f);
+	meshList[PAINTING]->textureArray[0] = LoadTGA("Image//Indoor//harambe.tga");
+
+	InitPartitioning();
 
 	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
 
@@ -109,372 +124,10 @@ void SceneLevel01::Init()
 	FogEffect = false;
 	Switch = false;
 
-	SpawnGhost();
 
 	initSceneObjects();
 
-	InitPartitioning();
-}
-
-void SceneLevel01::initSceneObjects()
-{
-	/*AABBObject * key = new AABBObject();
-	key->Object = AABBObject::OBJECT_TYPE::KEY;
-	key->active = true;
-	key->pos.Set(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	key->scale.Set(10, 10, 10);
-	instance->Object_list.push_back(key);*/
-
-	/*modelStack.PushMatrix();
-	modelStack.Translate(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
-	modelStack.Scale(4, 3.5, 4);
-	modelStack.Rotate(-75, 0, 1, 0);
-	RenderMeshOutlined(meshList[DOOR], Light);
-	modelStack.PopMatrix();*/
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//[Left] first room 
-	//(front doors)
-	AABBObject* door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
-	door->scale.Set(4, 4, 4);
-	door1 = door;
-	instance->Object_list.push_back(door);
-
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
-	door->scale.Set(4, 4, 4);
-	door2 = door;
-	instance->Object_list.push_back(door);
-
-	//rotated door (doesnt work now)
-	/*door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->angle = -75;
-	door->rotate.Set(0, 1, 0);
-	door->pos.Set(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
-	door->scale.Set(4, 3.5, 4);
-	instance->Object_list.push_back(door);*/
-
-	//(chairs)
-	AABBObject* chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->pos.Set(590, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -630);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->angle = 180;
-	chair->rotate.Set(0, 1, 0);
-	chair->pos.Set(590, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -570);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	//(table)
-	AABBObject* table = new AABBObject();
-	table->Object = AABBObject::OBJECT_TYPE::TABLE;
-	table->active = true;
-	table->pos.Set(590, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -600);
-	table->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(table);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//[Left] second room 
-	//(front doors)
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
-	door->scale.Set(4, 4, 4);
-	door3 = door;
-	instance->Object_list.push_back(door);
-
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
-	door->scale.Set(4, 4, 4);
-	door4 = door;
-	instance->Object_list.push_back(door);
-
-	//(chairs)
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->pos.Set(1090, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->angle = 180;
-	chair->rotate.Set(0, 1, 0);
-	chair->pos.Set(1090, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -690);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	//(table)
-	table = new AABBObject();
-	table->Object = AABBObject::OBJECT_TYPE::TABLE;
-	table->active = true;
-	table->pos.Set(1093, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -720);
-	table->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(table);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//[Right] first room (front doors)
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
-	door->scale.Set(4, 4, 4);
-	door5 = door;
-	instance->Object_list.push_back(door);
-
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
-	door->scale.Set(4, 4, 4);
-	door6 = door;
-	instance->Object_list.push_back(door);
-
-	//(chairs)
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->pos.Set(500, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 610);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->angle = 180;
-	chair->rotate.Set(0, 1, 0);
-	chair->pos.Set(500, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 670);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	//(table)
-	table = new AABBObject();
-	table->Object = AABBObject::OBJECT_TYPE::TABLE;
-	table->active = true;
-	table->pos.Set(500, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 640);
-	table->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(table);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//[Right] second room (front doors)
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
-	door->scale.Set(4, 4, 4);
-	door7 = door;
-	instance->Object_list.push_back(door);
-
-	door = new AABBObject();
-	door->Object = AABBObject::OBJECT_TYPE::DOOR;
-	door->active = true;
-	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
-	door->scale.Set(4, 4, 4);
-	door8 = door;
-	instance->Object_list.push_back(door);
-
-	//(chairs)
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->pos.Set(1400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 610);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	chair = new AABBObject();
-	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
-	chair->active = true;
-	chair->angle = 180;
-	chair->rotate.Set(0, 1, 0);
-	chair->pos.Set(1400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 670);
-	chair->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(chair);
-
-	//(table)
-	table = new AABBObject();
-	table->Object = AABBObject::OBJECT_TYPE::TABLE;
-	table->active = true;
-	table->pos.Set(1400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 640);
-	table->scale.Set(1, 1, 1);
-	instance->Object_list.push_back(table);
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	AABBObject* hammer = new AABBObject();
-	hammer->Object = AABBObject::OBJECT_TYPE::HAMMER;
-	hammer->active = true;
-	hammer->pos.Set(1525, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 925);
-	hammer->scale.Set(10, 10, 10);
-	hammerPtr = hammer;
-	instance->Object_list.push_back(hammer);
-
-	AABBObject* indoorGate = new AABBObject();
-	indoorGate->Object = AABBObject::OBJECT_TYPE::INDOORGATE;
-	indoorGate->active = true;
-	indoorGate->pos.Set(-400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
-	indoorGate->scale.Set(1, 1.2, 1);
-	exitPtr = indoorGate;
-	instance->Object_list.push_back(indoorGate);
-
-	AABBObject* bed = new AABBObject();
-	bed->Object = AABBObject::OBJECT_TYPE::BED;
-	bed->active = true;
-	bed->angle = 90;
-	bed->rotate.Set(0, 1, 0);
-	bed->pos.Set(150, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
-	bed->scale.Set(25, 25, 25);
-	instance->Object_list.push_back(bed);
-
-	bed = new AABBObject();
-	bed->Object = AABBObject::OBJECT_TYPE::BED;
-	bed->active = true;
-	bed->angle = -90;
-	bed->rotate.Set(0, 1, 0);
-	bed->pos.Set(1530, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
-	bed->scale.Set(25, 25, 25);
-	instance->Object_list.push_back(bed);
-	///////////////////////////////////////////////////////////WALLS//////////////////////////////////////////////////////
-	//FIRST WALLS, LEFT SIDE
-	AABBObject* walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(-95, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, -95 / TERRAINSIZE.x, -15 / TERRAINSIZE.z), -100);
-	walls->scale.Set(70, 25, 22);
-	instance->Object_list.push_back(walls);
-	
-	//FIRST WALLS, RIGHT SIDE
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(-95, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, -95 / TERRAINSIZE.x, -15 / TERRAINSIZE.z), 305);
-	walls->scale.Set(70, 25, 22);
-	instance->Object_list.push_back(walls);
-
-	//FIRST DOOR, LEFT SIDE, WALL
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
-	walls->scale.Set(29, 25, 5);
-	instance->Object_list.push_back(walls);
-	
-	//FIRST DOOR, RIGHT SIDE, WALL
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
-	walls->scale.Set(61, 25, 22);
-	instance->Object_list.push_back(walls);
-
-	//SECOND SET OF WALLS, LEFT SIDE
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 305);
-	walls->scale.Set(61, 25, 22);
-	instance->Object_list.push_back(walls);
-
-	//SECOND SET OF WALLS, RIGHT SIDE
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
-	walls->scale.Set(29, 25, 5);
-	instance->Object_list.push_back(walls);
-
-	//SECOND SET OF WALLS, LEFT SIDE (DOOR)
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
-	walls->scale.Set(29, 25, 5);
-	instance->Object_list.push_back(walls);
-
-	//SECOND SET OF WALLS, RIGHT SIDE (DOOR)
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z),370);
-	walls->scale.Set(29, 25, 5);
-	instance->Object_list.push_back(walls);
-	
-	//Back wall [Main corridoor]
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(1455, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 90);
-	walls->scale.Set(5, 25, 60);
-	instance->Object_list.push_back(walls);
-
-	//First left door, Barricaded room
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(210, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -330);
-	walls->scale.Set(22, 20, 20);
-	instance->Object_list.push_back(walls);
-
-	//First left door, toilet, right wall
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(485, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
-	walls->scale.Set(5, 25, 20);
-	instance->Object_list.push_back(walls);
-
-	//First left door, toilet, front wall
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(625, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
-	walls->scale.Set(17, 25, 3);
-	instance->Object_list.push_back(walls);
-
-	//First left door, toilet, left wall
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
-	walls->scale.Set(3, 25, 20);
-	instance->Object_list.push_back(walls);
-
-	//First left door, toilet, back wall
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -210);
-	walls->scale.Set(25, 25, 3);
-	instance->Object_list.push_back(walls);
-
-	//TOILET
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
-	walls->scale.Set(5, 10, 5);
-	instance->Object_list.push_back(walls);
-
-	//First left door, left most wall
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(90, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -490);
-	walls->scale.Set(3, 25, 90);
-	instance->Object_list.push_back(walls);
+	SpawnGhost();
 }
 
 void SceneLevel01::Update(double dt)
@@ -512,7 +165,7 @@ void SceneLevel01::Update(double dt)
 	if (timer > 3.f)
 	{
 		//left first front
-		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		if (instance->singletonCamera->position.x < 460 && instance->singletonCamera->position.x > 340)
 		{
 			if (instance->singletonCamera->position.z > -200 && instance->singletonCamera->position.z < -100)
 			{
@@ -523,9 +176,9 @@ void SceneLevel01::Update(double dt)
 			}
 		}
 		//left first inside
-		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		 if (instance->singletonCamera->position.x < 460 && instance->singletonCamera->position.x > 340)
 		{
-			if (instance->singletonCamera->position.z > -270 && instance->singletonCamera->position.z < -170)
+			if (instance->singletonCamera->position.z > -300 && instance->singletonCamera->position.z < -200)
 			{
 				d2 = true;
 				timer = 0.f;
@@ -535,7 +188,7 @@ void SceneLevel01::Update(double dt)
 		}
 
 		//left second front
-		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		 if (instance->singletonCamera->position.x < 1360 && instance->singletonCamera->position.x > 1240)
 		{
 			if (instance->singletonCamera->position.z > -200 && instance->singletonCamera->position.z < -100)
 			{
@@ -546,9 +199,9 @@ void SceneLevel01::Update(double dt)
 			}
 		}
 		//left second inside
-		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		 if (instance->singletonCamera->position.x < 1360 && instance->singletonCamera->position.x > 1240)
 		{
-			if (instance->singletonCamera->position.z > -270 && instance->singletonCamera->position.z < -170)
+			if (instance->singletonCamera->position.z > -300 && instance->singletonCamera->position.z < -200)
 			{
 				d4 = true;
 				timer = 0.f;
@@ -558,7 +211,7 @@ void SceneLevel01::Update(double dt)
 		}
 
 		//right first front
-		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		 if (instance->singletonCamera->position.x < 460 && instance->singletonCamera->position.x > 340)
 		{
 			if (instance->singletonCamera->position.z > 300 && instance->singletonCamera->position.z < 400)
 			{
@@ -569,7 +222,7 @@ void SceneLevel01::Update(double dt)
 			}
 		}
 		//right first inside
-		if (instance->singletonCamera->position.x < 450 && instance->singletonCamera->position.x > 350)
+		 if (instance->singletonCamera->position.x < 460 && instance->singletonCamera->position.x > 340)
 		{
 			if (instance->singletonCamera->position.z > 420 && instance->singletonCamera->position.z < 520)
 			{
@@ -581,7 +234,7 @@ void SceneLevel01::Update(double dt)
 		}
 
 		//right second front
-		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		 if (instance->singletonCamera->position.x < 1360 && instance->singletonCamera->position.x > 1240)
 		{
 			if (instance->singletonCamera->position.z > 300 && instance->singletonCamera->position.z < 400)
 			{
@@ -592,7 +245,7 @@ void SceneLevel01::Update(double dt)
 			}
 		}
 		//right second inside
-		if (instance->singletonCamera->position.x < 1350 && instance->singletonCamera->position.x > 1250)
+		 if (instance->singletonCamera->position.x < 1360 && instance->singletonCamera->position.x > 1240)
 		{
 			if (instance->singletonCamera->position.z > 420 && instance->singletonCamera->position.z < 520)
 			{
@@ -603,60 +256,76 @@ void SceneLevel01::Update(double dt)
 			}
 		}
 	}
-
+	//left 1st
 	if (d1)
 	{
+		instance->singletonCamera->position.x = 400;
 		instance->singletonCamera->position.z = -250;
 		instance->singletonCamera->target.z = -260;
+		instance->singletonCamera->target.x = 400;
 		d1 = false;
 	}
 
-	if (d2)
+	 if (d2)
 	{
-		instance->singletonCamera->position.z = -145;
+		instance->singletonCamera->position.x = 400;
+		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
+		instance->singletonCamera->target.x = 400;
 		d2 = false;
 	}
-
+	//left 2nd
 	if (d3)
 	{
+		instance->singletonCamera->position.x = 1300;
 		instance->singletonCamera->position.z = -250;
 		instance->singletonCamera->target.z = -260;
+		instance->singletonCamera->target.x = 1300;
 		d3 = false;
 	}
 
-	if (d4)
+	 if (d4)
 	{
-		instance->singletonCamera->position.z = -160;
+		instance->singletonCamera->position.x = 1300;
+		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
+		instance->singletonCamera->target.x = 1300;
 		d4 = false;
 	}
-
+	//right 1st
 	if (d5)
 	{
-		instance->singletonCamera->position.z = 420;
-		instance->singletonCamera->target.z = 430;
+		instance->singletonCamera->position.x = 400;
+		instance->singletonCamera->position.z = 430;
+		instance->singletonCamera->target.z = 440;
+		instance->singletonCamera->target.x = 400;
 		d5 = false;
 	}
 
-	if (d6)
+	 if (d6)
 	{
+		instance->singletonCamera->position.x = 400;
 		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
+		instance->singletonCamera->target.x = 400;
 		d6 = false;
 	}
-
+	//right 2nd
 	if (d7)
 	{
-		instance->singletonCamera->position.z = 420;
-		instance->singletonCamera->target.z = 430;
+		instance->singletonCamera->position.x = 1300;
+		instance->singletonCamera->position.z = 430;
+		instance->singletonCamera->target.z = 440;
+		instance->singletonCamera->target.x = 1300;
 		d7 = false;
 	}
 
 	if (d8)
 	{
-		instance->singletonCamera->position.z = 330;
+		instance->singletonCamera->position.x = 1300;
+		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
+		instance->singletonCamera->target.x = 1300;
 		d8 = false;
 	}
 
@@ -908,6 +577,549 @@ ParticleObject* SceneLevel01::GetParticles(void)
 	return particle;
 }
 
+void SceneLevel01::initSceneObjects()
+{
+	/*AABBObject * key = new AABBObject();
+	key->Object = AABBObject::OBJECT_TYPE::KEY;
+	key->active = true;
+	key->pos.Set(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
+	key->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(key);*/
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//[Left] first room 
+	//(front doors)
+	AABBObject* door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	door->scale.Set(4, 4, 4);
+	door1 = door;
+	instance->Object_list.push_back(door);
+
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
+	door->scale.Set(4, 4, 4);
+	door2 = door;
+	instance->Object_list.push_back(door);
+
+	//(chairs)
+	AABBObject* chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->pos.Set(590, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -630);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->angle = 180;
+	chair->rotate.Set(0, 1, 0);
+	chair->pos.Set(590, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -570);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	//(table)
+	AABBObject* table = new AABBObject();
+	table->Object = AABBObject::OBJECT_TYPE::TABLE;
+	table->active = true;
+	table->pos.Set(590, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -600);
+	table->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(table);
+
+	//(Sofa)
+	AABBObject* sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->pos.Set(200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -610);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->angle = 180;
+	sofa->rotate.Set(0, 1, 0);
+	sofa->pos.Set(250, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -450);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	//(Toiletbowl)
+	AABBObject* toilet = new AABBObject();
+	toilet->Object = AABBObject::OBJECT_TYPE::TOILETBOWL;
+	toilet->active = true;
+	toilet->angle = 180;
+	toilet->rotate.Set(0, 1, 0);
+	toilet->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
+	toilet->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(toilet);
+
+	//(bedside table)
+	AABBObject* bedside = new AABBObject();
+	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
+	bedside->active = true;
+	bedside->angle = 90;
+	bedside->rotate.Set(0, 1, 0);
+	bedside->pos.Set(120, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -675);
+	bedside->scale.Set(2, 2, 2);
+	instance->Object_list.push_back(bedside);
+
+	AABBObject* bed = new AABBObject();
+	bed->Object = AABBObject::OBJECT_TYPE::BED;
+	bed->active = true;
+	bed->angle = 90;
+	bed->rotate.Set(0, 1, 0);
+	bed->pos.Set(150, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
+	bed->scale.Set(25, 25, 25);
+	instance->Object_list.push_back(bed);
+
+	//(Shelf)
+	AABBObject* shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(330, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -655);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(275, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -655);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//[Left] second room 
+	//(front doors)
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	door->scale.Set(4, 4, 4);
+	door3 = door;
+	instance->Object_list.push_back(door);
+
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -212);
+	door->scale.Set(4, 4, 4);
+	door4 = door;
+	instance->Object_list.push_back(door);
+
+	//(chairs)
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->pos.Set(1090, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->angle = 180;
+	chair->rotate.Set(0, 1, 0);
+	chair->pos.Set(1090, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -690);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	//(table)
+	table = new AABBObject();
+	table->Object = AABBObject::OBJECT_TYPE::TABLE;
+	table->active = true;
+	table->pos.Set(1093, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -720);
+	table->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(table);
+
+	//(Sofa)
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->angle = 180;
+	sofa->rotate.Set(0, 1, 0);
+	sofa->pos.Set(1050, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -250);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->angle = 180;
+	sofa->rotate.Set(0, 1, 0);
+	sofa->pos.Set(1530, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -250);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->pos.Set(1530, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -600);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->pos.Set(1050, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -600);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	//(Toiletbowl)
+	toilet = new AABBObject();
+	toilet->Object = AABBObject::OBJECT_TYPE::TOILETBOWL;
+	toilet->active = true;
+	toilet->angle = 90;
+	toilet->rotate.Set(0, 1, 0);
+	toilet->pos.Set(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
+	toilet->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(toilet);
+	
+	//(bedside table)
+	bedside = new AABBObject();
+	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
+	bedside->active = true;
+	bedside->angle = -90;
+	bedside->rotate.Set(0, 1, 0);
+	bedside->pos.Set(1560, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -680);
+	bedside->scale.Set(2, 2, 2);
+	instance->Object_list.push_back(bedside);
+
+	bed = new AABBObject();
+	bed->Object = AABBObject::OBJECT_TYPE::BED;
+	bed->active = true;
+	bed->angle = -90;
+	bed->rotate.Set(0, 1, 0);
+	bed->pos.Set(1530, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
+	bed->scale.Set(25, 25, 25);
+	instance->Object_list.push_back(bed);
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//[Right] first room (front doors)
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	door->scale.Set(4, 4, 4);
+	door5 = door;
+	instance->Object_list.push_back(door);
+
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
+	door->scale.Set(4, 4, 4);
+	door6 = door;
+	instance->Object_list.push_back(door);
+
+	//(chairs)
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->pos.Set(500, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 610);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->angle = 180;
+	chair->rotate.Set(0, 1, 0);
+	chair->pos.Set(500, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 670);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	//(table)
+	table = new AABBObject();
+	table->Object = AABBObject::OBJECT_TYPE::TABLE;
+	table->active = true;
+	table->pos.Set(500, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 640);
+	table->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(table);
+
+	//(sofa)
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->angle = 180;
+	sofa->rotate.Set(0, 1, 0);
+	sofa->pos.Set(625, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 970);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	sofa = new AABBObject();
+	sofa->Object = AABBObject::OBJECT_TYPE::SOFA;
+	sofa->active = true;
+	sofa->pos.Set(625, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 770);
+	sofa->scale.Set(7, 7, 7);
+	instance->Object_list.push_back(sofa);
+
+	//(Toiletbowl)
+	toilet = new AABBObject();
+	toilet->Object = AABBObject::OBJECT_TYPE::TOILETBOWL;
+	toilet->active = true;
+	toilet->pos.Set(310, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 580);
+	toilet->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(toilet);
+
+	//(bedside table)
+	bedside = new AABBObject();
+	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
+	bedside->active = true;
+	bedside->angle = 90;
+	bedside->rotate.Set(0, 1, 0);
+	bedside->pos.Set(120, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 520);
+	bedside->scale.Set(2, 2, 2);
+	instance->Object_list.push_back(bedside);
+
+	//(bed)
+	bed = new AABBObject();
+	bed->Object = AABBObject::OBJECT_TYPE::BED;
+	bed->active = true;
+	bed->angle = 90;
+	bed->rotate.Set(0, 1, 0);
+	bed->pos.Set(150, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 460);
+	bed->scale.Set(25, 25, 25);
+	instance->Object_list.push_back(bed);
+
+	//(shelf)
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(220, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 950);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(165, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 950);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//[Right] second room (front doors)
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	door->scale.Set(4, 4, 4);
+	door7 = door;
+	instance->Object_list.push_back(door);
+
+	door = new AABBObject();
+	door->Object = AABBObject::OBJECT_TYPE::DOOR;
+	door->active = true;
+	door->pos.Set(1300, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
+	door->scale.Set(4, 4, 4);
+	door8 = door;
+	instance->Object_list.push_back(door);
+
+	//(chairs)
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->pos.Set(1400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 610);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	chair = new AABBObject();
+	chair->Object = AABBObject::OBJECT_TYPE::CHAIR;
+	chair->active = true;
+	chair->angle = 180;
+	chair->rotate.Set(0, 1, 0);
+	chair->pos.Set(1400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 670);
+	chair->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(chair);
+
+	//(table)
+	table = new AABBObject();
+	table->Object = AABBObject::OBJECT_TYPE::TABLE;
+	table->active = true;
+	table->pos.Set(1400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 640);
+	table->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(table);
+
+	//(bedside)
+	bedside = new AABBObject();
+	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
+	bedside->active = true;
+	bedside->angle = -90;
+	bedside->rotate.Set(0, 1, 0);
+	bedside->pos.Set(1570, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 510);
+	bedside->scale.Set(2, 2, 2);
+	instance->Object_list.push_back(bedside);
+
+	//(bed)
+	bed = new AABBObject();
+	bed->Object = AABBObject::OBJECT_TYPE::BED;
+	bed->active = true;
+	bed->angle = -90;
+	bed->rotate.Set(0, 1, 0);
+	bed->pos.Set(1520, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 460);
+	bed->scale.Set(25, 25, 25);
+	instance->Object_list.push_back(bed);
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	AABBObject* hammer = new AABBObject();
+	hammer->Object = AABBObject::OBJECT_TYPE::HAMMER;
+	hammer->active = true;
+	hammer->pos.Set(1525, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 925);
+	hammer->scale.Set(10, 10, 10);
+	hammerPtr = hammer;
+	instance->Object_list.push_back(hammer);
+
+	AABBObject* indoorGate = new AABBObject();
+	indoorGate->Object = AABBObject::OBJECT_TYPE::INDOORGATE;
+	indoorGate->active = true;
+	indoorGate->pos.Set(-400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 97);
+	indoorGate->scale.Set(1, 1.2, 1);
+	exitPtr = indoorGate;
+	instance->Object_list.push_back(indoorGate);
+
+///////////////////////////////////////////////////////////WALLS//////////////////////////////////////////////////////
+	//FIRST WALLS, LEFT SIDE
+	AABBObject* walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(-95, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, -95 / TERRAINSIZE.x, -15 / TERRAINSIZE.z), -100);
+	walls->scale.Set(70, 25, 22);
+	instance->Object_list.push_back(walls);
+	
+	//FIRST WALLS, RIGHT SIDE
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(-95, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, -95 / TERRAINSIZE.x, -15 / TERRAINSIZE.z), 305);
+	walls->scale.Set(70, 25, 22);
+	instance->Object_list.push_back(walls);
+
+	//FIRST DOOR, LEFT SIDE, WALL
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	walls->scale.Set(29, 25, 5);
+	instance->Object_list.push_back(walls);
+	
+	//FIRST DOOR, RIGHT SIDE, WALL
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -100);
+	walls->scale.Set(61, 25, 22);
+	instance->Object_list.push_back(walls);
+
+	//SECOND SET OF WALLS, LEFT SIDE
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(842, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 305);
+	walls->scale.Set(61, 25, 22);
+	instance->Object_list.push_back(walls);
+
+	//SECOND SET OF WALLS, RIGHT SIDE
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	walls->scale.Set(29, 25, 5);
+	instance->Object_list.push_back(walls);
+
+	//SECOND SET OF WALLS, LEFT SIDE (DOOR)
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	walls->scale.Set(29, 25, 5);
+	instance->Object_list.push_back(walls);
+
+	//SECOND SET OF WALLS, RIGHT SIDE (DOOR)
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z),370);
+	walls->scale.Set(29, 25, 5);
+	instance->Object_list.push_back(walls);
+	
+	//Back wall [Main corridoor]
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1455, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 90);
+	walls->scale.Set(5, 25, 60);
+	instance->Object_list.push_back(walls);
+
+	//First left door, Barricaded room
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(210, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -330);
+	walls->scale.Set(22, 20, 20);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, right wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(485, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
+	walls->scale.Set(5, 25, 20);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(625, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
+	walls->scale.Set(17, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, left wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
+	walls->scale.Set(3, 25, 20);
+	instance->Object_list.push_back(walls);
+
+	//First left door, toilet, back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -210);
+	walls->scale.Set(25, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//TOILET
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
+	walls->scale.Set(5, 10, 5);
+	instance->Object_list.push_back(walls);
+
+	//First left door, left most wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(90, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -490);
+	walls->scale.Set(3, 25, 90);
+	instance->Object_list.push_back(walls);
+	
+}
+
 void SceneLevel01::RenderGround()
 {
 	modelStack.PushMatrix();
@@ -996,20 +1208,39 @@ void SceneLevel01::RenderLevel(bool Light)
 	modelStack.Translate(500, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 100);
 	modelStack.Scale(1050, 1, 305);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[CEILING], Light);
+	RenderMesh(meshList[CEILING], true);
 	modelStack.PopMatrix();
 }
 
 void SceneLevel01::RenderRoomObjects(bool Light)
 {
-	//AABB cannot rotate by itself
+	//paintings
+	modelStack.PushMatrix();
+	modelStack.Translate(530, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -795);
+	modelStack.Scale(70, 40, 1);
+	RenderMesh(meshList[PAINTING], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(640, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -795);
+	modelStack.Scale(70, 40, 1);
+	RenderMesh(meshList[PAINTING], false);
+	modelStack.PopMatrix();
+
 	//[Left] first room
 	
+	modelStack.PushMatrix();
+	modelStack.Translate(463, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
+	modelStack.Scale(4, 3.5, 4);
+	modelStack.Rotate(-75, 0, 1, 0);
+	RenderMeshOutlined(meshList[DOOR], Light);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(398, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -505);
 	modelStack.Scale(300, 1, 300);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[ROOMCEILING], Light);
+	RenderMesh(meshList[ROOMCEILING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1025,20 +1256,13 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
-	modelStack.Scale(1, 1, 1);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMeshOutlined(meshList[TOILETBOWL], Light);
-	modelStack.PopMatrix();
-
 	//[Left] Second room
 
 	modelStack.PushMatrix();
 	modelStack.Translate(1295, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -505);
 	modelStack.Scale(300, 1, 300);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[ROOMCEILING], Light);
+	RenderMesh(meshList[ROOMCEILING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1062,12 +1286,6 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
-	modelStack.Scale(1, 1, 1);
-	modelStack.Rotate(90, 0, 1, 0);
-	RenderMeshOutlined(meshList[TOILETBOWL], Light);
-	modelStack.PopMatrix();
 
 	//[Right] first room
 
@@ -1075,7 +1293,7 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.Translate(398, 60 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
 	modelStack.Scale(300, 1, 300);
 	modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(meshList[ROOMCEILING], Light);
+	RenderMesh(meshList[ROOMCEILING], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1130,11 +1348,11 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.PopMatrix();
 
 	//test obj
-	/*modelStack.PushMatrix();
-	modelStack.Translate(401, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[PISTOLBULLET], Light);
-	modelStack.PopMatrix();*/
+	//modelStack.PushMatrix();
+	//modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	//modelStack.Scale(2, 2, 2);
+	//RenderMesh(meshList[BEDSIDE], false);
+	//modelStack.PopMatrix();
 
 }
 

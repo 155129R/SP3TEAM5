@@ -14,6 +14,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	void initSceneObjects();
+
 	void RenderGround();
 	void RenderSkyplane();
 	void RenderTerrain();
@@ -30,8 +32,6 @@ public:
 	void RenderPassGPass();
 	void RenderPassMain();
 	void RenderWorld();
-
-	void initSceneObjects();
 
 private:
 	float rotateAngle;

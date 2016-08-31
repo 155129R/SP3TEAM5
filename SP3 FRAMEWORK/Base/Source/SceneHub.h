@@ -60,6 +60,10 @@ private:
 
 	bool showBuy;
 	bool showSell;
+
+	int buySize;
+	int sellSize;
+
 };
 
 #endif

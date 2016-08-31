@@ -44,6 +44,7 @@ class Singleton
 		bool openDoor;
 		bool gotHammer;
 		float footstepDelay;
+		int money;
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
@@ -94,6 +95,8 @@ class Singleton
 
 		gotKey = false;
 		gotHammer = false;
+
+		money = 0;
 	}
 	~Singleton()
 	{

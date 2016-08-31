@@ -18,6 +18,9 @@ public:
 		TOILETBOWL,
 		TABLE,
 		HAMMER,
+		SOFA,
+		BEDSIDE,
+		SHELF,
 
 		//OUTDOOR
 		FOUNTAIN,
