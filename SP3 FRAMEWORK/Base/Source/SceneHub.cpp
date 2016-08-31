@@ -121,7 +121,7 @@ void SceneHub::initSceneObjects()
 
 void SceneHub::Update(double dt)
 {
-	std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 	timeb4disappear += dt;
 	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
 
@@ -1101,6 +1101,7 @@ void SceneHub::RenderPassMain()
 	{
 		RenderWeapons(false);
 		RenderInventory();
+		RenderGUI();
 	}
 	//Render objects
 	RenderLight();
@@ -1161,6 +1162,31 @@ void SceneHub::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.f, 15, 25);
 	}
 
+	if (Singleton::getInstance()->showShop == false)
+	{
+		ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
+		switch (weaponType)
+		{
+		case 1:
+			ss.str("");
+			ss.precision(5);
+			ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+			break;
+		case 2:
+			ss.str("");
+			ss.precision(5);
+			ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+			break;
+		case 3:
+
+			break;
+		}
+	}
+	
 	SceneBase::Render();
 
 }
