@@ -82,6 +82,10 @@ void Boss::Update(double dt)
 				pos.x += dir.x * speed * dt;
 				pos.z += dir.z * speed * dt;
 				mode_timer += dt;
+				if ((Singleton::getInstance()->player->getPosition() - pos).Length() <= 450)
+				{
+					mode_timer = 5.0f;
+				}
 			}
 			break;
 		}
@@ -96,7 +100,6 @@ void Boss::Update(double dt)
 			else
 			{
 				//Fires at the player meanwhile
-				float timer = 0.0f;
 				fire_rate = 0.8f;
 				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
@@ -116,7 +119,6 @@ void Boss::Update(double dt)
 			else
 			{
 				//Fires at the player meanwhile
-				float timer = 0.0f;
 				fire_rate = 0.2f;
 				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
