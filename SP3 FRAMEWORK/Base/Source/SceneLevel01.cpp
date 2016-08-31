@@ -1149,6 +1149,62 @@ void SceneLevel01::initSceneObjects()
 	walls->pos.Set(1288, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -440);
 	walls->scale.Set(26, 20, 16);
 	instance->Object_list.push_back(walls);
+
+	//Second left door, wall with door
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1005, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -485);
+	walls->scale.Set(3, 25, 60);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, left wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -485);
+	walls->scale.Set(3, 25, 64);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, right wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -485);
+	walls->scale.Set(3, 25, 64);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1298, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -800);
+	walls->scale.Set(64, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, room divider
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1208, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -718);
+	walls->scale.Set(3, 25, 20);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, Bedroom front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1430, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -650);
+	walls->scale.Set(32, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, Dining room front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1070, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -632);
+	walls->scale.Set(16, 25, 3);
+	instance->Object_list.push_back(walls);
 }
 
 void SceneLevel01::RenderGround()
