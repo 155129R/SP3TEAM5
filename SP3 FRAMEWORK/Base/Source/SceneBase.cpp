@@ -755,11 +755,11 @@ void SceneBase::Update(double dt)
 		{
 			reloadTime -= dt * 5;
 			pistolAmmo = 20;
-			
 			if (reloadTime <= 0)
 			{
 				reloading = false;
 				pistolMag--;
+				sound.playSoundEffect2D("Sound/reload.mp3");
 			}
 		}
 
@@ -772,6 +772,7 @@ void SceneBase::Update(double dt)
 			{
 				reloading = false;
 				rifleMag--;
+				sound.playSoundEffect2D("Sound/reload.mp3");
 			}
 		}
 
@@ -894,7 +895,8 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('W') || Application::IsKeyPressed('A') || Application::IsKeyPressed('S') || Application::IsKeyPressed('D'))
 	{
 		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME1 ||
-			Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2)
+			Singleton::getInstance()->program_state == Singleton::PROGRAM_GAME2 ||
+			Singleton::getInstance()->program_state == Singleton::PROGRAM_HUB)
 		{
 			if (Singleton::getInstance()->footstepDelay > 0.5 && Singleton::getInstance()->player->getRun() == 0)
 			{

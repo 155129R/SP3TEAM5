@@ -18,6 +18,8 @@ static const Vector3 TERRAINSIZE(1400.f, 200.0f, 1400.f);
 
 void SceneHub::Init()
 {
+	sound.playMusic("Sound/shopbgm.mp3");
+
 	showBuy = false;
 	showSell = false;
 	showDefault = true;
@@ -130,8 +132,8 @@ void SceneHub::Update(double dt)
 
 	SceneBase::Update(dt);
 
-	//sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
-	//	irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
+	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
+		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 	//cout << (Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() << endl;
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
@@ -142,6 +144,17 @@ void SceneHub::Update(double dt)
 			
 			if ((Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() < 150)
 			{
+				if (rand() % 2)
+				{
+					//sound.playSoundEffect3D("Sound/gorilla1.mp3", irrklang::vec3df(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15), false);
+					sound.playSoundEffect2D("Sound/gorilla1.mp3");
+				}
+				else
+				{
+					//sound.playSoundEffect3D("Sound/gorilla2.wav", irrklang::vec3df(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15), false);
+					sound.playSoundEffect2D("Sound/gorilla2.wav");
+				}
+					
 				cout <<"open shop" << endl;
 				if (Singleton::getInstance()->showShop == false)
 				{
@@ -228,24 +241,28 @@ void SceneHub::Update(double dt)
 	////////////////////////////////////////////////////////
 	if (Application::IsKeyPressed('V'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
+		sound.stopMusic();
 		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
@@ -520,16 +537,24 @@ void SceneHub::RenderShop()
 		if ((725 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 585 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 			(182 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 117 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
 		{
-			//MOUSE CLICK
-			if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+			//MOUSE CLICK	
+			if (!bLButtonState && Application::IsMousePressed(0))
 			{
+				bLButtonState = true;
+
 				showSell = true;
 				showBuy = false;
 				showDefault = false;
 				buySize = 5;
 				sellSize = 15;
+				sound.playSoundEffect2D("Sound/button.mp3");
 				RenderImageOnScreen(meshList[UI_SELL], Vector3(sellSize, sellSize, 1), Vector3(65, 45, 1), Vector3(0, 0, 0));
 			}
+			else if (bLButtonState && !Application::IsMousePressed(0))
+			{
+				bLButtonState = false;
+			}
+
 			//MOUSE HOVER
 			else
 			{
@@ -549,14 +574,21 @@ void SceneHub::RenderShop()
 			(182 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 117 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
 		{
 			//MOUSE CLICK
-			if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+			if (!bLButtonState && Application::IsMousePressed(0))
 			{
+				bLButtonState = true;
+
 				showSell = false;
 				showBuy = true;
 				showDefault = false;
 				buySize = 15;
 				sellSize = 5;
+				sound.playSoundEffect2D("Sound/button.mp3");
 				RenderImageOnScreen(meshList[UI_BUY], Vector3(buySize, buySize, 1), Vector3(50, 45, 1), Vector3(0, 0, 0));
+			}
+			else if (bLButtonState && !Application::IsMousePressed(0))
+			{
+				bLButtonState = false;
 			}
 			//MOUSE HOVER
 			else
@@ -577,11 +609,17 @@ void SceneHub::RenderShop()
 			(91 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 57 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
 		{
 			//MOUSE CLICK
-			if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+			if (!bLButtonState && Application::IsMousePressed(0))
 			{
+				bLButtonState = true;
+
 				Application::SetMousePosition(0, 0);
 				Application::HideCursor();
 				Singleton::getInstance()->showShop = false;
+			}
+			else if (bLButtonState && !Application::IsMousePressed(0))
+			{
+				bLButtonState = false;
 			}
 		}
 
@@ -661,6 +699,7 @@ void SceneHub::RenderShop()
 					{
 						Singleton::getInstance()->money -= 5;
 						pistolMag++;
+						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
 					{
@@ -689,6 +728,7 @@ void SceneHub::RenderShop()
 					{
 						Singleton::getInstance()->money -= 10;
 						rifleMag++;
+						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
 					{
@@ -717,6 +757,7 @@ void SceneHub::RenderShop()
 					{
 						Singleton::getInstance()->money -= 15;
 						instance->player->AddHealthpack(1);
+						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
 					{
@@ -782,6 +823,8 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
+						sound.playSoundEffect2D("Sound/sell.mp3");
+
 						if (Singleton::getInstance()->inventory[0]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[0]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[0]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[0]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[0]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[0]->howMuchItWorth;
@@ -807,6 +850,8 @@ void SceneHub::RenderShop()
 					if (!bLButtonState && Application::IsMousePressed(0))
 					{
 						bLButtonState = true;
+
+						sound.playSoundEffect2D("Sound/sell.mp3");
 
 						if (Singleton::getInstance()->inventory[1]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[1]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[1]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[1]->howMuchItWorth;
@@ -834,6 +879,8 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
+						sound.playSoundEffect2D("Sound/sell.mp3");
+
 						if (Singleton::getInstance()->inventory[2]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[2]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[2]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[2]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[2]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[2]->howMuchItWorth;
@@ -859,6 +906,8 @@ void SceneHub::RenderShop()
 					if (!bLButtonState && Application::IsMousePressed(0))
 					{
 						bLButtonState = true;
+
+						sound.playSoundEffect2D("Sound/sell.mp3");
 
 						if (Singleton::getInstance()->inventory[3]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[3]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[3]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[3]->howMuchItWorth;
@@ -886,6 +935,8 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
+						sound.playSoundEffect2D("Sound/sell.mp3");
+
 						if (Singleton::getInstance()->inventory[4]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[4]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[4]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[4]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[4]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[4]->howMuchItWorth;
@@ -911,6 +962,8 @@ void SceneHub::RenderShop()
 					if (!bLButtonState && Application::IsMousePressed(0))
 					{
 						bLButtonState = true;
+
+						sound.playSoundEffect2D("Sound/sell.mp3");
 
 						if (Singleton::getInstance()->inventory[5]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[5]->howMuchItWorth;
 						if (Singleton::getInstance()->inventory[5]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[5]->howMuchItWorth;
