@@ -601,9 +601,9 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
-						if (Singleton::getInstance()->inventory[0]->name == "ghost1") Singleton::getInstance()->money += 10;
-						if (Singleton::getInstance()->inventory[0]->name == "ghost2") Singleton::getInstance()->money += 20;
-						if (Singleton::getInstance()->inventory[0]->name == "ghost3") Singleton::getInstance()->money += 30;
+						if (Singleton::getInstance()->inventory[0]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[0]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[0]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[0]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[0]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[0]->howMuchItWorth;
 
 						if (Singleton::getInstance()->inventory.size() > 0)
 							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin());
@@ -627,9 +627,9 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
-						if (Singleton::getInstance()->inventory[1]->name == "ghost1") Singleton::getInstance()->money += 10;
-						if (Singleton::getInstance()->inventory[1]->name == "ghost2") Singleton::getInstance()->money += 20;
-						if (Singleton::getInstance()->inventory[1]->name == "ghost3") Singleton::getInstance()->money += 30;
+						if (Singleton::getInstance()->inventory[1]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[1]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[1]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[1]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[1]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[1]->howMuchItWorth;
 
 						if (Singleton::getInstance()->inventory.size() > 0)
 							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 1);
@@ -653,9 +653,9 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
-						if (Singleton::getInstance()->inventory[2]->name == "ghost1") Singleton::getInstance()->money += 10;
-						if (Singleton::getInstance()->inventory[2]->name == "ghost2") Singleton::getInstance()->money += 20;
-						if (Singleton::getInstance()->inventory[2]->name == "ghost3") Singleton::getInstance()->money += 30;
+						if (Singleton::getInstance()->inventory[2]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[2]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[2]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[2]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[2]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[2]->howMuchItWorth;
 
 						if (Singleton::getInstance()->inventory.size() > 0)
 							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 2);
@@ -679,9 +679,9 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
-						if (Singleton::getInstance()->inventory[3]->name == "ghost1") Singleton::getInstance()->money += 10;
-						if (Singleton::getInstance()->inventory[3]->name == "ghost2") Singleton::getInstance()->money += 20;
-						if (Singleton::getInstance()->inventory[3]->name == "ghost3") Singleton::getInstance()->money += 30;
+						if (Singleton::getInstance()->inventory[3]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[3]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[3]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[3]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[3]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[3]->howMuchItWorth;
 
 						if (Singleton::getInstance()->inventory.size() > 0)
 							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 3);
@@ -705,9 +705,9 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
-						if (Singleton::getInstance()->inventory[4]->name == "ghost1") Singleton::getInstance()->money += 10;
-						if (Singleton::getInstance()->inventory[4]->name == "ghost2") Singleton::getInstance()->money += 20;
-						if (Singleton::getInstance()->inventory[4]->name == "ghost3") Singleton::getInstance()->money += 30;
+						if (Singleton::getInstance()->inventory[4]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[4]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[4]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[4]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[4]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[4]->howMuchItWorth;
 
 						if (Singleton::getInstance()->inventory.size() > 0)
 							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 4);
@@ -731,9 +731,9 @@ void SceneHub::RenderShop()
 					{
 						bLButtonState = true;
 
-						if (Singleton::getInstance()->inventory[5]->name == "ghost1") Singleton::getInstance()->money += 10;
-						if (Singleton::getInstance()->inventory[5]->name == "ghost2") Singleton::getInstance()->money += 20;
-						if (Singleton::getInstance()->inventory[5]->name == "ghost3") Singleton::getInstance()->money += 30;
+						if (Singleton::getInstance()->inventory[5]->name == "ghost1") Singleton::getInstance()->money += Singleton::getInstance()->inventory[5]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[5]->name == "ghost2") Singleton::getInstance()->money += Singleton::getInstance()->inventory[5]->howMuchItWorth;
+						if (Singleton::getInstance()->inventory[5]->name == "ghost3") Singleton::getInstance()->money += Singleton::getInstance()->inventory[5]->howMuchItWorth;
 
 						if (Singleton::getInstance()->inventory.size() > 0)
 							Singleton::getInstance()->inventory.erase(Singleton::getInstance()->inventory.begin() + 5);

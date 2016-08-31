@@ -11,9 +11,9 @@ class Item
 {
 public:
 	string name;
-
+	int howMuchItWorth;
 	Item();
-	Item(string s);
+	Item(string s, int i);
 	~Item();
 	
 
