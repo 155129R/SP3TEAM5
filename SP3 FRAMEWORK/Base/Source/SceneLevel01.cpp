@@ -127,12 +127,12 @@ void SceneLevel01::Init()
 
 	initSceneObjects();
 
-	SpawnGhost();
+	//SpawnGhost();
 }
 
 void SceneLevel01::Update(double dt)
 {
-	//bLightEnabled = false;
+	bLightEnabled = false;
 
 	if (instance->openDoor == false)
 		camera.Update(dt);
@@ -1090,8 +1090,8 @@ void SceneLevel01::initSceneObjects()
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	walls->active = true;
-	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
-	walls->scale.Set(3, 25, 20);
+	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -385);
+	walls->scale.Set(3, 25, 80);
 	instance->Object_list.push_back(walls);
 
 	//First left door, toilet, back wall
@@ -1102,14 +1102,6 @@ void SceneLevel01::initSceneObjects()
 	walls->scale.Set(25, 25, 3);
 	instance->Object_list.push_back(walls);
 
-	//TOILET
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
-	walls->scale.Set(5, 10, 5);
-	instance->Object_list.push_back(walls);
-
 	//First left door, left most wall
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
@@ -1118,6 +1110,45 @@ void SceneLevel01::initSceneObjects()
 	walls->scale.Set(3, 25, 90);
 	instance->Object_list.push_back(walls);
 	
+	//First left door, Bedroom Front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(264, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -640);
+	walls->scale.Set(32, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//First left door, Bedroom right wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(470, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -720);
+	walls->scale.Set(4, 25, 19);
+	instance->Object_list.push_back(walls);
+
+	//First left door, Bedroom Back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(390, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -805);
+	walls->scale.Set(90, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, wall with main door
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1305, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -205);
+	walls->scale.Set(90, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, Barricaded room
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1288, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -440);
+	walls->scale.Set(26, 20, 16);
+	instance->Object_list.push_back(walls);
 }
 
 void SceneLevel01::RenderGround()
@@ -1545,46 +1576,49 @@ void SceneLevel01::RenderPassMain()
 	{
 		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
-
-	//On screen text
 	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	ss.str("");
-	ss << "pistol mag: " << pistolMag;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
+	if (showText)
+	{
+		//On screen text
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	ss.str("");
-	ss << "pistol ammo: " << pistolAmmo;
-//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
+		ss.str("");
+		ss << "pistol mag: " << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
 
-	ss.str("");
-	ss << "rifle mag: " << rifleMag;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
+		ss.str("");
+		ss << "pistol ammo: " << pistolAmmo;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "rifle ammo: " << rifleAmmo;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+		ss.str("");
+		ss << "rifle mag: " << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "Position z: " << camera.position.z;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
+		ss.str("");
+		ss.precision(5);
+		ss << "rifle ammo: " << rifleAmmo;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "Position x: " << camera.position.x;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+		ss.str("");
+		ss.precision(5);
+		ss << "Position z: " << camera.position.z;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
 
-	if (reloading){
-		std::ostringstream ss;
-		ss << "Reloading";
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+		ss.str("");
+		ss.precision(5);
+		ss << "Position x: " << camera.position.x;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+
+		if (reloading){
+			std::ostringstream ss;
+			ss << "Reloading";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+		}
+
 	}
-
 	switch (weaponType)
 	{
 	case 1:

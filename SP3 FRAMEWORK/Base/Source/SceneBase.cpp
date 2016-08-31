@@ -681,10 +681,12 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed(VK_F1))
 	{
 		ShowHitbox = true;
+		showText = true;
 	}
 	if (Application::IsKeyPressed(VK_F2))
 	{
 		ShowHitbox = false;
+		showText = false;
 	}
 
 	if (Application::IsKeyPressed('6'))
@@ -2466,7 +2468,7 @@ void SceneBase::RenderInventory()
 		//////////////////////
 		int sz2 = Singleton::getInstance()->inventory2ndRow.size();
 		//static bool bLButtonState = false;
-		cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
+		//cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
 		//system("CLS");
 
 		for (int i = 1; i <= sz2; i++)

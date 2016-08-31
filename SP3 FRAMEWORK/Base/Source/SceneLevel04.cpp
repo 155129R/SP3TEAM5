@@ -730,25 +730,27 @@ void SceneLevel04::RenderPassMain()
 	//bLightEnabled = false;
 
 	//On screen text
+	std::ostringstream ss;
 
-		std::ostringstream ss;
+	if (showText)
+	{
 		ss.precision(5);
 		ss << "FPS: " << fps;
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	{
-		std::ostringstream ss;
-		ss.precision(5);
-		ss << "Partition: " << getPartition(camera.position);
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+		{
+			std::ostringstream ss;
+			ss.precision(5);
+			ss << "Partition: " << getPartition(camera.position);
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+		}
+		{
+			std::ostringstream ss;
+			ss.precision(5);
+			ss << "Position: " << camera.position;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+		}
 	}
-	{
-		std::ostringstream ss;
-		ss.precision(5);
-		ss << "Position: " << camera.position;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
-	}
-
 	switch (weaponType)
 	{
 	case 1:
