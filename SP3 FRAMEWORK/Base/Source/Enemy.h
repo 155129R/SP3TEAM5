@@ -59,11 +59,9 @@ private:
 	Vector3 waypoint[2];
 	int travel_to;
 
-	Sound sound;
+	float AttackCD = 1.0f;
 
-	irrklang::ISoundEngine* ghost1 = irrklang::createIrrKlangDevice();
-	irrklang::ISoundEngine* ghost2 = irrklang::createIrrKlangDevice();
-	irrklang::ISoundEngine* ghost3 = irrklang::createIrrKlangDevice();
+	irrklang::ISoundEngine* ghost = irrklang::createIrrKlangDevice();
 };
 
 #endif

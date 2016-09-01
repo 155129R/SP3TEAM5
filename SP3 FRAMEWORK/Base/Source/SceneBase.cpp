@@ -280,6 +280,7 @@ void SceneBase::Init()
 	meshList[GEO_CACTUS] = MeshBuilder::GenerateOBJ("Cactus", "OBJ//Cactus.obj");
 	meshList[GEO_CACTUS]->textureArray[0] = LoadTGA("Image//Cactus.tga");
 
+	//Inventory and GUI
 	meshList[INVENTORY_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[INVENTORY_UI]->textureID = LoadTGA("Image//HUD//inventory.tga");
 
@@ -336,6 +337,9 @@ void SceneBase::Init()
 
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision.tga");
+
+	meshList[UI_CROSSHAIR] = MeshBuilder::GenerateQuad("Crosshair", Color(1, 1, 1), 1.f);
+	meshList[UI_CROSSHAIR]->textureID = LoadTGA("Image//HUD//Crosshair.tga");
 
 	//Particles
 	//meshList[GEO_PARTICLE_WATER] = MeshBuilder::GenerateSphere("lightball", Color(0.5, 0.5, 1), 18, 36, 1.f);
@@ -865,7 +869,7 @@ void SceneBase::Update(double dt)
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				500,
+				1000,
 				1000,
 				2
 				));
@@ -968,7 +972,7 @@ void SceneBase::Update(double dt)
 	}
 
 	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
+	//				Cheats to access all scenes			  //
 	////////////////////////////////////////////////////////
 	if (Application::IsKeyPressed('V'))
 	{
@@ -993,6 +997,12 @@ void SceneBase::Update(double dt)
 		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
+	if (Application::IsKeyPressed('C'))
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 	}
 }
 
@@ -1331,7 +1341,6 @@ void SceneBase::Render()
 {
 	//GUI Stuff
 	std::ostringstream ss;
-
 	if (instance->stateCheck == false && instance->openDoor == false)
 	{
 		ss.str("");
@@ -1357,6 +1366,8 @@ void SceneBase::Render()
 		{
 			RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 		}
+
+		RenderImageOnScreen(meshList[UI_CROSSHAIR], Vector3(4, 4, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
 	if (Singleton::getInstance()->stateCheck)
 	{
