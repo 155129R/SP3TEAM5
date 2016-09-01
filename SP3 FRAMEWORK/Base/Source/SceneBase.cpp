@@ -344,8 +344,11 @@ void SceneBase::Init()
 	//Player
 	meshList[GEO_STAMINA] = MeshBuilder::GenerateQuad("Stamina", Color(0, 1, 0), 1.f);
 
-	meshList[UI_POTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[UI_POTION] = MeshBuilder::GenerateQuad("Potion icon", Color(0, 0, 0), 1.f);
 	meshList[UI_POTION]->textureID = LoadTGA("Image//Hub//potionUI.tga");
+
+	meshList[GEO_TEXT_BOX] = MeshBuilder::GenerateQuad("dialogue box", Color(0, 0, 0), 1.f);
+	meshList[GEO_TEXT_BOX]->textureID = LoadTGA("Image//HUD//Dialogue_Box.tga");
 
 	//Minimap
 	m_Minimap = new Minimap();
@@ -940,6 +943,34 @@ void SceneBase::Update(double dt)
 			}
 		}
 	}
+
+	////////////////////////////////////////////////////////
+	//	for next time winning condition to go next scene  //
+	////////////////////////////////////////////////////////
+	if (Application::IsKeyPressed('V'))
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+	}
+	if (Application::IsKeyPressed('N'))
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+	}
+	if (Application::IsKeyPressed('M'))
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+	}
 }
 
 void SceneBase::UpdateShoot(double dt)
@@ -1302,7 +1333,6 @@ void SceneBase::Render()
 			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 	}
-
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -1326,7 +1356,7 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
-	std::cout << Singleton::getInstance()->player->GetFear() << std::endl;
+	//std::cout << Singleton::getInstance()->player->GetFear() << std::endl;
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
@@ -1963,7 +1993,6 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 		}
 	}
 }
-
 void SceneBase::RenderEnemies(bool ShowHitbox)
 {
 	playerPartition = getPartition(camera.position);
