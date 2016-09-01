@@ -602,11 +602,10 @@ void SceneLevel02::UpdateParticle(double dt)
 		particleWater1->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
 		//particleSmoke->scale.Set(5, 5, 5);
 		float range = 3;
-		particleWater1->vel.Set(Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range));
+		particleWater1->vel.Set(Math::RandFloatMinMax(-range, range), Math::RandFloatMinMax(10, 20),	Math::RandFloatMinMax(-range, range));
 		particleWater1->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
-		particleWater1->pos.Set(0, 80 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
+		//particleWater1->scale.Set(20, 20, 10);
+		particleWater1->pos.Set(0, 0, 0);
 	}
 
 	for (auto it : particleList)
@@ -628,7 +627,7 @@ void SceneLevel02::UpdateParticle(double dt)
 
 			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
 			{
-				particle->vel += m_gravity * (float)dt;
+				particle->vel += m_gravity * ((float)dt * 2);
 				particle->pos += particle->vel * (float)dt * 10.f;
 
 				//if particle reaches the terrain, it should not be inacitve
@@ -1089,6 +1088,9 @@ void SceneLevel02::RenderPassMain()
 
 		break;
 	}
+
+	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
 
 	SceneBase::Render();
 

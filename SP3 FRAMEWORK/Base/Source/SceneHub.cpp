@@ -630,6 +630,7 @@ void SceneHub::RenderShop()
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 40);
 			ss.str(""); ss.precision(5); ss << "help you?";
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 2.3f, 19, 37);
+
 		}
 		if (showBuy)
 		{

@@ -53,6 +53,9 @@ class Singleton
 		Item* item_ghost1;
 		Item* item_ghost2;
 		Item* item_ghost3;
+		Item* item_torchlight;
+		Item* item_nightVision;
+		Item* item_radar;
 		Camera3* singletonCamera;
 
 		//Environment
@@ -75,16 +78,27 @@ class Singleton
 		item_ghost1 = new Item("ghost1", 10);
 		item_ghost2 = new Item("ghost2", 20);
 		item_ghost3 = new Item("ghost3", 30);
+		item_torchlight = new Item("torchlight", 0);
+		item_nightVision = new Item("nightvision", 0);
+		item_radar = new Item("radar", 0);
 		mousex = 400;
 		mousey = 300;
 		footstepDelay = 0;
+		if (inventory2ndRow.size() < 6)
+		{
+			inventory2ndRow.push_back(item_torchlight);
+			inventory2ndRow.push_back(item_nightVision);
+			inventory2ndRow.push_back(item_radar);
+		}
+			
+
 
 		//program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
-		//program_state = PROGRAM_GAME2;
+		program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
-		program_state = PROGRAM_HUB;
+		//program_state = PROGRAM_HUB;
 
 		stateCheck = false;
 

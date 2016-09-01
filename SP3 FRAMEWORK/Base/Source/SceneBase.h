@@ -259,6 +259,9 @@ public:
 		INV_GHOST2,
 		INV_GHOST3,
 		INV_HOVER,
+		INV_TORCH_LIGHT,
+		INV_NIGHT_VISION,
+		INV_RADAR,
 
 		//shop
 		SHOP_UI,

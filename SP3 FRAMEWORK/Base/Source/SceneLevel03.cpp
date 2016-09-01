@@ -606,7 +606,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 
 void SceneLevel03::RenderHUD()
 {
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
+	//RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
 
 	RenderRadar();
 }
@@ -918,6 +918,10 @@ void SceneLevel03::RenderPassMain()
 
 		break;
 	}
+
+	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
 	SceneBase::Render();
 }
 

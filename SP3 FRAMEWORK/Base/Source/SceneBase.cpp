@@ -325,6 +325,15 @@ void SceneBase::Init()
 	meshList[INV_GHOST3] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
 	meshList[INV_GHOST3]->textureID = LoadTGA("Image//HUD//Ghost_3_icon.tga");
 
+	meshList[INV_TORCH_LIGHT] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[INV_TORCH_LIGHT]->textureID = LoadTGA("Image//HUD//torchLight.tga");
+
+	meshList[INV_NIGHT_VISION] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[INV_NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision_icon.tga");
+
+	meshList[INV_RADAR] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
+	meshList[INV_RADAR]->textureID = LoadTGA("Image//HUD//radar_icon.tga");
+
 	meshList[NIGHT_VISION] = MeshBuilder::GenerateQuad("NightVision", Color(1, 1, 1), 1.f);
 	meshList[NIGHT_VISION]->textureID = LoadTGA("Image//HUD//nightVision.tga");
 
@@ -483,7 +492,6 @@ void SceneBase::Init()
 	fearValueBar = 0;
 	gunUp = false;
 	gunDown = false;
-
 }
 
 void SceneBase::SpawnGhost()
@@ -2661,22 +2669,19 @@ void SceneBase::RenderInventory()
 			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "hammer")
 				RenderOBJOnScreen(meshList[HAMMER], 1.5, i * 7.6 + 12.4, 30.5, 10, 0, rotateKey * 20, 0, false);
 
+			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "torchlight")
+				RenderImageOnScreen(meshList[INV_TORCH_LIGHT], Vector3(6, 6, 1), Vector3(i * 7.6 + 12.4, 31.5, 1), Vector3(0, 0, 0));
+
+			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "nightvision")
+				RenderImageOnScreen(meshList[INV_NIGHT_VISION], Vector3(6, 5, 1), Vector3(i * 7.6 + 12.4, 31.5, 1), Vector3(0, 0, 0));
+
+			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "radar")
+				RenderImageOnScreen(meshList[INV_RADAR], Vector3(6, 4, 1), Vector3(i * 7.6 + 12.4, 31.5, 1), Vector3(0, 0, 0));
+
 			//SLOT 1
 			if ((230 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 165 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 1)
 			{
-				//MOUSE CLICK	
-				if (!bLButtonState && Application::IsMousePressed(0))
-				{
-					bLButtonState = true;
-					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
-						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin());
-					break;
-				}
-				else if (bLButtonState && !Application::IsMousePressed(0))
-				{
-					bLButtonState = false;
-				}
 				//MOUSE HOVER
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(19.7, 31.5, 1), Vector3(0, 0, 0));
@@ -2693,6 +2698,27 @@ void SceneBase::RenderInventory()
 						ss.str(""); ss.precision(5); ss << "This is a hammer ";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
+					if (Singleton::getInstance()->inventory2ndRow[0]->name == "torchlight")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a torchlight ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+
+						ss.str(""); ss.precision(5); ss << "Press 'F' to use it ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 14);
+					}
+					if (Singleton::getInstance()->inventory2ndRow[0]->name == "nightvision")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a nightvision ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+
+						ss.str(""); ss.precision(5); ss << "Press '6' to ON, '7' to OFF ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 14);
+					}
+					if (Singleton::getInstance()->inventory2ndRow[0]->name == "radar")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a radar ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
 				}
 			}
 
@@ -2700,18 +2726,6 @@ void SceneBase::RenderInventory()
 			if ((305 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 240 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 2)
 			{
-				//MOUSE CLICK
-				if (!bLButtonState && Application::IsMousePressed(0))
-				{
-					bLButtonState = true;
-					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
-						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 1);
-					break;
-				}
-				else if (bLButtonState && !Application::IsMousePressed(0))
-				{
-					bLButtonState = false;
-				}
 				//MOUSE HOVER
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(27.5, 31.5, 1), Vector3(0, 0, 0));
@@ -2728,6 +2742,27 @@ void SceneBase::RenderInventory()
 						ss.str(""); ss.precision(5); ss << "This is a hammer ";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
+					if (Singleton::getInstance()->inventory2ndRow[1]->name == "torchlight")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a torchlight ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+
+						ss.str(""); ss.precision(5); ss << "Press 'F' to use it ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 14);
+					}
+					if (Singleton::getInstance()->inventory2ndRow[1]->name == "nightvision")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a nightvision ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+
+						ss.str(""); ss.precision(5); ss << "Press '6' to ON, '7' to OFF ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 14);
+					}
+					if (Singleton::getInstance()->inventory2ndRow[1]->name == "radar")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a radar ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
 				}
 			}
 
@@ -2735,18 +2770,6 @@ void SceneBase::RenderInventory()
 			if ((380 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 315 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 3)
 			{
-				//MOUSE CLICK
-				if (!bLButtonState && Application::IsMousePressed(0))
-				{
-					bLButtonState = true;
-					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
-						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 2);
-					break;
-				}
-				else if (bLButtonState && !Application::IsMousePressed(0))
-				{
-					bLButtonState = false;
-				}
 				//MOUSE HOVER
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(35.3, 31.5, 1), Vector3(0, 0, 0));
@@ -2763,6 +2786,11 @@ void SceneBase::RenderInventory()
 						ss.str(""); ss.precision(5); ss << "This is a hammer ";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
+					if (Singleton::getInstance()->inventory2ndRow[2]->name == "radar")
+					{
+						ss.str(""); ss.precision(5); ss << "This is a radar ";
+						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
+					}
 				}
 			}
 
@@ -2770,18 +2798,6 @@ void SceneBase::RenderInventory()
 			if ((455 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 390 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 4)
 			{
-				//MOUSE CLICK
-				if (!bLButtonState && Application::IsMousePressed(0))
-				{
-					bLButtonState = true;
-					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
-						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 3);
-					break;
-				}
-				else if (bLButtonState && !Application::IsMousePressed(0))
-				{
-					bLButtonState = false;
-				}
 				//MOUSE HOVER
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(43.1, 31.5, 1), Vector3(0, 0, 0));
@@ -2805,18 +2821,6 @@ void SceneBase::RenderInventory()
 			if ((530 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 465 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 5)
 			{
-				//MOUSE CLICK
-				if (!bLButtonState && Application::IsMousePressed(0))
-				{
-					bLButtonState = true;
-					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
-						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 4);
-					break;
-				}
-				else if (bLButtonState && !Application::IsMousePressed(0))
-				{
-					bLButtonState = false;
-				}
 				//MOUSE HOVER
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(50.9, 31.5, 1), Vector3(0, 0, 0));
@@ -2840,18 +2844,6 @@ void SceneBase::RenderInventory()
 			if ((605 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 540 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 				(315 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 250 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey) && i == 6)
 			{
-				//MOUSE CLICK
-				if (!bLButtonState && Application::IsMousePressed(0))
-				{
-					bLButtonState = true;
-					if (Singleton::getInstance()->inventory2ndRow.size() > 0)
-						Singleton::getInstance()->inventory2ndRow.erase(Singleton::getInstance()->inventory2ndRow.begin() + 5);
-					break;
-				}
-				else if (bLButtonState && !Application::IsMousePressed(0))
-				{
-					bLButtonState = false;
-				}
 				//MOUSE HOVER
 				{
 					RenderImageOnScreen(meshList[INV_HOVER], Vector3(6.5, 6.5, 1), Vector3(58.7, 31.5, 1), Vector3(0, 0, 0));
