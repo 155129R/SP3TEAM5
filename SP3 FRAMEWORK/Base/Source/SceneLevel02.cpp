@@ -1105,15 +1105,6 @@ void SceneLevel02::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
 
-	//render shapes
-	if (Axis == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_AXES], false);
-		modelStack.PopMatrix();
-	}
-
 	RenderWeapons(false);
 	RenderInventory();
 	RenderGUI();

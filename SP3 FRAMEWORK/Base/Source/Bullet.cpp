@@ -51,7 +51,7 @@ void Bullet::Update(double dt)
 	{
 		if (Singleton::getInstance()->boss->Hitbox.Collide(position, true))
 		{
-			Singleton::getInstance()->boss->damage(1);
+			Singleton::getInstance()->boss->damage(damage);
 			deleteBullet = true;
 		}
 		else if (distanceTravelled >= range)

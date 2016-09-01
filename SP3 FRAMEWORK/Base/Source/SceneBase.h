@@ -368,6 +368,18 @@ protected:
 	MS viewStack;
 	MS projectionStack;
 
+	//Toggle Axis
+	bool Axis;
+	float Axis_Wait;
+
+	//Toggle FlashLight
+	bool Flashlight = true;
+	float Flashlight_Wait = 0.0f;
+
+	//Toggle Fog
+	bool FogEffect;
+	bool Switch;
+
 	Light lights[2];
 
 	bool mode = false;

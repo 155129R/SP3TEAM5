@@ -733,16 +733,6 @@ void SceneLevel04::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
 
-
-	//render shapes
-	if (Axis == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_AXES], false);
-		modelStack.PopMatrix();
-	}
-
 	if (instance->gameWin)
 	{
 		RenderImageOnScreen(meshList[GAME_WIN], /*Vector3(80, 17, 1)*/Vector3(5 * scaleWin, 1 * scaleWin, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));

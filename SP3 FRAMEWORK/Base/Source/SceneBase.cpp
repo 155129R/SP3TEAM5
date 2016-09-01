@@ -775,6 +775,89 @@ void SceneBase::Update(double dt)
 	{
 		weaponType = 3;
 	}
+
+
+	if (Flashlight)
+	{
+		Vector3 view = (camera.target - camera.position).Normalized();
+		lights[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
+		lights[1].spotDirection.Set(-view.x, -view.y, -view.z);
+	}
+
+	//TOGGLE AXIS
+	if (Application::IsKeyPressed('X') && Axis_Wait >= 0.5f)
+	{
+		Axis_Wait = 0.0f;
+		if (Axis == false)
+		{
+			Axis = true;
+		}
+		else if (Axis == true)
+		{
+			Axis = false;
+		}
+	}
+	else
+	{
+		Axis_Wait += dt;
+	}
+
+	if (Application::IsKeyPressed('F') && Flashlight_Wait >= 0.5f)
+	{
+		Flashlight_Wait = 0.0f;
+		if (Flashlight == false)
+		{
+			lights[1].power = 15.0f;
+			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
+			Flashlight = true;
+		}
+		else if (Flashlight == true)
+		{
+			lights[1].power = 0.0f;
+			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
+			Flashlight = false;
+		}
+	}
+	else
+	{
+		Flashlight_Wait += dt;
+	}
+
+	//TOGGLE FogEffect
+	if (Application::IsKeyPressed('Z'))
+	{
+		Switch = true;
+	}
+	if (Switch)
+	{
+		if (FogEffect == true)
+		{
+			if (FogAmount > 1500)
+			{
+				FogAmount -= 3000 * dt;
+				glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			}
+			else
+			{
+				FogEffect = false;
+				Switch = false;
+			}
+		}
+		if (FogEffect == false)
+		{
+			if (FogAmount < 6000)
+			{
+				FogAmount += 3000 * dt;
+				glUniform1f(m_parameters[U_FOG_END], FogAmount);
+			}
+			else
+			{
+				FogEffect = true;
+				Switch = false;
+			}
+		}
+	}
+
 	//reloading
 	if (reloading == false)
 		reloadTime = 1.f;
@@ -1339,6 +1422,15 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
+	//render shapes
+	if (Axis == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Scale(1000, 1000, 1000);
+		RenderMesh(meshList[GEO_AXES], false);
+		modelStack.PopMatrix();
+	}
+
 	//GUI Stuff
 	std::ostringstream ss;
 	if (instance->stateCheck == false && instance->openDoor == false && instance->showShop == false)
