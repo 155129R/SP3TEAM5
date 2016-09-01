@@ -485,12 +485,9 @@ void SceneBase::Init()
 
 	characterHeight = 7.f;
 
-	Singleton::getInstance()->player->Init();
-
 	//Loading text file
 	ReadFile("Text//Ghost_Amount.csv", ghost_Amount);
 
-	Singleton::getInstance()->player->Init();
 
 	delay = 0;
 
@@ -736,20 +733,9 @@ void SceneBase::Update(double dt)
 	{
 		nightVision = true;
 	}
-	if (nightVision)
-	{
-		lights[0].power = 4.f;
-		lights[0].color = (0.1f, 0.8f, 0.5f);
-		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
-		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
-	}
 	if (Application::IsKeyPressed('7'))
 	{
 		nightVision = false;
-		lights[0].power = 0.5f;
-		lights[0].color = (0.f, 0.2f, 0.4f);
-		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
-		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	}
 	if (Application::IsKeyPressed(VK_F8))
 	{
@@ -3209,7 +3195,6 @@ void SceneBase::Exit()
 	}
 	instance->Object_list.clear();
 	instance->Enemy_list.clear();
-
 	glDeleteProgram(m_programID);
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);

@@ -87,6 +87,8 @@ class Singleton
 	{
 		//init stuff here
 		player = new Player();
+        player->Init();
+
 		boss = new Boss();
 		item_key = new Item("key", 0);
 		item_hammer = new Item("hammer", 0);
