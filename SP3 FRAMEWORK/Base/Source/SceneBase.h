@@ -222,6 +222,7 @@ public:
 		BUTTON_INSTRUCTION,
 		BUTTON_EXIT,
 		GEO_KEY,
+		QUEST_EXIT,
 
 		//level 03
 		GEO_CACTUS,
@@ -260,6 +261,9 @@ public:
 		INV_GHOST2,
 		INV_GHOST3,
 		INV_HOVER,
+		INV_TORCH_LIGHT,
+		INV_NIGHT_VISION,
+		INV_RADAR,
 
 		//shop
 		SHOP_UI,

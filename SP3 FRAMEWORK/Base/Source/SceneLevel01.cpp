@@ -2510,6 +2510,9 @@ void SceneLevel01::RenderPassMain()
 		break;
 	}
 
+	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
 	//Dialogues
 	if (Dialogues)
 	{
@@ -2523,7 +2526,6 @@ void SceneLevel01::RenderPassMain()
 		ss << "Press E to continue...";
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
 	}
-
 	SceneBase::Render();
 }
 
