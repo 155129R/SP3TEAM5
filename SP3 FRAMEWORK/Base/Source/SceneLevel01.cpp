@@ -2602,10 +2602,7 @@ void SceneLevel01::RenderPassMain()
 	std::ostringstream ss;
 
 
-	if (timerstart && timer < 3.f)
-	{
-		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
-	}
+	
 
 	if (reloading){
 		std::ostringstream ss;
@@ -2621,23 +2618,6 @@ void SceneLevel01::RenderPassMain()
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
-		ss.str("");
-		ss << "pistol mag: " << pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
-
-		ss.str("");
-		ss << "pistol ammo: " << pistolAmmo;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
-
-		ss.str("");
-		ss << "rifle mag: " << rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
-
-		ss.str("");
-		ss.precision(5);
-		ss << "rifle ammo: " << rifleAmmo;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 
 		ss.str("");
 		ss.precision(5);
@@ -2661,13 +2641,13 @@ void SceneLevel01::RenderPassMain()
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:
@@ -2692,7 +2672,10 @@ void SceneLevel01::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
 	}
 	SceneBase::Render();
-
+	if (timerstart && timer < 3.f)
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
+	}
 }
 
 void SceneLevel01::Render()

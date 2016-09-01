@@ -769,11 +769,11 @@ void SceneHub::RenderShop()
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 52, 16);
 
 			RenderImageOnScreen(meshList[UI_AMMO_PISTOL], Vector3(5, 4, 1), Vector3(48, 13, 1), Vector3(0, 0, 0));
-			ss.str(""); ss.precision(5); ss << pistolMag;
+			ss.str(""); ss.precision(5); ss << instance->pistolMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 48, 8);
 
 			RenderImageOnScreen(meshList[UI_AMMO_RIFLE], Vector3(9, 4, 1), Vector3(58, 13, 1), Vector3(0, 0, 0));
-			ss.str(""); ss.precision(5); ss << rifleMag;
+			ss.str(""); ss.precision(5); ss << instance->rifleMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 58, 8);
 
 			RenderImageOnScreen(meshList[UI_POTION], Vector3(4, 4, 1), Vector3(68, 13, 1), Vector3(0, 0, 0));
@@ -816,7 +816,7 @@ void SceneHub::RenderShop()
 					if (Singleton::getInstance()->money >= 5)
 					{
 						Singleton::getInstance()->money -= 5;
-						pistolMag++;
+						instance->pistolMag++;
 						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
@@ -845,7 +845,7 @@ void SceneHub::RenderShop()
 					if (Singleton::getInstance()->money >= 10)
 					{
 						Singleton::getInstance()->money -= 10;
-						rifleMag++;
+						instance->rifleMag++;
 						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
@@ -1327,13 +1327,13 @@ void SceneHub::RenderPassMain()
 		case 1:
 			ss.str("");
 			ss.precision(5);
-			ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+			ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 			break;
 		case 2:
 			ss.str("");
 			ss.precision(5);
-			ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+			ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 			break;
 		case 3:

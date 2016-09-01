@@ -911,13 +911,13 @@ void SceneLevel03::RenderPassMain()
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:

@@ -186,6 +186,7 @@ public:
 		//PLAYER
 		GEO_STAMINA,
 		NIGHT_VISION,
+		GEO_TEXT_BOX,
 
 		//Minimap
 		GEO_VIEW,
