@@ -13,7 +13,6 @@ void Player::Init()
 {
 	weaponType = WEAPON_TYPE::W_PISTOL;
 	weapon_value = 1;
-	Healthpacks = 0;
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
 
@@ -200,17 +199,17 @@ void Player::setRun(bool run)
 
 void Player::AddHealthpack(int Amount)
 {
-	Healthpacks += Amount;
+	Singleton::getInstance()->Healthpacks += Amount;
 }
 int Player::getHealthPack()
 {
-	return Healthpacks;
+	return Singleton::getInstance()->Healthpacks;
 }
 void Player::UseHealthpack()
 {
-	if (Healthpacks > 0)
+	if (Singleton::getInstance()->Healthpacks > 0)
 	{
-		Healthpacks -= 1;
+		Singleton::getInstance()->Healthpacks -= 1;
 		fear_value -= 20;
 		if (fear_value <= 0)
 		{

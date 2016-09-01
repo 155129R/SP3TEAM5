@@ -73,7 +73,6 @@ private:
 	float recharge;
 
 	Vector3 position;
-	int Healthpacks;
 };
 
 #endif

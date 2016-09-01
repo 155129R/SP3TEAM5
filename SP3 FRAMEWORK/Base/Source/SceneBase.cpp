@@ -1341,7 +1341,7 @@ void SceneBase::Render()
 {
 	//GUI Stuff
 	std::ostringstream ss;
-	if (instance->stateCheck == false && instance->openDoor == false)
+	if (instance->stateCheck == false && instance->openDoor == false && instance->showShop == false)
 	{
 		ss.str("");
 		ss << instance->player->getHealthPack();
