@@ -278,6 +278,7 @@ public:
 		//HUB
 		GEO_HUB,
 		GEO_SHOPKEEPER,
+		SHOP_BG,
 
 		//UI
 		UI_VACUUM,

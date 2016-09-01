@@ -38,6 +38,9 @@ void SceneHub::Init()
 	meshList[GEO_HUB]->textureArray[0] = LoadTGA("Image//Hub//hub.tga");
 	meshList[GEO_HUB]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
 
+	meshList[SHOP_BG] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[SHOP_BG]->textureArray[0] = LoadTGA("Image//Hub//shopBG.tga");
+
 	meshList[SHOP_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[SHOP_UI]->textureID = LoadTGA("Image//Hub//shopUI.tga");
 
@@ -554,6 +557,13 @@ void SceneHub::RenderOthers(bool Light)
 	modelStack.Scale(140, 140, 140);
 	modelStack.Rotate(shopkeeperAngle - 90, 0, 1, 0);
 	RenderMeshOutlined(meshList[GEO_SHOPKEEPER], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(400, 100, 0);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(600, 300, 140);
+	RenderMesh(meshList[SHOP_BG], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();

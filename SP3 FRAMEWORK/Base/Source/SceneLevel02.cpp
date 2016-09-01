@@ -1093,16 +1093,6 @@ void SceneLevel02::RenderPassMain()
 		RenderMeshOutlined(meshList[QUEST_EXIT], false);
 		modelStack.PopMatrix();
 		glEnable(GL_DEPTH_TEST);
-
-		ss.str("");
-		ss.precision(5);
-		ss << "Get away from here!!";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.5f, 10, 30);
-
-		ss.str("");
-		ss.precision(5);
-		ss << "Distance left: " << distanceLeft;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.f, 15, 25);
 	}
 	
 	switch (weaponType)
