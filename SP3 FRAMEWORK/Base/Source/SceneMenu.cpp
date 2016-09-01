@@ -55,6 +55,10 @@ void SceneMenu::Init()
 	meshList[GAME_CREDITS] = MeshBuilder::GenerateQuad("GAME_CREDITS", Color(0, 0, 0), 1.f);
 	meshList[GAME_CREDITS]->textureID = LoadTGA("Image//Screen//creditsMenu.tga");
 
+    meshList[GAME_INSTRUCTIONS] = MeshBuilder::GenerateQuad("GAME_INSTRUCTIONS", Color(0, 0, 0), 1.f);
+    meshList[GAME_INSTRUCTIONS]->textureID = LoadTGA("Image//Screen//instructions.tga");
+
+
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
@@ -569,6 +573,11 @@ void SceneMenu::RenderHUD()
 		//MOUSE CLICK
 		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
 		{
+            if (!instance->gameInstructions)
+            {
+                instance->gameInstructions = true;
+                instance->gameCredit = false;
+            }
 			RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
 		}
 		//MOUSE HOVER
@@ -591,9 +600,11 @@ void SceneMenu::RenderHUD()
 		//MOUSE CLICK
 		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
 		{
-			if (!instance->gameCredit)
-				instance->gameCredit = true;
-
+            if (!instance->gameCredit)
+            {
+                instance->gameInstructions = false;
+                instance->gameCredit = true;
+            }
 			RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
 		}
 		//MOUSE HOVER
@@ -638,6 +649,10 @@ void SceneMenu::RenderHUD()
 	//RENDER CREDITS IF CLICKED ON
 	if (instance->gameCredit)
 		RenderImageOnScreen(meshList[GAME_CREDITS], Vector3(25, 30, 50), Vector3(25, 18, 0), Vector3(0, 0, 0));
+
+    //RENDER INSTRUCTIONS IF CLICKED ON
+    if (instance->gameInstructions)
+        RenderImageOnScreen(meshList[GAME_INSTRUCTIONS], Vector3(40, 45, 65), Vector3(25, 23, 0), Vector3(0, 0, 0));
 
 }
 

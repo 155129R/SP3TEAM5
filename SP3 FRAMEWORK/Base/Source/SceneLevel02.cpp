@@ -138,6 +138,7 @@ void SceneLevel02::Init()
 	lights[0].power = 2.f;
 
 	InitPartitioning();
+    spatialPartitioning = false;
 }
 
 void SceneLevel02::initSceneObjects()
