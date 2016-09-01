@@ -47,6 +47,14 @@ class Singleton
 		bool gameWin;
 		bool gameCredit;
 
+		double maxPistolAmmo;
+		double pistolMag;
+		double pistolAmmo;
+
+		double maxRifleAmmo;
+		double rifleMag;
+		double rifleAmmo;
+
 		float footstepDelay;
 		int money;
 		bool noClip;
@@ -118,6 +126,14 @@ class Singleton
 		gameCredit = false;
 
 		money = 0;
+
+		maxPistolAmmo = 20;
+		pistolMag = 2;
+		pistolAmmo = maxPistolAmmo;
+
+		maxRifleAmmo = 10;
+		rifleMag = 1;
+		rifleAmmo = maxRifleAmmo;
 	}
 	~Singleton()
 	{

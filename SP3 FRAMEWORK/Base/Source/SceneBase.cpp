@@ -777,35 +777,35 @@ void SceneBase::Update(double dt)
 
 	if (Application::IsKeyPressed('R'))
 	{
-		if (weaponType == 1 && pistolMag > 0 && pistolAmmo < maxPistolAmmo)
+		if (weaponType == 1 && instance->pistolMag > 0 && instance->pistolAmmo < instance->maxPistolAmmo)
 			reloading = true;
-		if (weaponType == 2 && rifleMag > 0 && rifleAmmo < maxRifleAmmo)
+		if (weaponType == 2 && instance->rifleMag > 0 && instance->rifleAmmo < instance->maxRifleAmmo)
 			reloading = true;
 	}
 
 	if (reloading)
 	{
-		if (weaponType == 1 && pistolMag > 0)
+		if (weaponType == 1 && instance->pistolMag > 0)
 		{
 			reloadTime -= dt * 5;
-			pistolAmmo = 20;
+			instance->pistolAmmo = 20;
 			if (reloadTime <= 0)
 			{
 				reloading = false;
-				pistolMag--;
+				instance->pistolMag--;
 				sound.playSoundEffect2D("Sound/reload.mp3");
 			}
 		}
 
-		if (weaponType == 2 && rifleMag > 0)
+		if (weaponType == 2 && instance->rifleMag > 0)
 		{
 			reloadTime -= dt * 5;
-			rifleAmmo = 10;
+			instance->rifleAmmo = 10;
 
 			if (reloadTime <= 0)
 			{
 				reloading = false;
-				rifleMag--;
+				instance->rifleMag--;
 				sound.playSoundEffect2D("Sound/reload.mp3");
 			}
 		}
@@ -815,12 +815,12 @@ void SceneBase::Update(double dt)
 	//weapon shooting with cooldowns
 	if (weaponType == 1)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate) && reloading == false && pistolAmmo > 0)
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate) && reloading == false && instance->pistolAmmo > 0)
 		{
 			sound.playSoundEffect2D("Sound/shoot.wav");
 
 			gunDown = true;
-			pistolAmmo--;
+			instance->pistolAmmo--;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -855,12 +855,12 @@ void SceneBase::Update(double dt)
 	}
 	else if (weaponType == 2)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate) && reloading == false && rifleAmmo > 0)
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate) && reloading == false && instance->rifleAmmo > 0)
 		{
 			//sound.playSoundEffect2D("Sound/spray.wav");
 			sound.playSoundEffect2D("Sound/shoot.mp3");
 			gunDown = true;
-			rifleAmmo--;
+			instance->rifleAmmo--;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -2449,15 +2449,15 @@ void SceneBase::RenderGUI()
 	case 1:
 		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
 		RenderImageOnScreen(meshList[UI_BOX2],
-			Vector3(((pistolAmmo / maxPistolAmmo) * 18), 6, 1),
-			Vector3(((pistolAmmo / maxPistolAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
+			Vector3(((instance->pistolAmmo / instance->maxPistolAmmo) * 18), 6, 1),
+			Vector3(((instance->pistolAmmo / instance->maxPistolAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
 
 		break;
 	case 2:
 		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
 		RenderImageOnScreen(meshList[UI_BOX2],
-			Vector3(((rifleAmmo / maxRifleAmmo) * 18), 6, 1),
-			Vector3(((rifleAmmo / maxRifleAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
+			Vector3(((instance->rifleAmmo / instance->maxRifleAmmo) * 18), 6, 1),
+			Vector3(((instance->rifleAmmo / instance->maxRifleAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
 
 		break;
 	case 3:
