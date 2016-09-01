@@ -60,6 +60,9 @@ class Singleton
 		float footstepDelay;
 		int money;
 		bool noClip;
+
+		int Healthpacks;
+
 		//ADD UNIVERSAL STUFF HERE
 		Player* player;
 		Boss* boss;
@@ -130,6 +133,7 @@ class Singleton
 		gameCredit = false;
 
 		money = 0;
+		Healthpacks = 0;
 
 		maxPistolAmmo = 20;
 		pistolMag = 2;
@@ -147,6 +151,9 @@ class Singleton
 		delete item_ghost1;
 		delete item_ghost2;
 		delete item_ghost3;
+		delete item_torchlight;
+		delete item_nightVision;
+		delete item_radar;
 	}
 };
 

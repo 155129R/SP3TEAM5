@@ -375,6 +375,7 @@ void SceneLevel02::Update(double dt)
 	{
 		if (distanceLeft < 50)
 		{
+			fountainsfx->stopAllSounds();
 			sound.stopMusic();
 			Singleton::getInstance()->stateCheck = true;
 			Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
@@ -627,6 +628,25 @@ void SceneLevel02::Update(double dt)
 
 	rotateAngle += (float)(1 * dt);
 
+	////////////////////////////////////////////////////////
+	//	for next time winning condition to go next scene  //
+	////////////////////////////////////////////////////////
+	if (Application::IsKeyPressed('V'))
+	{
+		fountainsfx->stopAllSounds();
+	}
+	if (Application::IsKeyPressed('B'))
+	{
+		fountainsfx->stopAllSounds();
+	}
+	if (Application::IsKeyPressed('N'))
+	{
+		fountainsfx->stopAllSounds();
+	}
+	if (Application::IsKeyPressed('M'))
+	{
+		fountainsfx->stopAllSounds();
+	}
 
 	fps = (float)(1.f / dt);
 }
