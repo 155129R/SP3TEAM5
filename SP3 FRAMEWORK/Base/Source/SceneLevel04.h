@@ -23,7 +23,6 @@ public:
 	void RenderSprite();
 	void RenderHUD();
 	void RenderLight();
-	void RenderTombstone(bool Light);
 	void UpdateParticle(double dt);
 	ParticleObject* GetParticles(void);
 	void RenderParticle(ParticleObject* particle);
@@ -34,7 +33,7 @@ public:
 
 private:
 	float rotateAngle;
-
+	int yOffset;
 	//Toggle Axis
 	bool Axis;
 	float Axis_Wait;
@@ -48,7 +47,6 @@ private:
 	bool Switch;
 
 	std::vector<Vector3> gravePos;
-	std::vector<Vector3> pocongPos;
 
 	int lightningRand;
 	bool lightning;

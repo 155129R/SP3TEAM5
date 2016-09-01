@@ -81,7 +81,6 @@ class Singleton
 
 		//program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
-
 		//program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
@@ -100,7 +99,6 @@ class Singleton
 	}
 	~Singleton()
 	{
-		delete player;
 		delete boss;
 		delete item_key;
 	}

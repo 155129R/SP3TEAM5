@@ -81,6 +81,11 @@ void SceneLevel01::Init()
 	meshList[CHAIR] = MeshBuilder::GenerateOBJ("Chair", "OBJ//Indoor//chair.obj");
 	meshList[CHAIR]->textureArray[0] = LoadTGA("Image//Indoor//chair.tga");
 
+	meshList[ELEVATOR] = MeshBuilder::GenerateOBJ("ELEVATOR", "OBJ//Indoor//elevator.obj");
+	meshList[ELEVATOR]->textureArray[0] = LoadTGA("Image//Indoor//elevator.tga");
+
+	meshList[ELEVATORCOVER] = MeshBuilder::GenerateOBJ("ELEVATORCOVER", "OBJ//Indoor//elevatorCover.obj");
+	meshList[ELEVATORCOVER]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
 
 	meshList[SOFA] = MeshBuilder::GenerateOBJ("SOFA", "OBJ//Indoor//sofa.obj");
 	meshList[SOFA]->textureArray[0] = LoadTGA("Image//Indoor//sofa.tga");
@@ -91,12 +96,31 @@ void SceneLevel01::Init()
 	meshList[BEDSIDE] = MeshBuilder::GenerateOBJ("BEDSIDE", "OBJ//Indoor//bedside.obj");
 	meshList[BEDSIDE]->textureArray[0] = LoadTGA("Image//Indoor//bedside.tga");
 
+	meshList[SINK] = MeshBuilder::GenerateOBJ("SINK", "OBJ//Indoor//sink.obj");
+	meshList[SINK]->textureArray[0] = LoadTGA("Image//Indoor//sink.tga");
+
+	meshList[CRATE] = MeshBuilder::GenerateOBJ("CRATE", "OBJ//Indoor//crate.obj");
+	meshList[CRATE]->textureArray[0] = LoadTGA("Image//Indoor//crate.tga");
+
+	//harambe
 	meshList[PAINTING] = MeshBuilder::GenerateQuad("PAINTING", Color(0, 0, 0), 1.f);
-	meshList[PAINTING]->textureArray[0] = LoadTGA("Image//Indoor//harambe.tga");
+	meshList[PAINTING]->textureArray[0] = LoadTGA("Image//Indoor//paintingHarambe.tga");
+	//starry night
+	meshList[PAINTING2] = MeshBuilder::GenerateQuad("PAINTING2", Color(0, 0, 0), 1.f);
+	meshList[PAINTING2]->textureArray[0] = LoadTGA("Image//Indoor//painting1.tga");
+	//city lights
+	meshList[PAINTING3] = MeshBuilder::GenerateQuad("PAINTING3", Color(0, 0, 0), 1.f);
+	meshList[PAINTING3]->textureArray[0] = LoadTGA("Image//Indoor//painting2.tga");
+	//ghost painting 1
+	meshList[PAINTING4] = MeshBuilder::GenerateQuad("PAINTING4", Color(0, 0, 0), 1.f);
+	meshList[PAINTING4]->textureArray[0] = LoadTGA("Image//Indoor//ghostpainting.tga");
+	//ghost painting 1
+	meshList[PAINTING5] = MeshBuilder::GenerateQuad("PAINTING5", Color(0, 0, 0), 1.f);
+	meshList[PAINTING5]->textureArray[0] = LoadTGA("Image//Indoor//ghostpainting2.tga");
 
 	InitPartitioning();
 
-	camera.Init(Vector3(-322, 5, 87), Vector3(-321, 5, 87), Vector3(0, 1, 0));
+	camera.Init(Vector3(180, 5, -668), Vector3(179, 5, -668), Vector3(0, 1, 0));
 
 	//Random my random randomly using srand
 	srand(time(NULL));
@@ -124,15 +148,14 @@ void SceneLevel01::Init()
 	FogEffect = false;
 	Switch = false;
 
-
 	initSceneObjects();
 
-	SpawnGhost();
+	//SpawnGhost();
 }
 
 void SceneLevel01::Update(double dt)
 {
-	//bLightEnabled = false;
+	bLightEnabled = false;
 
 	if (instance->openDoor == false)
 		camera.Update(dt);
@@ -579,13 +602,6 @@ ParticleObject* SceneLevel01::GetParticles(void)
 
 void SceneLevel01::initSceneObjects()
 {
-	/*AABBObject * key = new AABBObject();
-	key->Object = AABBObject::OBJECT_TYPE::KEY;
-	key->active = true;
-	key->pos.Set(1000, -35 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
-	key->scale.Set(10, 10, 10);
-	instance->Object_list.push_back(key);*/
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//[Left] first room 
 	//(front doors)
@@ -657,6 +673,13 @@ void SceneLevel01::initSceneObjects()
 	toilet->scale.Set(1, 1, 1);
 	instance->Object_list.push_back(toilet);
 
+	AABBObject* sink = new AABBObject();
+	sink->Object = AABBObject::OBJECT_TYPE::SINK;
+	sink->active = true;
+	sink->pos.Set(650, -45 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -380);
+	sink->scale.Set(20, 20, 20);
+	instance->Object_list.push_back(sink);
+
 	//(bedside table)
 	AABBObject* bedside = new AABBObject();
 	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
@@ -682,7 +705,7 @@ void SceneLevel01::initSceneObjects()
 	shelf->active = true;
 	shelf->angle = 180;
 	shelf->rotate.Set(0, 1, 0);
-	shelf->pos.Set(330, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -655);
+	shelf->pos.Set(330, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
 	shelf->scale.Set(10, 10, 10);
 	instance->Object_list.push_back(shelf);
 
@@ -691,7 +714,7 @@ void SceneLevel01::initSceneObjects()
 	shelf->active = true;
 	shelf->angle = 180;
 	shelf->rotate.Set(0, 1, 0);
-	shelf->pos.Set(275, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -655);
+	shelf->pos.Set(275, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -656);
 	shelf->scale.Set(10, 10, 10);
 	instance->Object_list.push_back(shelf);
 
@@ -781,7 +804,7 @@ void SceneLevel01::initSceneObjects()
 	toilet->pos.Set(1200, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -405);
 	toilet->scale.Set(1, 1, 1);
 	instance->Object_list.push_back(toilet);
-	
+
 	//(bedside table)
 	bedside = new AABBObject();
 	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
@@ -800,6 +823,21 @@ void SceneLevel01::initSceneObjects()
 	bed->pos.Set(1530, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -750);
 	bed->scale.Set(25, 25, 25);
 	instance->Object_list.push_back(bed);
+
+	//(Shelf)
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->pos.Set(1260, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -782);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->pos.Set(1360, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -782);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//[Right] first room (front doors)
@@ -869,6 +907,15 @@ void SceneLevel01::initSceneObjects()
 	toilet->scale.Set(1, 1, 1);
 	instance->Object_list.push_back(toilet);
 
+	sink = new AABBObject();
+	sink->Object = AABBObject::OBJECT_TYPE::SINK;
+	sink->active = true;
+	sink->angle = 180;
+	sink->rotate.Set(0, 1, 0);
+	sink->pos.Set(320, -45 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 730);
+	sink->scale.Set(20, 20, 20);
+	instance->Object_list.push_back(sink);
+	
 	//(bedside table)
 	bedside = new AABBObject();
 	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
@@ -879,6 +926,15 @@ void SceneLevel01::initSceneObjects()
 	bedside->scale.Set(2, 2, 2);
 	instance->Object_list.push_back(bedside);
 
+	bedside = new AABBObject();
+	bedside->Object = AABBObject::OBJECT_TYPE::BEDSIDE;
+	bedside->active = true;
+	bedside->angle = 90;
+	bedside->rotate.Set(0, 1, 0);
+	bedside->pos.Set(120, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 690);
+	bedside->scale.Set(2, 2, 2);
+	instance->Object_list.push_back(bedside);
+
 	//(bed)
 	bed = new AABBObject();
 	bed->Object = AABBObject::OBJECT_TYPE::BED;
@@ -886,6 +942,15 @@ void SceneLevel01::initSceneObjects()
 	bed->angle = 90;
 	bed->rotate.Set(0, 1, 0);
 	bed->pos.Set(150, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 460);
+	bed->scale.Set(25, 25, 25);
+	instance->Object_list.push_back(bed);
+
+	bed = new AABBObject();
+	bed->Object = AABBObject::OBJECT_TYPE::BED;
+	bed->active = true;
+	bed->angle = 90;
+	bed->rotate.Set(0, 1, 0);
+	bed->pos.Set(150, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 750);
 	bed->scale.Set(25, 25, 25);
 	instance->Object_list.push_back(bed);
 
@@ -905,6 +970,24 @@ void SceneLevel01::initSceneObjects()
 	shelf->angle = 180;
 	shelf->rotate.Set(0, 1, 0);
 	shelf->pos.Set(165, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 950);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+	//475 957
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(475, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 980);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 980);
 	shelf->scale.Set(10, 10, 10);
 	instance->Object_list.push_back(shelf);
 
@@ -971,7 +1054,95 @@ void SceneLevel01::initSceneObjects()
 	bed->scale.Set(25, 25, 25);
 	instance->Object_list.push_back(bed);
 
+	//(shelf)
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->angle = 180;
+	shelf->rotate.Set(0, 1, 0);
+	shelf->pos.Set(1560, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 630);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	shelf = new AABBObject();
+	shelf->Object = AABBObject::OBJECT_TYPE::SHELF;
+	shelf->active = true;
+	shelf->pos.Set(1560, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 655);
+	shelf->scale.Set(10, 10, 10);
+	instance->Object_list.push_back(shelf);
+
+	//(sink)
+	sink = new AABBObject();
+	sink->Object = AABBObject::OBJECT_TYPE::SINK;
+	sink->active = true;
+	sink->pos.Set(1090, -45 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 640);
+	sink->scale.Set(20, 20, 20);
+	instance->Object_list.push_back(sink);
+
+	sink = new AABBObject();
+	sink->Object = AABBObject::OBJECT_TYPE::SINK;
+	sink->active = true;
+	sink->angle = 90;
+	sink->rotate.Set(0, 1, 0);
+	sink->pos.Set(1005, -45 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 720);
+	sink->scale.Set(20, 20, 20);
+	instance->Object_list.push_back(sink);
+
+	//(Toiletbowl)
+	toilet = new AABBObject();
+	toilet->Object = AABBObject::OBJECT_TYPE::TOILETBOWL;
+	toilet->active = true;
+	toilet->pos.Set(1140, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 650);
+	toilet->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(toilet);
+
+	toilet = new AABBObject();
+	toilet->Object = AABBObject::OBJECT_TYPE::TOILETBOWL;
+	toilet->active = true;
+	toilet->angle = 90;
+	toilet->rotate.Set(0, 1, 0);
+	toilet->pos.Set(1010, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 770);
+	toilet->scale.Set(1, 1, 1);
+	instance->Object_list.push_back(toilet);
+
+	//(crates)
+	AABBObject* crate = new AABBObject();
+	crate->Object = AABBObject::OBJECT_TYPE::CRATE;
+	crate->active = true;
+	crate->pos.Set(1350, -10 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 900);
+	crate->scale.Set(40, 40, 40);
+	instance->Object_list.push_back(crate);
+
+	crate = new AABBObject();
+	crate->Object = AABBObject::OBJECT_TYPE::CRATE;
+	crate->active = true;
+	crate->pos.Set(1350, -10 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 950);
+	crate->scale.Set(40, 40, 40);
+	instance->Object_list.push_back(crate);
+
+	crate = new AABBObject();
+	crate->Object = AABBObject::OBJECT_TYPE::CRATE;
+	crate->active = true;
+	crate->pos.Set(1350, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 980);
+	crate->scale.Set(40, 40, 40);
+	instance->Object_list.push_back(crate);
+
+	crate = new AABBObject();
+	crate->Object = AABBObject::OBJECT_TYPE::CRATE;
+	crate->active = true;
+	crate->pos.Set(1350, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 930);
+	crate->scale.Set(40, 40, 40);
+	instance->Object_list.push_back(crate);
+
+	crate = new AABBObject();
+	crate->Object = AABBObject::OBJECT_TYPE::CRATE;
+	crate->active = true;
+	crate->pos.Set(1350, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 880);
+	crate->scale.Set(40, 40, 40);
+	instance->Object_list.push_back(crate);
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Misc OBJs
 
 	AABBObject* hammer = new AABBObject();
 	hammer->Object = AABBObject::OBJECT_TYPE::HAMMER;
@@ -988,6 +1159,96 @@ void SceneLevel01::initSceneObjects()
 	indoorGate->scale.Set(1, 1.2, 1);
 	exitPtr = indoorGate;
 	instance->Object_list.push_back(indoorGate);
+	//1
+	AABBObject* elevatorCover = new AABBObject();
+	elevatorCover->Object = AABBObject::OBJECT_TYPE::ELEVATORCOVER;
+	elevatorCover->active = true;
+	elevatorCover->pos.Set(630, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 10);
+	elevatorCover->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevatorCover);
+
+	AABBObject* elevator = new AABBObject();
+	elevator->Object = AABBObject::OBJECT_TYPE::ELEVATOR;
+	elevator->active = true;
+	elevator->pos.Set(630, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 10);
+	elevator->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevator);
+	//2
+	elevatorCover = new AABBObject();
+	elevatorCover->Object = AABBObject::OBJECT_TYPE::ELEVATORCOVER;
+	elevatorCover->active = true;
+	elevatorCover->pos.Set(840, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 10);
+	elevatorCover->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevatorCover);
+
+	elevator = new AABBObject();
+	elevator->Object = AABBObject::OBJECT_TYPE::ELEVATOR;
+	elevator->active = true;
+	elevator->pos.Set(840, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 10);
+	elevator->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevator);
+	//3
+	elevatorCover = new AABBObject();
+	elevatorCover->Object = AABBObject::OBJECT_TYPE::ELEVATORCOVER;
+	elevatorCover->active = true;
+	elevatorCover->pos.Set(1050, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 10);
+	elevatorCover->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevatorCover);
+
+	elevator = new AABBObject();
+	elevator->Object = AABBObject::OBJECT_TYPE::ELEVATOR;
+	elevator->active = true;
+	elevator->pos.Set(1050, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 10);
+	elevator->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevator);
+	//4
+	elevatorCover = new AABBObject();
+	elevatorCover->Object = AABBObject::OBJECT_TYPE::ELEVATORCOVER;
+	elevatorCover->active = true;
+	elevatorCover->pos.Set(630, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 190.1);
+	elevatorCover->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevatorCover);
+
+	elevator = new AABBObject();
+	elevator->Object = AABBObject::OBJECT_TYPE::ELEVATOR;
+	elevator->active = true;
+	elevator->angle = 180;
+	elevator->rotate.Set(0, 1, 0);
+	elevator->pos.Set(630, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 190.1);
+	elevator->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevator);
+	//5
+	elevatorCover = new AABBObject();
+	elevatorCover->Object = AABBObject::OBJECT_TYPE::ELEVATORCOVER;
+	elevatorCover->active = true;
+	elevatorCover->pos.Set(840, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 190.1);
+	elevatorCover->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevatorCover);
+
+	elevator = new AABBObject();
+	elevator->Object = AABBObject::OBJECT_TYPE::ELEVATOR;
+	elevator->active = true;
+	elevator->angle = 180;
+	elevator->rotate.Set(0, 1, 0);
+	elevator->pos.Set(840, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 190.1);
+	elevator->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevator);
+	//6
+	elevatorCover = new AABBObject();
+	elevatorCover->Object = AABBObject::OBJECT_TYPE::ELEVATORCOVER;
+	elevatorCover->active = true;
+	elevatorCover->pos.Set(1050, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 190.1);
+	elevatorCover->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevatorCover);
+
+	elevator = new AABBObject();
+	elevator->Object = AABBObject::OBJECT_TYPE::ELEVATOR;
+	elevator->active = true;
+	elevator->angle = 180;
+	elevator->rotate.Set(0, 1, 0);
+	elevator->pos.Set(1050, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 190.1);
+	elevator->scale.Set(80, 80, 80);
+	instance->Object_list.push_back(elevator);
 
 ///////////////////////////////////////////////////////////WALLS//////////////////////////////////////////////////////
 	//FIRST WALLS, LEFT SIDE
@@ -1050,8 +1311,8 @@ void SceneLevel01::initSceneObjects()
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	walls->active = true;
-	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z),370);
-	walls->scale.Set(29, 25, 5);
+	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	walls->scale.Set(29, 25, 2);
 	instance->Object_list.push_back(walls);
 	
 	//Back wall [Main corridoor]
@@ -1090,8 +1351,8 @@ void SceneLevel01::initSceneObjects()
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	walls->active = true;
-	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -315);
-	walls->scale.Set(3, 25, 20);
+	walls->pos.Set(705, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -385);
+	walls->scale.Set(3, 25, 80);
 	instance->Object_list.push_back(walls);
 
 	//First left door, toilet, back wall
@@ -1102,14 +1363,6 @@ void SceneLevel01::initSceneObjects()
 	walls->scale.Set(25, 25, 3);
 	instance->Object_list.push_back(walls);
 
-	//TOILET
-	walls = new AABBObject();
-	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
-	walls->active = true;
-	walls->pos.Set(600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -240);
-	walls->scale.Set(5, 10, 5);
-	instance->Object_list.push_back(walls);
-
 	//First left door, left most wall
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
@@ -1118,6 +1371,102 @@ void SceneLevel01::initSceneObjects()
 	walls->scale.Set(3, 25, 90);
 	instance->Object_list.push_back(walls);
 	
+	//First left door, Bedroom Front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(264, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -640);
+	walls->scale.Set(32, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//First left door, Bedroom right wall
+
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(470, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -720);
+	walls->scale.Set(4, 25, 19);
+	instance->Object_list.push_back(walls);
+
+	//First left door, Bedroom Back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(390, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -805);
+	walls->scale.Set(90, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, wall with main door
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1305, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -205);
+	walls->scale.Set(90, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, Barricaded room
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1288, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -440);
+	walls->scale.Set(26, 20, 16);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, wall with door
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1005, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -485);
+	walls->scale.Set(3, 25, 60);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, left wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -485);
+	walls->scale.Set(3, 25, 64);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, right wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1600, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -485);
+	walls->scale.Set(3, 25, 64);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1298, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -800);
+	walls->scale.Set(64, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, room divider
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1208, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -718);
+	walls->scale.Set(3, 25, 20);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, Bedroom front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1430, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -650);
+	walls->scale.Set(32, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second left door, Dining room front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1070, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -632);
+	walls->scale.Set(16, 25, 3);
+	instance->Object_list.push_back(walls);
 }
 
 void SceneLevel01::RenderGround()
@@ -1214,17 +1563,559 @@ void SceneLevel01::RenderLevel(bool Light)
 
 void SceneLevel01::RenderRoomObjects(bool Light)
 {
-	//paintings
+	//paintings harambe
 	modelStack.PushMatrix();
 	modelStack.Translate(530, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -795);
 	modelStack.Scale(70, 40, 1);
-	RenderMesh(meshList[PAINTING], false);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(295, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -785);
+	modelStack.Scale(70, 40, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(460, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -735);
+	modelStack.Scale(1, 40, 70);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(690, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -635);
+	modelStack.Scale(1, 40, 70);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(480, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -305);
+	modelStack.Scale(1, 40, 70);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(310, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -305);
+	modelStack.Scale(1, 40, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -530);
+	modelStack.Scale(1, 40, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(317, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -635);
+	modelStack.Scale(70, 40, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	//paintings starrynight
+	modelStack.PushMatrix();
+	modelStack.Translate(730, 10 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 4.5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(945, 10 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(690, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -735);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	//paintings city light
+	modelStack.PushMatrix();
+	modelStack.Translate(945, 10 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 4.5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(730, 10 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(640, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -795);
-	modelStack.Scale(70, 40, 1);
-	RenderMesh(meshList[PAINTING], false);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(690, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -535);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	//ghost painting
+	modelStack.PushMatrix();
+	modelStack.Translate(320, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING4], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(480, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1220, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING5], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1380, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -203);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(320, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING5], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(480, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 404);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1220, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 403);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING4], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1380, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 403);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1435, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -104);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1435, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -4);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1435, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 96);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1435, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 196);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1435, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 296);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1152, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 296);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1152, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -104);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+	//535 255
+	modelStack.PushMatrix();
+	modelStack.Translate(535, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 296);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(255, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 296);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(535, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -104);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(255, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -104);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(166, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(66, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-34, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-134, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-234, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-334, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 5);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(166, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(66, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-34, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-134, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-234, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-334, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 195);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1000, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -400);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1000, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -300);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1000, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1585, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -400);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1585, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -300);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1585, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1410, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -630);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1068, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -630);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1410, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -215);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1510, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -215);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1168, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -215);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1068, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -215);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -360);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -520);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1400, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 413);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1440, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 485);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1440, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 585);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1440, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 685);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1215, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 485);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1215, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 585);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1215, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 685);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1300, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 830);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(520, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 550);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(430, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 650);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 448);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 548);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 648);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 648);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 748);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 848);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(695, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 948);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(590, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 415);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING2], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(490, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 415);
+	modelStack.Scale(70, 50, 1);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(490, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 530);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(390, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 530);
+	modelStack.Scale(70, 50, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(290, 0 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 485);
+	modelStack.Scale(1, 50, 70);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING3], true);
 	modelStack.PopMatrix();
 
 	//[Left] first room
@@ -1250,11 +2141,11 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	RenderMeshOutlined(meshList[DOOR], Light);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(120, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -420);
 	modelStack.Scale(1.2, 1, 1);
 	RenderMeshOutlined(meshList[BLOCKAGE], Light);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	//[Left] Second room
 
@@ -1348,12 +2239,11 @@ void SceneLevel01::RenderRoomObjects(bool Light)
 	modelStack.PopMatrix();
 
 	//test obj
-	//modelStack.PushMatrix();
-	//modelStack.Translate(400, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
-	//modelStack.Scale(2, 2, 2);
-	//RenderMesh(meshList[BEDSIDE], false);
-	//modelStack.PopMatrix();
-
+	/*modelStack.PushMatrix();
+	modelStack.Translate(400, -30 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -500);
+	modelStack.Scale(40, 40, 40);
+	RenderMesh(meshList[CRATE], false);
+	modelStack.PopMatrix();*/
 }
 
 void SceneLevel01::RenderHUD()
@@ -1511,7 +2401,7 @@ void SceneLevel01::RenderPassMain()
 
 	RenderWeapons(true);
 	RenderInventory();
-
+	RenderGUI();
 	//Render objects
 	RenderLight();
 
@@ -1545,9 +2435,8 @@ void SceneLevel01::RenderPassMain()
 	{
 		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
-
-	//On screen text
 	std::ostringstream ss;
+
 	ss.precision(5);
 	ss << "FPS: " << fps;
 	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
@@ -1572,12 +2461,12 @@ void SceneLevel01::RenderPassMain()
 	ss.str("");
 	ss.precision(5);
 	ss << "Position z: " << camera.position.z;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
 
 	ss.str("");
 	ss.precision(5);
 	ss << "Position x: " << camera.position.x;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
 
 	if (reloading){
 		std::ostringstream ss;
@@ -1585,19 +2474,60 @@ void SceneLevel01::RenderPassMain()
 		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
 	}
 
+	if (showText)
+	{
+		//On screen text
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+
+		ss.str("");
+		ss << "pistol mag: " << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
+
+		ss.str("");
+		ss << "pistol ammo: " << pistolAmmo;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
+
+		ss.str("");
+		ss << "rifle mag: " << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
+
+		ss.str("");
+		ss.precision(5);
+		ss << "rifle ammo: " << rifleAmmo;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+
+		ss.str("");
+		ss.precision(5);
+		ss << "Position z: " << camera.position.z;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
+
+		ss.str("");
+		ss.precision(5);
+		ss << "Position x: " << camera.position.x;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+
+		if (reloading){
+			std::ostringstream ss;
+			ss << "Reloading";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+		}
+
+	}
 	switch (weaponType)
 	{
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:
 

@@ -168,12 +168,20 @@ public:
 		CHANDELIER,
 		CEILING,
 		TOILETBOWL,
+		ELEVATOR,
+		ELEVATORCOVER,
 		HAMMER,
 		ROOMCEILING,
 		PAINTING,
+		PAINTING2,
+		PAINTING3,
+		PAINTING4,
+		PAINTING5,
 		SOFA,
 		BEDSIDE,
 		SHELF,
+		SINK,
+		CRATE,
 
 		//PLAYER
 		GEO_STAMINA,
@@ -271,6 +279,10 @@ public:
 		UI_PISTOL,
 		UI_RIFLE,
 		UI_BOX,
+		UI_BOX2,
+		UI_STAMINA_BAR,
+		UI_FEAR_BAR,
+		UI_BLACK_BAR,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -322,6 +334,7 @@ public:
 	void RenderBullets(bool light);
 	void RenderWeapons(bool light);
 	void RenderInventory();
+	void RenderGUI();
 	void FootStep1();
 	void FootStep2();
 	void FootStep3();
@@ -406,14 +419,15 @@ protected:
 	bool gunUp;
 	bool gunDown;
 
-	int maxPistolAmmo = 20;
-	int pistolMag = 2;
-	int pistolAmmo = maxPistolAmmo;
+	double maxPistolAmmo = 20;
+	double pistolMag = 2;
+	double pistolAmmo = maxPistolAmmo;
 
-	int maxRifleAmmo = 10;
-	int rifleMag = 1;
-	int rifleAmmo = maxRifleAmmo;
-
+	double maxRifleAmmo = 10;
+	double rifleMag = 1;
+	double rifleAmmo = maxRifleAmmo;
+	float fearValueBar;
+	float Degree;
 
 	bool reloading = false;
 	float reloadTime;
@@ -453,6 +467,8 @@ protected:
 	Sound sound;
 
 	Color fogColor;
+
+	bool showText = true;
 };
 
 #endif

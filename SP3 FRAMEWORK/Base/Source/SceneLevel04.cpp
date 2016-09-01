@@ -487,91 +487,11 @@ void SceneLevel04::RenderTerrain()
 	modelStack.PopMatrix();
 }
 
-void SceneLevel04::RenderTombstone(bool Light)
-{
-	if (spatialPartitioning)
-	{
-		playerPartition = getPartition(camera.position);
-		for (auto Object : instance->Object_list)
-		{
-			if (Object->active)
-			{
-				if (Object->Object == AABBObject::OBJECT_TYPE::TOMBSTONE)
-				{
-					posPartition = getPartition(Object->pos);
-
-					if (renderCheck(playerPartition, posPartition) == true)
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(Object->pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, Object->pos.x / TERRAINSIZE.x, Object->pos.z / TERRAINSIZE.z)) - 20, Object->pos.z);
-						modelStack.Scale(10, 10, 10);
-						RenderMeshOutlined(meshList[TOMBSTONE], true);
-						modelStack.PopMatrix();
-					}
-				}
-			}
-		}
-
-		for (auto pos : pocongPos)
-		{
-			//posPartition = getPartition(pos);
-
-			//if (renderCheck(playerPartition, posPartition) == true)
-			//{
-			//	modelStack.PushMatrix();
-			//	modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			//	modelStack.Scale(60, 60, 60);
-			//	modelStack.Rotate(180, 0, 0, 1);
-			//	RenderMeshOutlined(meshList[POCONG], true);
-			//	modelStack.PopMatrix();
-			//}
-
-		}
-	}
-	else
-	{
-		playerPartition = getPartition(camera.position);
-		for (auto Object : instance->Object_list)
-		{
-			if (Object->active)
-			{
-				if (Object->Object == AABBObject::OBJECT_TYPE::TOMBSTONE)
-				{
-					posPartition = getPartition(Object->pos);
-
-					if (renderCheck(playerPartition, posPartition) == true)
-					{
-						modelStack.PushMatrix();
-						modelStack.Translate(Object->pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, Object->pos.x / TERRAINSIZE.x, Object->pos.z / TERRAINSIZE.z)) - 20, Object->pos.z);
-						modelStack.Scale(10, 10, 10);
-						RenderMeshOutlined(meshList[TOMBSTONE], true);
-						modelStack.PopMatrix();
-					}
-				}
-			}
-		}
-
-		for (auto pos : pocongPos)
-		{
-			//char playerPartition = getPartition(camera.position);
-			//char posPartition = getPartition(pos);
-
-			//modelStack.PushMatrix();
-			//modelStack.Translate(pos.x, (-50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, pos.x / TERRAINSIZE.x, pos.z / TERRAINSIZE.z)), pos.z);
-			//modelStack.Scale(60, 60, 60);
-			//modelStack.Rotate(180, 0, 0, 1);
-			//RenderMeshOutlined(meshList[POCONG], true);
-			//modelStack.PopMatrix();
-
-		}
-	}
-}
-
 void SceneLevel04::RenderEnvironment(bool Light)
 {
 	RenderObjects(ShowHitbox);
 	RenderEnemies(ShowHitbox);
-	int yOffset = 50;
+	yOffset = 50;
 	modelStack.PushMatrix();
 	modelStack.Translate(1100, (ReadHeightMap(m_heightMap_4, 1100 / TERRAINSIZE.x, 1970 / TERRAINSIZE.z)  * TERRAINSIZE.y) - yOffset, 1970);
 	modelStack.Scale(0.6f, 0.6f, 0.6f);
@@ -598,7 +518,7 @@ void SceneLevel04::RenderEnvironment(bool Light)
 
 	for (int i = 0; i < 128; ++i)
 	{
-		float Degree = Math::RadianToDegree(atan2(-(randompos_z[i] - instance->player->getPosition().z), randompos_x[i] - instance->player->getPosition().x));
+		Degree = Math::RadianToDegree(atan2(-(randompos_z[i] - instance->player->getPosition().z), randompos_x[i] - instance->player->getPosition().x));
 		switch (random[i])
 		{
 		case 1:
@@ -794,6 +714,7 @@ void SceneLevel04::RenderPassMain()
 
 	
 	RenderInventory();
+	RenderGUI();
 	RenderWeapons(true);
 	RenderBullets(false);
 	//Render objects
@@ -824,38 +745,40 @@ void SceneLevel04::RenderPassMain()
 	//bLightEnabled = false;
 
 	//On screen text
+	std::ostringstream ss;
 
-		std::ostringstream ss;
+	if (showText)
+	{
 		ss.precision(5);
 		ss << "FPS: " << fps;
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	{
-		std::ostringstream ss;
-		ss.precision(5);
-		ss << "Partition: " << getPartition(camera.position);
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+		{
+			std::ostringstream ss;
+			ss.precision(5);
+			ss << "Partition: " << getPartition(camera.position);
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 8);
+		}
+		{
+			std::ostringstream ss;
+			ss.precision(5);
+			ss << "Position: " << camera.position;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
+		}
 	}
-	{
-		std::ostringstream ss;
-		ss.precision(5);
-		ss << "Position: " << camera.position;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
-	}
-
 	switch (weaponType)
 	{
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:
 

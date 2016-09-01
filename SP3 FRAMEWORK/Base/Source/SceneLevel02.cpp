@@ -1011,6 +1011,7 @@ void SceneLevel02::RenderPassMain()
 
 	RenderWeapons(false);
 	RenderInventory();
+	RenderGUI();
 	//Render objects
 	RenderLight();
 
@@ -1045,15 +1046,18 @@ void SceneLevel02::RenderPassMain()
 
 	//On screen text
 	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "POS: " << camera.position;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+	if (showText)
+	{
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
+		ss.str("");
+		ss.precision(5);
+		ss << "POS: " << camera.position;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+	}
 	if (questToNextScene)
 	{
 		ss.str("");
@@ -1072,14 +1076,14 @@ void SceneLevel02::RenderPassMain()
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/20" << "MAG:" << pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/10" << "MAG:" << rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 63, 7);
+		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:
 

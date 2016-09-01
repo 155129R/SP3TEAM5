@@ -17,7 +17,7 @@ void Player::Init()
 	fear = FEAR_LEVEL::NORMAL;
 	fear_value = 0;
 
-	stamina = 500.0f;
+	stamina = 100.0f;
 	recharge = 3.0f;
 
 	Run = false;
@@ -203,7 +203,7 @@ int Player::getHealthPack()
 }
 void Player::UseHealthpack()
 {
-	std::cout << "TEsty" << std::endl;
+	//std::cout << "TEsty" << std::endl;
 	if (Healthpacks > 0)
 	{
 		Healthpacks -= 1;
