@@ -51,7 +51,6 @@ Enemy::Enemy(ENEMY_TYPE type, ENEMY_STATE state) : Type(type), State(state)
 	travel_to = 1;
 
 	rotate = 0.0f;
-	cooldown = 0.8f;
 
 	ghost->setDefault3DSoundMinDistance(100.f);
 	ghost->setDefault3DSoundMaxDistance(1500.f);

@@ -115,7 +115,6 @@ void SceneHub::Init()
 
 	//camera.position.Set(1, 5, 1);
 
-
 	InitPartitioning();
 }
 
@@ -1286,6 +1285,11 @@ void SceneHub::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
 
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	RenderMesh(meshList[GEO_AXES], false);
+	modelStack.PopMatrix();
+
 	if (Singleton::getInstance()->showShop == false)
 	{
 		RenderWeapons(false);
@@ -1304,8 +1308,6 @@ void SceneHub::RenderPassMain()
 	//RenderMesh(meshList[GEO_LIGHT_DEPTH_QUAD], false);
 	//modelStack.PopMatrix();
 	//viewStack.PopMatrix();
-
-
 
 	RenderWorld();
 
