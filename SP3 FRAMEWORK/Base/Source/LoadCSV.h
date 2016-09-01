@@ -15,5 +15,6 @@ using std::stringstream;
 using std::stoi;
 
 void ReadFile(string file_path, int ghost[]);
+void ReadDialogue(string file_path, string dialogue[]); 
 
 #endif 

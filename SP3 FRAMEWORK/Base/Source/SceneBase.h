@@ -152,6 +152,24 @@ public:
 		VACUUM,
 		PISTOLBULLET,
 
+		//PLAYER
+		GEO_STAMINA,
+		NIGHT_VISION,
+		GEO_TEXT_BOX,
+
+		//Minimap
+		GEO_VIEW,
+		GEO_GREENBALL,
+		GEO_REDBALL,
+		GEO_BLUEBALL,
+		GEO_BOSS_ICON,
+
+		//Screen
+		GEO_LOAD_1,
+		GEO_LOAD_2,
+		GEO_LOAD_3,
+		GEO_LOAD_4,
+
 		//level 01
 		LEVEL01_TERRAIN,
 		LEVEL01_WALLS,
@@ -183,49 +201,6 @@ public:
 		SINK,
 		CRATE,
 
-		//PLAYER
-		GEO_STAMINA,
-		NIGHT_VISION,
-
-		//Minimap
-		GEO_VIEW,
-		GEO_GREENBALL,
-		GEO_REDBALL,
-		GEO_BLUEBALL,
-		GEO_BOSS_ICON,
-
-		//Screen
-		GEO_LOAD_1,
-		GEO_LOAD_2,
-		GEO_LOAD_3,
-		GEO_LOAD_4,
-
-		//level 03
-		GEO_CACTUS,
-		GEO_TREE_1,
-		GEO_TREE_2,
-		GEO_TREE_3,
-		GEO_BUSH,
-		GEO_BRIDGE,
-		GEO_LOGS,
-		WATER_FLOW,
-
-		//SPRITE / ENEMY
-		GEO_GHOST1_ATTACK,
-		GEO_GHOST1_LEFT,
-		GEO_GHOST1_RIGHT,
-		GEO_GHOST2_ATTACK,
-		GEO_GHOST2_LEFT,
-		GEO_GHOST2_RIGHT,
-		GEO_GHOST3_ATTACK,
-		GEO_GHOST3_LEFT,
-		GEO_GHOST3_RIGHT,
-		GEO_HITBOX,
-		BOSS,
-		WISP,
-		GEO_HP,
-		GEO_BOSS_HP,
-
 		//level 2
 		FOUNTAIN,
 		FOUNTAIN_WATER1,
@@ -247,6 +222,17 @@ public:
 		BUTTON_INSTRUCTION,
 		BUTTON_EXIT,
 		GEO_KEY,
+		QUEST_EXIT,
+
+		//level 03
+		GEO_CACTUS,
+		GEO_TREE_1,
+		GEO_TREE_2,
+		GEO_TREE_3,
+		GEO_BUSH,
+		GEO_BRIDGE,
+		GEO_LOGS,
+		WATER_FLOW,
 
 		//level4
 		TOMBSTONE,
@@ -254,11 +240,30 @@ public:
 		DEADTREE,
 		POCONG,
 
+		//SPRITE / ENEMY
+		GEO_GHOST1_ATTACK,
+		GEO_GHOST1_LEFT,
+		GEO_GHOST1_RIGHT,
+		GEO_GHOST2_ATTACK,
+		GEO_GHOST2_LEFT,
+		GEO_GHOST2_RIGHT,
+		GEO_GHOST3_ATTACK,
+		GEO_GHOST3_LEFT,
+		GEO_GHOST3_RIGHT,
+		GEO_HITBOX,
+		BOSS,
+		WISP,
+		GEO_HP,
+		GEO_BOSS_HP,
+
 		//inventory
 		INV_GHOST1,
 		INV_GHOST2,
 		INV_GHOST3,
 		INV_HOVER,
+		INV_TORCH_LIGHT,
+		INV_NIGHT_VISION,
+		INV_RADAR,
 
 		//shop
 		SHOP_UI,
@@ -404,7 +409,8 @@ protected:
 	float rotateAngle = 0;
 	float rotateKey = 0;
 	Minimap* m_Minimap;
-	float HealthpackCD;
+	float HealthpackCD = 0.0f;
+	bool Ready = true;
 	Color Black;
 
 	//Enemy 
@@ -426,7 +432,6 @@ protected:
 	double maxRifleAmmo = 10;
 	double rifleMag = 1;
 	double rifleAmmo = maxRifleAmmo;
-	float fearValueBar;
 	float Degree;
 
 	bool reloading = false;
@@ -469,6 +474,8 @@ protected:
 	Color fogColor;
 
 	bool showText = false;
+	bool showText = true;
+	bool Dialogues = true;
 };
 
 #endif

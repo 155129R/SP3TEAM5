@@ -63,6 +63,9 @@ void SceneLevel02::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
 
+	meshList[QUEST_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[QUEST_EXIT]->textureArray[0] = LoadTGA("Image//Outdoor//questGate.tga");
+
 	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
 	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
@@ -112,6 +115,9 @@ void SceneLevel02::Init()
 	initSceneObjects();
 
 	SpawnGhost();
+
+	//Loading dialogue
+	ReadDialogue("Text//Dialogue_2.txt", Dialogue);
 
 	lights[0].position.Set(130, 150, 100);
 	lights[0].power = 2.f;
@@ -369,7 +375,6 @@ void SceneLevel02::Update(double dt)
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95 && cameraViewObject(keyPtr->pos, 80) == true)
 					{
 						sound.playSoundEffect2D("Sound/pickUp.mp3");
-						questToNextScene = true;
 						Singleton::getInstance()->gotKey = true;
 						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 
@@ -458,36 +463,51 @@ void SceneLevel02::Update(double dt)
 			spaceButtonState4 = false;
 	}
 
-	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
-	////////////////////////////////////////////////////////
-	if (Application::IsKeyPressed('V'))
+	//Dialogues
+	if (Dialogue_Selection != 2 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f)
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+		Dialogue_Timer = 1.0f;
+		Dialogue_Selection++;
 	}
-	if (Application::IsKeyPressed('B'))
+	else
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+		if (!instance->gotKey)
+		{
+			Dialogue_Timer -= (float)dt;
+		}
 	}
-	if (Application::IsKeyPressed('N'))
+	if (Dialogue_Selection == 2 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f &&
+		!key_bool)
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+		Dialogue_Timer = 1.0f;
+		Dialogues = false;
 	}
-	if (Application::IsKeyPressed('M'))
+	if (instance->gotKey)
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+		if (!key_bool)
+		{
+			Dialogues = true;
+			key_bool = true;
+		}
+		Dialogue_Selection = 3;
+	}
+	if (Dialogue_Selection == 3 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer2 <= 0.0f)
+	{
+		Dialogues = false;
+		questToNextScene = true;
+	}
+	else
+	{
+		if (key_bool)
+		{
+			Dialogue_Timer2 -= (float)dt;
+		}
 	}
 
 	UpdateParticle(dt);
@@ -602,11 +622,10 @@ void SceneLevel02::UpdateParticle(double dt)
 		particleWater1->type = PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1;
 		//particleSmoke->scale.Set(5, 5, 5);
 		float range = 3;
-		particleWater1->vel.Set(Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range),
-			Math::RandFloatMinMax(-range, range));
+		particleWater1->vel.Set(Math::RandFloatMinMax(-range, range), Math::RandFloatMinMax(10, 20),	Math::RandFloatMinMax(-range, range));
 		particleWater1->rotateSpeed = Math::RandFloatMinMax(20.f, 40.f);
-		particleWater1->pos.Set(0, 80 + 350.f * ReadHeightMap(m_heightMap, -20.f / 4000, -20.f / 4000), 0);
+		//particleWater1->scale.Set(20, 20, 10);
+		particleWater1->pos.Set(0, 0, 0);
 	}
 
 	for (auto it : particleList)
@@ -628,7 +647,7 @@ void SceneLevel02::UpdateParticle(double dt)
 
 			if (particle->type == PARTICLEOBJECT_TYPE::P_FOUNTAIN_WATER1)
 			{
-				particle->vel += m_gravity * (float)dt;
+				particle->vel += m_gravity * ((float)dt * 2);
 				particle->pos += particle->vel * (float)dt * 10.f;
 
 				//if particle reaches the terrain, it should not be inacitve
@@ -1060,6 +1079,15 @@ void SceneLevel02::RenderPassMain()
 	}
 	if (questToNextScene)
 	{
+		glDisable(GL_DEPTH_TEST);
+		modelStack.PushMatrix();
+		modelStack.Translate(-1500, 20, 335);
+		modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - -1500, camera.position.z - 335)), 0, 1, 0);
+		modelStack.Scale(150, 150, 150);
+		RenderMeshOutlined(meshList[QUEST_EXIT], false);
+		modelStack.PopMatrix();
+		glEnable(GL_DEPTH_TEST);
+
 		ss.str("");
 		ss.precision(5);
 		ss << "Get away from here!!";
@@ -1090,8 +1118,26 @@ void SceneLevel02::RenderPassMain()
 		break;
 	}
 
-	SceneBase::Render();
 
+	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
+	//Dialogues
+	if (Dialogues)
+	{
+		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
+
+		ss.str("");
+		ss << Dialogue[Dialogue_Selection];
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
+
+
+		ss.str("");
+		ss << "Press E to continue...";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+	}
+
+	SceneBase::Render();
 }
 
 void SceneLevel02::Render()

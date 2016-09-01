@@ -20,6 +20,7 @@ public:
 	
 	float GetStamina();
 	int GetFear();
+	float GetFearValue();
 
 	void InflictFear(int amount);
 

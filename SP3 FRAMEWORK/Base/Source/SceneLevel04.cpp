@@ -102,6 +102,9 @@ void SceneLevel04::Init()
 	}
 
 	Singleton::getInstance()->boss->reset();
+
+	//Loading dialogue
+	ReadDialogue("Text//Dialogue_4.txt", Dialogue);
 }
 
 void SceneLevel04::Update(double dt)
@@ -129,6 +132,42 @@ void SceneLevel04::Update(double dt)
 	UpdateParticle(dt);
 
 	UpdateHitboxes(dt);
+
+	//Dialogues
+	if (Dialogue_Selection == 0 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f &&
+		!boss_bool)
+	{
+		Dialogue_Timer = 1.0f;
+		Dialogues = false;
+	}
+	else
+	{
+		Dialogue_Timer -= (float)dt;
+	}
+	if (instance->boss->getHP() <= 0)
+	{
+		if (!boss_bool)
+		{
+			Dialogues = true;
+			boss_bool = true;
+		}
+		Dialogue_Selection = 1;
+	}
+	if (Dialogue_Selection == 1 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer2 <= 0.0f)
+	{
+		Dialogues = false;
+	}
+	else
+	{
+		if (boss_bool)
+		{
+			Dialogue_Timer2 -= (float)dt;
+		}
+	}
 
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
 	
@@ -250,34 +289,6 @@ void SceneLevel04::Update(double dt)
 	}
 
 	rotateAngle += (float)(1 * dt);
-
-	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
-	////////////////////////////////////////////////////////
-	if (Application::IsKeyPressed('V'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
-	}
-	if (Application::IsKeyPressed('B'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
-	}
-	if (Application::IsKeyPressed('N'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
-	}
-	if (Application::IsKeyPressed('M'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
-	}
 
 	if (Singleton::getInstance()->boss->getHP() <= 0)
 	{
@@ -784,6 +795,24 @@ void SceneLevel04::RenderPassMain()
 
 		break;
 	}
+
+	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
+	//Dialogues
+	if (Dialogues)
+	{
+		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
+
+		ss.str("");
+		ss << Dialogue[Dialogue_Selection];
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
+
+		ss.str("");
+		ss << "Press E to continue...";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+	}
+
 	SceneBase::Render();
 }
 
