@@ -100,6 +100,8 @@ void SceneLevel03::Init()
 	ReadDialogue("Text//Dialogue_3.txt", Dialogue);
 
 	initSceneObjects();
+
+    InitPartitioning();
 }
 
 void SceneLevel03::initSceneObjects()
@@ -207,6 +209,21 @@ void SceneLevel03::Update(double dt)
 	camera.Update(dt);
 
 	SceneBase::Update(dt);
+
+    if (nightVision)
+    {
+        lights[0].power = 4.f;
+        lights[0].color = (1.f, 1.f, 1.f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
+    else
+    {
+        lights[0].power = 0.5f;
+        lights[0].color = (0.8f, 0.8f, 0.8f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
 
 	UpdateParticle(dt);
 
@@ -870,7 +887,6 @@ void SceneLevel03::RenderPassMain()
 	RenderBullets(false);
 
 	//On screen text
-	
 	std::ostringstream ss;
 
 	if (showText)

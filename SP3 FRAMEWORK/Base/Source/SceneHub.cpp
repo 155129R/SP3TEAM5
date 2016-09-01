@@ -68,7 +68,7 @@ void SceneHub::Init()
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//Random my random randomly using srand
 	srand(time(NULL));
-	camera.Init(Vector3(1,5,1), Vector3(350, 5, 15), Vector3(0, 1, 0));
+	camera.Init(Vector3(1, 5, 1), Vector3(350, 5, 15), Vector3(0, 1, 0));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -100,8 +100,6 @@ void SceneHub::Init()
 	questToNextScene = false;
 	distanceLeft = 0;
 
-	spatialPartitioning = false;
-
 	buySize = 10;
 	sellSize = 10;
 
@@ -112,8 +110,11 @@ void SceneHub::Init()
 
 	initSceneObjects();
 
-	lights[0].position.Set(1, 80, 1);
-	lights[0].power = 5.f;
+	//lights[0].position.Set(1, 80, 1);
+	//lights[0].power = 5.f;
+
+	//camera.position.Set(1, 5, 1);
+
 
 	InitPartitioning();
 }
@@ -195,6 +196,21 @@ void SceneHub::Update(double dt)
 		camera.Update(dt);
 
 	SceneBase::Update(dt);
+
+    if (nightVision)
+    {
+        lights[0].power = 4.f;
+        lights[0].color = (1.f, 1.f, 1.f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
+    else
+    {
+        lights[0].power = 0.5f;
+        lights[0].color = (0.8f, 0.8f, 0.8f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
 
 	//cout << (Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() << endl;
 	static bool eButtonState = false;
@@ -1313,100 +1329,102 @@ void SceneHub::RenderPassMain()
 
 	//On screen text
 	std::ostringstream ss;
-	if (showText)
-	{
-	    ss.str("");
-		ss.precision(5);
-		ss << "FPS: " << fps;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+    if (instance->stateCheck == false && instance->openDoor == false)
+    {
+        if (showText)
+        {
+            ss.str("");
+            ss.precision(5);
+            ss << "FPS: " << fps;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-		ss.str("");
-		ss.precision(5);
-		ss << "POS: " << camera.position;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+            ss.str("");
+            ss.precision(5);
+            ss << "POS: " << camera.position;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
 
-	}
-	if (Singleton::getInstance()->showShop == false)
-	{
-		switch (weaponType)
-		{
-		case 1:
-			ss.str("");
-			ss.precision(5);
-			ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
-			break;
-		case 2:
-			ss.str("");
-			ss.precision(5);
-			ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
-			break;
-		case 3:
+        }
+        if (Singleton::getInstance()->showShop == false)
+        {
+            switch (weaponType)
+            {
+            case 1:
+                ss.str("");
+                ss.precision(5);
+                ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+                break;
+            case 2:
+                ss.str("");
+                ss.precision(5);
+                ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+                break;
+            case 3:
 
-			break;
-		}
-	}
+                break;
+            }
+        }
 
-	if (distance_1 <= 50)
-	{
-		ss.str("");
-		ss.precision(5);
-		ss << "Press E to travel to the House";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-	}
-	if (distance_2 <= 50)
-	{
-		if (instance->gotHammer)
-		{
-			ss.str("");
-			ss.precision(5);
-			ss << "Press E to travel to Town Square";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-		}
-		else
-		{
-			ss.str("");
-			ss.precision(5);
-			ss << "Get the Hammer and clear the House first!";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-		}
-	}
-	if (distance_3 <= 50)
-	{
-		if (instance->gotKey)
-		{
-			ss.str("");
-			ss.precision(5);
-			ss << "Press E to travel to the Forest";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-		}
-		else
-		{
-			ss.str("");
-			ss.precision(5);
-			ss << "Get the Key and clear Town Square first!";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-		}
-	}
-	if (distance_4 <= 50)
-	{
-		if (instance->gotClear)
-		{
-			ss.str("");
-			ss.precision(5);
-			ss << "Press E to travel to the Cemetery";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-		}
-		else
-		{
-			ss.str("");
-			ss.precision(5);
-			ss << "Clear the Forest first!";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
-		}
-	}
-	
+        if (distance_1 <= 50)
+        {
+            ss.str("");
+            ss.precision(5);
+            ss << "Press E to travel to the House";
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+        }
+        if (distance_2 <= 50)
+        {
+            if (instance->gotHammer)
+            {
+                ss.str("");
+                ss.precision(5);
+                ss << "Press E to travel to Town Square";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+            }
+            else
+            {
+                ss.str("");
+                ss.precision(5);
+                ss << "Get the Hammer and clear the House first!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+            }
+        }
+        if (distance_3 <= 50)
+        {
+            if (instance->gotKey)
+            {
+                ss.str("");
+                ss.precision(5);
+                ss << "Press E to travel to the Forest";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+            }
+            else
+            {
+                ss.str("");
+                ss.precision(5);
+                ss << "Get the Key and clear Town Square first!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+            }
+        }
+        if (distance_4 <= 50)
+        {
+            if (instance->gotClear)
+            {
+                ss.str("");
+                ss.precision(5);
+                ss << "Press E to travel to the Cemetery";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+            }
+            else
+            {
+                ss.str("");
+                ss.precision(5);
+                ss << "Clear the Forest first!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+            }
+        }
+    }
 	SceneBase::Render();
 }
 

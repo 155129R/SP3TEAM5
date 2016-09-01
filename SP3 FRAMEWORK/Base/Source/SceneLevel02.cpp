@@ -115,8 +115,6 @@ void SceneLevel02::Init()
 	questToNextScene = false;
 	distanceLeft = 0;
 
-	spatialPartitioning = false;
-
 	fountainsfx->setDefault3DSoundMinDistance(100.f);
 	fountainsfx->setDefault3DSoundMaxDistance(5000.f);
 	fountainsfx->setSoundVolume(1.f);
@@ -355,6 +353,21 @@ void SceneLevel02::initSceneObjects()
 void SceneLevel02::Update(double dt)
 {
 	SceneBase::Update(dt);
+
+    if (nightVision)
+    {
+        lights[0].power = 4.f;
+        lights[0].color = (1.f, 1.f, 1.f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
+    else
+    {
+        lights[0].power = 0.5f;
+        lights[0].color = (0.8f, 0.8f, 0.8f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
 
 	distanceLeft = (Vector3(-1300, 20, 335) - camera.position).Length();
 
@@ -1142,64 +1155,65 @@ void SceneLevel02::RenderPassMain()
 
 	//On screen text
 	std::ostringstream ss;
+    if (instance->stateCheck == false && instance->openDoor == false)
+    {
+        if (showText)
+        {
+            ss.precision(5);
+            ss << "FPS: " << fps;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	if (showText)
-	{
-		ss.precision(5);
-		ss << "FPS: " << fps;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+            ss.str("");
+            ss.precision(5);
+            ss << "POS: " << camera.position;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+        }
+        if (questToNextScene)
+        {
+            glDisable(GL_DEPTH_TEST);
+            modelStack.PushMatrix();
+            modelStack.Translate(-1500, 20, 335);
+            modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - -1500, camera.position.z - 335)), 0, 1, 0);
+            modelStack.Scale(150, 150, 150);
+            RenderMeshOutlined(meshList[QUEST_EXIT], false);
+            modelStack.PopMatrix();
+            glEnable(GL_DEPTH_TEST);
+        }
 
-		ss.str("");
-		ss.precision(5);
-		ss << "POS: " << camera.position;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
-	}
-	if (questToNextScene)
-	{
-		glDisable(GL_DEPTH_TEST);
-		modelStack.PushMatrix();
-		modelStack.Translate(-1500, 20, 335);
-		modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - -1500, camera.position.z - 335)), 0, 1, 0);
-		modelStack.Scale(150, 150, 150);
-		RenderMeshOutlined(meshList[QUEST_EXIT], false);
-		modelStack.PopMatrix();
-		glEnable(GL_DEPTH_TEST);
-	}
-	
-	switch (weaponType)
-	{
-	case 1:
-		ss.str("");
-		ss.precision(5);
-		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
-		break;
-	case 2:
-		ss.str("");
-		ss.precision(5);
-		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
-		break;
-	case 3:
+        switch (weaponType)
+        {
+        case 1:
+            ss.str("");
+            ss.precision(5);
+            ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+            break;
+        case 2:
+            ss.str("");
+            ss.precision(5);
+            ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+            break;
+        case 3:
 
-		break;
-	}
+            break;
+        }
 
-	//Dialogues
-	if (Dialogues)
-	{
-		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
+        //Dialogues
+        if (Dialogues)
+        {
+            RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
 
-		ss.str("");
-		ss << Dialogue[Dialogue_Selection];
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
+            ss.str("");
+            ss << Dialogue[Dialogue_Selection];
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
 
 
-		ss.str("");
-		ss << "Press E to continue...";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
-	}
-
+            ss.str("");
+            ss << "Press E to continue...";
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+        }
+    }
 	SceneBase::Render();
 }
 

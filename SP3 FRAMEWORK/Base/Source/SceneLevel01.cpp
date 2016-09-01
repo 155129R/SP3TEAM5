@@ -152,8 +152,12 @@ void SceneLevel01::Init()
 
 	SpawnGhost();
 
+    lights[0].position.Set(40, 50, 40);
+
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_1.txt", Dialogue);
+
+    InitPartitioning();
 }
 
 void SceneLevel01::Update(double dt)
@@ -171,6 +175,21 @@ void SceneLevel01::Update(double dt)
 
 	camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	
+    if (nightVision)
+    {
+        lights[0].power = 1.f;
+        lights[0].color = (1.f, 1.f, 1.f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
+    else
+    {
+        lights[0].power = 0.1f;
+        lights[0].color = (0.8f, 0.8f, 0.8f);
+        glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
+        glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
+    }
+
 	for (std::vector<Enemy *>::iterator it = instance->Enemy_list.begin(); it != instance->Enemy_list.end(); ++it)
 	{
 		Enemy *ghost = (Enemy *)*it;
@@ -2513,71 +2532,73 @@ void SceneLevel01::RenderPassMain()
 
 
 	
+    if (instance->stateCheck == false && instance->openDoor == false)
+    {
+        if (reloading){
+            std::ostringstream ss;
+            ss << "Reloading";
+            //RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+        }
 
-	if (reloading){
-		std::ostringstream ss;
-		ss << "Reloading";
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
-	}
 
+        if (showText)
+        {
+            //On screen text
 
-	if (showText)
-	{
-		//On screen text
+            ss.precision(5);
+            ss << "FPS: " << fps;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-		ss.precision(5);
-		ss << "FPS: " << fps;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+            ss.str("");
+            ss.precision(5);
+            ss << "Position z: " << camera.position.z;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
 
-		ss.str("");
-		ss.precision(5);
-		ss << "Position z: " << camera.position.z;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
+            ss.str("");
+            ss.precision(5);
+            ss << "Position x: " << camera.position.x;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
 
-		ss.str("");
-		ss.precision(5);
-		ss << "Position x: " << camera.position.x;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
+            if (reloading){
+                std::ostringstream ss;
+                ss << "Reloading";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+            }
 
-		if (reloading){
-			std::ostringstream ss;
-			ss << "Reloading";
-			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
-		}
+        }
+        switch (weaponType)
+        {
+        case 1:
+            ss.str("");
+            ss.precision(5);
+            ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+            break;
+        case 2:
+            ss.str("");
+            ss.precision(5);
+            ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
+            break;
+        case 3:
 
-	}
-	switch (weaponType)
-	{
-	case 1:
-		ss.str("");
-		ss.precision(5);
-		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
-		break;
-	case 2:
-		ss.str("");
-		ss.precision(5);
-		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
-		break;
-	case 3:
+            break;
+        }
 
-		break;
-	}
+        //Dialogues
+        if (Dialogues)
+        {
+            RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
 
-	//Dialogues
-	if (Dialogues)
-	{
-		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
+            ss.str("");
+            ss << Dialogue[Dialogue_Selection];
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
 
-		ss.str("");
-		ss << Dialogue[Dialogue_Selection];
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
-
-		ss.str("");
-		ss << "Press E to continue...";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
-	}
+            ss.str("");
+            ss << "Press E to continue...";
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+        }
+    }
 	SceneBase::Render();
 	if (timerstart && timer < 3.f)
 	{
