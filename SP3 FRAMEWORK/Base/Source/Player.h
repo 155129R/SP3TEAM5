@@ -36,6 +36,7 @@ public:
 	void AddHealthpack(int Amount);
 	int getHealthPack();
 	void UseHealthpack();
+	void Revive();
 
 private:
 	//weapon
