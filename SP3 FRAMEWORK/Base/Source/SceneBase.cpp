@@ -1400,9 +1400,11 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
+
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
+	{
 		FogAmount = 1500.0f;
 		fogColor.Set(0.8f, 0.8f, 0.8f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
@@ -1455,9 +1457,10 @@ void SceneBase::UpdateFearEffect(double dt)
 				}
 				break;
 			}
-			break;
 		}
+		break;
 
+	}
 	case 2:
 		FogAmount = 1000.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
