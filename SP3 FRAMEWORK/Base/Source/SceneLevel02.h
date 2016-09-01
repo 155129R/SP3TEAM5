@@ -59,6 +59,12 @@ private:
 
 	AABBObject* keyPtr;
 	AABBObject* gatePtr;
+
+	string Dialogue[4];
+	float Dialogue_Timer = 1.0f;
+	float Dialogue_Timer2 = 1.0f;
+	int Dialogue_Selection = 0;
+	bool key_bool = false;
 };
 
 #endif

@@ -113,6 +113,9 @@ void SceneLevel02::Init()
 
 	SpawnGhost();
 
+	//Loading dialogue
+	ReadDialogue("Text//Dialogue_2.txt", Dialogue);
+
 	lights[0].position.Set(130, 150, 100);
 	lights[0].power = 2.f;
 
@@ -458,36 +461,50 @@ void SceneLevel02::Update(double dt)
 			spaceButtonState4 = false;
 	}
 
-	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
-	////////////////////////////////////////////////////////
-	if (Application::IsKeyPressed('V'))
+	//Dialogues
+	if (Dialogue_Selection != 2 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f)
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+		Dialogue_Timer = 1.0f;
+		Dialogue_Selection++;
 	}
-	if (Application::IsKeyPressed('B'))
+	else
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+		if (!instance->gotKey)
+		{
+			Dialogue_Timer -= (float)dt;
+		}
 	}
-	if (Application::IsKeyPressed('N'))
+	if (Dialogue_Selection == 2 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f &&
+		!key_bool)
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+		Dialogue_Timer = 1.0f;
+		Dialogues = false;
 	}
-	if (Application::IsKeyPressed('M'))
+	if (instance->gotKey)
 	{
-		sound.stopMusic();
-		sound.stopSoundEffect3D();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+		if (!key_bool)
+		{
+			Dialogues = true;
+			key_bool = true;
+		}
+		Dialogue_Selection = 3;
+	}
+	if (Dialogue_Selection == 3 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer2 <= 0.0f)
+	{
+		Dialogues = false;
+	}
+	else
+	{
+		if (key_bool)
+		{
+			Dialogue_Timer2 -= (float)dt;
+		}
 	}
 
 	UpdateParticle(dt);
@@ -1090,8 +1107,21 @@ void SceneLevel02::RenderPassMain()
 		break;
 	}
 
-	SceneBase::Render();
+	//Dialogues
+	if (Dialogues)
+	{
+		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
 
+		ss.str("");
+		ss << Dialogue[Dialogue_Selection];
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
+
+		ss.str("");
+		ss << "Press E to continue...";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+	}
+
+	SceneBase::Render();
 }
 
 void SceneLevel02::Render()

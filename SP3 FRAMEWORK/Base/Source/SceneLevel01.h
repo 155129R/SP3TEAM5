@@ -51,6 +51,12 @@ private:
 	float timer;
 	bool timerstart;
 
+	string Dialogue[4];
+	float Dialogue_Timer = 1.0f;
+	float Dialogue_Timer2 = 1.0f;
+	int Dialogue_Selection = 0;
+	bool hammer_bool = false;
+
 	bool d1;
 	bool d2;
 	bool d3;

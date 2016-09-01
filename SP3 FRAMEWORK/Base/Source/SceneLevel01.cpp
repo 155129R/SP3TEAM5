@@ -151,6 +151,9 @@ void SceneLevel01::Init()
 	initSceneObjects();
 
 	//SpawnGhost();
+
+	//Loading dialogue
+	ReadDialogue("Text//Dialogue_1.txt", Dialogue);
 }
 
 void SceneLevel01::Update(double dt)
@@ -419,15 +422,58 @@ void SceneLevel01::Update(double dt)
 						object->active = false;
 					}
 				}
-			}
-
-			
+			}	
 		}
 	}
 	else if (!Application::IsKeyPressed('E'))
 	{
 		if (eButtonState)
 			eButtonState = false;
+	}
+
+	if (Dialogue_Selection != 2 && 
+		Application::IsKeyPressed('E')&&
+		Dialogue_Timer <= 0.0f)
+	{
+		Dialogue_Timer = 1.0f;
+		Dialogue_Selection++;
+	}
+	else
+	{
+		if (!instance->gotHammer)
+		{
+			Dialogue_Timer -= (float)dt;
+		}
+	}
+	if (Dialogue_Selection == 2 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f &&
+		!hammer_bool)
+	{
+		Dialogue_Timer = 1.0f;
+		Dialogues = false;
+	}
+	if (instance->gotHammer)
+	{
+		if (!hammer_bool)
+		{
+			Dialogues = true;
+			hammer_bool = true;
+		}
+		Dialogue_Selection = 3;
+	}
+	if (Dialogue_Selection == 3 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer2 <= 0.0f)
+	{
+		Dialogues = false;
+	}
+	else
+	{
+		if (hammer_bool)
+		{
+			Dialogue_Timer2 -= (float)dt;
+		}
 	}
 
 	if (Flashlight)
@@ -512,35 +558,6 @@ void SceneLevel01::Update(double dt)
 	}
 
 	rotateAngle += (float)(1 * dt);
-
-
-	////////////////////////////////////////////////////////
-	//	for next time winning condition to go next scene  //
-	////////////////////////////////////////////////////////
-	if (Application::IsKeyPressed('V'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
-	}
-	if (Application::IsKeyPressed('B'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
-	}
-	if (Application::IsKeyPressed('N'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
-	}
-	if (Application::IsKeyPressed('M'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
-	}
 
 	fps = (float)(1.f / dt);
 }
@@ -2389,7 +2406,6 @@ void SceneLevel01::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
 
-
 	//render shapes
 	if (Axis == true)
 	{
@@ -2422,56 +2438,16 @@ void SceneLevel01::RenderPassMain()
 
 	RenderObjects(ShowHitbox);
 
-	
-
 	if (!Singleton::getInstance()->stateCheck)
 	{
 		RenderHUD();
 	}
 
-	
+	std::ostringstream ss;
 
 	if (timerstart && timer < 3.f)
 	{
 		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
-	}
-	std::ostringstream ss;
-
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
-	ss.str("");
-	ss << "pistol mag: " << pistolMag;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
-
-	ss.str("");
-	ss << "pistol ammo: " << pistolAmmo;
-//	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
-
-	ss.str("");
-	ss << "rifle mag: " << rifleMag;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "rifle ammo: " << rifleAmmo;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "Position z: " << camera.position.z;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 18);
-
-	ss.str("");
-	ss.precision(5);
-	ss << "Position x: " << camera.position.x;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 21);
-
-	if (reloading){
-		std::ostringstream ss;
-		ss << "Reloading";
-		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
 	}
 
 	if (showText)
@@ -2533,6 +2509,21 @@ void SceneLevel01::RenderPassMain()
 
 		break;
 	}
+
+	//Dialogues
+	if (Dialogues)
+	{
+		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
+
+		ss.str("");
+		ss << Dialogue[Dialogue_Selection];
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
+
+		ss.str("");
+		ss << "Press E to continue...";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+	}
+
 	SceneBase::Render();
 }
 
