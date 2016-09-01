@@ -200,6 +200,7 @@ public:
 		GEO_LOAD_2,
 		GEO_LOAD_3,
 		GEO_LOAD_4,
+		GEO_LOAD_HUB,
 		GAME_WIN,
 		TO_HUB,
 		GAME_CREDITS,

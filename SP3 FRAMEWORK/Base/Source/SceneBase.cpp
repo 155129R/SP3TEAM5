@@ -380,6 +380,8 @@ void SceneBase::Init()
 	meshList[GEO_LOAD_4] = MeshBuilder::GenerateQuad("Level 4 loading screen", Color(0, 0, 0), 1.f);
 	meshList[GEO_LOAD_4]->textureID = LoadTGA("Image//Screen//Load_Screen04.tga");
 	meshList[GEO_LOAD_4]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen04.tga");
+	meshList[GEO_LOAD_HUB] = MeshBuilder::GenerateQuad("HUB loading screen", Color(0, 0, 0), 1.f);
+	meshList[GEO_LOAD_HUB]->textureID = LoadTGA("Image//Screen//Load_ScreenHub.tga");
 
 	//meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
 	//meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
@@ -687,12 +689,12 @@ void SceneBase::Update(double dt)
 		Ready = false;
 	}
 
-	if (Application::IsKeyPressed('G'))
+	if (Application::IsKeyPressed(VK_F3))
 	{
 		mode = false;
 	}
 
-	if (Application::IsKeyPressed('H'))
+	if (Application::IsKeyPressed(VK_F4))
 	{
 		mode = true;
 	}
@@ -763,7 +765,6 @@ void SceneBase::Update(double dt)
 	{
 		weaponType = 3;
 	}
-
 
 	if (Flashlight)
 	{
@@ -1471,6 +1472,10 @@ void SceneBase::Render()
 		{
 			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
+		if (Singleton::getInstance()->program_state == Singleton::PROGRAM_HUB)
+		{
+			RenderImageOnScreen(meshList[GEO_LOAD_HUB], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
+		}
 	}
 }
 
@@ -1585,6 +1590,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		instance->program_state = Singleton::PROGRAM_HUB;
+		instance->player->Revive();
 		break;
 	}
 }
@@ -1881,7 +1887,8 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					}
 					case AABBObject::OBJECT_TYPE::FOUNTAIN:
 					{
-						modelStack.PushMatrix();
+						std::cout << "its here leh" << std::endl;
+						modelStack.PushMatrix(); 
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
 						RenderMeshOutlined(meshList[FOUNTAIN], false);
