@@ -219,15 +219,7 @@ void Enemy::Chase(double dt, Vector3 playerPos)
 	if (Hitbox.Collide(playerPos))
 	{
 		//DEAL FEAR
-		if (cooldown >= 0.8f)
-		{
-			cooldown = 0.0f;
-			Singleton::getInstance()->player->InflictFear(Attack);
-		}
-		else
-		{
-			cooldown += dt;
-		}
+		Singleton::getInstance()->player->InflictFear(Attack);
 		State = ENEMY_STATE::PATROL;
 	}
 }
