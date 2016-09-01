@@ -150,7 +150,7 @@ void SceneLevel01::Init()
 
 	initSceneObjects();
 
-	//SpawnGhost();
+	SpawnGhost();
 
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_1.txt", Dialogue);

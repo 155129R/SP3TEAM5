@@ -1407,9 +1407,7 @@ void SceneBase::UpdateFearEffect(double dt)
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
-		FogAmount = 1500.0f;
-		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
-		glUniform1f(m_parameters[U_FOG_END], FogAmount);
+
 		switch (instance->stateCheck)
 		{
 			case Singleton::PROGRAM_GAME1:
