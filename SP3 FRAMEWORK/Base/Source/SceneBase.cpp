@@ -777,35 +777,35 @@ void SceneBase::Update(double dt)
 
 	if (Application::IsKeyPressed('R'))
 	{
-		if (weaponType == 1 && pistolMag > 0 && pistolAmmo < maxPistolAmmo)
+		if (weaponType == 1 && instance->pistolMag > 0 && instance->pistolAmmo < instance->maxPistolAmmo)
 			reloading = true;
-		if (weaponType == 2 && rifleMag > 0 && rifleAmmo < maxRifleAmmo)
+		if (weaponType == 2 && instance->rifleMag > 0 && instance->rifleAmmo < instance->maxRifleAmmo)
 			reloading = true;
 	}
 
 	if (reloading)
 	{
-		if (weaponType == 1 && pistolMag > 0)
+		if (weaponType == 1 && instance->pistolMag > 0)
 		{
 			reloadTime -= dt * 5;
-			pistolAmmo = 20;
+			instance->pistolAmmo = 20;
 			if (reloadTime <= 0)
 			{
 				reloading = false;
-				pistolMag--;
+				instance->pistolMag--;
 				sound.playSoundEffect2D("Sound/reload.mp3");
 			}
 		}
 
-		if (weaponType == 2 && rifleMag > 0)
+		if (weaponType == 2 && instance->rifleMag > 0)
 		{
 			reloadTime -= dt * 5;
-			rifleAmmo = 10;
+			instance->rifleAmmo = 10;
 
 			if (reloadTime <= 0)
 			{
 				reloading = false;
-				rifleMag--;
+				instance->rifleMag--;
 				sound.playSoundEffect2D("Sound/reload.mp3");
 			}
 		}
@@ -815,17 +815,17 @@ void SceneBase::Update(double dt)
 	//weapon shooting with cooldowns
 	if (weaponType == 1)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate) && reloading == false && pistolAmmo > 0)
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.5f / fireRate) && reloading == false && instance->pistolAmmo > 0)
 		{
 			sound.playSoundEffect2D("Sound/shoot.wav");
 
 			gunDown = true;
-			pistolAmmo--;
+			instance->pistolAmmo--;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				500,
+				1000,
 				1000,
 				1
 				));
@@ -855,12 +855,12 @@ void SceneBase::Update(double dt)
 	}
 	else if (weaponType == 2)
 	{
-		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate) && reloading == false && rifleAmmo > 0)
+		if (Application::IsKeyPressed(VK_SPACE) && readyToShoot >= (float)(0.1f / fireRate) && reloading == false && instance->rifleAmmo > 0)
 		{
 			//sound.playSoundEffect2D("Sound/spray.wav");
 			sound.playSoundEffect2D("Sound/shoot.mp3");
 			gunDown = true;
-			rifleAmmo--;
+			instance->rifleAmmo--;
 			readyToShoot = 0.f;
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
@@ -886,7 +886,7 @@ void SceneBase::Update(double dt)
 
 		if (gunUp == true)
 		{
-			rotateRifle -= (float)(50 * dt);
+			rotateRifle -= (float)(100 * dt);
 			if (rotateRifle <= 4)
 			{
 				gunUp = false;
@@ -1400,10 +1400,13 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
+
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
+	{
 		FogAmount = 1500.0f;
+		fogColor.Set(0.8f, 0.8f, 0.8f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		switch (instance->stateCheck)
@@ -1415,6 +1418,7 @@ void SceneBase::UpdateFearEffect(double dt)
 					FogAmount -= 3000 * (float)dt;
 					glUniform1f(m_parameters[U_FOG_END], FogAmount);
 				}
+				break;
 			}
 			case Singleton::PROGRAM_GAME2:
 			{
@@ -1422,7 +1426,7 @@ void SceneBase::UpdateFearEffect(double dt)
 				FogAmount = 1500.0f;
 				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 				glUniform1f(m_parameters[U_FOG_END], FogAmount);
-
+				break;
 			}
 			case Singleton::PROGRAM_GAME3:
 			{
@@ -1430,11 +1434,13 @@ void SceneBase::UpdateFearEffect(double dt)
 				FogAmount = 1500.0f;
 				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 				glUniform1f(m_parameters[U_FOG_END], FogAmount);
+				break;
 			}
 			case Singleton::PROGRAM_GAME4:
 			{
 				fogColor.Set(0.2f, 0.2f, 0.2f);
 				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+				break;
 			}
 			case Singleton::PROGRAM_HUB:
 			{
@@ -1449,10 +1455,12 @@ void SceneBase::UpdateFearEffect(double dt)
 					glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 					glUniform1f(m_parameters[U_FOG_END], FogAmount);
 				}
+				break;
 			}
-
 		}
+		break;
 
+	}
 	case 2:
 		FogAmount = 1000.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
@@ -1475,7 +1483,6 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 5:
-		//fearValueBar = 0.f;
 		FogAmount = 100.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -2448,15 +2455,15 @@ void SceneBase::RenderGUI()
 	case 1:
 		RenderImageOnScreen(meshList[UI_PISTOL], Vector3(5, 4, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
 		RenderImageOnScreen(meshList[UI_BOX2],
-			Vector3(((pistolAmmo / maxPistolAmmo) * 18), 6, 1),
-			Vector3(((pistolAmmo / maxPistolAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
+			Vector3(((instance->pistolAmmo / instance->maxPistolAmmo) * 18), 6, 1),
+			Vector3(((instance->pistolAmmo / instance->maxPistolAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
 
 		break;
 	case 2:
 		RenderImageOnScreen(meshList[UI_RIFLE], Vector3(9, 4, 1), Vector3(10, 4, 90), Vector3(0, 0, 0));
 		RenderImageOnScreen(meshList[UI_BOX2],
-			Vector3(((rifleAmmo / maxRifleAmmo) * 18), 6, 1),
-			Vector3(((rifleAmmo / maxRifleAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
+			Vector3(((instance->rifleAmmo / instance->maxRifleAmmo) * 18), 6, 1),
+			Vector3(((instance->rifleAmmo / instance->maxRifleAmmo) * 18 * 0.5) + 1, 3.5, 85), Vector3(0, 0, 0));
 
 		break;
 	case 3:

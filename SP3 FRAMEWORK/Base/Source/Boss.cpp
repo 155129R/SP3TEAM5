@@ -36,10 +36,11 @@ void Boss::Update(double dt)
 	int rng = Math::RandIntMinMax(0, 10);
 
 	//Sets the boss state to dead when hp reaches 0
-	if (HP <= 0)
+	if (HP <= 0 && Singleton::getInstance()->gameWin == false)
 	{
 		HP = 0;
 		boss_state = BOSS_STATE::DEAD;
+		Singleton::getInstance()->gameWin = true;
 	}
 
 	//Boss state machine
@@ -101,7 +102,7 @@ void Boss::Update(double dt)
 			{
 				//Fires at the player meanwhile
 				fire_rate = 0.8f;
-				//Shoot(dt, Singleton::getInstance()->player->getPosition());
+				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
 			}
 			break;

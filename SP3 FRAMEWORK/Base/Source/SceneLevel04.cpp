@@ -39,6 +39,12 @@ void SceneLevel04::Init()
 	meshList[GEO_TREE_3] = MeshBuilder::GenerateQuad("Dead Tree", Color(0, 0, 0), 1.f);
 	meshList[GEO_TREE_3]->textureArray[0] = LoadTGA("Image//Forest//Dead_Tree.tga");
 
+	meshList[GAME_WIN] = MeshBuilder::GenerateQuad("GAME_WIN", Color(0, 0, 0), 1.f);
+	meshList[GAME_WIN]->textureID = LoadTGA("Image//Screen//gameWin.tga");
+
+	meshList[TO_HUB] = MeshBuilder::GenerateQuad("TO_HUB", Color(0, 0, 0), 1.f);
+	meshList[TO_HUB]->textureID = LoadTGA("Image//Screen//returnToHub.tga");
+
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
@@ -111,7 +117,8 @@ void SceneLevel04::Update(double dt)
 	//std::cout << instance->player->GetFear() << endl;
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 
-	camera.Update(dt);
+	if (!instance->gameWin)
+		camera.Update(dt);
 
 	SceneBase::Update(dt);
 
@@ -208,6 +215,22 @@ void SceneLevel04::Update(double dt)
 		{
 			fogColor.Set(0.2f, 0.2f, 0.2f);
 			glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+		}
+	}
+
+	if (instance->gameWin)
+	{
+		if (scaleWin < 15){
+			scaleWin += dt * 5;
+		}
+		else if (scaleWin >= 15){
+			if (Application::IsKeyPressed('P'))
+			{
+				sound.stopMusic();
+				Singleton::getInstance()->stateCheck = true;
+				Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
+				instance->gameWin = false;
+			}
 		}
 	}
 
@@ -720,6 +743,14 @@ void SceneLevel04::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
+	if (instance->gameWin)
+	{
+		RenderImageOnScreen(meshList[GAME_WIN], /*Vector3(80, 17, 1)*/Vector3(5 * scaleWin, 1 * scaleWin, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		if (scaleWin >= 15)
+		{
+			RenderImageOnScreen(meshList[TO_HUB], Vector3(56, 2, 1), Vector3(40, 15, 0), Vector3(0, 0, 0));
+		}
+	}
 	
 	RenderInventory();
 	RenderGUI();
@@ -779,13 +810,13 @@ void SceneLevel04::RenderPassMain()
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:

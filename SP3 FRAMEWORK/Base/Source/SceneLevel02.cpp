@@ -71,7 +71,15 @@ void SceneLevel02::Init()
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
 
-	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
+	//harambe
+	meshList[PAINTING] = MeshBuilder::GenerateQuad("PAINTING", Color(0, 0, 0), 1.f);
+	meshList[PAINTING]->textureArray[0] = LoadTGA("Image//Indoor//paintingHarambe.tga");
+	//starry night
+	meshList[PAINTING2] = MeshBuilder::GenerateQuad("PAINTING2", Color(0, 0, 0), 1.f);
+	meshList[PAINTING2]->textureArray[0] = LoadTGA("Image//Indoor//painting1.tga");
+
+	camera.Init(Vector3(27, 5, -444), Vector3(0, 5, 1), Vector3(0, 1, 0));
+
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 
 	//Random my random randomly using srand
@@ -346,7 +354,7 @@ void SceneLevel02::initSceneObjects()
 
 void SceneLevel02::Update(double dt)
 {
-	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+	SceneBase::Update(dt);
 
 	distanceLeft = (Vector3(-1300, 20, 335) - camera.position).Length();
 
@@ -356,15 +364,12 @@ void SceneLevel02::Update(double dt)
 		{
 			sound.stopMusic();
 			Singleton::getInstance()->stateCheck = true;
-			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 		}
 	}
 		
-
 	if (Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
-
-	SceneBase::Update(dt);
 
 	fountainsfx->setListenerPosition(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 	gatesfx->setListenerPosition(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
@@ -868,6 +873,61 @@ void SceneLevel02::RenderOthers(bool Light)
 		RenderMeshOutlined(meshList[GEO_BUSH], Light);
 		modelStack.PopMatrix();
 	}
+
+	//paintings harambe
+	modelStack.PushMatrix();
+	modelStack.Translate(1229, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 95);
+	modelStack.Scale(1, 80, 140);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1229, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -105);
+	modelStack.Scale(1, 80, 140);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1112, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -220);
+	modelStack.Scale(140, 80, 1);
+	RenderMesh(meshList[PAINTING], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(912, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -220);
+	modelStack.Scale(140, 80, 1);
+	RenderMesh(meshList[PAINTING2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(1112, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 220);
+	modelStack.Scale(140, 80, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(912, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 220);
+	modelStack.Scale(140, 80, 1);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(768, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 142);
+	modelStack.Scale(1, 80, 140);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING2], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(768, 50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -142);
+	modelStack.Scale(1, 80, 140);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[PAINTING], false);
+	modelStack.PopMatrix();
 }
 void SceneLevel02::RenderHUD()
 {
@@ -1100,13 +1160,13 @@ void SceneLevel02::RenderPassMain()
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:

@@ -52,6 +52,9 @@ void SceneMenu::Init()
 	meshList[BUTTON_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[BUTTON_EXIT]->textureID = LoadTGA("Image//Screen//exit.tga");
 
+	meshList[GAME_CREDITS] = MeshBuilder::GenerateQuad("GAME_CREDITS", Color(0, 0, 0), 1.f);
+	meshList[GAME_CREDITS]->textureID = LoadTGA("Image//Screen//creditsMenu.tga");
+
 	terrainHeight = TERRAINSIZE.y;
 	Terrainsize = TERRAINSIZE * 0.5f;
 	InitPartitioning();
@@ -147,6 +150,14 @@ void SceneMenu::Update(double dt)
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level4_Heights);
 	//camera.Update(dt);
+
+	if (!instance->gameCredit)
+		creditTimer = 0; 
+	if (instance->gameCredit)
+		creditTimer += dt;
+
+	if (creditTimer > 5)
+		instance->gameCredit = false;
 
 	if (Flashlight)
 	{
@@ -524,9 +535,6 @@ void SceneMenu::RenderEnvironment(bool Light)
 
 void SceneMenu::RenderHUD()
 {
-
-
-
 	//////////////////////////
 	//     START BUTTON     //
 	/////////////////////////
@@ -552,86 +560,81 @@ void SceneMenu::RenderHUD()
 	{
 		RenderImageOnScreen(meshList[BUTTON_PLAY], Vector3(7.8, 6, 0), Vector3(60, 30, 0), Vector3(0, 0, 0));
 	}
-
-	//////////////////////////////////
-	////     INSTRUCTION BUTTON     //
-	//////////////////////////////////
-	//if ((693 * Application::GetWindowWidth() / 1920 > Singleton::getInstance()->mousex && 506 * Application::GetWindowWidth() / 1920 < Singleton::getInstance()->mousex) &&
-	//	(439 * Application::GetWindowHeight() / 1080 > Singleton::getInstance()->mousey && 400 * Application::GetWindowHeight() / 1080 <Singleton::getInstance()->mousey))
-	//{
-	//	//MOUSE CLICK
-	//	if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
-	//	{
-	//		RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
-	//	}
-	//	//MOUSE HOVER
-	//	else
-	//	{
-	//		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
-	//	}
-	//}
-	////DEFAULT
-	//else
-	//{
-	//	RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
-	//}
-
-	//////////////////////////////
-	////     CREDITS BUTTON     //
-	//////////////////////////////
-	//if ((1152 * Application::GetWindowWidth() / 1920 > Singleton::getInstance()->mousex && 767 * Application::GetWindowWidth() / 1920 < Singleton::getInstance()->mousex) &&
-	//	(755 * Application::GetWindowHeight() / 1080 > Singleton::getInstance()->mousey && 685 * Application::GetWindowHeight() / 1080 <Singleton::getInstance()->mousey))
-	//{
-	//	//MOUSE CLICK
-	//	if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
-	//	{
-	//		RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
-	//	}
-	//	//MOUSE HOVER
-	//	else
-	//	{
-	//		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
-	//	}
-	//}
-	////DEFAULT
-	//else
-	//{
-	//	RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
-	//}
-
-	///////////////////////////
-	////     EXIT BUTTON     //
-	///////////////////////////
-	//if ((630 * Application::GetWindowWidth() / 1920 > Singleton::getInstance()->mousex && 569 * Application::GetWindowWidth() / 1920 < Singleton::getInstance()->mousex) &&
-	//	(580 * Application::GetWindowHeight() / 1080 > Singleton::getInstance()->mousey && 557 * Application::GetWindowHeight() / 1080 <Singleton::getInstance()->mousey))
-	//{
-	//	//MOUSE CLICK
-	//	if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
-	//	{
-	//		RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
-	//		Singleton::getInstance()->program_state = Singleton::PROGRAM_EXIT;
-	//	}
-	//	//MOUSE HOVER
-	//	else
-	//	{
-	//		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
-	//	}
-	//}
-	////DEFAULT
-	//else
-	//{
-	//	RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
-	//}
+	//////////////////////////
+	//     INSTRUCTION BUTTON     //
+	/////////////////////////
+	if ((695 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 505 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+		(382 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 336 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+	{
+		//MOUSE CLICK
+		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+		{
+			
+		}
+		//MOUSE HOVER
+		else
+		{
+			RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(22, 6, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
+		}
+	}
+	//DEFAULT
+	else
+	{
+		RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
+	}
+	//////////////////////////
+	//     CREDITS BUTTON     //
+	/////////////////////////
+	if ((660 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 540 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+		(437 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 400 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+	{
+		//MOUSE CLICK
+		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+		{
+			if (!instance->gameCredit)
+				instance->gameCredit = true;
+		}
+		//MOUSE HOVER
+		else
+		{
+			RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(15, 6, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
+		}
+	}
+	//DEFAULT
+	else
+	{
+		RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
+	}
+	//////////////////////////
+	//     EXIT BUTTON     //
+	/////////////////////////
+	if ((632 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 570 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
+		(500 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 456 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
+	{
+		//MOUSE CLICK
+		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
+		{
+			
+		}
+		//MOUSE HOVER
+		else
+		{
+			RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(9.7, 6, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
+		}
+	}
+	//DEFAULT
+	else
+	{
+		RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
+	}
 	if (Singleton::getInstance()->program_state == Singleton::PROGRAM_MENU)
 	{
 		RenderImageOnScreen(meshList[GAME_TITLE], Vector3(50, 10, 50), Vector3(30, 50, 0), Vector3(0, 0, 0));
-
-		//RenderImageOnScreen(meshList[BUTTON_PLAY], Vector3(7.8, 6, 50), Vector3(60, 30, 0), Vector3(0, 0, 0));
-		RenderImageOnScreen(meshList[BUTTON_OPTIONS], Vector3(11.5, 5, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
-		RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
-		RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
-		RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 6, 0), Vector3(0, 0, 0));
 	}
+
+	//RENDER CREDITS IF CLICKED ON
+	if (instance->gameCredit)
+		RenderImageOnScreen(meshList[GAME_CREDITS], Vector3(25, 30, 50), Vector3(25, 18, 0), Vector3(0, 0, 0));
 
 }
 
@@ -805,8 +808,7 @@ void SceneMenu::RenderPassMain()
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 0, 2, 3);
 
-		/*
-		ss.str("");
+		/*ss.str("");
 		ss.precision(5);
 		ss << "Mouse Pos X: " << std::to_string(Singleton::getInstance()->mousex);
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3, 2, 6);

@@ -85,7 +85,7 @@ void SceneLevel01::Init()
 	meshList[ELEVATOR]->textureArray[0] = LoadTGA("Image//Indoor//elevator.tga");
 
 	meshList[ELEVATORCOVER] = MeshBuilder::GenerateOBJ("ELEVATORCOVER", "OBJ//Indoor//elevatorCover.obj");
-	meshList[ELEVATORCOVER]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
+	meshList[ELEVATORCOVER]->textureArray[0] = LoadTGA("Image//Indoor//level01.tga");
 
 	meshList[SOFA] = MeshBuilder::GenerateOBJ("SOFA", "OBJ//Indoor//sofa.obj");
 	meshList[SOFA]->textureArray[0] = LoadTGA("Image//Indoor//sofa.tga");
@@ -150,7 +150,7 @@ void SceneLevel01::Init()
 
 	initSceneObjects();
 
-	//SpawnGhost();
+	SpawnGhost();
 
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_1.txt", Dialogue);
@@ -289,6 +289,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -250;
 		instance->singletonCamera->target.z = -260;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d1 = false;
 	}
 
@@ -298,6 +299,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d2 = false;
 	}
 	//left 2nd
@@ -307,6 +309,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -250;
 		instance->singletonCamera->target.z = -260;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d3 = false;
 	}
 
@@ -316,6 +319,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d4 = false;
 	}
 	//right 1st
@@ -325,6 +329,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 430;
 		instance->singletonCamera->target.z = 440;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d5 = false;
 	}
 
@@ -334,6 +339,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d6 = false;
 	}
 	//right 2nd
@@ -343,6 +349,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 430;
 		instance->singletonCamera->target.z = 440;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d7 = false;
 	}
 
@@ -352,6 +359,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d8 = false;
 	}
 
@@ -368,48 +376,56 @@ void SceneLevel01::Update(double dt)
 					{
 						sound.stopMusic();
 						Singleton::getInstance()->stateCheck = true;
-						Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+						Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 					}
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door1->pos - camera.position).Length() < 95 && cameraViewObject(door1->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door2->pos - camera.position).Length() < 95 && cameraViewObject(door2->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door3->pos - camera.position).Length() < 95 && cameraViewObject(door3->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door4->pos - camera.position).Length() < 95 && cameraViewObject(door4->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door5->pos - camera.position).Length() < 95 && cameraViewObject(door5->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door6->pos - camera.position).Length() < 95 && cameraViewObject(door6->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door7->pos - camera.position).Length() < 95 && cameraViewObject(door7->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door8->pos - camera.position).Length() < 95 && cameraViewObject(door8->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 				if (object->active && cameraViewObject(hammerPtr->pos, 80) == true)
 				{
@@ -2586,10 +2602,7 @@ void SceneLevel01::RenderPassMain()
 	std::ostringstream ss;
 
 
-	if (timerstart && timer < 3.f)
-	{
-		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
-	}
+	
 
 	if (reloading){
 		std::ostringstream ss;
@@ -2605,23 +2618,6 @@ void SceneLevel01::RenderPassMain()
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
-
-		ss.str("");
-		ss << "pistol mag: " << pistolMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 6);
-
-		ss.str("");
-		ss << "pistol ammo: " << pistolAmmo;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 9);
-
-		ss.str("");
-		ss << "rifle mag: " << rifleMag;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 12);
-
-		ss.str("");
-		ss.precision(5);
-		ss << "rifle ammo: " << rifleAmmo;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 15);
 
 		ss.str("");
 		ss.precision(5);
@@ -2645,13 +2641,13 @@ void SceneLevel01::RenderPassMain()
 	case 1:
 		ss.str("");
 		ss.precision(5);
-		ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+		ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 2:
 		ss.str("");
 		ss.precision(5);
-		ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+		ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 		break;
 	case 3:
@@ -2676,7 +2672,10 @@ void SceneLevel01::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
 	}
 	SceneBase::Render();
-
+	if (timerstart && timer < 3.f)
+	{
+		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
+	}
 }
 
 void SceneLevel01::Render()
