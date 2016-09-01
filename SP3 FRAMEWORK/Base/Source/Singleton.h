@@ -43,6 +43,7 @@ class Singleton
 		bool showShop;
 		bool openDoor;
 		bool gotHammer;
+		bool gotClear;
 		float footstepDelay;
 		int money;
 		//ADD UNIVERSAL STUFF HERE
@@ -90,15 +91,13 @@ class Singleton
 			inventory2ndRow.push_back(item_nightVision);
 			inventory2ndRow.push_back(item_radar);
 		}
-			
-
-
+		
 		//program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
-		program_state = PROGRAM_GAME2;
+		//program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
-		//program_state = PROGRAM_HUB;
+		program_state = PROGRAM_HUB;
 
 		stateCheck = false;
 
@@ -108,6 +107,7 @@ class Singleton
 
 		gotKey = false;
 		gotHammer = false;
+		gotClear = false;
 
 		money = 0;
 	}

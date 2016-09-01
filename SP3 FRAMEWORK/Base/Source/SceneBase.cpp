@@ -814,7 +814,7 @@ void SceneBase::Update(double dt)
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				500,
+				1000,
 				1000,
 				1
 				));

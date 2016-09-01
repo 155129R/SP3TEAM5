@@ -65,6 +65,15 @@ private:
 	int sellSize;
 	float timeb4disappear;
 
+	AABBObject * Portal_1;
+	AABBObject * Portal_2;
+	AABBObject * Portal_3;
+	AABBObject * Portal_4;
+
+	float distance_1 = 0.0f;
+	float distance_2 = 0.0f;
+	float distance_3 = 0.0f;
+	float distance_4 = 0.0f;
 };
 
 #endif

@@ -348,11 +348,10 @@ void SceneLevel02::Update(double dt)
 			sound.stopMusic();
 			sound.stopSoundEffect3D();
 			Singleton::getInstance()->stateCheck = true;
-			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 		}
 	}
 		
-
 	if (Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
 
