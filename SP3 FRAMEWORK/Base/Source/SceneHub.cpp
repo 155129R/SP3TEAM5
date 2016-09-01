@@ -118,7 +118,37 @@ void SceneHub::Init()
 
 void SceneHub::initSceneObjects()
 {
+	//Counter
+	AABBObject * Counter = new AABBObject();
+	Counter->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Counter->active = true;
+	Counter->pos.Set(285, -60, 25);
+	Counter->scale.Set(6, 5, 52);
+	instance->Object_list.push_back(Counter);
 
+	//Back
+	AABBObject * Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-405, 35, 30);
+	Boundary->scale.Set(1, 30, 55);
+	instance->Object_list.push_back(Boundary);
+
+	//Left
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-45, 35, -245);
+	Boundary->scale.Set(65, 30, 1);
+	instance->Object_list.push_back(Boundary);
+
+	//Right
+	Boundary = new AABBObject();
+	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Boundary->active = true;
+	Boundary->pos.Set(-45, 35, 290);
+	Boundary->scale.Set(65, 30, 1);
+	instance->Object_list.push_back(Boundary);
 }
 
 void SceneHub::Update(double dt)
@@ -490,11 +520,34 @@ void SceneHub::RenderTerrain()
 
 void SceneHub::RenderEnvironment(bool Light)
 {
+	modelStack.PushMatrix();
+	modelStack.Translate(-170, -6, -240);
+	modelStack.Scale(115, 120, 140);
+	RenderMeshOutlined(meshList[GEO_LOAD_1], Light);
+	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(100, -6, -240);
+	modelStack.Scale(115, 120, 140);
+	RenderMeshOutlined(meshList[GEO_LOAD_2], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(100, -6, 286);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(115, 120, 140);
+	RenderMeshOutlined(meshList[GEO_LOAD_3], Light);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-170, -6, 286);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(115, 120, 140);
+	RenderMeshOutlined(meshList[GEO_LOAD_4], Light);
+	modelStack.PopMatrix();
 }
 void SceneHub::RenderOthers(bool Light)
 {
-
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -49 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Rotate(-90, 1, 0, 0);
@@ -1217,9 +1270,6 @@ void SceneHub::RenderPassMain()
 
 	if (Singleton::getInstance()->showShop == false)
 	{
-		ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
-
 		switch (weaponType)
 		{
 		case 1:

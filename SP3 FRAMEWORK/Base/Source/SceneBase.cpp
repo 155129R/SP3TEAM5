@@ -357,12 +357,16 @@ void SceneBase::Init()
 	//Loading screens
 	meshList[GEO_LOAD_1] = MeshBuilder::GenerateQuad("Level 1 loading screen", Color(0, 0, 0), 1.f);
 	meshList[GEO_LOAD_1]->textureID = LoadTGA("Image//Screen//Load_Screen01.tga");
+	meshList[GEO_LOAD_1]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen01.tga");
 	meshList[GEO_LOAD_2] = MeshBuilder::GenerateQuad("Level 2 loading screen", Color(0, 0, 0), 1.f);
 	meshList[GEO_LOAD_2]->textureID = LoadTGA("Image//Screen//Load_Screen02.tga");
+	meshList[GEO_LOAD_2]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen02.tga");
 	meshList[GEO_LOAD_3] = MeshBuilder::GenerateQuad("Level 3 loading screen", Color(0, 0, 0), 1.f);
 	meshList[GEO_LOAD_3]->textureID = LoadTGA("Image//Screen//Load_Screen03.tga");
+	meshList[GEO_LOAD_3]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen03.tga");
 	meshList[GEO_LOAD_4] = MeshBuilder::GenerateQuad("Level 4 loading screen", Color(0, 0, 0), 1.f);
 	meshList[GEO_LOAD_4]->textureID = LoadTGA("Image//Screen//Load_Screen04.tga");
+	meshList[GEO_LOAD_4]->textureArray[0] = LoadTGA("Image//Screen//Load_Screen04.tga");
 
 	//meshList[POCONG] = MeshBuilder::GenerateOBJ("POCONG", "OBJ//pocong.obj");
 	//meshList[POCONG]->textureArray[0] = LoadTGA("Image//Graveyard//pocong.tga");
@@ -652,7 +656,7 @@ void SceneBase::Update(double dt)
 		if (inventoryButtonState)
 			inventoryButtonState = false;
 	}
-	if (Application::IsKeyPressed('4') && HealthpackCD <= 0.0f)
+	if (Application::IsKeyPressed('4') && Ready && instance->player->GetFearValue() > 0)
 	{
 		instance->player->UseHealthpack();
 		HealthpackCD = 5.0f;
@@ -660,6 +664,15 @@ void SceneBase::Update(double dt)
 	else
 	{
 		HealthpackCD -= (float)dt;
+	}
+	if (HealthpackCD <= 0.0f)
+	{
+		Ready = true;
+		HealthpackCD = 0.0f;
+	}
+	else
+	{
+		Ready = false;
 	}
 
 	if (Application::IsKeyPressed('G'))
@@ -1324,6 +1337,27 @@ void SceneBase::Render()
 			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 	}
+	
+	//GUI Stuff
+	std::ostringstream ss;
+	ss.str(""); 
+	ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
+	if (!Ready)
+	{
+		ss.str("");
+		ss.precision(3);
+		ss << "Cooldown: " << HealthpackCD;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
+	}
+	else
+	{
+		ss.str("");
+		ss.precision(3);
+		ss << "Ready!";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
+	}
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -1347,11 +1381,10 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
-	//std::cout << Singleton::getInstance()->player->GetFear() << std::endl;
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
-		fearValueBar = 100.f;
+		//fearValueBar = 100.f;
 		FogAmount = 1500.0f;
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
@@ -1403,7 +1436,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		}
 
 	case 2:
-		fearValueBar = 75.f;
+		//fearValueBar = 75.f;
 		FogAmount = 1000.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1411,7 +1444,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 3:
-		fearValueBar = 50.f;
+		//fearValueBar = 50.f;
 		FogAmount = 700.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1419,7 +1452,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 4:
-		fearValueBar = 25.f;
+		//fearValueBar = 25.f;
 		FogAmount = 500.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1427,7 +1460,7 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 5:
-		fearValueBar = 0.f;
+		//fearValueBar = 0.f;
 		FogAmount = 100.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -2379,7 +2412,6 @@ void SceneBase::RenderWeapons(bool light)
 }
 void SceneBase::RenderGUI()
 {
-	//cout << instance->player->GetStamina() << endl;
 	RenderImageOnScreen(meshList[UI_BOX], Vector3(18, 9, 1), Vector3(10, 5, 80), Vector3(0, 0, 0));
 	RenderImageOnScreen(meshList[UI_STAMINA_BAR],
 		Vector3(((instance->player->GetStamina() / 100) * 40), 2, 1),
@@ -2387,8 +2419,8 @@ void SceneBase::RenderGUI()
 	RenderImageOnScreen(meshList[UI_BLACK_BAR], Vector3(40, 2, 1), Vector3(40, 2, 84), Vector3(0, 0, 0));
 
 	RenderImageOnScreen(meshList[UI_FEAR_BAR],
-		Vector3(((fearValueBar / 100)* 40), 2, 1),
-		Vector3(((fearValueBar / 100) * 40 * 0.5) + 20, 6, 85), Vector3(0, 0, 0));
+		Vector3(((float)(100 - instance->player->GetFearValue()) / 100 * 40), 2, 1),
+		Vector3(((float)(100 - instance->player->GetFearValue()) / 100 * 40 * 0.5) + 20, 6, 85), Vector3(0, 0, 0));
 	RenderImageOnScreen(meshList[UI_BLACK_BAR], Vector3(40, 2, 1), Vector3(40, 6, 84), Vector3(0, 0, 0));
 
 	RenderImageOnScreen(meshList[UI_POTION], Vector3(4, 4, 1), Vector3(5, 13, 1), Vector3(0, 0, 0));
@@ -2426,8 +2458,6 @@ void SceneBase::RenderInventory()
 		int sz = Singleton::getInstance()->inventory.size();
 		static bool bLButtonState = false;
 		std::ostringstream ss;
-		//cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
-		//system("CLS");
 		for (int i = 1; i <= sz; i++)
 		{
 			//cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
@@ -2464,17 +2494,17 @@ void SceneBase::RenderInventory()
 
 					if (Singleton::getInstance()->inventory[0]->name == "ghost1")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
+						ss.str(""); ss.precision(5); ss << "This is an Apparition";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[0]->name == "ghost2")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost2 ";
+						ss.str(""); ss.precision(5); ss << "This is a Mini Phantom";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[0]->name == "ghost3")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost3 ";
+						ss.str(""); ss.precision(5); ss << "This is a Flaming Skull";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
@@ -2502,17 +2532,17 @@ void SceneBase::RenderInventory()
 
 					if (Singleton::getInstance()->inventory[1]->name == "ghost1")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
+						ss.str(""); ss.precision(5); ss << "This is an Apparition";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[1]->name == "ghost2")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost2 ";
+						ss.str(""); ss.precision(5); ss << "This is a Mini Phantom";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[1]->name == "ghost3")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost3 ";
+						ss.str(""); ss.precision(5); ss << "This is a Flaming Skull";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
@@ -2540,17 +2570,17 @@ void SceneBase::RenderInventory()
 
 					if (Singleton::getInstance()->inventory[2]->name == "ghost1")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
+						ss.str(""); ss.precision(5); ss << "This is an Apparition";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[2]->name == "ghost2")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost2 ";
+						ss.str(""); ss.precision(5); ss << "This is a Mini Phantom";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[2]->name == "ghost3")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost3 ";
+						ss.str(""); ss.precision(5); ss << "This is a Flaming Skull";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
@@ -2578,17 +2608,17 @@ void SceneBase::RenderInventory()
 
 					if (Singleton::getInstance()->inventory[3]->name == "ghost1")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
+						ss.str(""); ss.precision(5); ss << "This is an Apparition";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[3]->name == "ghost2")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost2 ";
+						ss.str(""); ss.precision(5); ss << "This is a Mini Phantom";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[3]->name == "ghost3")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost3 ";
+						ss.str(""); ss.precision(5); ss << "This is a Flaming Skull";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
@@ -2616,17 +2646,17 @@ void SceneBase::RenderInventory()
 
 					if (Singleton::getInstance()->inventory[4]->name == "ghost1")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
+						ss.str(""); ss.precision(5); ss << "This is an Apparition";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[4]->name == "ghost2")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost2 ";
+						ss.str(""); ss.precision(5); ss << "This is a Mini Phantom";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[4]->name == "ghost3")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost3 ";
+						ss.str(""); ss.precision(5); ss << "This is a Flaming Skull";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
@@ -2654,17 +2684,17 @@ void SceneBase::RenderInventory()
 
 					if (Singleton::getInstance()->inventory[5]->name == "ghost1")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost1 ";
+						ss.str(""); ss.precision(5); ss << "This is an Apparition";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[5]->name == "ghost2")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost2 ";
+						ss.str(""); ss.precision(5); ss << "This is a Mini Phantom";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 					if (Singleton::getInstance()->inventory[5]->name == "ghost3")
 					{
-						ss.str(""); ss.precision(5); ss << "This is ghost3 ";
+						ss.str(""); ss.precision(5); ss << "This is a Flaming Skull";
 						RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 20, 18);
 					}
 				}
@@ -3085,7 +3115,7 @@ bool SceneBase::renderCheck(char partition1, char partition2)
 		return true;
 	else return false;
 }
-bool  SceneBase::cameraViewObject(Vector3 pos, float degree)
+bool SceneBase::cameraViewObject(Vector3 pos, float degree)
 {
 	if (pos != camera.position)
 	{

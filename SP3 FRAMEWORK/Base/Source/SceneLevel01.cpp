@@ -49,7 +49,7 @@ void SceneLevel01::Init()
 	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//Indoor//stairs.tga");
 
 	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Indoor//Level01.obj");
-	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
+	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//Indoor//level1.tga");
 
 	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//Indoor//door.obj");
 	meshList[DOOR]->textureArray[0] = LoadTGA("Image//Indoor//door.tga");

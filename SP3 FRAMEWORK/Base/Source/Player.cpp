@@ -127,6 +127,11 @@ int Player::GetFear()
 	}
 }
 
+float Player::GetFearValue()
+{
+	return fear_value;
+}
+
 void Player::InflictFear(int amount)
 {
 	fear_value += amount;
@@ -203,10 +208,13 @@ int Player::getHealthPack()
 }
 void Player::UseHealthpack()
 {
-	//std::cout << "TEsty" << std::endl;
 	if (Healthpacks > 0)
 	{
 		Healthpacks -= 1;
 		fear_value -= 20;
+		if (fear_value <= 0)
+		{
+			fear_value = 0;
+		}
 	}
 }
