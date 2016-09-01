@@ -432,7 +432,6 @@ protected:
 	double maxRifleAmmo = 10;
 	double rifleMag = 1;
 	double rifleAmmo = maxRifleAmmo;
-	float fearValueBar;
 	float Degree;
 
 	bool reloading = false;

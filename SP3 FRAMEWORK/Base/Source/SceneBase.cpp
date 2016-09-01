@@ -496,7 +496,6 @@ void SceneBase::Init()
 
 	rotatePistol = 5;
 	rotateRifle = 4;
-	fearValueBar = 0;
 	gunUp = false;
 	gunDown = false;
 }
@@ -1323,6 +1322,27 @@ void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
 
 void SceneBase::Render()
 {
+	//GUI Stuff
+	std::ostringstream ss;
+	ss.str("");
+	ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
+	if (!Ready)
+	{
+		ss.str("");
+		ss.precision(3);
+		ss << "Cooldown: " << HealthpackCD;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
+	}
+	else
+	{
+		ss.str("");
+		ss.precision(3);
+		ss << "Ready!";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
+	}
+
 	if (nightVision == true)
 	{
 		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
@@ -1350,27 +1370,6 @@ void SceneBase::Render()
 			RenderImageOnScreen(meshList[GEO_LOAD_4], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 		}
 	}
-	
-	//GUI Stuff
-	std::ostringstream ss;
-	ss.str(""); 
-	ss << instance->player->getHealthPack();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
-
-	if (!Ready)
-	{
-		ss.str("");
-		ss.precision(3);
-		ss << "Cooldown: " << HealthpackCD;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
-	}
-	else
-	{
-		ss.str("");
-		ss.precision(3);
-		ss << "Ready!";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
-	}
 }
 
 void SceneBase::UpdatePlayer(double dt)
@@ -1397,7 +1396,6 @@ void SceneBase::UpdateFearEffect(double dt)
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
-		//fearValueBar = 100.f;
 		FogAmount = 1500.0f;
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
@@ -1449,7 +1447,6 @@ void SceneBase::UpdateFearEffect(double dt)
 		}
 
 	case 2:
-		//fearValueBar = 75.f;
 		FogAmount = 1000.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1457,7 +1454,6 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 3:
-		//fearValueBar = 50.f;
 		FogAmount = 700.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
@@ -1465,7 +1461,6 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 4:
-		//fearValueBar = 25.f;
 		FogAmount = 500.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
