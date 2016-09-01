@@ -85,7 +85,7 @@ void SceneLevel01::Init()
 	meshList[ELEVATOR]->textureArray[0] = LoadTGA("Image//Indoor//elevator.tga");
 
 	meshList[ELEVATORCOVER] = MeshBuilder::GenerateOBJ("ELEVATORCOVER", "OBJ//Indoor//elevatorCover.obj");
-	meshList[ELEVATORCOVER]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
+	meshList[ELEVATORCOVER]->textureArray[0] = LoadTGA("Image//Indoor//level01.tga");
 
 	meshList[SOFA] = MeshBuilder::GenerateOBJ("SOFA", "OBJ//Indoor//sofa.obj");
 	meshList[SOFA]->textureArray[0] = LoadTGA("Image//Indoor//sofa.tga");
