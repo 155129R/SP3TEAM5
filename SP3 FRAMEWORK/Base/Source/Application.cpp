@@ -197,7 +197,7 @@ void Application::Run()
 	//sceneManager->ChangeScene(5);
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) && Singleton::getInstance()->program_state != Singleton::PROGRAM_EXIT)
 	{
 		////////////////////////////
 		//    change scene here   //

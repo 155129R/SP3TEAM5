@@ -560,16 +560,16 @@ void SceneMenu::RenderHUD()
 	{
 		RenderImageOnScreen(meshList[BUTTON_PLAY], Vector3(7.8, 6, 0), Vector3(60, 30, 0), Vector3(0, 0, 0));
 	}
-	//////////////////////////
+	////////////////////////////////
 	//     INSTRUCTION BUTTON     //
-	/////////////////////////
+	////////////////////////////////
 	if ((695 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 505 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 		(382 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 336 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
 	{
 		//MOUSE CLICK
 		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
 		{
-			
+			RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
 		}
 		//MOUSE HOVER
 		else
@@ -582,9 +582,9 @@ void SceneMenu::RenderHUD()
 	{
 		RenderImageOnScreen(meshList[BUTTON_INSTRUCTION], Vector3(19, 5, 50), Vector3(60, 24, 0), Vector3(0, 0, 0));
 	}
-	//////////////////////////
+	////////////////////////////
 	//     CREDITS BUTTON     //
-	/////////////////////////
+	////////////////////////////
 	if ((660 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 540 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
 		(437 * Application::GetWindowHeight() / 600> Singleton::getInstance()->mousey && 400 * Application::GetWindowHeight() / 600< Singleton::getInstance()->mousey))
 	{
@@ -593,6 +593,8 @@ void SceneMenu::RenderHUD()
 		{
 			if (!instance->gameCredit)
 				instance->gameCredit = true;
+
+			RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
 		}
 		//MOUSE HOVER
 		else
@@ -605,7 +607,7 @@ void SceneMenu::RenderHUD()
 	{
 		RenderImageOnScreen(meshList[BUTTON_CREDITS], Vector3(12, 5, 50), Vector3(60, 18, 0), Vector3(0, 0, 0));
 	}
-	//////////////////////////
+	/////////////////////////
 	//     EXIT BUTTON     //
 	/////////////////////////
 	if ((632 * Application::GetWindowWidth() / 800> Singleton::getInstance()->mousex && 570 * Application::GetWindowWidth() / 800< Singleton::getInstance()->mousex) &&
@@ -614,7 +616,8 @@ void SceneMenu::RenderHUD()
 		//MOUSE CLICK
 		if ((GetKeyState(VK_LBUTTON) & 0x100) != 0)
 		{
-			
+			RenderImageOnScreen(meshList[BUTTON_EXIT], Vector3(6.7, 5, 50), Vector3(60, 12, 0), Vector3(0, 0, 0));
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_EXIT;
 		}
 		//MOUSE HOVER
 		else
