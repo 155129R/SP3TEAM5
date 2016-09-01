@@ -96,6 +96,14 @@ void SceneLevel03::Init()
 
 	SpawnGhost();
 
+	//Loading dialogue
+	ReadDialogue("Text//Dialogue_3.txt", Dialogue);
+
+	initSceneObjects();
+}
+
+void SceneLevel03::initSceneObjects()
+{
 	AABBObject * Logs = new AABBObject();
 	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
 	Logs->active = true;
@@ -152,7 +160,7 @@ void SceneLevel03::Init()
 	Boundary->pos.Set(-1900, 100, 0);
 	Boundary->scale.Set(5, 10, 380);
 	instance->Object_list.push_back(Boundary);
-	
+
 	//Right
 	Boundary = new AABBObject();
 	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
@@ -209,6 +217,26 @@ void SceneLevel03::Update(double dt)
 	}
 
 	UpdateEnemy(dt);
+
+	//Dialogues
+	if (Dialogue_Selection != 1 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f)
+	{
+		Dialogue_Timer = 1.0f;
+		Dialogue_Selection++;
+	}
+	else
+	{
+		Dialogue_Timer -= (float)dt;
+	}
+	if (Dialogue_Selection == 1 &&
+		Application::IsKeyPressed('E') &&
+		Dialogue_Timer <= 0.0f)
+	{
+		Dialogue_Timer = 1.0f;
+		Dialogues = false;
+	}
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
 	camera.Terrain = getHeightofTerrain(TERRAINSIZE.x, level3_Heights);
@@ -301,30 +329,6 @@ void SceneLevel03::Update(double dt)
 	////////////////////////////////////////////////////////
 	float distance = (Change->pos - Singleton::getInstance()->player->getPosition()).Length();
 	if (Application::IsKeyPressed('E') && distance <= 200)
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
-	}
-	if (Application::IsKeyPressed('V'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
-	}
-	if (Application::IsKeyPressed('B'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
-	}
-	if (Application::IsKeyPressed('N'))
-	{
-		sound.stopMusic();
-		Singleton::getInstance()->stateCheck = true;
-		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
-	}
-	if (Application::IsKeyPressed('M'))
 	{
 		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
@@ -606,7 +610,7 @@ void SceneLevel03::RenderEnvironment(bool Light, bool inverted)
 
 void SceneLevel03::RenderHUD()
 {
-	RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
+	//RenderImageOnScreen(meshList[GEO_STAMINA], Vector3(100, 2, 1), Vector3(50 - (100 - instance->player->GetStamina() / 3), 1, 0), Vector3(0, 0, 0));
 
 	RenderRadar();
 }
@@ -842,6 +846,8 @@ void SceneLevel03::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
+	RenderInventory();
+	RenderGUI();
 	//Render objects
 	RenderLight();
 
@@ -875,8 +881,7 @@ void SceneLevel03::RenderPassMain()
 	
 	RenderWeapons(false);
 	RenderBullets(false);
-	RenderInventory();
-	RenderGUI();
+
 	//On screen text
 	
 		std::ostringstream ss;
@@ -918,6 +923,24 @@ void SceneLevel03::RenderPassMain()
 
 		break;
 	}
+
+	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
+
+	//Dialogues
+	if (Dialogues)
+	{
+		RenderImageOnScreen(meshList[GEO_TEXT_BOX], Vector3(80, 30, 1), Vector3(30, 20, 0), Vector3(0, 0, 0));
+
+		ss.str("");
+		ss << Dialogue[Dialogue_Selection];
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 2, 21);
+
+		ss.str("");
+		ss << "Press E to continue...";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
+	}
+
 	SceneBase::Render();
 }
 

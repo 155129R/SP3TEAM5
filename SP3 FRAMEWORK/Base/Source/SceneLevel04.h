@@ -56,6 +56,12 @@ private:
 	float randompos_z[128];
 
 	float boss_hp_ratio = 0.0f;
+
+	string Dialogue[2];
+	float Dialogue_Timer = 1.0f;
+	float Dialogue_Timer2 = 1.0f;
+	int Dialogue_Selection = 0;
+	bool boss_bool = false;
 };
 
 #endif

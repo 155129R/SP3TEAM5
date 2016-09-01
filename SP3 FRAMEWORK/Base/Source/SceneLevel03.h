@@ -14,6 +14,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	void initSceneObjects();
+
 	void RenderGround();
 	void RenderSkyplane(bool inverted = false);
 	void RenderTerrain();
@@ -55,6 +57,10 @@ private:
 
 	AABBObject* Change;
 	SpriteAnimation* Water;
+
+	string Dialogue[2];
+	float Dialogue_Timer = 1.0f;
+	int Dialogue_Selection = 0;
 };
 
 #endif

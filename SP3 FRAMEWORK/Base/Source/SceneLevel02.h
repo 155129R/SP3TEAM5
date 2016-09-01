@@ -3,6 +3,7 @@
 
 #include "SceneBase.h"
 #include "Sound.h"
+#include "irrKlang.h"
 
 class SceneLevel02 : public SceneBase
 {
@@ -59,6 +60,15 @@ private:
 
 	AABBObject* keyPtr;
 	AABBObject* gatePtr;
+
+	string Dialogue[4];
+	float Dialogue_Timer = 1.0f;
+	float Dialogue_Timer2 = 1.0f;
+	int Dialogue_Selection = 0;
+	bool key_bool = false;
+
+	irrklang::ISoundEngine* fountainsfx = irrklang::createIrrKlangDevice();
+	irrklang::ISoundEngine* gatesfx = irrklang::createIrrKlangDevice();
 };
 
 #endif
