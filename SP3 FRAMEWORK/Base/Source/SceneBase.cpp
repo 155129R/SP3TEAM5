@@ -483,6 +483,7 @@ void SceneBase::Init()
 	fearValueBar = 0;
 	gunUp = false;
 	gunDown = false;
+	nightVision = false;
 
 }
 
@@ -711,8 +712,11 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('6'))
 	{
 		nightVision = true;
+	}
+	if (nightVision)
+	{
 		lights[0].power = 4.f;
-		lights[0].color = (0.0f, 0.8f, 0.5f);
+		lights[0].color = (0.1f, 0.8f, 0.5f);
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	}
@@ -724,7 +728,14 @@ void SceneBase::Update(double dt)
 		glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &lights[0].color.r);
 		glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 	}
-
+	if (Application::IsKeyPressed(VK_F8))
+	{
+		instance->noClip = true;
+	}
+	if (Application::IsKeyPressed(VK_F9))
+	{
+		instance->noClip = false;
+	}
 	if (Application::IsKeyPressed('1'))
 	{
 		weaponType = 1;
@@ -1269,7 +1280,7 @@ void SceneBase::Render()
 {
 	if (nightVision == true)
 	{
-		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(60, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
 	}
 	if (Singleton::getInstance()->stateCheck)
 	{
@@ -1403,6 +1414,9 @@ void SceneBase::UpdateFearEffect(double dt)
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &Black.r);
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		instance->program_state = Singleton::PROGRAM_HUB;
 		break;
 	}
 }

@@ -45,7 +45,10 @@ void Camera3::Forward(double dt)
 					willCollide = false;
 			}
 		}
-
+		if (Singleton::getInstance()->noClip)
+		{
+			willCollide = false;
+		}
 	if (!willCollide)
 	{
 		target.x += view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -91,7 +94,10 @@ void Camera3::Backward(double dt)
 			else
 				willCollide = false;
 		}
-	
+		if (Singleton::getInstance()->noClip)
+		{
+			willCollide = false;
+		}
 	if (!willCollide)
 	{
 		target.x -= view.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -140,7 +146,10 @@ void Camera3::Sideway(double dt, bool Left)
 				else
 					willCollide = false;
 			}
-		
+			if (Singleton::getInstance()->noClip)
+			{
+				willCollide = false;
+			}
 		if (!willCollide)
 		{
 			target.x -= right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;
@@ -187,7 +196,10 @@ void Camera3::Sideway(double dt, bool Left)
 				else
 					willCollide = false;
 			}
-		
+			if (Singleton::getInstance()->noClip)
+			{
+				willCollide = false;
+			}
 		if (!willCollide)
 		{
 			target.x += right.x * CAMERA_SPEED * RUN_SPEED * (float)dt;

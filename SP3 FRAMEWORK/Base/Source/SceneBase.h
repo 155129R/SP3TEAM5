@@ -397,7 +397,7 @@ protected:
 
 	float FogAmount;
 	float fps;
-	bool ShowHitbox = true;
+	bool ShowHitbox = false;
 
 	//Player
 	float radarAngle = 0;
@@ -468,7 +468,7 @@ protected:
 
 	Color fogColor;
 
-	bool showText = true;
+	bool showText = false;
 };
 
 #endif
