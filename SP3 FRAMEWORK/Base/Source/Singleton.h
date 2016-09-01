@@ -43,7 +43,20 @@ class Singleton
 		bool showShop;
 		bool openDoor;
 		bool gotHammer;
+
+		bool gameWin;
+		bool gameCredit;
+
+		double maxPistolAmmo;
+		double pistolMag;
+		double pistolAmmo;
+
+		double maxRifleAmmo;
+		double rifleMag;
+		double rifleAmmo;
+
 		bool gotClear;
+
 		float footstepDelay;
 		int money;
 		bool noClip;
@@ -110,12 +123,28 @@ class Singleton
 		gotHammer = false;
 		gotClear = false;
 		noClip = false;
+
+		gameWin = false;
+		gameCredit = false;
+
 		money = 0;
+
+		maxPistolAmmo = 20;
+		pistolMag = 2;
+		pistolAmmo = maxPistolAmmo;
+
+		maxRifleAmmo = 10;
+		rifleMag = 1;
+		rifleAmmo = maxRifleAmmo;
 	}
 	~Singleton()
 	{
 		delete boss;
 		delete item_key;
+		delete item_hammer;
+		delete item_ghost1;
+		delete item_ghost2;
+		delete item_ghost3;
 	}
 };
 

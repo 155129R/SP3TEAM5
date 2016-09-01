@@ -38,6 +38,9 @@ void SceneHub::Init()
 	meshList[GEO_HUB]->textureArray[0] = LoadTGA("Image//Hub//hub.tga");
 	meshList[GEO_HUB]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
 
+	meshList[SHOP_BG] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[SHOP_BG]->textureArray[0] = LoadTGA("Image//Hub//shopBG.tga");
+
 	meshList[SHOP_UI] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[SHOP_UI]->textureID = LoadTGA("Image//Hub//shopUI.tga");
 
@@ -630,6 +633,13 @@ void SceneHub::RenderOthers(bool Light)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(400, 100, 0);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Scale(600, 300, 140);
+	RenderMesh(meshList[SHOP_BG], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
 	modelStack.Translate(0, -52 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 0);
 	modelStack.Scale(60, 40, 60);
 	RenderMeshOutlined(meshList[GEO_HUB], true);
@@ -771,11 +781,11 @@ void SceneHub::RenderShop()
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 52, 16);
 
 			RenderImageOnScreen(meshList[UI_AMMO_PISTOL], Vector3(5, 4, 1), Vector3(48, 13, 1), Vector3(0, 0, 0));
-			ss.str(""); ss.precision(5); ss << pistolMag;
+			ss.str(""); ss.precision(5); ss << instance->pistolMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 48, 8);
 
 			RenderImageOnScreen(meshList[UI_AMMO_RIFLE], Vector3(9, 4, 1), Vector3(58, 13, 1), Vector3(0, 0, 0));
-			ss.str(""); ss.precision(5); ss << rifleMag;
+			ss.str(""); ss.precision(5); ss << instance->rifleMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 58, 8);
 
 			RenderImageOnScreen(meshList[UI_POTION], Vector3(4, 4, 1), Vector3(68, 13, 1), Vector3(0, 0, 0));
@@ -818,7 +828,7 @@ void SceneHub::RenderShop()
 					if (Singleton::getInstance()->money >= 5)
 					{
 						Singleton::getInstance()->money -= 5;
-						pistolMag++;
+						instance->pistolMag++;
 						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
@@ -847,7 +857,7 @@ void SceneHub::RenderShop()
 					if (Singleton::getInstance()->money >= 10)
 					{
 						Singleton::getInstance()->money -= 10;
-						rifleMag++;
+						instance->rifleMag++;
 						sound.playSoundEffect2D("Sound/buy.mp3");
 					}
 					else
@@ -1333,13 +1343,13 @@ void SceneHub::RenderPassMain()
 		case 1:
 			ss.str("");
 			ss.precision(5);
-			ss << pistolAmmo << "/" << maxPistolAmmo << "         " << "MAG:" << pistolMag;
+			ss << instance->pistolAmmo << "/" << instance->maxPistolAmmo << "         " << "MAG:" << instance->pistolMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 			break;
 		case 2:
 			ss.str("");
 			ss.precision(5);
-			ss << rifleAmmo << "/" << maxRifleAmmo << "         " << "MAG:" << rifleMag;
+			ss << instance->rifleAmmo << "/" << instance->maxRifleAmmo << "         " << "MAG:" << instance->rifleMag;
 			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 1.5f, 3, 7);
 			break;
 		case 3:
