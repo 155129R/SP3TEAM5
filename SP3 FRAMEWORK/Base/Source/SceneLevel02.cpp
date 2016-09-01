@@ -138,7 +138,9 @@ void SceneLevel02::Init()
 	lights[0].power = 2.f;
 
 	InitPartitioning();
+
     spatialPartitioning = false;
+
 }
 
 void SceneLevel02::initSceneObjects()
@@ -1117,15 +1119,6 @@ void SceneLevel02::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 		Vector3 spotDirection_cameraspace = viewStack.Top() * lights[1].spotDirection;
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-
-	//render shapes
-	if (Axis == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_AXES], false);
-		modelStack.PopMatrix();
 	}
 
 	RenderWeapons(false);

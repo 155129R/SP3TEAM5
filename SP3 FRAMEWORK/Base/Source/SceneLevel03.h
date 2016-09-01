@@ -36,27 +36,17 @@ public:
 private:
 	float rotateAngle;
 
-	//Toggle Axis
-	bool Axis;
-	float Axis_Wait;
-
-	//Toggle FlashLight
-	bool Flashlight = false;
-	float Flashlight_Wait = 0.0f;
-
-	//Toggle Fog
-	bool FogEffect;
-	bool Switch;
-
 	//Forest
-	Vector3 Tree[400];
-	int Tree_Type[400];
-	Vector3 Bush[400];
+	Vector3 Tree[300];
+	int Tree_Type[300];
+	Vector3 Bush[300];
 
 	float Degree;
 
 	AABBObject* Change;
 	SpriteAnimation* Water;
+
+	float distance = 0.0f;
 
 	string Dialogue[2];
 	float Dialogue_Timer = 1.0f;

@@ -293,6 +293,7 @@ public:
 		UI_STAMINA_BAR,
 		UI_FEAR_BAR,
 		UI_BLACK_BAR,
+		UI_CROSSHAIR,
 
 		GEO_PARTICLE_WATER,
 		GEO_PARTICLE_SAND,
@@ -367,6 +368,18 @@ protected:
 	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
+
+	//Toggle Axis
+	bool Axis;
+	float Axis_Wait;
+
+	//Toggle FlashLight
+	bool Flashlight = true;
+	float Flashlight_Wait = 0.0f;
+
+	//Toggle Fog
+	bool FogEffect;
+	bool Switch;
 
 	Light lights[2];
 

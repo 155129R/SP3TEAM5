@@ -40,6 +40,7 @@ void Boss::Update(double dt)
 	{
 		HP = 0;
 		boss_state = BOSS_STATE::DEAD;
+		sound.playSoundEffect2D("Sound//Boss_Hurt.mp3");
 		Singleton::getInstance()->gameWin = true;
 	}
 
@@ -234,7 +235,6 @@ void Boss::despawn(double dt)
 		active = false;
 		Boss_Bullet.clear();
 	}
-	sound.playSoundEffect2D("Sound/Boss_Hurt.mp3");
 }
 
 void Boss::reset()

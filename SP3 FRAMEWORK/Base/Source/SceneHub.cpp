@@ -110,7 +110,11 @@ void SceneHub::Init()
 
 	initSceneObjects();
 
-	camera.position.Set(1, 5, 1);
+	//lights[0].position.Set(1, 80, 1);
+	//lights[0].power = 5.f;
+
+	//camera.position.Set(1, 5, 1);
+
 
 	InitPartitioning();
 }
@@ -1282,14 +1286,6 @@ void SceneHub::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
 
-	//render shapes
-	if (Axis == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_AXES], false);
-		modelStack.PopMatrix();
-	}
 	if (Singleton::getInstance()->showShop == false)
 	{
 		RenderWeapons(false);

@@ -34,17 +34,6 @@ public:
 private:
 	float rotateAngle;
 	int yOffset;
-	//Toggle Axis
-	bool Axis;
-	float Axis_Wait;
-
-	//Toggle FlashLight
-	bool Flashlight = false;
-	float Flashlight_Wait = 0.0f;
-
-	//Toggle Fog
-	bool FogEffect;
-	bool Switch;
 
 	std::vector<Vector3> gravePos;
 

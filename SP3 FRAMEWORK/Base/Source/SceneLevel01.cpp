@@ -511,87 +511,6 @@ void SceneLevel01::Update(double dt)
 		}
 	}
 
-	if (Flashlight)
-	{
-		Vector3 view = (camera.target - camera.position).Normalized();
-		lights[1].position.Set(camera.position.x, camera.position.y, camera.position.z);
-		lights[1].spotDirection.Set(-view.x, -view.y, -view.z);
-	}
-
-	//TOGGLE AXIS
-	if (Application::IsKeyPressed('X') && Axis_Wait >= 0.5f)
-	{
-		Axis_Wait = 0.0f;
-		if (Axis == false)
-		{
-			Axis = true;
-		}
-		else if (Axis == true)
-		{
-			Axis = false;
-		}
-	}
-	else
-	{
-		Axis_Wait += dt;
-	}
-
-	if (Application::IsKeyPressed('F') && Flashlight_Wait >= 0.5f)
-	{
-		Flashlight_Wait = 0.0f;
-		if (Flashlight == false)
-		{
-			lights[1].power = 15.0f;
-			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
-			Flashlight = true;
-		}
-		else if (Flashlight == true)
-		{
-			lights[1].power = 0.0f;
-			glUniform1f(m_parameters[U_LIGHT1_POWER], lights[1].power);
-			Flashlight = false;
-		}
-	}
-	else
-	{
-		Flashlight_Wait += dt;
-	}
-
-	//TOGGLE FogEffect
-	if (Application::IsKeyPressed('Z'))
-	{
-		Switch = true;
-	}
-	if (Switch)
-	{
-		if (FogEffect == true)
-		{
-			if (FogAmount > 1500)
-			{
-				FogAmount -= 3000 * dt;
-				glUniform1f(m_parameters[U_FOG_END], FogAmount);
-			}
-			else
-			{
-				FogEffect = false;
-				Switch = false;
-			}
-		}
-		if (FogEffect == false)
-		{
-			if (FogAmount < 6000)
-			{
-				FogAmount += 3000 * dt;
-				glUniform1f(m_parameters[U_FOG_END], FogAmount);
-			}
-			else
-			{
-				FogEffect = true;
-				Switch = false;
-			}
-		}
-	}
-
 	rotateAngle += (float)(1 * dt);
 
 	fps = (float)(1.f / dt);
@@ -2576,15 +2495,6 @@ void SceneLevel01::RenderPassMain()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 		Vector3 spotDirection_cameraspace = viewStack.Top() * lights[1].spotDirection;
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-
-	//render shapes
-	if (Axis == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Scale(1000, 1000, 1000);
-		RenderMesh(meshList[GEO_AXES], false);
-		modelStack.PopMatrix();
 	}
 
 	RenderWeapons(true);
