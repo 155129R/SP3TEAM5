@@ -29,7 +29,7 @@ void SceneHub::Init()
 	lights[0].position.Set(0, 500, 0);
 
 	meshList[FLOOR] = MeshBuilder::GenerateQuad2("floor", Color(0, 0, 0), 10, 10, TexCoord(10, 10));
-	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+	meshList[FLOOR]->textureArray[0] = LoadTGA("Image//Outdoor//floor.tga");
 
 	meshList[GEO_SHOPKEEPER] = MeshBuilder::GenerateQuad("HARAMBE", Color(1, 1, 1), 1);
 	meshList[GEO_SHOPKEEPER]->textureArray[0] = LoadTGA("Image//Hub//shopkeeper.tga");
