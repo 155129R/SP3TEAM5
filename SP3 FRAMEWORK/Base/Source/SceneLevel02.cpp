@@ -139,7 +139,8 @@ void SceneLevel02::Init()
 
 	InitPartitioning();
 
-	spatialPartitioning = false;;
+    spatialPartitioning = false;
+
 }
 
 void SceneLevel02::initSceneObjects()

@@ -204,6 +204,7 @@ public:
 		GAME_WIN,
 		TO_HUB,
 		GAME_CREDITS,
+        GAME_INSTRUCTIONS,
 
 		//level 03
 		GEO_CACTUS,

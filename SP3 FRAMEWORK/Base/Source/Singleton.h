@@ -46,6 +46,7 @@ class Singleton
 
 		bool gameWin;
 		bool gameCredit;
+        bool gameInstructions;
 
 		double maxPistolAmmo;
 		double pistolMag;
@@ -131,6 +132,7 @@ class Singleton
 
 		gameWin = false;
 		gameCredit = false;
+        gameInstructions = false;
 
 		money = 0;
 		Healthpacks = 0;
