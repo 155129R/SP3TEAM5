@@ -78,8 +78,6 @@ void SceneLevel04::Init()
 
 	initSceneObjects();
 	////////////
-
-	spatialPartitioning = true;
 	nightVision = false;
 	lightning = false;
 

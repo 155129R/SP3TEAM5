@@ -496,6 +496,8 @@ void SceneBase::Init()
 	gunUp = false;
 	gunDown = false;
 	nightVision = false;
+    spatialPartitioning = true;
+
 }
 
 void SceneBase::SpawnGhost()

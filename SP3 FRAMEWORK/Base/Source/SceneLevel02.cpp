@@ -115,8 +115,6 @@ void SceneLevel02::Init()
 	questToNextScene = false;
 	distanceLeft = 0;
 
-	spatialPartitioning = false;
-
 	fountainsfx->setDefault3DSoundMinDistance(100.f);
 	fountainsfx->setDefault3DSoundMaxDistance(5000.f);
 	fountainsfx->setSoundVolume(1.f);

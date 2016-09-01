@@ -156,6 +156,8 @@ void SceneLevel01::Init()
 
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_1.txt", Dialogue);
+
+    InitPartitioning();
 }
 
 void SceneLevel01::Update(double dt)

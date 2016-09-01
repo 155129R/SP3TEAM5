@@ -68,7 +68,7 @@ void SceneHub::Init()
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//Random my random randomly using srand
 	srand(time(NULL));
-	camera.Init(Vector3(20, 5, 20), Vector3(350, 5, 15), Vector3(0, 1, 0));
+	camera.Init(Vector3(1, 5, 1), Vector3(350, 5, 15), Vector3(0, 1, 0));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -99,8 +99,6 @@ void SceneHub::Init()
 
 	questToNextScene = false;
 	distanceLeft = 0;
-
-	spatialPartitioning = false;
 
 	buySize = 10;
 	sellSize = 10;
