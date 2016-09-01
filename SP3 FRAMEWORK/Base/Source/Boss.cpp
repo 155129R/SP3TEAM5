@@ -101,7 +101,7 @@ void Boss::Update(double dt)
 			{
 				//Fires at the player meanwhile
 				fire_rate = 0.8f;
-				//Shoot(dt, Singleton::getInstance()->player->getPosition());
+				Shoot(dt, Singleton::getInstance()->player->getPosition());
 				mode_timer += dt;
 			}
 			break;

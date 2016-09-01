@@ -71,9 +71,9 @@ void SceneLevel02::Init()
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[GEO_BUSH]->textureArray[0] = LoadTGA("Image//Forest//Bush.tga");
 
-	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(27, 5, -444), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
-	sound.Init();
+
 	//Random my random randomly using srand
 	srand(time(NULL));
 
@@ -109,8 +109,17 @@ void SceneLevel02::Init()
 
 	spatialPartitioning = false;
 
-	sound.playSoundEffect3D("Sound/fountain.mp3",
-		irrklang::vec3df(0, 0, 0), true);
+	fountainsfx->setDefault3DSoundMinDistance(100.f);
+	fountainsfx->setDefault3DSoundMaxDistance(5000.f);
+	fountainsfx->setSoundVolume(1.f);
+
+	gatesfx->setDefault3DSoundMinDistance(100.f);
+	gatesfx->setDefault3DSoundMaxDistance(5000.f);
+	gatesfx->setSoundVolume(1.f);
+
+	fountainsfx->play3D("Sound/fountain.mp3", irrklang::vec3df(0, 0, 0),true);
+
+	//sound.playSoundEffect3D("Sound/fountain.mp3", irrklang::vec3df(0, 0, 0), true);
 
 	initSceneObjects();
 
@@ -337,7 +346,7 @@ void SceneLevel02::initSceneObjects()
 
 void SceneLevel02::Update(double dt)
 {
-	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+	SceneBase::Update(dt);
 
 	distanceLeft = (Vector3(-1300, 20, 335) - camera.position).Length();
 
@@ -346,20 +355,16 @@ void SceneLevel02::Update(double dt)
 		if (distanceLeft < 50)
 		{
 			sound.stopMusic();
-			sound.stopSoundEffect3D();
 			Singleton::getInstance()->stateCheck = true;
-			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 		}
 	}
 		
-
 	if (Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
 
-	SceneBase::Update(dt);
-	
-	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), 
-		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
+	fountainsfx->setListenerPosition(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
+	gatesfx->setListenerPosition(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
@@ -385,8 +390,7 @@ void SceneLevel02::Update(double dt)
 
 			if ((gatePtr->pos - camera.position).Length() < 95 && cameraViewObject(gatePtr->pos, 80) == true && Singleton::getInstance()->gotKey == true && openGate == false)
 			{
-				sound.playSoundEffect3D("Sound/gateOpen.wav",
-					irrklang::vec3df(-1190, 20, 335), false);
+				gatesfx->play3D("Sound/gateOpen.wav", irrklang::vec3df(-1190, 20, 335));
 				openGate = true;
 				gatePtr->active = false;
 			}
@@ -416,7 +420,6 @@ void SceneLevel02::Update(double dt)
 			spaceButtonState2 = true;
 
 			Singleton::getInstance()->gotKey = true;
-
 			if (Singleton::getInstance()->inventory2ndRow.size() < 6)
 				Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 		}

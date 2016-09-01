@@ -43,6 +43,7 @@ class Singleton
 		bool showShop;
 		bool openDoor;
 		bool gotHammer;
+		bool gotClear;
 		float footstepDelay;
 		int money;
 		bool noClip;
@@ -90,9 +91,7 @@ class Singleton
 			inventory2ndRow.push_back(item_torchlight);
 			inventory2ndRow.push_back(item_nightVision);
 			inventory2ndRow.push_back(item_radar);
-		}
-			
-
+		}		
 
 		program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
@@ -109,8 +108,8 @@ class Singleton
 
 		gotKey = false;
 		gotHammer = false;
+		gotClear = false;
 		noClip = false;
-
 		money = 0;
 	}
 	~Singleton()
@@ -118,7 +117,6 @@ class Singleton
 		delete boss;
 		delete item_key;
 	}
-
 };
 
 #endif /*SINGLETON_H*/

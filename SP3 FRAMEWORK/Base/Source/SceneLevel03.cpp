@@ -333,6 +333,7 @@ void SceneLevel03::Update(double dt)
 		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
+		instance->gotClear = true;
 	}
 
 	fps = (float)(1.f / dt);
