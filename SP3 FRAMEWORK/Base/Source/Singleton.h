@@ -55,6 +55,8 @@ class Singleton
 		double rifleMag;
 		double rifleAmmo;
 
+		bool gotClear;
+
 		float footstepDelay;
 		int money;
 		bool noClip;
@@ -102,8 +104,7 @@ class Singleton
 			inventory2ndRow.push_back(item_torchlight);
 			inventory2ndRow.push_back(item_nightVision);
 			inventory2ndRow.push_back(item_radar);
-		}
-			
+		}		
 
 		program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
@@ -120,6 +121,7 @@ class Singleton
 
 		gotKey = false;
 		gotHammer = false;
+		gotClear = false;
 		noClip = false;
 
 		gameWin = false;
@@ -144,7 +146,6 @@ class Singleton
 		delete item_ghost2;
 		delete item_ghost3;
 	}
-
 };
 
 #endif /*SINGLETON_H*/

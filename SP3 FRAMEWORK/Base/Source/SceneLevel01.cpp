@@ -376,7 +376,7 @@ void SceneLevel01::Update(double dt)
 					{
 						sound.stopMusic();
 						Singleton::getInstance()->stateCheck = true;
-						Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+						Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 					}
 				}
 

@@ -148,6 +148,38 @@ void SceneHub::initSceneObjects()
 	Boundary->pos.Set(-45, 35, 290);
 	Boundary->scale.Set(65, 30, 1);
 	instance->Object_list.push_back(Boundary);
+
+	//Portal 1
+	Portal_1 = new AABBObject();
+	Portal_1->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Portal_1->active = true;
+	Portal_1->pos.Set(-170, -6, -240);
+	Portal_1->scale.Set(10, 10, 1);
+	instance->Object_list.push_back(Portal_1);
+
+	//Portal 2
+	Portal_2 = new AABBObject();
+	Portal_2->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Portal_2->active = true;
+	Portal_2->pos.Set(100, -6, -240);
+	Portal_2->scale.Set(10, 10, 1);
+	instance->Object_list.push_back(Portal_2);
+
+	//Portal 3
+	Portal_3 = new AABBObject();
+	Portal_3->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Portal_3->active = true;
+	Portal_3->pos.Set(100, -6, 286);
+	Portal_3->scale.Set(10, 10, 1);
+	instance->Object_list.push_back(Portal_3);
+
+	//Portal 4
+	Portal_4 = new AABBObject();
+	Portal_4->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	Portal_4->active = true;
+	Portal_4->pos.Set(-170, -6, 286);
+	Portal_4->scale.Set(10, 10, 1);
+	instance->Object_list.push_back(Portal_4);
 }
 
 void SceneHub::Update(double dt)
@@ -261,6 +293,41 @@ void SceneHub::Update(double dt)
 	{
 		if (spaceButtonState4)
 			spaceButtonState4 = false;
+	}
+
+	////////////////////////////////////////////////////////
+	//						Portals						  //
+	////////////////////////////////////////////////////////
+	distance_1 = (Portal_1->pos - Singleton::getInstance()->player->getPosition()).Length();
+	if (Application::IsKeyPressed('E') && distance_1 <= 50)
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
+	}
+
+	distance_2 = (Portal_2->pos - Singleton::getInstance()->player->getPosition()).Length();
+	if (Application::IsKeyPressed('E') && distance_2 <= 50 && instance->gotHammer)
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
+	}
+
+	distance_3 = (Portal_3->pos - Singleton::getInstance()->player->getPosition()).Length();
+	if (Application::IsKeyPressed('E') && distance_3 <= 50 && instance->gotKey)
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+	}
+
+	distance_4 = (Portal_4->pos - Singleton::getInstance()->player->getPosition()).Length();
+	if (Application::IsKeyPressed('E') && distance_4 <= 50 && instance->gotClear)
+	{
+		sound.stopMusic();
+		Singleton::getInstance()->stateCheck = true;
+		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}
 
 	////////////////////////////////////////////////////////
@@ -513,18 +580,21 @@ void SceneHub::RenderTerrain()
 
 void SceneHub::RenderEnvironment(bool Light)
 {
+	//Portal 1
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, -6, -240);
 	modelStack.Scale(115, 120, 140);
 	RenderMeshOutlined(meshList[GEO_LOAD_1], Light);
 	modelStack.PopMatrix();
 
+	//Portal 2
 	modelStack.PushMatrix();
 	modelStack.Translate(100, -6, -240);
 	modelStack.Scale(115, 120, 140);
 	RenderMeshOutlined(meshList[GEO_LOAD_2], Light);
 	modelStack.PopMatrix();
 
+	//Portal 3
 	modelStack.PushMatrix();
 	modelStack.Translate(100, -6, 286);
 	modelStack.Rotate(180, 0, 1, 0);
@@ -532,6 +602,7 @@ void SceneHub::RenderEnvironment(bool Light)
 	RenderMeshOutlined(meshList[GEO_LOAD_3], Light);
 	modelStack.PopMatrix();
 
+	//Portal 4
 	modelStack.PushMatrix();
 	modelStack.Translate(-170, -6, 286);
 	modelStack.Rotate(180, 0, 1, 0);
@@ -1236,7 +1307,7 @@ void SceneHub::RenderPassMain()
 	}
 
 	// Render the crosshair
-//	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
+	//RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 2.0f);
 
 	//On screen text
 	std::ostringstream ss;
@@ -1248,19 +1319,6 @@ void SceneHub::RenderPassMain()
 	ss.precision(5);
 	ss << "POS: " << camera.position;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
-
-	if (questToNextScene)
-	{
-		ss.str("");
-		ss.precision(5);
-		ss << "Get away from here!!";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.5f, 10, 30);
-
-		ss.str("");
-		ss.precision(5);
-		ss << "Distance left: " << distanceLeft;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 3.f, 15, 25);
-	}
 
 	if (Singleton::getInstance()->showShop == false)
 	{
@@ -1283,9 +1341,67 @@ void SceneHub::RenderPassMain()
 			break;
 		}
 	}
+
+	if (distance_1 <= 50)
+	{
+		ss.str("");
+		ss.precision(5);
+		ss << "Press E to travel to the House";
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+	}
+	if (distance_2 <= 50)
+	{
+		if (instance->gotHammer)
+		{
+			ss.str("");
+			ss.precision(5);
+			ss << "Press E to travel to Town Square";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+		}
+		else
+		{
+			ss.str("");
+			ss.precision(5);
+			ss << "Get the Hammer and clear the House first!";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+		}
+	}
+	if (distance_3 <= 50)
+	{
+		if (instance->gotKey)
+		{
+			ss.str("");
+			ss.precision(5);
+			ss << "Press E to travel to the Forest";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+		}
+		else
+		{
+			ss.str("");
+			ss.precision(5);
+			ss << "Get the Key and clear Town Square first!";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+		}
+	}
+	if (distance_4 <= 50)
+	{
+		if (instance->gotClear)
+		{
+			ss.str("");
+			ss.precision(5);
+			ss << "Press E to travel to the Cemetery";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+		}
+		else
+		{
+			ss.str("");
+			ss.precision(5);
+			ss << "Clear the Forest first!";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.8f, 0.8f, 0.8f), 2.5, 20, 30);
+		}
+	}
 	
 	SceneBase::Render();
-
 }
 
 void SceneHub::Render()

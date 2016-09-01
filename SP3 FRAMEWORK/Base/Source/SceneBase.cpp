@@ -825,7 +825,7 @@ void SceneBase::Update(double dt)
 			bulletList.push_back(new Bullet(
 				Vector3(camera.position.x, camera.position.y, camera.position.z),
 				Vector3(camera.view.x, camera.view.y, camera.view.z),
-				500,
+				1000,
 				1000,
 				1
 				));
@@ -1404,7 +1404,9 @@ void SceneBase::UpdateFearEffect(double dt)
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:
+	{
 		FogAmount = 1500.0f;
+		fogColor.Set(0.8f, 0.8f, 0.8f);
 		glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		switch (instance->stateCheck)
@@ -1416,6 +1418,7 @@ void SceneBase::UpdateFearEffect(double dt)
 					FogAmount -= 3000 * (float)dt;
 					glUniform1f(m_parameters[U_FOG_END], FogAmount);
 				}
+				break;
 			}
 			case Singleton::PROGRAM_GAME2:
 			{
@@ -1423,7 +1426,7 @@ void SceneBase::UpdateFearEffect(double dt)
 				FogAmount = 1500.0f;
 				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 				glUniform1f(m_parameters[U_FOG_END], FogAmount);
-
+				break;
 			}
 			case Singleton::PROGRAM_GAME3:
 			{
@@ -1431,11 +1434,13 @@ void SceneBase::UpdateFearEffect(double dt)
 				FogAmount = 1500.0f;
 				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 				glUniform1f(m_parameters[U_FOG_END], FogAmount);
+				break;
 			}
 			case Singleton::PROGRAM_GAME4:
 			{
 				fogColor.Set(0.2f, 0.2f, 0.2f);
 				glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
+				break;
 			}
 			case Singleton::PROGRAM_HUB:
 			{
@@ -1450,10 +1455,12 @@ void SceneBase::UpdateFearEffect(double dt)
 					glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 					glUniform1f(m_parameters[U_FOG_END], FogAmount);
 				}
+				break;
 			}
-
 		}
+		break;
 
+	}
 	case 2:
 		FogAmount = 1000.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
@@ -1476,7 +1483,6 @@ void SceneBase::UpdateFearEffect(double dt)
 		break;
 
 	case 5:
-		//fearValueBar = 0.f;
 		FogAmount = 100.0f;
 		glUniform1f(m_parameters[U_FOG_END], FogAmount);
 		Black.Set(0.0f, 0.0f, 0.0f);

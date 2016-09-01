@@ -78,7 +78,8 @@ void SceneLevel02::Init()
 	meshList[PAINTING2] = MeshBuilder::GenerateQuad("PAINTING2", Color(0, 0, 0), 1.f);
 	meshList[PAINTING2]->textureArray[0] = LoadTGA("Image//Indoor//painting1.tga");
 
-	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 1), Vector3(0, 1, 0));
+	camera.Init(Vector3(27, 5, -444), Vector3(0, 5, 1), Vector3(0, 1, 0));
+
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 
 	//Random my random randomly using srand
@@ -353,7 +354,7 @@ void SceneLevel02::initSceneObjects()
 
 void SceneLevel02::Update(double dt)
 {
-	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
+	SceneBase::Update(dt);
 
 	distanceLeft = (Vector3(-1300, 20, 335) - camera.position).Length();
 
@@ -363,15 +364,12 @@ void SceneLevel02::Update(double dt)
 		{
 			sound.stopMusic();
 			Singleton::getInstance()->stateCheck = true;
-			Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
+			Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
 		}
 	}
 		
-
 	if (Singleton::getInstance()->showInventory == false)
 		camera.Update(dt);
-
-	SceneBase::Update(dt);
 
 	fountainsfx->setListenerPosition(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 	gatesfx->setListenerPosition(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z), irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
