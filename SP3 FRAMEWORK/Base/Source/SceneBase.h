@@ -222,6 +222,7 @@ public:
 		BUTTON_INSTRUCTION,
 		BUTTON_EXIT,
 		GEO_KEY,
+		QUEST_EXIT,
 
 		//level 03
 		GEO_CACTUS,

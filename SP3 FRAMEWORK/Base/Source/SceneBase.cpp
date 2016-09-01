@@ -950,24 +950,28 @@ void SceneBase::Update(double dt)
 	if (Application::IsKeyPressed('V'))
 	{
 		sound.stopMusic();
+		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
 		sound.stopMusic();
+		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
 		sound.stopMusic();
+		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
 		sound.stopMusic();
+		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}

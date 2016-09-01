@@ -63,6 +63,9 @@ void SceneLevel02::Init()
 	meshList[COCONUT_TREE] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[COCONUT_TREE]->textureArray[0] = LoadTGA("Image//Outdoor//coconutTree.tga");
 
+	meshList[QUEST_EXIT] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
+	meshList[QUEST_EXIT]->textureArray[0] = LoadTGA("Image//Outdoor//questGate.tga");
+
 	meshList[GEO_TREE_1] = MeshBuilder::GenerateQuad("Thin Tree", Color(0, 0, 0), 1.f);
 	meshList[GEO_TREE_1]->textureArray[0] = LoadTGA("Image//Forest//Tree_1.tga");
 	meshList[GEO_BUSH] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
@@ -372,7 +375,6 @@ void SceneLevel02::Update(double dt)
 					if (object->Object == AABBObject::OBJECT_TYPE::KEY && (keyPtr->pos - camera.position).Length() < 95 && cameraViewObject(keyPtr->pos, 80) == true)
 					{
 						sound.playSoundEffect2D("Sound/pickUp.mp3");
-						questToNextScene = true;
 						Singleton::getInstance()->gotKey = true;
 						Singleton::getInstance()->inventory2ndRow.push_back(Singleton::getInstance()->item_key);
 
@@ -498,6 +500,7 @@ void SceneLevel02::Update(double dt)
 		Dialogue_Timer2 <= 0.0f)
 	{
 		Dialogues = false;
+		questToNextScene = true;
 	}
 	else
 	{
@@ -1076,6 +1079,15 @@ void SceneLevel02::RenderPassMain()
 	}
 	if (questToNextScene)
 	{
+		glDisable(GL_DEPTH_TEST);
+		modelStack.PushMatrix();
+		modelStack.Translate(-1500, 20, 335);
+		modelStack.Rotate(Math::RadianToDegree(atan2(camera.position.x - -1500, camera.position.z - 335)), 0, 1, 0);
+		modelStack.Scale(150, 150, 150);
+		RenderMeshOutlined(meshList[QUEST_EXIT], false);
+		modelStack.PopMatrix();
+		glEnable(GL_DEPTH_TEST);
+
 		ss.str("");
 		ss.precision(5);
 		ss << "Get away from here!!";
