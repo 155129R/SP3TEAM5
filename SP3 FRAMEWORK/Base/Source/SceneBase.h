@@ -474,7 +474,6 @@ protected:
 	Color fogColor;
 
 	bool showText = false;
-	bool showText = true;
 	bool Dialogues = true;
 };
 

@@ -2591,9 +2591,6 @@ void SceneLevel01::RenderPassMain()
 		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 	}
 
-
-	std::ostringstream ss;
-
 	if (reloading){
 		std::ostringstream ss;
 		ss << "Reloading";
