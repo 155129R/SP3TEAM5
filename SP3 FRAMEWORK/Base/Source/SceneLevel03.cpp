@@ -99,6 +99,11 @@ void SceneLevel03::Init()
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_3.txt", Dialogue);
 
+	initSceneObjects();
+}
+
+void SceneLevel03::initSceneObjects()
+{
 	AABBObject * Logs = new AABBObject();
 	Logs->Object = AABBObject::OBJECT_TYPE::LOGS;
 	Logs->active = true;
@@ -155,7 +160,7 @@ void SceneLevel03::Init()
 	Boundary->pos.Set(-1900, 100, 0);
 	Boundary->scale.Set(5, 10, 380);
 	instance->Object_list.push_back(Boundary);
-	
+
 	//Right
 	Boundary = new AABBObject();
 	Boundary->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
@@ -841,6 +846,8 @@ void SceneLevel03::RenderPassMain()
 		modelStack.PopMatrix();
 	}
 
+	RenderInventory();
+	RenderGUI();
 	//Render objects
 	RenderLight();
 
@@ -874,8 +881,7 @@ void SceneLevel03::RenderPassMain()
 	
 	RenderWeapons(false);
 	RenderBullets(false);
-	RenderInventory();
-	RenderGUI();
+
 	//On screen text
 	
 		std::ostringstream ss;

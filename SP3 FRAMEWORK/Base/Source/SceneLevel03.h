@@ -14,6 +14,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	void initSceneObjects();
+
 	void RenderGround();
 	void RenderSkyplane(bool inverted = false);
 	void RenderTerrain();

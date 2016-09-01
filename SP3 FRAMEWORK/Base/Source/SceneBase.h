@@ -402,14 +402,15 @@ protected:
 
 	float FogAmount;
 	float fps;
-	bool ShowHitbox = true;
+	bool ShowHitbox = false;
 
 	//Player
 	float radarAngle = 0;
 	float rotateAngle = 0;
 	float rotateKey = 0;
 	Minimap* m_Minimap;
-	float HealthpackCD;
+	float HealthpackCD = 0.0f;
+	bool Ready = true;
 	Color Black;
 
 	//Enemy 
@@ -431,7 +432,6 @@ protected:
 	double maxRifleAmmo = 10;
 	double rifleMag = 1;
 	double rifleAmmo = maxRifleAmmo;
-	float fearValueBar;
 	float Degree;
 
 	bool reloading = false;
@@ -473,7 +473,7 @@ protected:
 
 	Color fogColor;
 
-	bool showText = true;
+	bool showText = false;
 	bool Dialogues = true;
 };
 

@@ -49,7 +49,7 @@ void SceneLevel01::Init()
 	meshList[STAIRS]->textureArray[0] = LoadTGA("Image//Indoor//stairs.tga");
 
 	meshList[LEVEL01] = MeshBuilder::GenerateOBJ("level01", "OBJ//Indoor//Level01.obj");
-	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//Indoor//uvmap.tga");
+	meshList[LEVEL01]->textureArray[0] = LoadTGA("Image//Indoor//level1.tga");
 
 	meshList[DOOR] = MeshBuilder::GenerateOBJ("Door", "OBJ//Indoor//door.obj");
 	meshList[DOOR]->textureArray[0] = LoadTGA("Image//Indoor//door.tga");
@@ -158,7 +158,7 @@ void SceneLevel01::Init()
 
 void SceneLevel01::Update(double dt)
 {
-	bLightEnabled = false;
+	//bLightEnabled = false;
 
 	if (instance->openDoor == false)
 		camera.Update(dt);
@@ -1328,7 +1328,7 @@ void SceneLevel01::initSceneObjects()
 	walls = new AABBObject();
 	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
 	walls->active = true;
-	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	walls->pos.Set(1290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 405);
 	walls->scale.Set(29, 25, 2);
 	instance->Object_list.push_back(walls);
 	
@@ -1483,6 +1483,143 @@ void SceneLevel01::initSceneObjects()
 	walls->active = true;
 	walls->pos.Set(1070, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), -632);
 	walls->scale.Set(16, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//first right door Left wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(710, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 655);
+	walls->scale.Set(3, 25, 68);
+	instance->Object_list.push_back(walls);
+
+	//Both right door back wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(855, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 1008);
+	walls->scale.Set(180, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//First right door bedroom 
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(98, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 703);
+	walls->scale.Set(3, 25, 60);
+	instance->Object_list.push_back(walls);
+
+	//First right door Bedroom & Toilet Divider
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(280, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 608);
+	walls->scale.Set(3, 25, 40);
+	instance->Object_list.push_back(walls);
+
+	//First right door Dining & Toilet Divider
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(415, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 660);
+	walls->scale.Set(3, 25, 24);
+	instance->Object_list.push_back(walls);
+
+	//First right door Bedroom front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(290, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 960);
+	walls->scale.Set(3, 25, 18);
+	instance->Object_list.push_back(walls);
+
+	//First right door Toilet front wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(320, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 758);
+	walls->scale.Set(10, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//First right door Entrance & rooms divider
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(420, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 540);
+	walls->scale.Set(36, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Right Wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(990, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 705);
+	walls->scale.Set(3, 25, 64);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Left Wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1608, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 690);
+	walls->scale.Set(3, 25, 64);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Bedroom Left Wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1534, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 400);
+	walls->scale.Set(15, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Bedroom Right Wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1459, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 582);
+	walls->scale.Set(3, 25, 38);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Hammer Behind boxes
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1154, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 932);
+	walls->scale.Set(38, 25, 18);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Hammer Door
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1380, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 855);
+	walls->scale.Set(8, 25, 5);
+	instance->Object_list.push_back(walls);
+
+
+	//Second Right Door Hammer Bedroom Division
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1525, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 848);
+	walls->scale.Set(15, 25, 3);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door BARRICADED ROOM
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1100, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 532);
+	walls->scale.Set(22, 25, 22);
+	instance->Object_list.push_back(walls);
+
+	//Second Right Door Main Right wall
+	walls = new AABBObject();
+	walls->Object = AABBObject::OBJECT_TYPE::BOUNDARY;
+	walls->active = true;
+	walls->pos.Set(1211, -50 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 580);
+	walls->scale.Set(3, 25, 38);
 	instance->Object_list.push_back(walls);
 }
 
@@ -2418,6 +2555,8 @@ void SceneLevel01::RenderPassMain()
 	RenderWeapons(true);
 	RenderInventory();
 	RenderGUI();
+
+	SceneBase::Render();
 	//Render objects
 	RenderLight();
 
@@ -2443,16 +2582,26 @@ void SceneLevel01::RenderPassMain()
 		RenderHUD();
 	}
 
+
 	std::ostringstream ss;
+
 
 	if (timerstart && timer < 3.f)
 	{
-		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		RenderImageOnScreen(meshList[GEO_LOAD_1], Vector3(80, 60, 1), Vector3(40, 30, 100), Vector3(0, 0, 0));
 	}
+
+	if (reloading){
+		std::ostringstream ss;
+		ss << "Reloading";
+		//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 22);
+	}
+
 
 	if (showText)
 	{
 		//On screen text
+
 		ss.precision(5);
 		ss << "FPS: " << fps;
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
@@ -2527,6 +2676,7 @@ void SceneLevel01::RenderPassMain()
 		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0.5f, 0.8f, 0.5f), 2.5, 2, 19);
 	}
 	SceneBase::Render();
+
 }
 
 void SceneLevel01::Render()
