@@ -64,7 +64,6 @@ void SceneHub::Init()
 
 	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 120), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
-	sound.Init();
 	//Random my random randomly using srand
 	srand(time(NULL));
 
@@ -132,8 +131,6 @@ void SceneHub::Update(double dt)
 
 	SceneBase::Update(dt);
 
-	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
-		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 	//cout << (Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() << endl;
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
@@ -242,28 +239,24 @@ void SceneHub::Update(double dt)
 	if (Application::IsKeyPressed('V'))
 	{
 		sound.stopMusic();
-		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME1;
 	}
 	if (Application::IsKeyPressed('B'))
 	{
 		sound.stopMusic();
-		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME2;
 	}
 	if (Application::IsKeyPressed('N'))
 	{
 		sound.stopMusic();
-		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME3;
 	}
 	if (Application::IsKeyPressed('M'))
 	{
 		sound.stopMusic();
-		sound.stopSoundEffect3D();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_GAME4;
 	}

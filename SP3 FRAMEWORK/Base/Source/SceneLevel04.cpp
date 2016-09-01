@@ -86,7 +86,6 @@ void SceneLevel04::Init()
 	glUniform3fv(m_parameters[U_FOG_COLOR], 1, &fogColor.r);
 
 	lightning = true;
-	sound.Init();
 
 	for (int i = 0; i < 128; ++i)
 	{
@@ -111,8 +110,6 @@ void SceneLevel04::Update(double dt)
 {
 	//std::cout << instance->player->GetFear() << endl;
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-	sound.Update(irrklang::vec3df(camera.position.x, camera.position.y, camera.position.z),
-		irrklang::vec3df(-camera.view.x, camera.view.y, -camera.view.z));
 
 	camera.Update(dt);
 

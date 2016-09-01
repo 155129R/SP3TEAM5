@@ -189,9 +189,9 @@ void Application::Init()
 void Application::Run()
 {
 	//start 1st scene here
-	//sceneManager->ChangeScene(0);
+	sceneManager->ChangeScene(0);
 	//sceneManager->ChangeScene(1);
-	sceneManager->ChangeScene(2);
+	//sceneManager->ChangeScene(2);
 	//sceneManager->ChangeScene(3);
 	//sceneManager->ChangeScene(4);
 	//sceneManager->ChangeScene(5);

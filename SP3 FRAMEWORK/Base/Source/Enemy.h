@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "AABB.h"
 #include "Sound.h"
+#include "irrKlang.h"
 
 struct Enemy : public GameObject
 {
@@ -59,6 +60,10 @@ private:
 	int travel_to;
 
 	Sound sound;
+
+	irrklang::ISoundEngine* ghost1 = irrklang::createIrrKlangDevice();
+	irrklang::ISoundEngine* ghost2 = irrklang::createIrrKlangDevice();
+	irrklang::ISoundEngine* ghost3 = irrklang::createIrrKlangDevice();
 };
 
 #endif
