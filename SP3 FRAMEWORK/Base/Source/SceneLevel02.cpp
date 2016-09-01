@@ -1121,10 +1121,6 @@ void SceneLevel02::RenderPassMain()
 		break;
 	}
 
-
-	ss.str(""); ss.precision(5); ss << instance->player->getHealthPack();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
-
 	//Dialogues
 	if (Dialogues)
 	{

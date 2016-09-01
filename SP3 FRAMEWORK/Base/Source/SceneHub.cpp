@@ -62,10 +62,10 @@ void SceneHub::Init()
 	meshList[UI_POTION] = MeshBuilder::GenerateQuad("Water", Color(0, 0, 0), 1.f);
 	meshList[UI_POTION]->textureID = LoadTGA("Image//Hub//potionUI.tga");
 
-	camera.Init(Vector3(50, 5, 50), Vector3(0, 5, 120), Vector3(0, 1, 0));
 	//camera.Init(Vector3(-1190, 20, 335), Vector3(0, 5, 1), Vector3(0, 1, 0));
 	//Random my random randomly using srand
 	srand(time(NULL));
+	camera.Init(Vector3(20, 5, 20), Vector3(350, 5, 15), Vector3(0, 1, 0));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -111,6 +111,8 @@ void SceneHub::Init()
 
 	lights[0].position.Set(1, 80, 1);
 	lights[0].power = 5.f;
+
+	camera.position.Set(1, 5, 1);
 
 	InitPartitioning();
 }
@@ -1311,15 +1313,19 @@ void SceneHub::RenderPassMain()
 
 	//On screen text
 	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
+	if (showText)
+	{
+	    ss.str("");
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 2, 3);
 
-	ss.str("");
-	ss.precision(5);
-	ss << "POS: " << camera.position;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
+		ss.str("");
+		ss.precision(5);
+		ss << "POS: " << camera.position;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 2.5f, 2, 6);
 
+	}
 	if (Singleton::getInstance()->showShop == false)
 	{
 		switch (weaponType)

@@ -1331,28 +1331,32 @@ void SceneBase::Render()
 {
 	//GUI Stuff
 	std::ostringstream ss;
-	ss.str("");
-	ss << instance->player->getHealthPack();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
 
-	if (!Ready)
+	if (instance->stateCheck == false && instance->openDoor == false)
 	{
 		ss.str("");
-		ss.precision(3);
-		ss << "Cooldown: " << HealthpackCD;
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
-	}
-	else
-	{
-		ss.str("");
-		ss.precision(3);
-		ss << "Ready!";
-		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
-	}
+		ss << instance->player->getHealthPack();
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 6, 10);
 
-	if (nightVision == true)
-	{
-		RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		if (!Ready)
+		{
+			ss.str("");
+			ss.precision(3);
+			ss << "Cooldown: " << HealthpackCD;
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
+		}
+		else
+		{
+			ss.str("");
+			ss.precision(3);
+			ss << "Ready!";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 2.5f, 10, 10);
+		}
+
+		if (nightVision == true)
+		{
+			RenderImageOnScreen(meshList[NIGHT_VISION], Vector3(80, 60, 1), Vector3(40, 30, 0), Vector3(0, 0, 0));
+		}
 	}
 	if (Singleton::getInstance()->stateCheck)
 	{
