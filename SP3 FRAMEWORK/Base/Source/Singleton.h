@@ -43,6 +43,10 @@ class Singleton
 		bool showShop;
 		bool openDoor;
 		bool gotHammer;
+
+		bool gameWin;
+		bool gameCredit;
+
 		float footstepDelay;
 		int money;
 		//ADD UNIVERSAL STUFF HERE
@@ -79,12 +83,12 @@ class Singleton
 		mousey = 300;
 		footstepDelay = 0;
 
-		//program_state = PROGRAM_MENU;
+		program_state = PROGRAM_MENU;
 		//program_state = PROGRAM_GAME1;
 		//program_state = PROGRAM_GAME2;
 		//program_state = PROGRAM_GAME3;
 		//program_state = PROGRAM_GAME4;
-		program_state = PROGRAM_HUB;
+		//program_state = PROGRAM_HUB;
 
 		stateCheck = false;
 
@@ -95,12 +99,19 @@ class Singleton
 		gotKey = false;
 		gotHammer = false;
 
+		gameWin = false;
+		gameCredit = false;
+
 		money = 0;
 	}
 	~Singleton()
 	{
 		delete boss;
 		delete item_key;
+		delete item_hammer;
+		delete item_ghost1;
+		delete item_ghost2;
+		delete item_ghost3;
 	}
 
 };

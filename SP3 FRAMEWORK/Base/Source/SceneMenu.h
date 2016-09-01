@@ -56,6 +56,8 @@ private:
 	bool lightning;
 
 	Sound sound;
+
+	double creditTimer = 0;
 };
 
 #endif

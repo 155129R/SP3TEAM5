@@ -150,7 +150,7 @@ void SceneLevel01::Init()
 
 	initSceneObjects();
 
-	//SpawnGhost();
+	SpawnGhost();
 }
 
 void SceneLevel01::Update(double dt)
@@ -286,6 +286,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -250;
 		instance->singletonCamera->target.z = -260;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d1 = false;
 	}
 
@@ -295,6 +296,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d2 = false;
 	}
 	//left 2nd
@@ -304,6 +306,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -250;
 		instance->singletonCamera->target.z = -260;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d3 = false;
 	}
 
@@ -313,6 +316,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = -180;
 		instance->singletonCamera->target.z = -170;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d4 = false;
 	}
 	//right 1st
@@ -322,6 +326,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 430;
 		instance->singletonCamera->target.z = 440;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d5 = false;
 	}
 
@@ -331,6 +336,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
 		instance->singletonCamera->target.x = 400;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d6 = false;
 	}
 	//right 2nd
@@ -340,6 +346,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 430;
 		instance->singletonCamera->target.z = 440;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d7 = false;
 	}
 
@@ -349,6 +356,7 @@ void SceneLevel01::Update(double dt)
 		instance->singletonCamera->position.z = 380;
 		instance->singletonCamera->target.z = 370;
 		instance->singletonCamera->target.x = 1300;
+		sound.playSoundEffect2D("Sound//doorClose.wav");
 		d8 = false;
 	}
 
@@ -372,41 +380,49 @@ void SceneLevel01::Update(double dt)
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door1->pos - camera.position).Length() < 95 && cameraViewObject(door1->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door2->pos - camera.position).Length() < 95 && cameraViewObject(door2->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door3->pos - camera.position).Length() < 95 && cameraViewObject(door3->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door4->pos - camera.position).Length() < 95 && cameraViewObject(door4->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door5->pos - camera.position).Length() < 95 && cameraViewObject(door5->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door6->pos - camera.position).Length() < 95 && cameraViewObject(door6->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door7->pos - camera.position).Length() < 95 && cameraViewObject(door7->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 
 				if (object->Object == AABBObject::OBJECT_TYPE::DOOR && (door8->pos - camera.position).Length() < 95 && cameraViewObject(door8->pos, 80) == true)
 				{
 					timerstart = true;
+					sound.playSoundEffect2D("Sound//doorOpen.wav");
 				}
 				if (object->active && cameraViewObject(hammerPtr->pos, 80) == true)
 				{

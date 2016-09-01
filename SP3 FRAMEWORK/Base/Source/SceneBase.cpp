@@ -852,7 +852,7 @@ void SceneBase::Update(double dt)
 
 		if (gunUp == true)
 		{
-			rotateRifle -= (float)(50 * dt);
+			rotateRifle -= (float)(100 * dt);
 			if (rotateRifle <= 4)
 			{
 				gunUp = false;
@@ -1318,7 +1318,7 @@ void SceneBase::UpdatePlayer(double dt)
 }
 void SceneBase::UpdateFearEffect(double dt)
 {
-	std::cout << Singleton::getInstance()->player->GetFear() << std::endl;
+	//std::cout << Singleton::getInstance()->player->GetFear() << std::endl;
 	switch (Singleton::getInstance()->player->GetFear())
 	{
 	case 1:

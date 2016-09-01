@@ -199,6 +199,9 @@ public:
 		GEO_LOAD_2,
 		GEO_LOAD_3,
 		GEO_LOAD_4,
+		GAME_WIN,
+		TO_HUB,
+		GAME_CREDITS,
 
 		//level 03
 		GEO_CACTUS,
@@ -431,6 +434,8 @@ protected:
 
 	bool reloading = false;
 	float reloadTime;
+
+	double scaleWin = 5;
 
 	//bullet
 	std::vector<Bullet*> bulletList;
