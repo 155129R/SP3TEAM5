@@ -134,8 +134,9 @@ void SceneLevel02::Init()
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_2.txt", Dialogue);
 
-	lights[0].position.Set(130, 150, 100);
+	lights[0].position.Set(13, 20, 10);
 	lights[0].power = 2.f;
+	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 
 	InitPartitioning();
 
@@ -1043,11 +1044,10 @@ void SceneLevel02::RenderWorld()
 	RenderSkyplane();
 	RenderTerrain();
 	RenderObjects(ShowHitbox);
-	RenderEnvironment(false);
+	RenderEnvironment(true);
 	RenderOthers(false);
 	RenderEnemies(false);
 	RenderBullets(false);
-	//RenderSprite();
 	glUniform1f(m_parameters[U_FOG_ENABLE], 0);
 }
 

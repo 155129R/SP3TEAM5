@@ -153,6 +153,8 @@ void SceneLevel01::Init()
 	SpawnGhost();
 
     lights[0].position.Set(40, 50, 40);
+	lights[0].power = 0.0f;
+	glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
 
 	//Loading dialogue
 	ReadDialogue("Text//Dialogue_1.txt", Dialogue);

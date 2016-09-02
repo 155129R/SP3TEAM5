@@ -112,9 +112,6 @@ void SceneLevel04::Init()
 
 void SceneLevel04::Update(double dt)
 {
-	//std::cout << instance->player->GetFear() << endl;
-	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);
-
 	if (!instance->gameWin)
 		camera.Update(dt);
 

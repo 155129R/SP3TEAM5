@@ -85,35 +85,16 @@ void SceneHub::Init()
 	//Shadow stuff
 	m_lightDepthFBO.Init(4096, 4096);
 
-	bLightEnabled = true;
-
-	Axis = false;
-	Axis_Wait = 0.0f;
-
-	FogEffect = false;
-	Switch = false;
 	soundTimer = 0;
-
-	openGate = false;
-	rotateGate = 90;
-
-	questToNextScene = false;
-	distanceLeft = 0;
 
 	buySize = 10;
 	sellSize = 10;
-
-	//sound.playSoundEffect3D("Sound/fountain.mp3",
-	//	irrklang::vec3df(0, 0, 0), true);
 
 	timeb4disappear = 0;
 
 	initSceneObjects();
 
-	//lights[0].position.Set(1, 80, 1);
-	//lights[0].power = 5.f;
-
-	//camera.position.Set(1, 5, 1);
+	camera.position.Set(1, 5, 1);
 
 	InitPartitioning();
 }
@@ -187,7 +168,6 @@ void SceneHub::initSceneObjects()
 
 void SceneHub::Update(double dt)
 {
-	//std::cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << std::endl;
 	timeb4disappear += dt;
 	distanceLeft = (Vector3(-2000, 20, 335) - camera.position).Length();
 
@@ -211,7 +191,6 @@ void SceneHub::Update(double dt)
         glUniform1f(m_parameters[U_LIGHT0_POWER], lights[0].power);
     }
 
-	//cout << (Vector3(350, -40 + TERRAINSIZE.y * ReadHeightMap(m_heightMap, 1 / TERRAINSIZE.x, 1 / TERRAINSIZE.z), 15) - camera.position).Length() << endl;
 	static bool eButtonState = false;
 	if (Application::IsKeyPressed('E'))
 	{
@@ -232,7 +211,6 @@ void SceneHub::Update(double dt)
 					sound.playSoundEffect2D("Sound/gorilla2.wav");
 				}
 					
-				cout <<"open shop" << endl;
 				if (Singleton::getInstance()->showShop == false)
 				{
 					Application::SetMousePosition(0, 0);
@@ -929,8 +907,6 @@ void SceneHub::RenderShop()
 
 			for (int i = 1; i <= sz; i++)
 			{
-				//cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
-
 				if (Singleton::getInstance()->inventory[i - 1]->name == "ghost1")
 				{
 					RenderImageOnScreen(meshList[INV_GHOST1], Vector3(4, 4, 1), Vector3(47, 41 - i * 5, 1), Vector3(0, 0, 0));
@@ -1286,7 +1262,8 @@ void SceneHub::RenderPassMain()
 	}
 
 	modelStack.PushMatrix();
-	modelStack.Scale(1000, 1000, 1000);
+	modelStack.Translate(0, 10000, 0);
+	modelStack.Scale(1, 1, 1);
 	RenderMesh(meshList[GEO_AXES], false);
 	modelStack.PopMatrix();
 
@@ -1297,6 +1274,7 @@ void SceneHub::RenderPassMain()
 		RenderGUI();
 	}
 	//Render objects
+	SceneBase::Render();
 	RenderLight();
 	RenderShop();
 	//Depth quad
@@ -1427,7 +1405,6 @@ void SceneHub::RenderPassMain()
             }
         }
     }
-	SceneBase::Render();
 }
 
 void SceneHub::Render()

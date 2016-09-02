@@ -670,7 +670,10 @@ void SceneBase::Update(double dt)
 		if (inventoryButtonState)
 			inventoryButtonState = false;
 	}
-	if (Application::IsKeyPressed('4') && Ready && instance->player->GetFearValue() > 0)
+	if (Application::IsKeyPressed('4') &&
+		Ready && 
+		instance->player->GetFearValue() > 0 &&
+		instance->player->getHealthPack() > 0)
 	{
 		instance->player->UseHealthpack();
 		HealthpackCD = 5.0f;
@@ -1075,6 +1078,10 @@ void SceneBase::Update(double dt)
 		sound.stopMusic();
 		Singleton::getInstance()->stateCheck = true;
 		Singleton::getInstance()->program_state = Singleton::PROGRAM_HUB;
+	}
+	if (Application::IsKeyPressed('Q'))
+	{
+		instance->player->AddHealthpack(1);
 	}
 }
 
@@ -1887,7 +1894,6 @@ void SceneBase::RenderObjects(bool ShowHitbox)
 					}
 					case AABBObject::OBJECT_TYPE::FOUNTAIN:
 					{
-						std::cout << "its here leh" << std::endl;
 						modelStack.PushMatrix(); 
 						modelStack.Translate(obj->pos.x, obj->pos.y, obj->pos.z);
 						modelStack.Scale(obj->scale.x, obj->scale.y, obj->scale.z);
@@ -2587,8 +2593,6 @@ void SceneBase::RenderInventory()
 		std::ostringstream ss;
 		for (int i = 1; i <= sz; i++)
 		{
-			//cout << i << ": " << Singleton::getInstance()->inventory[i-1]->name << endl;
-
 			if (Singleton::getInstance()->inventory[i - 1]->name == "ghost1")
 				RenderImageOnScreen(meshList[INV_GHOST1], Vector3(6, 6, 1), Vector3(i * 7.6 + 12.4, 39.5, 1), Vector3(0, 0, 0));
 
@@ -2833,13 +2837,10 @@ void SceneBase::RenderInventory()
 		//////////////////////
 		int sz2 = Singleton::getInstance()->inventory2ndRow.size();
 		//static bool bLButtonState = false;
-		//cout << Singleton::getInstance()->mousex << " " << Singleton::getInstance()->mousey << endl;
 		//system("CLS");
 
 		for (int i = 1; i <= sz2; i++)
 		{
-			//cout << i << ": " << Singleton::getInstance()->inventory2ndRow[i-1]->name << endl;
-
 			if (Singleton::getInstance()->inventory2ndRow[i - 1]->name == "key")
 				RenderOBJOnScreen(meshList[GEO_KEY], 1, i * 7.6 + 12.4, 29.5, 10, 0, rotateKey * 20, 0, false);
 
@@ -3235,8 +3236,6 @@ bool SceneBase::cameraViewObject(Vector3 pos, float degree)
 		
 
 		float angleX = Math::RadianToDegree(acos(view.Dot(camera.view)));
-		//std::cout << angleX << std::endl;
-
 
 		if (angleX <= degree)
 		{

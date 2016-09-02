@@ -147,8 +147,6 @@ void SceneMenu::Update(double dt)
 	if (cameraMove < -923)checkCameraMove = false;
 
 	camera.target.Set(cameraMove, 109.91, 1014.98);
-	//std::cout << camera.target  << std::endl;
-	//std::cout << Application::GetWindowWidth() << std::endl;
 	UpdateParticle(dt);
 
 	//camera.Terrain = TERRAINSIZE.y * ReadHeightMap(m_heightMap_4, camera.position.x / TERRAINSIZE.x, camera.position.z / TERRAINSIZE.z);

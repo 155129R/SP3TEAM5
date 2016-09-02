@@ -3,7 +3,7 @@
 #include "Mtx44.h"
 
 static const float CAMERA_SPEED = 200.f;
-static const float MOUSE_SPEED = 200.f;
+static const float MOUSE_SPEED = 300.f;
 
 Camera3::Camera3()
 	:willCollide(false)
@@ -65,8 +65,6 @@ void Camera3::Forward(double dt)
 		target.y -= position.y - Terrain;
 	}
 	position.y = Terrain;
-	//if (willCollide)
-	//	std::cout << "COLLLIDE" << std::endl;
 }
 
 void Camera3::Backward(double dt)
